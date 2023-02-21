@@ -1,0 +1,7 @@
+alias gle='google'
+alias wa='wolframalpha'
+alias uu='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y && omz update && antigen update'
+alias nvim='lvim'
+alias vim='nvim'
+alias vimdiff='nvim -d'
+alias view='nvim -R'
