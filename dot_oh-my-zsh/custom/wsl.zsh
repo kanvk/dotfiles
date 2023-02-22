@@ -1,16 +1,17 @@
 # WSL aliases
 alias exp='explorer.exe'
-alias yank='win32yank.exe -i --crlf'
+alias cscw='win32yank.exe -i --crlf'
+alias vscw='win32yank.exe -o --lf'
 alias hx='hx.exe'
 
-func strt() {
+func openw() {
     cmd.exe /C start "$*"
 }
 
-func wcmd() {
+func cmdw() {
     cmd.exe /C "$*"
 }
 
-func wpwsh() {
+func pwshw() {
     pwsh.exe -C "$*"
 }
