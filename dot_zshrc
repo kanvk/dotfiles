@@ -68,14 +68,15 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 # History configurations
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
-SAVEHIST=10000000
+SAVEHIST=1000000
 setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
+setopt hist_find_no_dups      # ignore duplicates when searching in line editor
 setopt hist_ignore_dups       # ignore duplicated commands history list
 setopt hist_ignore_space      # ignore commands that start with space
 setopt hist_verify            # show command with history expansion to user before running it
 setopt extended_history       # extended history timestamps
 setopt inc_append_history     # Immediately append commands to history
-#setopt share_history         # share command history data
+setopt share_history         # share command history data
 
 # force zsh to show the complete history
 alias history="history 0"
@@ -84,7 +85,7 @@ alias history="history 0"
 TIMEFMT=$'\nreal\t%E\nuser\t%U\nsys\t%S\ncpu\t%P'
 
 # make less more friendly for non-text input files, see lesspipe(1)
-#[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
