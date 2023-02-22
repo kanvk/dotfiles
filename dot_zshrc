@@ -14,7 +14,7 @@ fi
 # Oh My ZSH config
 export ZSH="/home/kanvk/.oh-my-zsh"
 plugins=(git git-lfs gh pip web-search docker docker-compose poetry copypath copyfile dirhistory
-    history taskwarrior fzf vi-mode colorize colored-man-pages copybuffer z jsontools rust)
+    history taskwarrior fzf vi-mode colorize colored-man-pages copybuffer z jsontools rust ssh-agent)
 source $ZSH/oh-my-zsh.sh
 
 # Antigen config
