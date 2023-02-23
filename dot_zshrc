@@ -9,7 +9,6 @@ fi
 [[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.pre.zsh"
 # ~/.zshrc file for zsh interactive shells.
 # see /usr/share/doc/zsh/examples/zshrc for examples
-#
 
 # Oh My ZSH config
 export ZSH="/home/kanvk/.oh-my-zsh"
