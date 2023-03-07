@@ -6,14 +6,13 @@ filled in as strings with either
 a global executable or a path to
 an executable
 ]]
-
 -- vim config
 vim.opt.relativenumber = true -- set relative numbered lines
-vim.opt.hidden = true -- allow hidden buffers
-vim.opt.smartindent = true -- enable smart indent
-vim.opt.shiftwidth = 4 -- Set space indent width
-vim.opt.tabstop = 4 -- Set tab indent width
-vim.opt.colorcolumn = "120" -- Set colorcolumn
+vim.opt.hidden = true         -- allow hidden buffers
+vim.opt.smartindent = true    -- enable smart indent
+vim.opt.shiftwidth = 4        -- Set space indent width
+vim.opt.tabstop = 4           -- Set tab indent width
+vim.opt.colorcolumn = "120"   -- Set colorcolumn
 
 -- WSL Config
 vim.g.clipboard = {
@@ -74,6 +73,25 @@ lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 --   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
 --   w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
 -- }
+
+-- trouble.nvim keymappings
+lvim.builtin.which_key.mappings["t"] = {
+    name = "Diagnostics",
+    t = { "<cmd>TroubleToggle<cr>", "trouble" },
+    w = { "<cmd>TroubleToggle workspace_diagnostics<cr>", "workspace" },
+    d = { "<cmd>TroubleToggle document_diagnostics<cr>", "document" },
+    q = { "<cmd>TroubleToggle quickfix<cr>", "quickfix" },
+    l = { "<cmd>TroubleToggle loclist<cr>", "loclist" },
+    r = { "<cmd>TroubleToggle lsp_references<cr>", "references" },
+}
+
+-- persistence.nvim keymappings
+lvim.builtin.which_key.mappings["S"] = {
+    name = "Session",
+    c = { "<cmd>lua require('persistence').load()<cr>", "Restore last session for current dir" },
+    l = { "<cmd>lua require('persistence').load({ last = true })<cr>", "Restore last session" },
+    Q = { "<cmd>lua require('persistence').stop()<cr>", "Quit without saving session" },
+}
 
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.builtin.alpha.active = true
@@ -176,13 +194,150 @@ lvim.lsp.installer.setup.automatic_installation = true
 -- }
 
 -- Additional Plugins
--- lvim.plugins = {
---     {"folke/tokyonight.nvim"},
---     {
---       "folke/trouble.nvim",
---       cmd = "TroubleToggle",
---     },
--- }
+lvim.plugins = {
+    -- {
+    -- "folke/trouble.nvim",
+    -- cmd = "TroubleToggle",
+    -- },
+    { "tpope/vim-repeat" },
+    {
+        "nacro90/numb.nvim",
+        config = function()
+            require('numb').setup({
+                show_numbers = true,         -- Enable 'number' for the window while peeking
+                show_cursorline = true,      -- Enable 'cursorline' for the window while peeking
+                hide_relativenumbers = true, -- Enable turning off 'relativenumber' for the window while peeking
+                number_only = false,         -- Peek only when the command is only a number instead of when it starts with a number
+                centered_peeking = true,     -- Peeked line will be centered relative to window
+            })
+        end
+    },
+    {
+        "ggandor/leap.nvim",
+        event = "BufRead",
+        config = function()
+            require('leap').add_default_mappings()
+        end
+    },
+    {
+        "kevinhwang91/nvim-bqf",
+        event = { "BufRead", "BufNew" },
+        config = function()
+            require("bqf").setup({
+                auto_enable = true,
+                preview = {
+                    win_height = 12,
+                    win_vheight = 12,
+                    delay_syntax = 80,
+                    border_chars = { "┃", "┃", "━", "━", "┏", "┓", "┗", "┛", "█" },
+                },
+                func_map = {
+                    vsplit = "",
+                    ptogglemode = "z,",
+                    stoggleup = "",
+                },
+                filter = {
+                    fzf = {
+                        action_for = { ["ctrl-s"] = "split" },
+                        extra_opts = { "--bind", "ctrl-o:toggle-all", "--prompt", "> " },
+                    },
+                },
+            })
+        end,
+    },
+    {
+        "windwp/nvim-spectre",
+        event = "BufRead",
+        config = function()
+            require("spectre").setup()
+        end,
+    },
+    {
+        "kevinhwang91/rnvimr",
+        cmd = "RnvimrToggle",
+        config = function()
+            vim.g.rnvimr_draw_border = 1
+            vim.g.rnvimr_pick_enable = 1
+            vim.g.rnvimr_bw_enable = 1
+        end,
+    },
+    {
+        "andymass/vim-matchup",
+        event = "CursorMoved",
+        config = function()
+            vim.g.matchup_matchparen_offscreen = { method = "popup" }
+        end,
+    },
+    {
+        "sindrets/diffview.nvim",
+        event = "BufRead",
+    },
+    {
+        "f-person/git-blame.nvim",
+        event = "BufRead",
+        config = function()
+            vim.cmd "highlight default link gitblame SpecialComment"
+            vim.g.gitblame_enabled = 0
+        end,
+    },
+    {
+        "tpope/vim-fugitive",
+        cmd = {
+            "G",
+            "Git",
+            "Gdiffsplit",
+            "Gread",
+            "Gwrite",
+            "Ggrep",
+            "GMove",
+            "GDelete",
+            "GBrowse",
+            "GRemove",
+            "GRename",
+            "Glgrep",
+            "Gedit"
+        },
+        ft = { "fugitive" }
+    },
+    {
+        "simrat39/symbols-outline.nvim",
+        config = function()
+            require('symbols-outline').setup()
+        end
+    },
+    {
+        "folke/trouble.nvim",
+        cmd = "TroubleToggle",
+    },
+    {
+        "metakirby5/codi.vim",
+        cmd = "Codi",
+    },
+    {
+        "ethanholz/nvim-lastplace",
+        event = "BufRead",
+        config = function()
+            require("nvim-lastplace").setup({
+                lastplace_ignore_buftype = { "quickfix", "nofile", "help" },
+                lastplace_ignore_filetype = {
+                    "gitcommit", "gitrebase", "svn", "hgcommit",
+                },
+                lastplace_open_folds = true,
+            })
+        end,
+    },
+    {
+        "folke/persistence.nvim",
+        event = "BufReadPre", -- this will only start session saving when an actual file was opened
+        module = "persistence",
+        config = function()
+            require("persistence").setup {
+                dir = vim.fn.expand(vim.fn.stdpath "config" .. "/session/"),
+                options = { "buffers", "curdir", "tabpages", "winsize" },
+            }
+        end,
+    },
+}
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 -- vim.api.nvim_create_autocmd("BufEnter", {
