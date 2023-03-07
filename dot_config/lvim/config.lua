@@ -13,6 +13,7 @@ vim.opt.hidden = true -- allow hidden buffers
 vim.opt.smartindent = true -- enable smart indent
 vim.opt.shiftwidth = 4 -- Set space indent width
 vim.opt.tabstop = 4 -- Set tab indent width
+vim.opt.colorcolumn = "120" -- Set colorcolumn
 
 -- WSL Config
 vim.g.clipboard = {

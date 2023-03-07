@@ -17,7 +17,8 @@ zstyle :omz:plugins:ssh-agent quiet yes
 # Oh My ZSH config
 export ZSH="/home/kanvk/.oh-my-zsh"
 plugins=(git git-lfs gh pip web-search docker docker-compose poetry copypath copyfile dirhistory
-    history taskwarrior fzf vi-mode colorize colored-man-pages copybuffer z jsontools rust ssh-agent)
+    history taskwarrior fzf vi-mode colorize colored-man-pages copybuffer z jsontools rust 
+    ssh-agent common-aliases)
 source $ZSH/oh-my-zsh.sh
 
 # Antigen config
@@ -267,9 +268,9 @@ if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
 fi
 
 # some more ls aliases
-alias ll='ls -l'
-alias la='ls -A'
-alias l='ls -CF'
+# alias ll='ls -l'
+# alias la='ls -A'
+# alias l='ls -CF'
 
 # enable command-not-found if installed
 #if [ -f /etc/zsh_command_not_found ]; then
