@@ -270,7 +270,7 @@ fi
 # some more ls aliases
 # alias ll='ls -l'
 # alias la='ls -A'
-# alias l='ls -CF'
+alias l='ls -CF'
 
 # enable command-not-found if installed
 #if [ -f /etc/zsh_command_not_found ]; then

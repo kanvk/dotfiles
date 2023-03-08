@@ -195,10 +195,6 @@ lvim.lsp.installer.setup.automatic_installation = true
 
 -- Additional Plugins
 lvim.plugins = {
-    -- {
-    -- "folke/trouble.nvim",
-    -- cmd = "TroubleToggle",
-    -- },
     { "tpope/vim-repeat" },
     {
         "nacro90/numb.nvim",
