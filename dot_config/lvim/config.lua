@@ -216,7 +216,12 @@ lvim.plugins = {
         "ggandor/leap.nvim",
         event = "BufRead",
         config = function()
-            require('leap').add_default_mappings()
+            local leap = require('leap')
+            leap.add_default_mappings()
+            leap.setup({
+                next_group = '<tab>',
+                prev_group = '<shift-tab>'
+            })
         end
     },
     {
