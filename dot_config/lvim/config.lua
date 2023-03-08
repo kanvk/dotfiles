@@ -252,6 +252,7 @@ lvim.plugins = {
     },
     {
         "windwp/nvim-spectre",
+        lazy = true,
         event = "BufRead",
         config = function()
             require("spectre").setup()
@@ -259,6 +260,7 @@ lvim.plugins = {
     },
     {
         "kevinhwang91/rnvimr",
+        lazy = true,
         cmd = "RnvimrToggle",
         config = function()
             vim.g.rnvimr_draw_border = 1
@@ -287,6 +289,7 @@ lvim.plugins = {
     },
     {
         "tpope/vim-fugitive",
+        lazy = true,
         cmd = {
             "G",
             "Git",
@@ -306,6 +309,7 @@ lvim.plugins = {
     },
     {
         "simrat39/symbols-outline.nvim",
+        lazy = true,
         config = function()
             require('symbols-outline').setup()
         end
@@ -316,6 +320,7 @@ lvim.plugins = {
     },
     {
         "metakirby5/codi.vim",
+        lazy = true,
         cmd = "Codi",
     },
     {
