@@ -1,5 +1,6 @@
 alias gle='google'
 alias wa='wolframalpha'
+alias py='python3'
 alias uu='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y && antigen update && omz update'
 alias nvim='lvim'
 alias vim='nvim'
