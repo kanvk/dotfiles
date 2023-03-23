@@ -1,7 +1,7 @@
 alias gle='google'
 alias wa='wolframalpha'
 alias py='python3'
-alias uup='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y'
+alias uup='sudo apt update && sudo apt full-upgrade -y'
 alias zup='antigen update && omz update'
 alias vup='lvim +LvimUpdate +q'
 alias uu='(zup); uup && exec zsh'
