@@ -198,6 +198,25 @@ source $ZSH/oh-my-zsh.sh
 source /usr/share/zsh-antigen/antigen.zsh
 antigen init ~/.antigenrc
 
+# zsh-autocomplete post-omz config
+# Reset up, down, ^R, ^S
+() {
+   local -a prefix=( '\e'{\[,O} )
+   local -a up=( ${^prefix}A ) down=( ${^prefix}B )
+   local key=
+   for key in $up[@]; do
+      bindkey "$key" up-line-or-history
+   done
+   for key in $down[@]; do
+      bindkey "$key" down-line-or-history
+   done
+
+    zle -A {.,}history-incremental-search-backward
+    zle -A {.,}vi-history-search-backward
+    bindkey -M emacs '^S' history-incremental-search-forward
+    bindkey -M vicmd '/' vi-history-search-forward
+}
+
 # Zfunc
 fpath+=~/.zfunc
 
