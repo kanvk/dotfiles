@@ -96,7 +96,7 @@ _poetry_02c43b1c96cc5380_complete()
             ;;
 
             (install)
-            opts+=("--all-extras:Install all extra dependencies." "--dry-run:Output the operations but do not execute anything \(implicitly enables --verbose\)." "--extras:Extra sets of dependencies to install." "--no-dev:Do not install the development dependencies. \(Deprecated\)" "--no-root:Do not install the root package \(the current project\)." "--only:The only dependency groups to include." "--only-root:Exclude all dependencies." "--remove-untracked:Removes packages not present in the lock file. \(Deprecated\)" "--sync:Synchronize the environment with the locked packages and the specified groups." "--with:The optional dependency groups to include." "--without:The dependency groups to ignore.")
+            opts+=("--all-extras:Install all extra dependencies." "--compile:Compile Python source files to bytecode. \(This option has no effect if modern-installation is disabled because the old installer always compiles.\)" "--dry-run:Output the operations but do not execute anything \(implicitly enables --verbose\)." "--extras:Extra sets of dependencies to install." "--no-dev:Do not install the development dependencies. \(Deprecated\)" "--no-root:Do not install the root package \(the current project\)." "--only:The only dependency groups to include." "--only-root:Exclude all dependencies." "--remove-untracked:Removes packages not present in the lock file. \(Deprecated\)" "--sync:Synchronize the environment with the locked packages and the specified groups." "--with:The optional dependency groups to include." "--without:The dependency groups to ignore.")
             ;;
 
             (list)
