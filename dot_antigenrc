@@ -2,7 +2,6 @@ antigen use oh-my-zsh
 antigen bundle djui/alias-tips
 antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle marlonrichert/zsh-autocomplete@main
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle RobSis/zsh-completion-generator
 antigen theme romkatv/powerlevel10k
