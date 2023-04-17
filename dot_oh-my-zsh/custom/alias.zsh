@@ -9,7 +9,8 @@ alias rup='rustup update && cargo install-update -a'
 alias gup='go-global-update'
 alias nup='sudo npm -g update'
 alias vup='lvim +LvimUpdate +q'
-alias aup='uup && rup && gup && nup && vup && zup'
+alias bup='brew update && brew upgrade && brew cleanup'
+alias aup='uup && bup && rup && gup && nup && vup && zup'
 alias uu='uup && zup'
 
 # vim
