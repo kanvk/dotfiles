@@ -29,7 +29,7 @@ vim.g.clipboard = {
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save = true
-lvim.colorscheme = "onedarker"
+lvim.colorscheme = "lunar"
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
@@ -159,39 +159,39 @@ lvim.lsp.installer.setup.automatic_installation = true
 --   buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
 -- end
 
--- -- set a formatter, this will override the language server formatting capabilities (if it exists)
+ -- linters and formatters <https://www.lunarvim.org/docs/languages#lintingformatting>
 -- local formatters = require "lvim.lsp.null-ls.formatters"
 -- formatters.setup {
---   { command = "black", filetypes = { "python" } },
---   { command = "isort", filetypes = { "python" } },
+--   { command = "stylua" },
 --   {
---     -- each formatter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
 --     command = "prettier",
---     ---@usage arguments to pass to the formatter
---     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
---     extra_args = { "--print-with", "100" },
---     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
+--     extra_args = { "--print-width", "100" },
 --     filetypes = { "typescript", "typescriptreact" },
 --   },
 -- }
-
--- -- set additional linters
 -- local linters = require "lvim.lsp.null-ls.linters"
 -- linters.setup {
 --   { command = "flake8", filetypes = { "python" } },
 --   {
---     -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
 --     command = "shellcheck",
---     ---@usage arguments to pass to the formatter
---     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
---     extra_args = { "--severity", "warning" },
---   },
---   {
---     command = "codespell",
---     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
---     filetypes = { "javascript", "python" },
+--     args = { "--severity", "warning" },
 --   },
 -- }
+
+-- lua_ls disable workspace config prompt and telemetry
+require('lspconfig').lua_ls.setup {
+    settings = {
+      Lua = {
+        workspace = {
+          library = vim.api.nvim_get_runtime_file('', true),
+          checkThirdParty = false, -- THIS IS THE IMPORTANT LINE TO ADD
+        },
+        telemetry = {
+          enable = false,
+        },
+      },
+    },
+  }
 
 -- Additional Plugins
 lvim.plugins = {
@@ -335,7 +335,7 @@ lvim.plugins = {
     {
         "folke/persistence.nvim",
         event = "BufReadPre", -- this will only start session saving when an actual file was opened
-        module = "persistence",
+        lazy = true,
         config = function()
             require("persistence").setup {
                 dir = vim.fn.expand(vim.fn.stdpath "config" .. "/session/"),
