@@ -159,7 +159,7 @@ lvim.lsp.installer.setup.automatic_installation = true
 --   buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
 -- end
 
- -- linters and formatters <https://www.lunarvim.org/docs/languages#lintingformatting>
+-- linters and formatters <https://www.lunarvim.org/docs/languages#lintingformatting>
 -- local formatters = require "lvim.lsp.null-ls.formatters"
 -- formatters.setup {
 --   { command = "stylua" },
@@ -177,21 +177,6 @@ lvim.lsp.installer.setup.automatic_installation = true
 --     args = { "--severity", "warning" },
 --   },
 -- }
-
--- lua_ls disable workspace config prompt and telemetry
-require('lspconfig').lua_ls.setup {
-    settings = {
-      Lua = {
-        workspace = {
-          library = vim.api.nvim_get_runtime_file('', true),
-          checkThirdParty = false, -- THIS IS THE IMPORTANT LINE TO ADD
-        },
-        telemetry = {
-          enable = false,
-        },
-      },
-    },
-  }
 
 -- Additional Plugins
 lvim.plugins = {
