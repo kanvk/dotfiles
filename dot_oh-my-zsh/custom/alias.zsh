@@ -3,7 +3,8 @@ alias gle='google'
 alias wa='wolframalpha'
 
 # Updates
-alias uup='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y'
+alias aptup='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y'
+alias uup='sudo nala upgrade --purge'
 alias zup='antigen update && omz update'
 alias rup='rustup update && cargo install-update -a'
 alias gup='go-global-update'
