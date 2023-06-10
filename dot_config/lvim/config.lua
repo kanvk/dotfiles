@@ -118,6 +118,7 @@ lvim.builtin.treesitter.ensure_installed = {
 
 lvim.builtin.treesitter.ignore_install = {}
 lvim.builtin.treesitter.highlight.enable = true
+lvim.builtin.treesitter.matchup.enable = true -- vim-matchup treesitter integration
 
 -- generic LSP settings
 
@@ -326,6 +327,26 @@ lvim.plugins = {
                 options = { "buffers", "curdir", "tabpages", "winsize" },
             }
         end,
+    },
+    {
+        'wfxr/minimap.vim',
+        build = "cargo install --locked code-minimap",
+        -- cmd = {"Minimap", "MinimapClose", "MinimapToggle", "MinimapRefresh", "MinimapUpdateHighlight"},
+        config = function()
+            vim.cmd("let g:minimap_width = 6")
+        end,
+    },
+    {
+        "andymass/vim-matchup",
+        event = "CursorMoved",
+        config = function()
+            vim.g.matchup_matchparen_offscreen = { method = "popup" }
+        end,
+    },
+    {
+        "nvim-neorg/neorg",
+        ft = "norg", -- lazy-load on filetype
+        config = true, -- run require("neorg").setup()
     },
 }
 
