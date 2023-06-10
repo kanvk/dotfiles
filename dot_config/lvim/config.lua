@@ -192,7 +192,7 @@ lvim.plugins = {
                 number_only = false,         -- Peek only when the command is only a number instead of when it starts with a number
                 centered_peeking = true,     -- Peeked line will be centered relative to window
             })
-        end
+        end,
     },
     {
         "ggandor/leap.nvim",
@@ -204,7 +204,7 @@ lvim.plugins = {
                 next_group = '<tab>',
                 prev_group = '<shift-tab>'
             })
-        end
+        end,
     },
     {
         "kevinhwang91/nvim-bqf",
@@ -287,14 +287,14 @@ lvim.plugins = {
             "Glgrep",
             "Gedit"
         },
-        ft = { "fugitive" }
+        ft = { "fugitive" },
     },
     {
         "simrat39/symbols-outline.nvim",
         lazy = true,
         config = function()
             require('symbols-outline').setup()
-        end
+        end,
     },
     {
         "folke/trouble.nvim",
@@ -331,10 +331,11 @@ lvim.plugins = {
     {
         'wfxr/minimap.vim',
         build = "cargo install --locked code-minimap",
-        -- cmd = {"Minimap", "MinimapClose", "MinimapToggle", "MinimapRefresh", "MinimapUpdateHighlight"},
+        cmd = { "Minimap", "MinimapClose", "MinimapToggle", "MinimapRefresh", "MinimapUpdateHighlight" },
         config = function()
             vim.cmd("let g:minimap_width = 6")
         end,
+        lazy = true,
     },
     {
         "andymass/vim-matchup",
@@ -345,7 +346,7 @@ lvim.plugins = {
     },
     {
         "nvim-neorg/neorg",
-        ft = "norg", -- lazy-load on filetype
+        ft = "norg",   -- lazy-load on filetype
         config = true, -- run require("neorg").setup()
     },
 }
