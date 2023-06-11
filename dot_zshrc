@@ -327,7 +327,7 @@ esac
 # enable color support of ls, less and man, and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
+    alias ls='lsd'
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
 
@@ -360,7 +360,7 @@ fi
 # some more ls aliases
 # alias ll='ls -l'
 # alias la='ls -A'
-alias l='ls -CF'
+alias l='ls -F'
 
 # enable command-not-found if installed
 #if [ -f /etc/zsh_command_not_found ]; then

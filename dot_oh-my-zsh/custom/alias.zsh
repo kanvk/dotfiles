@@ -26,6 +26,7 @@ alias bat='batcat'
 alias lg='lazygit'
 alias ldoc='lazydocker'
 alias clr='clear'
+alias tree='lsd --tree'
 
 # xclip
 alias c='xclip'
