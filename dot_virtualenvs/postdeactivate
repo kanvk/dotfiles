@@ -1,3 +1,4 @@
 #!/usr/bin/zsh
 # This hook is sourced after every virtualenv is deactivated.
 cd $VIRTUALENV_POSTACTIVATE_PATH
+VIRTUALENV_POSTACTIVATE_PATH=""
