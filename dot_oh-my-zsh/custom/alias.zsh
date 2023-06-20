@@ -11,7 +11,8 @@ alias gup='go-global-update'
 alias nup='sudo npm -g update'
 alias vup='lvim +LvimUpdate +q'
 alias bup='brew update && brew upgrade && brew cleanup'
-alias aup='uup && bup && rup && gup && nup && vup && zup'
+alias pup='poetry self update'
+alias aup='uup && bup && rup && gup && nup && pup && vup && zup'
 alias uu='uup && zup'
 
 # vim
@@ -24,7 +25,7 @@ alias view='nvim -R'
 alias py='python3'
 alias bat='batcat'
 alias lg='lazygit'
-alias ldoc='lazydocker'
+alias lzd='lazydocker'
 alias clr='clear'
 alias tree='lsd --tree'
 
