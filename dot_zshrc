@@ -23,6 +23,9 @@ fi
 # Homebrew completions
 FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 
+# asdf completions
+fpath+="${ASDF_DIR}/completions"
+
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
@@ -194,7 +197,7 @@ unset color_prompt force_color_prompt
 export ZSH="/home/kanvk/.oh-my-zsh"
 plugins=(git git-lfs gh pip web-search docker docker-compose poetry copypath copyfile dirhistory
     history taskwarrior fzf vi-mode colorize colored-man-pages copybuffer z jsontools rust 
-    ssh-agent common-aliases)
+    ssh-agent)
 source $ZSH/oh-my-zsh.sh
 
 # Antigen config
@@ -280,9 +283,6 @@ setopt extended_history       # extended history timestamps
 setopt inc_append_history     # Immediately append commands to history
 setopt share_history          # share command history data
 
-# force zsh to show the complete history
-# alias history="history 0"
-
 # configure `time` format
 TIMEFMT=$'\nreal\t%E\nuser\t%U\nsys\t%S\ncpu\t%P'
 
@@ -324,26 +324,9 @@ esac
 #     fi
 # }
 
-# enable color support of ls, less and man, and also add handy aliases
+# enable color support of ls, less and man
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='lsd'
-    alias dir='dir --color=auto'
-    alias vdir='vdir --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-    alias diff='diff --color=auto'
-    alias ip='ip --color=auto'
-
-    export LESS_TERMCAP_mb=$'\E[1;31m'     # begin blink
-    export LESS_TERMCAP_md=$'\E[1;36m'     # begin bold
-    export LESS_TERMCAP_me=$'\E[0m'        # reset bold/blink
-    export LESS_TERMCAP_so=$'\E[01;33m'    # begin reverse video
-    export LESS_TERMCAP_se=$'\E[0m'        # reset reverse video
-    export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
-    export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 
     # Take advantage of $LS_COLORS for completion as well
     zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
@@ -357,15 +340,16 @@ if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
     ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
 fi
 
-# some more ls aliases
-# alias ll='ls -l'
-# alias la='ls -A'
-alias l='ls -F'
-
 # enable command-not-found if installed
 #if [ -f /etc/zsh_command_not_found ]; then
 #    . /etc/zsh_command_not_found
 #fi
+
+# Delayed aliases
+alias ls='lsd'
+alias l='lsd -F'
+alias ll='lsd -lh'
+alias la='lsd -lAh'
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
