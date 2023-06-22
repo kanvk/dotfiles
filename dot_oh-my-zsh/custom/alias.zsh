@@ -109,17 +109,17 @@ if  [ -x "$(command -v coreutils)" ]; then
     alias vdir="command coreutils vdir"
     alias wc="command coreutils wc"
     alias yes="command coreutils yes"
-else
-    # Enable color support for GNU Coreutils if uutils are not found
-    alias dir='dir --color=auto'
-    alias vdir='vdir --color=auto'
-    alias ls='ls --color=auto'
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-    alias diff='diff --color=auto'
-    alias ip='ip --color=auto'
 fi
+
+# Enable color support for coreutils
+  alias dir='dir --color=auto'
+  alias vdir='vdir --color=auto'
+  alias ls='ls --color=auto'
+  alias grep='grep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias egrep='egrep --color=auto'
+  alias diff='diff --color=auto'
+  alias ip='ip --color=auto'
 
 # Other Programs
 alias py='python3'
