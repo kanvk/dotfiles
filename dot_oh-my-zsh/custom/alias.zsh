@@ -163,6 +163,7 @@ alias lzd='lazydocker'
 alias clr='clear'
 alias tree='lsd --tree'
 alias h='history'
+alias db='distrobox'
 
 # xclip
 alias c='xclip'
