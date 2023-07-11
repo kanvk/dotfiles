@@ -1,7 +1,8 @@
 #compdef x
 
 _x() {
-  envs=('vv8:virtualenv for vv8-crawler-slim' 'triton:conda env for triton')
+  envs=('vv8:virtualenv for vv8-crawler-slim' 'triton:conda env for triton' 'base:conda base env' 
+      'modin:conda modin env' 'pytorch:conda pytorch env' 'sklearn:conda sklearn env' 'tf:conda tf env')
   _describe 'command' envs
 }
 

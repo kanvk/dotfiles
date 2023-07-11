@@ -22,10 +22,21 @@ function x() {
   # vv8-crawler-slim
   if [[ $1 == "vv8" ]]; then
     workon vv8
+    cd ~/Documents/git/vv8-crawler-slim/
   # triton
   elif [[ $1 == "triton" ]]; then
     conda activate triton
     cd ~/Documents/git/triton
+  elif [[ $1 == "base" ]]; then
+    conda activate base
+  elif [[ $1 == "modin" ]]; then
+    conda activate modin
+  elif [[ $1 == "pytorch" ]]; then
+    conda activate pytorch
+  elif [[ $1 == "sklearn" ]]; then
+    conda activate sklearn
+  elif [[ $1 == "tf" ]]; then
+    conda activate tf
     
   # Env not found
   else
@@ -56,6 +67,16 @@ function xd() {
   elif [[ $X_ENV == "triton" ]]; then
     conda deactivate
     cd $X_ACTIVATE_PATH
+  elif [[ $X_ENV == "base" ]]; then
+    conda deactivate
+  elif [[ $X_ENV == "modin" ]]; then
+    conda deactivate
+  elif [[ $X_ENV == "pytorch" ]]; then
+    conda deactivate
+  elif [[ $X_ENV == "sklearn" ]]; then
+    conda deactivate
+  elif [[ $X_ENV == "tf" ]]; then
+    conda deactivate
 
   # Env not found
   else
