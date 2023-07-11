@@ -20,12 +20,6 @@ if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-# Homebrew completions
-FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-
-# asdf completions
-fpath+="${ASDF_DIR}/completions"
-
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
@@ -197,7 +191,7 @@ unset color_prompt force_color_prompt
 export ZSH="/home/kanvk/.oh-my-zsh"
 plugins=(git git-lfs gh pip web-search docker docker-compose poetry copypath copyfile dirhistory
     history taskwarrior fzf vi-mode colorize colored-man-pages copybuffer z jsontools rust 
-    ssh-agent)
+    ssh-agent x)
 source $ZSH/oh-my-zsh.sh
 
 # Antigen config
@@ -225,6 +219,12 @@ antigen init ~/.antigenrc
 
 # Zfunc
 fpath+=~/.zfunc
+
+# Homebrew completions
+FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+
+# asdf completions
+fpath+="$ASDF_DIR/completions"
 
 setopt autocd              # change directory just by typing its name
 #setopt correct            # auto correct mistakes
@@ -254,7 +254,7 @@ bindkey '^[[F' end-of-line                        # end
 bindkey '^[[Z' undo                               # shift + tab undo last action
 
 # enable completion features
-autoload -Uz compinit
+autoload -Uz compinit && compinit
 compinit -d ~/.cache/zcompdump
 zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*' auto-description 'specify: %d'
@@ -350,6 +350,9 @@ alias ls='lsd'
 alias l='lsd -F'
 alias ll='lsd -lh'
 alias la='lsd -lAh'
+
+# Delayed commands
+eval "$(direnv hook zsh)"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

@@ -1,3 +1,2 @@
 #!/usr/bin/zsh
 # This hook is sourced after every virtualenv is activated.
-VIRTUALENV_POSTACTIVATE_PATH=$(pwd)

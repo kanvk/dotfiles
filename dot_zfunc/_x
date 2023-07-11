@@ -1,0 +1,8 @@
+#compdef x
+
+_x() {
+  envs=('vv8:virtualenv for vv8-crawler-slim' 'triton:conda env for triton')
+  _describe 'command' envs
+}
+
+_x "$@"
