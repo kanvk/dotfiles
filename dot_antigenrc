@@ -1,7 +1,0 @@
-antigen bundle djui/alias-tips
-antigen bundle zsh-users/zsh-completions
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle RobSis/zsh-completion-generator
-antigen theme romkatv/powerlevel10k
-antigen apply

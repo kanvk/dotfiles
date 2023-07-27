@@ -186,15 +186,14 @@ fi
 unset color_prompt force_color_prompt
 
 # Oh My ZSH config
-export ZSH="/home/kanvk/.oh-my-zsh"
+export ZSH="$HOME/.local/share/sheldon/repos/github.com/ohmyzsh/ohmyzsh"
 plugins=(git git-lfs gh pip web-search docker docker-compose poetry copypath copyfile dirhistory
     history taskwarrior fzf vi-mode colorize colored-man-pages copybuffer z jsontools rust 
     ssh-agent x)
 source $ZSH/oh-my-zsh.sh
 
-# Antigen config
-source /usr/share/zsh-antigen/antigen.zsh
-antigen init ~/.antigenrc
+# Sheldon config
+eval "$(sheldon source)"
 
 # zsh-autocomplete post-omz config
 # Reset up, down, ^R, ^S
