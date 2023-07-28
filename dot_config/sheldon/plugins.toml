@@ -23,7 +23,6 @@ github = "romkatv/zsh-defer"
 
 [plugins.oh-my-zsh]
 github = "ohmyzsh/ohmyzsh"
-apply = ["defer"]
 
 [plugins.alias-tips]
 github = "djui/alias-tips"
