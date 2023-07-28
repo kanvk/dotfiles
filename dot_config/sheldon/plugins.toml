@@ -23,9 +23,11 @@ github = "romkatv/zsh-defer"
 
 [plugins.oh-my-zsh]
 github = "ohmyzsh/ohmyzsh"
+apply = ["defer"]
 
 [plugins.alias-tips]
 github = "djui/alias-tips"
+apply = ["defer"]
 
 [plugins.zsh-completions]
 github = "zsh-users/zsh-completions"
@@ -34,6 +36,7 @@ apply = ["defer"]
 [plugins.zsh-autosuggestions]
 github = "zsh-users/zsh-autosuggestions"
 use = ["{{ name }}.zsh"]
+apply = ["defer"]
 
 [plugins.zsh-syntax-highlighting]
 github = "zsh-users/zsh-syntax-highlighting"
