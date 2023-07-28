@@ -19,24 +19,17 @@ function x() {
   # Temporarily store current directory
   X_ACTIVATE_PATH_TMP=$(pwd)
 
-  # vv8-crawler-slim
   if [[ $1 == "vv8" ]]; then
     workon vv8
     cd ~/Documents/git/vv8-crawler-slim/
-  # triton
-  elif [[ $1 == "triton" ]]; then
-    conda activate triton
-    cd ~/Documents/git/triton
   elif [[ $1 == "base" ]]; then
     conda activate base
-  elif [[ $1 == "modin" ]]; then
-    conda activate modin
-  elif [[ $1 == "pytorch" ]]; then
-    conda activate pytorch
-  elif [[ $1 == "sklearn" ]]; then
-    conda activate sklearn
-  elif [[ $1 == "tf" ]]; then
-    conda activate tf
+  elif [[ $1 == "rapids" ]]; then
+    conda activate rapids-23.06
+  elif [[ $1 == "base-win" ]]; then
+    pwsh.exe -noexit -Command 'cd ~; conda activate base'
+  elif [[ $1 == "pdl-win" ]]; then
+    pwsh.exe -noexit -Command 'cd ~; conda activate pdl'
     
   # Env not found
   else
@@ -59,24 +52,17 @@ function xd() {
     return 1
   fi
 
-  # vv8-crawler-slim
   if [[ $X_ENV == "vv8" ]]; then
     deactivate
     cd $X_ACTIVATE_PATH
-  # triton
-  elif [[ $X_ENV == "triton" ]]; then
-    conda deactivate
-    cd $X_ACTIVATE_PATH
   elif [[ $X_ENV == "base" ]]; then
     conda deactivate
-  elif [[ $X_ENV == "modin" ]]; then
+  elif [[ $X_ENV == "rapids" ]]; then
     conda deactivate
-  elif [[ $X_ENV == "pytorch" ]]; then
-    conda deactivate
-  elif [[ $X_ENV == "sklearn" ]]; then
-    conda deactivate
-  elif [[ $X_ENV == "tf" ]]; then
-    conda deactivate
+  elif [[ $X_ENV == "base-win" ]]; then
+    # Do nothing
+  elif [[ $X_ENV == "pdl-win" ]]; then
+    # Do nothing
 
   # Env not found
   else
