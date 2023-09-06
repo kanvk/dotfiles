@@ -5,7 +5,7 @@ alias wa='wolframalpha'
 # Updates
 alias uup='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y'
 alias nalaup='sudo nala upgrade --purge -y'
-alias zup='omz update && sheldon lock --update'
+alias zup='sheldon lock --update && omz update'
 alias rup='rustup update && cargo install-update -a'
 alias gup='go-global-update'
 alias nup='sudo npm -g update'
