@@ -30,6 +30,8 @@ function x() {
     pwsh.exe -noexit -Command 'cd ~; conda activate base'
   elif [[ $1 == "pdl-win" ]]; then
     pwsh.exe -noexit -Command 'cd ~; conda activate pdl'
+  elif [[ $1 == "sdp-las-win" ]]; then
+    pwsh.exe -noexit -Command 'cd C:\Users\kanvk\Documents\git\2023FallTeam22-LAS-1; conda activate sdp-las'
     
   # Env not found
   else
@@ -62,6 +64,8 @@ function xd() {
   elif [[ $X_ENV == "base-win" ]]; then
     # Do nothing
   elif [[ $X_ENV == "pdl-win" ]]; then
+    # Do nothing
+  elif [[ $X_ENV == "sdp-las-win" ]]; then
     # Do nothing
 
   # Env not found
