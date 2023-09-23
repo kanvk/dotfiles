@@ -3,7 +3,7 @@ alias gle='google'
 alias wa='wolframalpha'
 
 # Updates
-alias uup='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y'
+alias aptup='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y'
 alias nalaup='sudo nala upgrade --purge -y'
 alias zup='sheldon lock --update && omz update'
 alias rup='rustup update && cargo install-update -a'
