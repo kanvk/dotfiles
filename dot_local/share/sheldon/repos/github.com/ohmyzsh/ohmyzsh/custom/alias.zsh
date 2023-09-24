@@ -4,6 +4,11 @@ alias op='open_command'
 # web-search
 alias gle='google'
 alias wa='wolframalpha'
+alias ddg='ddg'
+alias ghb='github'
+alias sof='stackoverflow'
+alias sch='scholar'
+alias yt='youtube'
 
 # Updates
 alias aptup='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y'
