@@ -1,3 +1,6 @@
+# zsh/omz
+alias op='open_command'
+
 # web-search
 alias gle='google'
 alias wa='wolframalpha'
