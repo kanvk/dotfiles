@@ -12,8 +12,8 @@ alias nup='sudo npm -g update'
 alias vup='lvim +LvimUpdate +q'
 alias bup='brew update && brew upgrade && brew cleanup'
 alias pup='poetry self update'
-alias aup='uup && bup && rup && gup && nup && pup && vup && zup'
-alias uu='uup && zup'
+alias aup='aptup && bup && rup && gup && nup && pup && vup && zup'
+alias uu='aptup && zup'
 
 # vim
 alias nvim='lvim'
