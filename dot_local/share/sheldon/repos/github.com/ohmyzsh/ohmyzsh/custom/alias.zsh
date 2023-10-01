@@ -24,10 +24,10 @@ alias aup='aptup && bup && rup && gup && nup && pup && vup && zup'
 alias uu='aptup && zup'
 
 # vim
-alias nvim='lvim'
-alias vim='nvim'
-alias vimdiff='nvim -d'
-alias view='nvim -R'
+alias nvim='nvim'
+alias vim='lvim'
+alias vimdiff='vim -d'
+alias view='vim -R'
 
 # Use rust uutils if possible
 if  [ -x "$(command -v coreutils)" ]; then

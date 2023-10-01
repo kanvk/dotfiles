@@ -181,6 +181,10 @@ lvim.lsp.installer.setup.automatic_installation = true
 
 -- Additional Plugins
 lvim.plugins = {
+    {
+    "lukas-reineke/indent-blankline.nvim",
+    pin = true,
+    },
     { "tpope/vim-repeat" },
     {
         "nacro90/numb.nvim",
