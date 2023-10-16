@@ -24,8 +24,8 @@ alias aup='aptup && bup && rup && gup && nup && pup && vup && zup'
 alias uu='aptup && zup'
 
 # vim
-alias nvim='nvim'
 alias vim='lvim'
+alias nvim='lvim'
 alias vimdiff='vim -d'
 alias view='vim -R'
 
