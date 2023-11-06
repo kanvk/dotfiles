@@ -182,8 +182,8 @@ lvim.lsp.installer.setup.automatic_installation = true
 -- Additional Plugins
 lvim.plugins = {
     {
-    "lukas-reineke/indent-blankline.nvim",
-    pin = true,
+        "lukas-reineke/indent-blankline.nvim",
+        pin = true,
     },
     { "tpope/vim-repeat" },
     {
@@ -335,11 +335,11 @@ lvim.plugins = {
     {
         'wfxr/minimap.vim',
         build = "cargo install --locked code-minimap",
+        lazy = true,
         cmd = { "Minimap", "MinimapClose", "MinimapToggle", "MinimapRefresh", "MinimapUpdateHighlight" },
         config = function()
             vim.cmd("let g:minimap_width = 6")
         end,
-        lazy = true,
     },
     {
         "andymass/vim-matchup",
@@ -348,11 +348,27 @@ lvim.plugins = {
             vim.g.matchup_matchparen_offscreen = { method = "popup" }
         end,
     },
-    {
-        "nvim-neorg/neorg",
-        ft = "norg",   -- lazy-load on filetype
-        config = true, -- run require("neorg").setup()
-    },
+    "nvim-neorg/neorg",
+    build = ":Neorg sync-parsers",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    ft = "norg",
+    cmd = "Neorg",
+    priority = 30, -- TS is 50 by default
+    config = function()
+        require("neorg").setup {
+            load = {
+                ["core.defaults"] = {}, -- Loads default behaviour
+                ["core.concealer"] = {}, -- Adds pretty icons to your documents
+                ["core.dirman"] = { -- Manages Neorg workspaces
+                    config = {
+                        workspaces = {
+                            notes = "~/notes",
+                        },
+                    },
+                },
+            },
+        }
+    end,
 }
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
