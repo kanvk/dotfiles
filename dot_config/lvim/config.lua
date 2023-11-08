@@ -15,16 +15,16 @@ vim.opt.tabstop = 4           -- Set tab indent width
 vim.opt.colorcolumn = "120"   -- Set colorcolumn
 
 -- WSL Config
--- vim.g.clipboard = {
-    -- copy = {
-        -- ["+"] = "win32yank.exe -i --crlf",
-        -- ["*"] = "win32yank.exe -i --crlf",
-    -- },
-    -- paste = {
-        -- ["+"] = "win32yank.exe -o --lf",
-        -- ["*"] = "win32yank.exe -o --lf",
-    -- },
--- }
+vim.g.clipboard = {
+    copy = {
+        ["+"] = "win32yank.exe -i --crlf",
+        ["*"] = "win32yank.exe -i --crlf",
+    },
+    paste = {
+        ["+"] = "win32yank.exe -o --lf",
+        ["*"] = "win32yank.exe -o --lf",
+    },
+}
 
 -- general
 lvim.log.level = "warn"
@@ -93,7 +93,6 @@ lvim.builtin.which_key.mappings["S"] = {
     Q = { "<cmd>lua require('persistence').stop()<cr>", "Quit without saving session" },
 }
 
--- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
 lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.terminal.active = true
