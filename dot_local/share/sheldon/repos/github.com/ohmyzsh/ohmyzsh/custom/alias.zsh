@@ -168,6 +168,7 @@ alias tree='lsd --tree'
 alias h='history'
 alias db='distrobox'
 alias gkr='gitkraken'
+alias asg='ast-grep'
 
 # xclip
 alias c='xclip'
