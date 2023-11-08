@@ -1,5 +1,5 @@
 # WSL aliases
-alias exp='explorer.exe'
+alias epl='pwshw explorer.exe'
 alias cscw='win32yank.exe -i --crlf'
 alias vscw='win32yank.exe -o --lf'
 
