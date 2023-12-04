@@ -170,6 +170,7 @@ alias h='history'
 alias db='distrobox'
 alias gkr='gitkraken'
 alias asg='ast-grep'
+alias ngr='ranger'
 
 # xclip
 alias c='xclip'
