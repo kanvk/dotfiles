@@ -5,6 +5,7 @@ export LVIM_DEV_MODE=1
 export SUDO_EDITOR=/home/kanvk/.local/bin/lvim
 export GPG_TTY=$TTY
 export HOMEBREW_NO_ENV_HINTS=1
+export HOMEBREW_NO_ANALYTICS=1
 
 # Less pager config
 export LESS="-R --mouse --wheel-lines=3"

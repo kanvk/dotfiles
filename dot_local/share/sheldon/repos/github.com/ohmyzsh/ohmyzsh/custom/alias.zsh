@@ -24,7 +24,7 @@ alias tldrup='tldr -u'
 alias rubyup='gem update --system && gem update'
 alias haskellup='stack upgrade && stack update'
 alias perlup='cpan -u'
-alias uu='aptup && brewup && rustupg && goup && npmup && poetryupup && vimup && tldrup && zshup'
+alias uu='aptup && brewup && rustupg && goup && npmup && poetryup && vimup && tldrup && zshup'
 alias aup='uu && rubyup && haskellup && perlup'
 
 # vim
