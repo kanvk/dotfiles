@@ -24,7 +24,7 @@ alias tldrup='tldr -u'
 alias rubyup='gem update --system && gem update'
 alias haskellup='stack upgrade && stack update'
 alias perlup='cpan -u'
-alias uu='aptup && brewup && rustupg && goup && npmup && poetryup && vimup && tldrup && zshup'
+alias uu='nalaup && brewup && rustupg && goup && npmup && poetryup && vimup && tldrup && zshup'
 alias aup='uu && rubyup && haskellup && perlup'
 
 # vim
@@ -164,7 +164,6 @@ alias ip='ip --color=auto'
 
 # Other Programs
 alias py='python3'
-alias bat='batcat'
 alias lg='lazygit'
 alias lzd='lazydocker'
 alias clr='clear'
