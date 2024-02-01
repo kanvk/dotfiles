@@ -2,8 +2,8 @@
 
 _x() {
   envs=('vv8:virtualenv for vv8-crawler-slim' 'base:conda base env' 
-      'rapids:conda rapids-23.06 env' 'base-win:conda base env (pwsh)'
-      'pdl-win:conda pdl env (pwsh)' 'sdp-las-win:conda sdp-las env (pwsh)')
+      'tf:conda tensorflow env' 'base-win:conda base env (pwsh)'
+      'pdl-win:conda pdl env (pwsh)' 'las:LAS_Transcribe dev env')
   _describe 'command' envs
 }
 

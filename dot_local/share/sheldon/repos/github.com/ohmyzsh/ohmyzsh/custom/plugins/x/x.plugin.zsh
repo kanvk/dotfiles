@@ -20,18 +20,17 @@ function x() {
   X_ACTIVATE_PATH_TMP=$(pwd)
 
   if [[ $1 == "vv8" ]]; then
-    workon vv8
-    cd ~/Documents/git/vv8-crawler-slim/
+    cd ~/dev/36_vv8_phishing
   elif [[ $1 == "base" ]]; then
     conda activate base
-  elif [[ $1 == "rapids" ]]; then
-    conda activate rapids-23.06
+  elif [[ $1 == "tf" ]]; then
+    conda activate tf
   elif [[ $1 == "base-win" ]]; then
     pwsh.exe -noexit -Command 'cd ~; conda activate base'
   elif [[ $1 == "pdl-win" ]]; then
     pwsh.exe -noexit -Command 'cd ~; conda activate pdl'
-  elif [[ $1 == "sdp-las-win" ]]; then
-    pwsh.exe -noexit -Command 'cd C:\Users\kanvk\Documents\git\2023FallTeam22-LAS-1; conda activate sdp-las'
+  elif [[ $1 == "las" ]]; then
+    cd ~/dev/LAS_Transcribe
     
   # Env not found
   else
@@ -47,7 +46,7 @@ function x() {
 }
 
 # Deactivates env
-function xd() {
+function xx() {
   # Exit if no env is active
   if [[ -z $X_ENV ]]; then
     echo "No environment active" 1>&2
@@ -55,17 +54,17 @@ function xd() {
   fi
 
   if [[ $X_ENV == "vv8" ]]; then
-    deactivate
+    # Do nothing
     cd $X_ACTIVATE_PATH
   elif [[ $X_ENV == "base" ]]; then
     conda deactivate
-  elif [[ $X_ENV == "rapids" ]]; then
+  elif [[ $X_ENV == "tf" ]]; then
     conda deactivate
   elif [[ $X_ENV == "base-win" ]]; then
     # Do nothing
   elif [[ $X_ENV == "pdl-win" ]]; then
     # Do nothing
-  elif [[ $X_ENV == "sdp-las-win" ]]; then
+  elif [[ $X_ENV == "las" ]]; then
     # Do nothing
 
   # Env not found
@@ -74,7 +73,8 @@ function xd() {
     return 1
   fi
   
-  # Unset environment variables
+  # cd back and unset environment variables
+  cd $X_ACTIVATE_PATH
   xc
 }
 
