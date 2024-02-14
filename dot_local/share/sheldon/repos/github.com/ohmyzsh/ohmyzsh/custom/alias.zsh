@@ -15,6 +15,7 @@ alias aptup='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove 
 alias nalaup='sudo nala upgrade --purge -y'
 alias zshup='sheldon lock --update && omz update'
 alias rustupg='rustup update && cargo install-update -a'
+alias pipup='pipx upgrade-all'
 alias goup='go-global-update'
 alias npmup='sudo npm -g update'
 alias vimup='lvim +LvimUpdate +q'
@@ -24,7 +25,7 @@ alias tldrup='tldr -u'
 alias rubyup='gem update --system && gem update'
 alias haskellup='stack upgrade && stack update'
 alias perlup='cpan -u'
-alias uu='nalaup && brewup && rustupg && goup && npmup && poetryup && vimup && tldrup && zshup'
+alias uu='nalaup && brewup && rustupg && pipup && goup && npmup && poetryup && vimup && tldrup && zshup'
 alias aup='uu && rubyup && haskellup && perlup'
 
 # vim
