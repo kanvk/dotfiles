@@ -174,6 +174,7 @@ alias db='distrobox'
 alias gkr='gitkraken'
 alias asg='ast-grep'
 alias ngr='ranger'
+alias llm='ollama'
 
 # xclip
 alias c='xclip'

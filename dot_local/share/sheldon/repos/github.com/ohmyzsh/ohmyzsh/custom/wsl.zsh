@@ -2,7 +2,8 @@
 alias epl='pwshw explorer.exe'
 alias cscw='win32yank.exe -i --crlf'
 alias vscw='win32yank.exe -o --lf'
-alias llm='ollama.exe'
+alias ollama='ollama.exe'
+alias ollamawsl='\ollama'
 
 func openw() {
     cmd.exe /C start "$*"
