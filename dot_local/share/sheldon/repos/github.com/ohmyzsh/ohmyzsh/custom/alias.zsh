@@ -176,6 +176,7 @@ alias gkr='gitkraken'
 alias asg='ast-grep'
 alias ngr='ranger'
 alias llm='ollama'
+alias bat='batcat'
 
 # xclip
 alias c='xclip'
