@@ -347,27 +347,18 @@ lvim.plugins = {
             vim.g.matchup_matchparen_offscreen = { method = "popup" }
         end,
     },
-    "nvim-neorg/neorg",
-    build = ":Neorg sync-parsers",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    ft = "norg",
-    cmd = "Neorg",
-    priority = 30, -- TS is 50 by default
-    config = function()
-        require("neorg").setup {
-            load = {
-                ["core.defaults"] = {}, -- Loads default behaviour
-                ["core.concealer"] = {}, -- Adds pretty icons to your documents
-                ["core.dirman"] = { -- Manages Neorg workspaces
-                    config = {
-                        workspaces = {
-                            notes = "~/notes",
-                        },
-                    },
-                },
-            },
-        }
-    end,
+    {
+        "vhyrro/luarocks.nvim",
+        priority = 1000,
+        config = true,
+    },
+    {
+        "nvim-neorg/neorg",
+        dependencies = { "luarocks.nvim" },
+        ft = "norg", -- lazy-load on filetype
+        version = "*", -- Pin Neorg to the latest stable release
+        config = true,
+    },
 }
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
@@ -382,7 +373,7 @@ lvim.plugins = {
 --     -- let treesitter use bash highlight for zsh files as well
 --     require("nvim-treesitter.highlight").attach(0, "bash")
 --   end,
--- })
+-- }
 
 -- statusline config
 local components = require("lvim.core.lualine.components")
