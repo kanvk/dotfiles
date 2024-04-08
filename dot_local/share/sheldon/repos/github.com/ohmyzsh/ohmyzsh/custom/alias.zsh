@@ -12,7 +12,7 @@ alias yt='youtube'
 
 # Updates
 alias aptup='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y'
-alias nalaup='sudo nala upgrade --purge -y'
+alias nalaup='sudo nala full-upgrade --purge -y'
 alias zshup='sheldon lock --update && omz update'
 alias rustupg='rustup update && cargo install-update -a'
 alias pipup='pipx upgrade-all'
