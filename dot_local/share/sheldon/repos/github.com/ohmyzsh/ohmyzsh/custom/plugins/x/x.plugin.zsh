@@ -5,15 +5,15 @@ function x() {
       if [[ $X_ENV == $1  ]]; then
         echo "$X_ENV already active" 1>&2
       else
-        echo "$X_ENV is active, deactivate it first" 1>&2
+        echo "$X_ENV is active" 1>&2
       fi
-      return 1
+      return 0
   fi
 
   # Exit if no env was provided
   if [[ -z $1 ]]; then
-    echo "No environment provided" 1>&2
-    return 1
+    echo "No environment active" 1>&2
+    return 0
   fi
 
   # Temporarily store current directory
