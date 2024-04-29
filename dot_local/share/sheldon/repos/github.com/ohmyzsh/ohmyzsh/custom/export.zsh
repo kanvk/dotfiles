@@ -1,8 +1,7 @@
 export PATH=/home/kanvk/.local/bin:/home/kanvk/.cargo/bin:/home/kanvk/go/bin:$PATH
-export VISUAL='lvim'
-export EDITOR='lvim'
-export LVIM_DEV_MODE=1
-export SUDO_EDITOR=/home/kanvk/.local/bin/lvim
+export VISUAL='nvim'
+export EDITOR='nvim'
+export SUDO_EDITOR='/home/linuxbrew/.linuxbrew/bin/nvim'
 export GPG_TTY=$TTY
 export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_NO_ANALYTICS=1

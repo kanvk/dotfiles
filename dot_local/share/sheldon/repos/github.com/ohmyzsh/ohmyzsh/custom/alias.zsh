@@ -18,7 +18,7 @@ alias rustupg='rustup update && cargo install-update -a'
 alias pipup='pipx upgrade-all'
 alias goup='go-global-update'
 alias npmup='sudo npm -g update'
-alias vimup='lvim +LvimUpdate +q'
+alias vimup='nvim +AstroUpdate +qa'
 alias brewup='brew update && brew upgrade && brew autoremove && brew cleanup'
 alias poetryup='poetry self update'
 alias tldrup='tldr -u'
@@ -30,8 +30,7 @@ alias uu='nalaup && brewup && rustupg && pipup && goup && npmup && poetryup && v
 alias aup='uu && rubyup && haskellup && perlup && nixup'
 
 # vim
-alias vim='lvim'
-alias nvim='lvim'
+alias vim='nvim'
 alias vimdiff='vim -d'
 alias view='vim -R'
 
