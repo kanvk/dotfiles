@@ -122,7 +122,7 @@ if [ "$color_prompt" = yes ]; then
         ## Comments
         ZSH_HIGHLIGHT_STYLES[comment]='fg=#6272A4'
         ## Constants
-        ## Entitites
+        ## Entities
         ## Functions/methods
         ZSH_HIGHLIGHT_STYLES[alias]='fg=#50FA7B'
         ZSH_HIGHLIGHT_STYLES[suffix-alias]='fg=#50FA7B'
