@@ -25,7 +25,7 @@ alias tldrup='tldr -u'
 alias rubyup='gem update --system && gem update'
 alias haskellup='stack upgrade && stack update'
 alias perlup='cpan -u'
-alias nixup='sudo -i nix upgrade-nix && nix-channel --update'
+alias nixup='nix upgrade-nix && nix-channel --update'
 alias uu='nalaup && brewup && rustupg && pipup && goup && npmup && poetryup && vimup && tldrup && zshup'
 alias aup='uu && rubyup && haskellup && perlup && nixup'
 
