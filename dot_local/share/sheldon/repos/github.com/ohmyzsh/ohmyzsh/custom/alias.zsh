@@ -176,6 +176,7 @@ alias asg='ast-grep'
 alias ngr='ranger'
 alias llm='ollama'
 alias bat='batcat'
+alias yz='yazi'
 
 # xclip
 alias c='xclip'
