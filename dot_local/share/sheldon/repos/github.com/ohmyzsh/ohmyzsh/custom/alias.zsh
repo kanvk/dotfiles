@@ -22,12 +22,13 @@ alias vimup='nvim +AstroUpdate +qa'
 alias brewup='brew update && brew upgrade && brew autoremove && brew cleanup'
 alias poetryup='poetry self update'
 alias tldrup='tldr -u'
-alias rubyup='gem update --system && gem update'
+alias rubyup='sudo gem update' # add gem update --system for non-apt installs
 alias haskellup='stack upgrade && stack update'
 alias perlup='cpan -u'
+alias asdfup='asdf plugin-update --all'
 alias nixup='nix upgrade-nix && nix-channel --update'
 alias uu='nalaup && brewup && rustupg && pipup && goup && npmup && poetryup && vimup && tldrup && zshup'
-alias aup='uu && rubyup && haskellup && perlup && nixup'
+alias aup='uu && asdfup && rubyup && haskellup && perlup && nixup'
 
 # vim
 alias vim='nvim'
