@@ -9,6 +9,7 @@ alias ghb='github'
 alias sof='stackoverflow'
 alias sch='scholar'
 alias yt='youtube'
+alias gpt='chatgpt'
 
 # Updates
 alias aptup='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y'
