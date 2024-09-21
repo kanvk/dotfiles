@@ -191,7 +191,7 @@ unset color_prompt force_color_prompt
 export ZSH="$HOME/.local/share/sheldon/repos/github.com/ohmyzsh/ohmyzsh"
 plugins=(git git-lfs gh pip web-search docker docker-compose poetry copypath copyfile dirhistory
     history taskwarrior fzf vi-mode colorize colored-man-pages copybuffer z jsontools rust 
-    ssh-agent)
+    ssh-agent conda brew)
 source $ZSH/oh-my-zsh.sh
 
 # Sheldon config
