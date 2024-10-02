@@ -3,7 +3,7 @@
 _x() {
   envs=('vv8:virtualenv for vv8-crawler-slim' 'base:conda base env' 
       'tf:conda tensorflow env' 'base-win:conda base env (pwsh)'
-      'pdl-win:conda pdl env (pwsh)' 'las:LAS_Transcribe dev env')
+      'pdl-win:conda pdl env (pwsh)' 'echolab:echolab env')
   _describe 'command' envs
 }
 

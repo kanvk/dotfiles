@@ -29,8 +29,8 @@ function x() {
     pwsh.exe -noexit -Command 'cd ~; conda activate base'
   elif [[ $1 == "pdl-win" ]]; then
     pwsh.exe -noexit -Command 'cd ~; conda activate pdl'
-  elif [[ $1 == "las" ]]; then
-    cd ~/dev/LAS_Transcribe
+  elif [[ $1 == "echolab" ]]; then
+    cd ~/dev/echolab
     
   # Env not found
   else
@@ -64,7 +64,7 @@ function xx() {
     # Do nothing
   elif [[ $X_ENV == "pdl-win" ]]; then
     # Do nothing
-  elif [[ $X_ENV == "las" ]]; then
+  elif [[ $X_ENV == "echolab" ]]; then
     # Do nothing
 
   # Env not found
