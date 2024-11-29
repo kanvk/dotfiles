@@ -37,7 +37,7 @@ alias vimdiff='vim -d'
 alias view='vim -R'
 
 # Use rust uutils if possible
-if  [ -x "$(command -v coreutils)" ]; then
+if  [ -x "$(command -v coreutils)" ] && false; then
     alias arch="command coreutils arch"
     alias b2sum="command coreutils b2sum"
     alias b3sum="command coreutils b3sum"
