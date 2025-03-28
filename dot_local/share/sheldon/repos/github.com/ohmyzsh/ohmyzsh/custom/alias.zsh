@@ -26,7 +26,7 @@ alias tldrup='tldr -u'
 alias rubyup='sudo gem update' # add gem update --system for non-apt installs
 alias haskellup='stack upgrade && stack update'
 alias perlup='cpan -u'
-alias asdfup='asdf plugin-update --all'
+alias asdfup='asdf plugin update --all'
 alias nixup='nix upgrade-nix && nix-channel --update'
 alias uu='nalaup && brewup && rustupg && pipup && goup && npmup && vimup && tldrup && zshup'  # pipx updates poetry
 alias aup='uu && asdfup && rubyup && haskellup && perlup && nixup'
@@ -37,7 +37,7 @@ alias vimdiff='vim -d'
 alias view='vim -R'
 
 # Use rust uutils if possible
-if  [ -x "$(command -v coreutils)" ] && false; then
+if  [ -x "$(command -v coreutils)" ]; then
     alias arch="command coreutils arch"
     alias b2sum="command coreutils b2sum"
     alias b3sum="command coreutils b3sum"
