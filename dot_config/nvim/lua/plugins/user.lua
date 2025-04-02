@@ -2,67 +2,14 @@
 
 ---@type LazySpec
 return {
-  { "tpope/vim-repeat" },
-  {
-    "ggandor/leap.nvim",
-    event = "BufRead",
-    config = function()
-      local leap = require "leap"
-      leap.create_default_mappings()
-      leap.setup {
-        next_group = "<tab>",
-        prev_group = "<shift-tab>",
-      }
-    end,
-  },
-  {
-    "windwp/nvim-spectre",
-    lazy = true,
-    event = "BufRead",
-    config = function() require("spectre").setup() end,
-  },
-  {
-    "andymass/vim-matchup",
-    event = "CursorMoved",
-    config = function() vim.g.matchup_matchparen_offscreen = { method = "popup" } end,
-  },
-  {
-    "sindrets/diffview.nvim",
-    event = "BufRead",
-  },
-  {
-    "f-person/git-blame.nvim",
-    event = "BufRead",
-    config = function()
-      vim.cmd "highlight default link gitblame SpecialComment"
-      vim.g.gitblame_enabled = 0
-    end,
-  },
-  {
-    "tpope/vim-fugitive",
-    lazy = true,
-    cmd = {
-      "G",
-      "Git",
-      "Gdiffsplit",
-      "Gread",
-      "Gwrite",
-      "Ggrep",
-      "GMove",
-      "GDelete",
-      "GBrowse",
-      "GRemove",
-      "GRename",
-      "Glgrep",
-      "Gedit",
-    },
-    ft = { "fugitive" },
-  },
+  -- Added plugins
   {
     "metakirby5/codi.vim",
     lazy = true,
     cmd = "Codi",
   },
+
+  -- Modified plugins
   {
     "folke/snacks.nvim",
     opts = {
