@@ -15,7 +15,5 @@ if not pcall(require, "lazy") then
   vim.cmd.quit()
 end
 
-require("user.wsl_clipboard").setup() -- Use win32yank with WSL
-
 require "lazy_setup"
 require "polish"

@@ -8,5 +8,6 @@ return {
   { import = "astrocommunity.pack.lua" },
   { import = "astrocommunity.colorscheme.catppuccin" },
   { import = "astrocommunity.colorscheme.dracula-nvim" },
+  { import = "astrocommunity.remote-development.remote-sshfs-nvim" },
   -- import/override with your plugins folder
 }

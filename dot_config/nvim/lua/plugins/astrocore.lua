@@ -11,7 +11,7 @@ return {
       large_buf = { size = 1024 * 256, lines = 10000 }, -- set global limits for large files for disabling features like treesitter
       autopairs = true, -- enable autopairs at start
       cmp = true, -- enable completion at start
-      diagnostics_mode = 3, -- diagnostic mode on start (0 = off, 1 = no signs/virtual text, 2 = no virtual text, 3 = on)
+      diagnostics = { virtual_text = true, virtual_lines = false }, -- diagnostic settings on startup
       highlighturl = true, -- highlight URLs at start
       notifications = true, -- enable notifications at start
     },
@@ -19,6 +19,19 @@ return {
     diagnostics = {
       virtual_text = true,
       underline = true,
+    },
+    -- passed to `vim.filetype.add`
+    filetypes = {
+      -- see `:h vim.filetype.add` for usage
+      extension = {
+        foo = "fooscript",
+      },
+      filename = {
+        [".foorc"] = "fooscript",
+      },
+      pattern = {
+        [".*/etc/foo/.*"] = "fooscript",
+      },
     },
     -- vim options can be configured here
     options = {
@@ -38,6 +51,7 @@ return {
         -- configure global vim variables (vim.g)
         -- NOTE: `mapleader` and `maplocalleader` must be set in the AstroNvim opts or before `lazy.setup`
         -- This can be found in the `lua/lazy_setup.lua` file
+        python3_host_prog = "/home/kanvk/.pyenv/shims/python3",
       },
     },
     -- Mappings can be configured through AstroCore as well.
@@ -60,10 +74,11 @@ return {
           end,
           desc = "Close buffer from tabline",
         },
+
         -- tables with just a `desc` key will be registered with which-key if it's installed
         -- this is useful for naming menus
         -- ["<Leader>b"] = { desc = "Buffers" },
-        
+
         -- setting a mapping to false will disable it
         -- ["<C-S>"] = false,
       },

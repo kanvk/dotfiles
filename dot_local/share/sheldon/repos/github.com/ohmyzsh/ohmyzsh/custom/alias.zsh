@@ -29,7 +29,7 @@ alias perlup='cpan -u'
 alias asdfup='asdf plugin update --all'
 alias nixup='nix upgrade-nix && nix-channel --update'
 alias uu='nalaup && brewup && rustupg && pipup && goup && npmup && vimup && tldrup && zshup'  # pipx updates poetry
-alias aup='uu && asdfup && rubyup && haskellup && perlup && nixup'
+alias aup='uu && asdfup && rubyup && haskellup && perlup'
 
 # vim
 alias vim='nvim'
