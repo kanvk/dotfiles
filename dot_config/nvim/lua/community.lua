@@ -18,7 +18,7 @@ return {
   { import = "astrocommunity.markdown-and-latex.markview-nvim" },
   { import = "astrocommunity.motion.flash-nvim" },
   { import = "astrocommunity.motion.vim-matchup" },
-  { import = "astrocommunity.note-taking.neorg" },
+  -- { import = "astrocommunity.note-taking.neorg" },
   { import = "astrocommunity.pack.bash" },
   { import = "astrocommunity.pack.chezmoi" },
   { import = "astrocommunity.pack.cmake" },

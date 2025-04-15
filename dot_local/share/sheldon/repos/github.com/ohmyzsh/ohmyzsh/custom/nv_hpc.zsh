@@ -1,4 +1,4 @@
-NVVER=2024
+NVVER=2025
 # Nvidia HPC SDK Config
 NVARCH=`uname -s`_`uname -m`; export NVARCH
 NVCOMPILERS=/opt/nvidia/hpc_sdk; export NVCOMPILERS

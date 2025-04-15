@@ -45,9 +45,13 @@ apply = ["defer"]
 github = "RobSis/zsh-completion-generator"
 apply = ["defer"]
 
-[plugins.x]
-local = "~/.local/share/sheldon/repos/github.com/ohmyzsh/ohmyzsh/custom/plugins/x"
+[plugins.fzf-tab]
+github = "Aloxaf/fzf-tab"
 apply = ["defer"]
 
 [plugins.powerlevel10k]
 github = "romkatv/powerlevel10k"
+
+[plugins.x]
+local = "~/.local/share/sheldon/repos/github.com/ohmyzsh/ohmyzsh/custom/plugins/x"
+apply = ["defer"]
