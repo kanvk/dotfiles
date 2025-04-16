@@ -45,6 +45,10 @@ apply = ["defer"]
 github = "RobSis/zsh-completion-generator"
 apply = ["defer"]
 
+[plugins.zsh-ssh]
+github = "kanvk/zsh-ssh"
+apply = ["defer"]
+
 [plugins.fzf-tab]
 github = "Aloxaf/fzf-tab"
 apply = ["defer"]

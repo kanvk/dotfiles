@@ -5,6 +5,8 @@ export SUDO_EDITOR='/home/linuxbrew/.linuxbrew/bin/nvim'
 export GPG_TTY=$TTY
 export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_NO_ANALYTICS=1
+export FZF_DEFAULT_OPTS="--bind=tab:down,shift-tab:up"
+export LS_COLORS="$(vivid generate snazzy)"
 
 # Less pager config
 export LESS="-R --mouse --wheel-lines=3"
@@ -30,13 +32,6 @@ export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 # export LESS_TERMCAP_ZV=$(tput rsubm)
 # export LESS_TERMCAP_ZO=$(tput ssupm)
 # export LESS_TERMCAP_ZW=$(tput rsupm)
-
-# Perl
-PATH="/home/kanvk/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="/home/kanvk/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/home/kanvk/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/home/kanvk/perl5\""; export PERL_MM_OPTB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/home/kanvk/perl5"; export PERL_MM_OPT;
 
 # pipx
 export PIPX_DEFAULT_PYTHON='/home/kanvk/.pyenv/shims/python3.12'
