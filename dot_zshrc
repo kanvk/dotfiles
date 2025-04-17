@@ -183,6 +183,10 @@ else
 fi
 unset color_prompt force_color_prompt
 
+# ssh-agent config (has to be before loading oh-my-zsh)
+zstyle :omz:plugins:ssh-agent lazy yes
+zstyle :omz:plugins:ssh-agent quiet yes
+
 # Oh My ZSH config
 export ZSH="$HOME/.local/share/sheldon/repos/github.com/ohmyzsh/ohmyzsh"
 plugins=(git git-lfs gh pip web-search docker docker-compose poetry copypath copyfile dirhistory

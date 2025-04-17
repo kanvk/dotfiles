@@ -30,7 +30,7 @@ return {
       -- Add user@host component to display the current user and hostname
       status.component.builder {
         provider = function()
-          local user = os.getenv("USER") or "user"
+          local user = os.getenv "USER" or "user"
           local host = vim.loop.os_gethostname() or "host"
           return string.format(" %s@%s", user, host)
         end,
@@ -44,33 +44,33 @@ return {
             ---@cast time string
             return status.utils.stylize(time, {
               icon = { kind = "Clock", padding = { left = 1, right = 1 } }, -- use our new clock icon
-              padding = { right = 1 },                            -- pad the right side so it's not cramped
+              padding = { right = 1 }, -- pad the right side so it's not cramped
             })
           end,
         },
         update = { -- update should happen when the mode has changed as well as when the time has changed
-          "User",  -- We can use the User autocmd event space to tell the component when to update
+          "User", -- We can use the User autocmd event space to tell the component when to update
           "ModeChanged",
           callback = vim.schedule_wrap(function(_, args)
             if -- update on user UpdateTime event and mode change
-                (args.event == "User" and args.match == "UpdateTime")
-                or (args.event == "ModeChanged" and args.match:match ".*:.*")
+              (args.event == "User" and args.match == "UpdateTime")
+              or (args.event == "ModeChanged" and args.match:match ".*:.*")
             then
               vim.cmd.redrawstatus() -- redraw on update
             end
           end),
         },
-        hl = status.hl.get_attributes "mode",                          -- highlight based on mode attributes
-        surround = { separator = "right", color = status.hl.mode_bg }, -- background highlight based on mode
+        -- hl = status.hl.get_attributes "mode", -- highlight based on mode attributes
+        -- surround = { separator = "right", color = status.hl.mode_bg }, -- background highlight based on mode
       },
     }
 
     -- Now that we have the component, we need a timer to emit the User UpdateTime event
-    vim.uv.new_timer():start(               -- timer for updating the time
+    vim.uv.new_timer():start( -- timer for updating the time
       (60 - tonumber(os.date "%S")) * 1000, -- offset timer based on current seconds past the minute
-      60000,                                -- update every 60 seconds
+      60000, -- update every 60 seconds
       vim.schedule_wrap(function()
-        vim.api.nvim_exec_autocmds(         -- emit our new User event
+        vim.api.nvim_exec_autocmds( -- emit our new User event
           "User",
           { pattern = "UpdateTime", modeline = false }
         )
