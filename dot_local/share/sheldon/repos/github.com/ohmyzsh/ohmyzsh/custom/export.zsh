@@ -7,6 +7,8 @@ export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_NO_ANALYTICS=1
 export FZF_DEFAULT_OPTS="--bind=tab:down,shift-tab:up"
 export LS_COLORS="$(vivid generate snazzy)"
+export LD_LIBRARY_PATH="/usr/lib/wsl/lib/:$LD_LIBRARY_PATH"
+export NUMBA_CUDA_DRIVER="/usr/lib/wsl/lib/libcuda.so.1"
 
 # Less pager config
 export LESS="-R --mouse --wheel-lines=3"
