@@ -179,6 +179,7 @@ alias ngr='ranger'
 alias llm='ollama'
 alias bat='batcat'
 alias yz='yazi'
+alias nf='apprise'
 
 # xclip
 alias c='xclip'
