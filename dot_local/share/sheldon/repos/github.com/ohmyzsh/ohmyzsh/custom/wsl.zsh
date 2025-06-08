@@ -18,3 +18,7 @@ func cmdw() {
 func pwshw() {
     pwsh.exe -C "$*"
 }
+alias pw='pwshw'
+
+# Program aliases
+alias qdrant='pwshw qdrant'

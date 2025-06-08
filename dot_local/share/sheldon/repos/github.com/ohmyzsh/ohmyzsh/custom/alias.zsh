@@ -180,9 +180,13 @@ alias llm='ollama'
 alias bat='batcat'
 alias yz='yazi'
 alias nf='apprise'
+alias nfw='apprise --tag=wk'
 
 # xclip
 alias c='xclip'
 alias v='xclip -o'
 alias csc='xclip -sel c'
 alias vsc='xclip -o -sel c'
+
+# misc
+alias sa='source .venv/bin/activate'
