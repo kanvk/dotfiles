@@ -28,7 +28,7 @@ alias haskellup='stack upgrade && stack update'
 alias perlup='sudo sh -c "cpanm --self-upgrade && cpan-outdated | cpanm"'
 alias asdfup='asdf plugin update --all'
 alias nixup='nix upgrade-nix && nix-channel --update'
-alias uu='nalaup && brewup && rustupg && pipup && goup && npmup && vimup && tldrup && zshup' # pipx updates poetry
+alias uu='nalaup && brewup && rustupg && pipup && goup && npmup && tldrup && zshup' # pipx updates poetry
 alias uuu='uu && asdfup && rubyup && haskellup && perlup'
 
 # vim
@@ -190,3 +190,4 @@ alias vsc='xclip -o -sel c'
 
 # misc
 alias sa='source .venv/bin/activate'
+alias pyinstall="TCLTK_PATH=$(brew --prefix tcl-tk) PYTHON_CONFIGURE_OPTS="--with-tcltk-includes=${TCLTK_PATH}/include --with-tcltk-libs=${TCLTK_PATH}/lib" pyenv install"

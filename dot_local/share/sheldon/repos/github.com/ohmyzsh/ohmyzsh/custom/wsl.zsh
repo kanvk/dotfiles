@@ -22,3 +22,4 @@ alias pw='pwshw'
 
 # Program aliases
 alias qdrant='pwshw qdrant'
+alias bw='pwshw bw'
