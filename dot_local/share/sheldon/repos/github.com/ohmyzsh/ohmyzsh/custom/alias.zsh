@@ -178,6 +178,8 @@ alias asg='ast-grep'
 alias ngr='ranger'
 alias llm='ollama'
 alias bat='batcat'
+alias cat='bat'
+alias less='moor'
 alias yz='yazi'
 alias nf='apprise'
 

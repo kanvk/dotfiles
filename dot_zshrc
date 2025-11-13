@@ -366,6 +366,7 @@ alias la='eza -lAh --icons=auto'
 # Delayed commands
 eval "$(direnv hook zsh)"
 eval "$(zoxide init zsh)"
+eval "$(mcfly init zsh)"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
