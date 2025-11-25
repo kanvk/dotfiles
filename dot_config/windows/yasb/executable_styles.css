@@ -1,34 +1,34 @@
 /* -------------------------------------------------------------------------------------------------- */
-/* Variables                                                                                         */
+/* Variables                                                                                          */
 /* -------------------------------------------------------------------------------------------------- */
 
 :root {
-	--rosewater: rgb(245, 224, 220);
-	--flamingo: rgb(242, 205, 205);
-	--pink: rgb(245, 194, 231);
-	--mauve: rgb(203, 166, 247);
-	--red: rgb(243, 139, 168);
-	--maroon: rgb(235, 160, 172);
-	--peach: rgb(250, 179, 135);
-	--yellow: rgb(249, 226, 175);
-	--green: rgb(166, 227, 161);
-	--teal: rgb(148, 226, 213);
-	--sky: rgb(137, 220, 235);
-	--sapphire: rgb(116, 199, 236);
-	--blue: rgb(137, 180, 250);
-	--lavender: rgb(180, 190, 254);
-	--text: rgb(205, 214, 244);
-	--subtext1: rgb(186, 194, 222);
-	--subtext0: rgb(166, 173, 200);
-	--overlay2: rgb(147, 153, 178);
-	--overlay1: rgb(127, 132, 156);
-	--overlay0: rgb(108, 112, 134);
-	--surface2: rgb(88, 91, 112);
-	--surface1: rgb(69, 71, 90);
-	--surface0: rgb(40, 41, 54);
-	--base: rgb(30, 30, 46);
-	--mantle: rgb(24, 24, 37);
-	--crust: rgb(17, 17, 27);
+    --rosewater: rgb(245, 224, 220);
+    --flamingo: rgb(242, 205, 205);
+    --pink: rgb(245, 194, 231);
+    --mauve: rgb(203, 166, 247);
+    --red: rgb(243, 139, 168);
+    --maroon: rgb(235, 160, 172);
+    --peach: rgb(250, 179, 135);
+    --yellow: rgb(249, 226, 175);
+    --green: rgb(166, 227, 161);
+    --teal: rgb(148, 226, 213);
+    --sky: rgb(137, 220, 235);
+    --sapphire: rgb(116, 199, 236);
+    --blue: rgb(137, 180, 250);
+    --lavender: rgb(180, 190, 254);
+    --text: rgb(205, 214, 244);
+    --subtext1: rgb(186, 194, 222);
+    --subtext0: rgb(166, 173, 200);
+    --overlay2: rgb(147, 153, 178);
+    --overlay1: rgb(127, 132, 156);
+    --overlay0: rgb(108, 112, 134);
+    --surface2: rgb(88, 91, 112);
+    --surface1: rgb(69, 71, 90);
+    --surface0: rgb(40, 41, 54);
+    --base: rgb(30, 30, 46);
+    --mantle: rgb(24, 24, 37);
+    --crust: rgb(17, 17, 27);
 }
 
 /* -------------------------------------------------------------------------------------------------- */
@@ -36,453 +36,969 @@
 /* -------------------------------------------------------------------------------------------------- */
 
 * {
-	font-size: 12px;
-	color: #cdd6f4;
-	font-weight: 500;
-	font-family: "CaskaydiaCove Nerd Font Mono", "JetBrainsMonoNL Nerd Font Mono";
-	margin: 0;
-	padding: 0;
+    font-size: 12px;
+    color: #cdd6f4;
+    font-weight: 500;
+    font-family: "CaskaydiaCove Nerd Font Mono",
+        "JetBrainsMonoNL Nerd Font Mono";
+    margin: 0;
+    padding: 0;
 }
 .yasb-bar {
-	padding: 0 8px;
-	margin: 0;
-	background-color: #1e1e2e;
-	border-radius: 8px;
+    padding: 0 8px;
+    margin: 0;
+    background-color: #1e1e2e;
+    border-radius: 8px;
 }
 
 .widget {
-	padding: 0 10px;
-	margin: 0;
+    padding: 0 10px;
+    margin: 0;
 }
 
 .widget .label {
-	padding: 2px 2px 1px 2px;
-
+    padding: 2px 2px 1px 2px;
 }
 
 .widget .label.alt {
-	padding: 1px 8px 1px 8px;
+    padding: 1px 8px 1px 8px;
 }
 
 /* -------------------------------------------------------------------------------------------------- */
-/* 2. Widget Containers                                                                               */
+/* 2. Widgets                                                                                         */
 /* -------------------------------------------------------------------------------------------------- */
-
-.glazewm-workspaces .widget-container {
-	background-color: var(--mantle);
-	margin: 4px 0px 4px 0px;
-	border-radius: 8px;
-}
-
-/* -------------------------------------------------------------------------------------------------- */
-/* 3. Widgets                                                                                         */
-/* -------------------------------------------------------------------------------------------------- */
-
-/***-------------------------------      • Windows Desktops •      --------------------------------***/
-
-.glazewm-workspaces {
-	margin: 0;
-}
-
-.glazewm-workspaces .ws-btn {
-	background-color: var(--surface1);
-	width: 10px;
-	height: 10px;
-	border-radius: 4px;
-	color: rgba(0, 0, 0, 0);
-	margin-right: 5px;
-	margin-left: 5px;
-}
-
-.glazewm-workspaces .ws-btn.active_populated,
-.glazewm-workspaces .ws-btn.active_empty {
-	color: rgba(0, 0, 0, 0);
-	background-color: var(--mauve);
-	margin-right: 5px;
-	margin-left: 5px;
-	width: 28px;
-	height: 10px;
-}
-
-.glazewm-workspaces .ws-btn.populated {
-	color: var(--surface1);
-}
-
-.glazewm-workspaces .ws-btn.empty {
-	color: #7D8B9D;
-}
-
-.glazewm-workspaces .ws-btn:hover,
-.glazewm-workspaces .ws-btn.populated:hover,
-.glazewm-workspaces .ws-btn.empty:hover {
-	background-color: var(--surface2);
-}
-
-/***---------------------------------      • Audio Widget •      ----------------------------------***/
-
-.audio-menu {
-	background-color: var(--mantle);
-}
-.audio-container .device {
-	background-color: var(--base);
-	border: none;
-	padding: 6px 8px 6px 4px;
-	margin: 2px 0;
-	font-size: 12px;
-	border-radius: 4px;
-	font-family: "CaskaydiaCove Nerd Font Mono";
-}
-.audio-container .device.selected {
-	background-color: var(--crust);
-} 
-.audio-container .device:hover {
-	background-color: var(--base);
-}
-
-.volume-slider::groove {
-	color: transparent;
-}
-.volume-slider::handle {
-	background-color: transparent;
-}
-.audio-menu {
-	background-color: rgba(17, 17, 27, 0.4);
-}
-
-/***------------------------------      • Notification Widget •      -------------------------------***/
-
-.notification-widget {
-	padding: 0 4px 0 4px;
-}
-
-.notification-widget .icon {
-	font-size: 12px;
-	padding-right: 5px;
-	padding-left: 2px;
-}
-.notification-widget .icon.new-notification {
-	color: var(--mauve);
-}
-.notification-widget .label.new-notification {
-	color: var(--mauve);
-}
 
 /***-------------------------------      • Power Menu Widget •      --------------------------------***/
 
 .power-menu-popup {
-	background: var(--crust);
-	border-radius: 8px;
+    background: var(--crust);
+    border-radius: 8px;
 }
 
 .power-menu-widget .label {
-	color: #eba0ac;
-	font-size: 16px;
-	font-family: "JetBrainsMonoNL Nerd Font Mono";
+    color: #eba0ac;
+    font-size: 16px;
+    font-family: "JetBrainsMonoNL Nerd Font Mono";
 }
 .power-menu-popup .button {
-	padding: 0px;
-	margin: 5px;
-	width: 250px;
-	height: 175px;
-	border-radius: 8px;
-	background-color: var(--base);
-	font-family: "CaskaydiaCove Nerd Font Mono";
-	color: white;
-
+    padding: 0px;
+    margin: 5px;
+    width: 250px;
+    height: 175px;
+    border-radius: 8px;
+    background-color: var(--base);
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: white;
 }
 .power-menu-popup .button.hover {
-	background-color: var(--base);
+    background-color: var(--base);
 }
 .power-menu-popup .button .label {
-	margin-bottom: 0px;
-	font-size: 16px;
-	font-weight: 600;
-	color: var(--text);
-	font-family: "CaskaydiaCove Nerd Font Mono";
+    margin-bottom: 0px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    font-family: "CaskaydiaCove Nerd Font Mono";
 }
 .power-menu-popup .button .icon {
-	font-size: 55px;
-	padding-top: 25px;
-	padding-right: 10px;
-	color: var(--text);
+    font-size: 55px;
+    padding-top: 25px;
+    padding-right: 10px;
+    color: var(--text);
 }
 .power-menu-popup .button.cancel .icon {
-	color: var(--red);
+    color: var(--red);
 }
 .power-menu-popup .button.cancel .label {
-	color: var(--red);
+    color: var(--red);
 }
 
 .clock-widget {
-	padding: 0 4px 0 4px;
+    padding: 0 4px 0 4px;
 }
 
 /* --------------------------------------------------------------------------------------------------- */
-/* 6. Icons & Typography                                                                               */
+/* 3. Icons & Typography                                                                               */
 /* --------------------------------------------------------------------------------------------------- */
 
 .icon {
-	font-size: 16px;
+    font-size: 16px;
 }
 .volume-widget .icon {
-	color: var(--mauve);
-	margin: 1px 2px 0 0;
+    color: var(--mauve);
+    margin: 1px 2px 0 0;
 }
 .start-menu .icon {
-	font-size: 18px;
-	color: #89b4fa
+    font-size: 18px;
+    color: #89b4fa;
 }
 .clock-widget .icon {
-	color: #cba6f7;
-	font-size: 14px;
-	margin-right: 7px;
+    color: #cba6f7;
+    font-size: 14px;
+    margin-right: 7px;
 }
 
 /***---------------------------------      • Weather Icons •      ----------------------------------***/
 
 .weather-widget .icon.cloudyDay {
-	color: var(--mauve);
+    color: var(--mauve);
 }
 .weather-widget .icon.cloudyNight {
-	color: var(--mauve);
+    color: var(--mauve);
 }
 .weather-widget .icon.rainyDay {
-	color: var(--mauve);
+    color: var(--mauve);
 }
 .weather-widget .icon.rainyNight {
-	color: var(--mauve);
+    color: var(--mauve);
 }
 .weather-widget .icon.snowyIcyDay {
-	color: var(--mauve);
+    color: var(--mauve);
 }
 .weather-widget .icon.snowyIcyNight {
-	color: var(--mauve);
+    color: var(--mauve);
 }
 .weather-widget .icon.blizzardDay {
-	color: var(--mauve);
+    color: var(--mauve);
 }
 .weather-widget .icon.default {
-	color: var(--mauve);
+    color: var(--mauve);
 }
 
 /***----------------------------------      • Weather Card •      -----------------------------------***/
 
 .weather-card {
-	background-color: var(--mantle);
+    background-color: var(--mantle);
 }
 .weather-card-today {
-	border-radius: 8px;
-	background-color: var(--base);
-	color: var(--text);
+    border-radius: 8px;
+    background-color: var(--base);
+    color: var(--text);
 }
 .weather-card-today .label {
-	font-size: 12px;
-	font-family: "CaskaydiaCove Nerd Font Mono";
+    font-size: 12px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
 }
 .weather-card-today .label.location {
-	font-size: 24px;
-	font-weight: 800;
-	font-family: "CaskaydiaCove Nerd Font Mono";
+    font-size: 24px;
+    font-weight: 800;
+    font-family: "CaskaydiaCove Nerd Font Mono";
 }
 .weather-card-today .label.alert {
-	font-size: 12px;
-	font-weight: 700;
-	background-color: rgba(247, 199, 42, 0.05);
-	border: 1px solid rgba(247, 209, 42, 0.1);
-	color: rgba(196, 181, 162, 0.85);
-	border-radius: 6px;
-	padding: 5px 0;
+    font-size: 12px;
+    font-weight: 700;
+    background-color: rgba(247, 199, 42, 0.05);
+    border: 1px solid rgba(247, 209, 42, 0.1);
+    color: rgba(196, 181, 162, 0.85);
+    border-radius: 6px;
+    padding: 5px 0;
 }
 .weather-card-day {
-	border-radius: 8px;
-	background-color: var(--base);
+    border-radius: 8px;
+    background-color: var(--base);
 }
 .weather-card-day .label {
-	font-size: 12px;
-	font-family: "CaskaydiaCove Nerd Font Mono";
-}
-
-/* Media Widget */
-
-.media-widget {
-	padding: 0;
-	margin-left: 0;
-}
-.media-widget .label {
-	color: var(--lavender);
-    padding-left: 5px;
-}
-
-/* Hide media widget buttons */
-
-.media-widget .btn {
-	max-width: 0;
+    font-size: 12px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
 }
 
 .calendar {
-	background-color: var(--mantle);
+    background-color: var(--mantle);
 }
 .calendar .calendar-table,
 .calendar .calendar-table::item {
-	background-color: rgba(17, 17, 27, 0);
-	color: var(--overlay1);
-	font-family: "CaskaydiaCove Nerd Font Mono";
-	margin: 0;
-	padding: 0;
-	border: none;
-	outline: none;
+    background-color: rgba(17, 17, 27, 0);
+    color: var(--overlay1);
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
 }
 
 .calendar .calendar-table::item:selected {
-	color: #4c4f69;
-	background: var(--mauve);
-	border-radius: 8px;
+    color: #4c4f69;
+    background: var(--mauve);
+    border-radius: 8px;
 }
 .calendar .day-label {
-	margin-top: 20px;
+    margin-top: 20px;
 }
 .calendar .day-label,
 .calendar .month-label,
 .calendar .date-label {
-	font-family: "CaskaydiaCove Nerd Font Mono";
-	font-size: 16px;
-	color: var(--text);
-	font-weight: 700;
-	min-width: 180px;
-	max-width: 180px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-size: 16px;
+    color: var(--text);
+    font-weight: 700;
+    min-width: 180px;
+    max-width: 180px;
 }
 .calendar .month-label {
-	font-weight: normal;
-	padding-bottom: 12px;
+    font-weight: normal;
+    padding-bottom: 12px;
 }
 .calendar .date-label {
-	font-size: 88px;
-	font-weight: 900;
-	color: var(--text);
-	margin-top: -20px;
+    font-size: 88px;
+    font-weight: 900;
+    color: var(--text);
+    margin-top: -20px;
 }
 
 .home-menu {
-	background-color: var(--mantle);
-	border-radius: 8px;
-	padding: 0;
-	margin-left: 0px;
+    background-color: var(--mantle);
+    border-radius: 8px;
+    padding: 0;
+    margin-left: 0px;
 }
 .home-menu .menu-item {
-	padding: 8px 48px 8px 12px;
-	font-size: 13px;
-	font-family: "CaskaydiaCove Nerd Font Mono";
-	font-weight: 600;
+    padding: 8px 48px 8px 12px;
+    font-size: 13px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-weight: 600;
 }
 .home-menu .menu-item:hover {
-	background-color: #cba6f4;
-	color: #181825;
-	margin: 4px 6px;
-	border-radius: 4px;
+    background-color: #cba6f4;
+    color: #181825;
+    margin: 4px 6px;
+    border-radius: 4px;
 }
 .home-menu .separator {
-	max-height: 1px;
-	background-color: #45475a;
-	margin: 0 8px;
+    max-height: 1px;
+    background-color: #45475a;
+    margin: 0 8px;
 }
 
-.wallpapers-gallery-window {
-	background-color: var(--mantle);
-	border: 2px;
-	margin: 0;
+/***--------------------------------      • Volume Widget •      ---------------------------------***/
+
+/* 1. Bar Widget Style */
+.volume-widget {
+    padding: 0 8px;
+}
+.volume-widget .label {
+    margin-right: 4px;    
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 500;
 }
 
-.battery-widget .widget-container .label.status-low {
-	color: var(--red);
-	background: rgba(243, 139, 168, 0.245);
-	margin: 4px 0px 4px 0px;
-	padding: 0 6px 0 6px;
-	border-radius: 8px;
-}
-.battery-widget .widget-container .label.status-medium {
-	color: var(--yellow);
-	background: rgba(249, 226, 175, 0.25);
-	margin: 4px 0px 4px 0px;
-	padding: 0 6px 0 6px;
-	border-radius: 8px;
-}
-.battery-widget .widget-container .label.status-high {
-	color: var(--teal);
-	background: rgba(148, 226, 213, 0.25);
-	margin: 4px 0px 4px 0px;
-	padding: 0 6px 0 6px;
-	border-radius: 8px;
-}
-.battery-widget .widget-container .label.status-full {
-	color: var(--green);
-	background: rgba(166, 227, 161, 0.25);
-	margin: 4px 0px 4px 0px;
-	padding: 0 6px 0 6px;
-	border-radius: 8px;
-}
-.battery-widget .widget-container .label.status-charging {
-	color: var(--blue);
-	background: rgba(137, 180, 250, 0.25);
-	margin: 4px 0px 4px 0px;
-	padding: 0 6px 0 6px;
-	border-radius: 8px;
-}
-
-.battery-widget .widget-container .icon.status-low {
-	color: var(--red);
-}
-.battery-widget .widget-container .icon.status-medium {
-	color: var(--yellow);
-}
-.battery-widget .widget-container .icon.status-high {
-	color: var(--teal);
-	padding-right: 4px;
-}
-.battery-widget .widget-container .icon.status-full {
-	color: var(--green);
-	padding-right: 4px;
-}
-.battery-widget .widget-container .icon.status-charging {
-	color: var(--blue);
-}
-
-.volume-slider {
-	border: none;
-}
-.volume-slider::groove {
-}
-.volume-slider::handle {
-}
+/* 2. Main Menu Popup (Glassy/Dark Background) */
 .audio-menu {
-	background-color: rgba(17, 17, 27, 0.4);
-}
-.audio-container .device {
-	background-color: transparent;
-	border: none;
-	padding: 6px 8px 6px 4px;
-	margin: 2px 0;
-	font-size: 12px;
-	border-radius: 4px;
-}
-.audio-container .device.selected {
-	background-color: rgba(255, 255, 255, 0.085);
-}
-.audio-container .device:hover {
-	background-color: rgba(255, 255, 255, 0.06);
+    background-color: var(--mantle);
+    min-width: 300px;
+    border: 1px solid var(--surface0);
+    border-radius: 8px;
+    padding: 8px;
 }
 
-.wallpapers-gallery-buttons {
-	background-color: var(--base);
-	color: var(--text);
-	border: none;
-	font-size: 16px;
-	padding: 8px 0px;
-	border-radius: 8px;
-	margin: 8px 8px 8px 8px;
-	width: 600px;
-	font-family: "CaskaydiaCove Nerd Font Mono";
+/* 3. System Volume Section */
+.audio-menu .system-volume-container .volume-slider {
+    border: none;
+    min-height: 24px;
 }
 
-.wallpapers-widget {
+/* 4. Device List Styles */
+.audio-menu .audio-container .device {
+    background-color: transparent;
+    border: none;
+    padding: 6px 8px 6px 4px;
+    margin: 2px 0;
+    font-size: 12px;
+    border-radius: 4px;
+    color: var(--overlay1);
+}
+.audio-menu .audio-container .device:hover {
+    background-color: var(--surface0);
+    color: var(--text);
+}
+.audio-menu .audio-container .device.selected {
+    background-color: var(--surface1);
+    color: var(--text);
+    font-weight: 600;
+}
+
+/* 5. Application Volume Toggle Button */
+.audio-menu .toggle-apps {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    min-height: 24px;
+    min-width: 24px;
+    border-radius: 4px;
+    color: var(--text);
+}
+.audio-menu .toggle-apps:hover {
+    background-color: var(--surface0);
+}
+.audio-menu .toggle-apps.expanded {
+    background-color: var(--surface1);
+}
+
+/* 6. Application Volume List Container */
+.audio-menu .apps-container {
+    padding: 8px;
+    margin-top: 20px;
+    border-radius: 8px;
+    background-color: var(--surface0);
+}
+
+.audio-menu .apps-container .app-volume .app-icon-container {
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    border-radius: 6px;
+    margin-right: 8px;
+    padding: 4px;
+}
+.audio-menu .apps-container .app-volume .app-icon-container:hover {
+    background-color: var(--surface1);
+}
+
+.audio-menu .apps-container .app-volume .app-slider {
+    min-height: 40px;
+    max-height: 40px;
+}
+
+/* -------------------------------------------------------------------------------------------------- */
+/* Universal Slider Styling for Audio Menu                                                            */
+/* Targets System Volume, App Volumes, and Microphone Sliders inside the menu                         */
+/* -------------------------------------------------------------------------------------------------- */
+
+.audio-menu QSlider {
+    min-height: 20px;
+    max-height: 20px;
+    background: transparent;
+}
+
+/* The Background Track (Gray) */
+.audio-menu QSlider::groove:horizontal {
+    border-radius: 2px;
+    height: 4px;             /* Thin track */
+    background: var(--surface1); 
+    margin: 0px;             /* Reset margins */
+}
+
+/* The Active Volume (Purple Fill) */
+.audio-menu QSlider::sub-page:horizontal {
+    border-radius: 2px;
+    height: 4px;             /* Must match groove height */
+    background: var(--mauve); 
+}
+
+/* The Circle Knob */
+.audio-menu QSlider::handle:horizontal {
+    background: var(--text);
+    border: 2px solid var(--base); /* Dark ring to make it pop */
+    
+    /* SIZE CALCULATIONS FOR CENTERING: */
+    /* Track height is 4px. Handle height is 14px. */
+    /* Difference is 10px. Offset (margin-top) is -5px. */
+    
+    width: 14px;
+    height: 14px;
+    margin-top: -5px; 
+    margin-bottom: -5px; 
+    border-radius: 9px;
+}
+
+/* Hover Effect */
+.audio-menu QSlider::handle:horizontal:hover {
+    background: var(--lavender);
+    border-color: var(--surface0);
+}
+
+/***--------------------------------      • Microphone Widget •      --------------------------------***/
+
+/* 1. Bar Widget Style */
+.microphone-widget {
+    padding: 0 8px;
+}
+
+/* Active State (Peach color for Input) */
+.microphone-widget .icon {
+    color: var(--peach); 
+    font-size: 16px;
+    margin: 0 2px 0 0;
+    padding-bottom: 2px;
+}
+
+/* Muted State (Red color for Alert/Off) */
+.microphone-widget .icon.muted {
+    color: var(--red);
+}
+
+.microphone-widget .label {
+    margin-right: 4px;
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.microphone-widget .label.muted {
+    color: var(--subtext0); /* Dim the text when muted */
+}
+
+/* 2. Menu Popup Styling */
+.microphone-menu {
+    background-color: var(--mantle);
+    border: 1px solid var(--surface0);
+    border-radius: 8px;
+    padding: 12px;
+    min-width: 200px;
+}
+
+/* -------------------------------------------------------------------------------------------------- */
+/* Microphone Slider Styling (Matches Volume Logic)                                                   */
+/* -------------------------------------------------------------------------------------------------- */
+
+.microphone-menu QSlider {
+    min-height: 20px;
+    max-height: 20px;
+    background: transparent;
+}
+
+/* The Background Track */
+.microphone-menu QSlider::groove:horizontal {
+    border-radius: 2px;
+    height: 4px;
+    background: var(--surface1);
+    margin: 0px;
+}
+
+/* The Filled Track (Peach) */
+.microphone-menu QSlider::sub-page:horizontal {
+    border-radius: 2px;
+    height: 4px;
+    background: var(--peach); /* Different color than volume */
+}
+
+/* The Knob */
+.microphone-menu QSlider::handle:horizontal {
+    background: var(--text);
+    border: 2px solid var(--base);
+    
+    /* Centering Math (Same as Volume) */
+    width: 14px;
+    height: 14px;
+    margin-top: -5px; 
+    margin-bottom: -5px;
+    border-radius: 9px;
+}
+
+.microphone-menu QSlider::handle:horizontal:hover {
+    background: var(--rosewater); /* Hover feedback */
+    border-color: var(--surface0);
+}
+
+/* -------------------------------------------------------------------------------------------------- */
+/* 4. Additional Widgets & Integrations                                                               */
+/* -------------------------------------------------------------------------------------------------- */
+
+/***--------------------------------      • Active Window •      ---------------------------------***/
+
+.active-window-widget {
+}
+.active-window-widget.your_class {
+}
+.active-window-widget .widget-container {
+}
+.active-window-widget .widget-container .label {
+}
+.active-window-widget .widget-container .label.alt {
+}
+.active-window-widget .widget-container .icon {
+}
+
+/***--------------------------------      • AI Chat Widget •      --------------------------------***/
+
+.ai-chat-widget {
     padding: 0 6px 0 6px;
+}
+.ai-chat-widget .icon {
+    color: var(--blue);
+    font-size: 16px;
+}
+.ai-chat-popup {
+    background-color: var(--mantle);
+    min-width: 500px;
+    max-width: 500px;
+    min-height: 600px;
+    max-height: 600px;
+}
+.ai-chat-popup .chat-header {
+    background-color: var(--base);
+    padding: 16px;
+}
+.ai-chat-popup .chat-footer {
+    background-color: transparent;
+    padding: 16px;
+}
+.ai-chat-popup .chat-header .provider-label,
+.ai-chat-popup .chat-header .model-label {
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-size: 14px;
+    color: var(--text);
+    margin-right: 8px;
+    font-weight: 600;
+}
+.ai-chat-popup .chat-header .provider-button,
+.ai-chat-popup .chat-header .model-button {
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    background-color: var(--surface0);
+    border: 1px solid var(--surface1);
+    font-size: 13px;
+    color: var(--text);
+    margin-right: 8px;
+    min-width: 130px;
+    max-width: 130px;
+    border-radius: 6px;
+    padding: 4px 10px;
+}
+.ai-chat-popup .chat-header .provider-button:disabled,
+.ai-chat-popup .chat-header .model-button:disabled {
+    color: var(--overlay0);
+}
+
+/* Context menu styles for header and chat content */
+.ai-chat-popup .context-menu {
+    background-color: var(--surface0);
+    border: none;
+    padding: 4px 0px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-size: 12px;
+    color: var(--text);
+}
+.ai-chat-popup .context-menu::separator {
+    height: 1px;
+    background-color: var(--surface1);
+    margin: 4px 8px;
+}
+
+.ai-chat-popup .context-menu::item {
+    background-color: transparent;
+    padding: 6px 12px;
+    margin: 2px 6px;
+    border-radius: 4px;
+    min-width: 100px;
+}
+/* Context menu item styles for header dropdown */
+.ai-chat-popup .chat-header .context-menu::item {
+    min-width: 130px;
+    max-width: 130px;
+    padding: 4px;
+}
+.ai-chat-popup .context-menu::item:disabled {
+    color: var(--overlay0);
+}
+.ai-chat-popup .context-menu::item:selected {
+    background-color: var(--surface1);
+    color: var(--text);
+}
+.ai-chat-popup .context-menu::item:checked {
+    background-color: var(--blue);
+    color: var(--base);
+}
+
+.ai-chat-popup .chat-content {
+    background-color: transparent;
+    border: none;
+}
+.ai-chat-popup .chat-content .empty-chat .greeting,
+.ai-chat-popup .chat-content .empty-chat .message {
+    color: var(--subtext1);
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-size: 48px;
+    font-weight: 600;
+}
+.ai-chat-popup .chat-content .empty-chat .message {
+    color: var(--overlay0);
+    font-size: 24px;
+    padding-top: 8px;
+}
+.ai-chat-popup .chat-content .user-message,
+.ai-chat-popup .chat-content .assistant-message {
+    color: var(--text);
+    padding: 8px;
+    border-radius: 4px;
+    margin: 4px 0;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-size: 14px;
+}
+.ai-chat-popup .chat-content .user-message {
+    margin-left: 26px;
+}
+.ai-chat-popup .chat-content .assistant-message {
+    background-color: var(--surface0);
+    border: 1px solid var(--surface1);
+}
+.ai-chat-popup .chat-content .assistant-icon {
+    font-size: 24px;
+    color: var(--subtext0);
+    margin-right: 8px;
+    font-family: "JetBrainsMonoNL Nerd Font Mono";
+}
+
+.ai-chat-popup .chat-footer .chat-input {
+    background-color: var(--surface0);
+    border: 2px solid var(--surface0);
+    border-radius: 4px;
+    padding: 0 8px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-size: 14px;
+    color: var(--text);
+    margin-top: 8px;
+    max-height: 28px;
+    min-height: 28px;
+}
+.ai-chat-popup .chat-footer .chat-input:focus {
+    border-color: var(--blue);
+}
+.ai-chat-popup .chat-footer .clear-button,
+.ai-chat-popup .chat-footer .send-button,
+.ai-chat-popup .chat-footer .stop-button {
+    background-color: var(--surface0);
+    color: var(--text);
+    font-size: 12px;
+    max-width: 30px;
+    min-width: 30px;
+    max-height: 30px;
+    min-height: 30px;
+    border-radius: 4px;
+    margin-top: 8px;
+    border: none;
+    font-family: "JetBrainsMonoNL Nerd Font Mono";
+}
+.ai-chat-popup .chat-footer .stop-button {
+    background-color: var(--blue);
+    color: var(--base);
+}
+.ai-chat-popup .chat-footer .clear-button:hover,
+.ai-chat-popup .chat-footer .send-button:hover,
+.ai-chat-popup .chat-footer .stop-button:hover {
+    background-color: var(--surface1);
+}
+.ai-chat-popup .chat-footer .clear-button:disabled,
+.ai-chat-popup .chat-footer .send-button:disabled,
+.ai-chat-popup .chat-footer .stop-button:disabled {
+    background-color: var(--surface0);
+    color: var(--overlay0);
+}
+
+/***--------------------------------      • VSCode Widget •      ---------------------------------***/
+
+.vscode-widget .widget-container .icon {
+    color: var(--blue);
+}
+
+.vscode-menu {
+    max-height: 500px;
+    min-width: 300px;
+}
+
+.vscode-menu .header {
+    border-bottom: 1px solid var(--surface1);
+    font-size: 15px;
+    font-weight: 400;
+    padding: 8px;
+    color: var(--text);
+    background-color: var(--mantle);
+}
+
+.vscode-menu .contents {
+    background-color: var(--mantle);
+}
+
+.vscode-menu .contents .item {
+    min-height: 30px;
+    border-bottom: 1px solid var(--surface0);
+}
+
+.vscode-menu .contents .item .title {
+    font-size: 12px;
+    margin-right: 5px;
+}
+
+.vscode-menu .contents .item .modified-date {
+    font-size: 11px;
+    margin-right: 5px;
+    color: var(--overlay0);
+}
+
+.vscode-menu .contents .item .folder-icon {
+    font-size: 16px;
+    margin-left: 8px;
+    color: var(--flamingo);
+}
+
+.vscode-menu .contents .item .file-icon {
+    font-size: 16px;
+    margin-left: 8px;
+    color: var(--mauve);
+}
+
+.vscode-menu .contents .item:hover {
+    background-color: var(--surface1);
+    border-bottom: 1px solid transparent;
+}
+
+/***---------------------------------      • WHKD Widget •      ----------------------------------***/
+
+.whkd-widget {
+    padding: 0 6px 0 6px;
+}
+.whkd-widget .icon {
+    font-size: 18px;
+}
+.whkd-popup .edit-config-button {
+    background-color: var(--blue);
+    color: var(--base);
+    padding: 4px 8px 6px 8px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 4px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+}
+
+.whkd-popup .keybind-buttons-container {
+    min-width: 240px;
+}
+.whkd-popup .keybind-button {
+    background-color: var(--surface0);
+    color: var(--text);
+    padding: 4px 8px 6px 8px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px inset var(--surface1);
+    border-bottom: 2px inset var(--surface1);
+    border-radius: 4px;
+    font-family: "JetBrainsMonoNL Nerd Font Mono";
+}
+.whkd-popup .keybind-button.special {
+    background-color: var(--surface0);
+}
+.whkd-popup .keybind-row:hover {
+    background-color: var(--surface1);
+    border-radius: 8px;
+}
+.whkd-popup .plus-separator {
+    padding: 0 0px;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: transparent;
+}
+.whkd-popup .filter-input {
+    padding: 0 8px 2px 8px;
+    font-size: 14px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    border: 1px solid var(--surface0);
+    border-radius: 4px;
+    outline: none;
+    color: var(--text);
+    background-color: var(--mantle);
+    min-height: 32px;
+}
+.whkd-popup .filter-input:focus {
+    border: 1px solid var(--blue);
+}
+.whkd-popup .keybind-command {
+    font-size: 14px;
+}
+.whkd-popup .keybind-header {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    padding: 8px 0;
+    margin-top: 20px;
+    background-color: var(--surface0);
+    border: 1px solid var(--surface1);
+    border-radius: 8px;
+}
+
+/***----------------------------      • Windows Desktops •      -----------------------------***/
+
+.windows-desktops {
+    padding: 0 4px 0 4px;
+}
+.windows-desktops .widget-container {
+    background-color: var(--crust);
+    margin: 4px 0 4px 0;
+    border-radius: 12px;
+    padding-left: 10px;
+    padding-right: 12px;
+}
+.windows-desktops .ws-btn {
+    color: var(--overlay1);
+    border: none;
+    font-size: 14px;
+    margin: 0 4px;
+    padding: 0;
+}
+.windows-desktops .ws-btn.active {
+    color: var(--blue);
+}
+
+.windows-desktops .context-menu {
+    background-color: var(--mantle);
+    border: none;
+    border-radius: 2px;
+    padding: 8px 0;
+}
+.windows-desktops .context-menu .menu-item {
+    padding: 6px 16px;
+}
+.windows-desktops .context-menu .menu-item:hover {
+    background-color: var(--surface1);
+    color: var(--text);
+}
+.windows-desktops .context-menu .separator {
+    margin: 2px 0px 2px 0px;
+    height: 1px;
+    background-color: var(--surface1);
+}
+
+.windows-desktops .rename-dialog {
+    background-color: var(--mantle);
+}
+.windows-desktops .rename-dialog QPushButton {
+    background-color: var(--surface0);
+    color: var(--text);
+    border: none;
+    padding: 4px 12px;
+    border-radius: 4px;
+}
+.windows-desktops .rename-dialog QPushButton:hover {
+    background-color: var(--surface1);
+    color: var(--text);
+    border: none;
+    padding: 4px 12px;
+    border-radius: 4px;
+}
+
+.windows-desktops .rename-dialog QLabel {
+    color: var(--text);
+}
+.windows-desktops .rename-dialog QLineEdit {
+    background-color: transparent;
+    border: 1px solid var(--blue);
+    padding: 4px;
+    color: var(--text);
+}
+
+/***----------------------------      • Komorebi Control •      -----------------------------***/
+
+.komorebi-control-widget .label {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 600;
+}
+.komorebi-control-menu {
+    background-color: var(--mantle);
+}
+.komorebi-control-menu .button {
+    color: var(--overlay1);
+    padding: 8px 16px;
+    font-size: 32px;
+    border-radius: 8px;
+    background-color: var(--surface0);
+}
+.komorebi-control-menu .button.active {
+    color: var(--text);
+    background-color: var(--surface0);
+}
+.komorebi-control-menu .button:disabled,
+.komorebi-control-menu .button.active:disabled {
+    background-color: var(--surface0);
+    color: var(--overlay0);
+}
+.komorebi-control-menu .footer .text {
+    font-size: 12px;
+    color: var(--overlay0);
+}
+
+/***----------------------------      • Komorebi Layout •      -----------------------------***/
+
+.komorebi-layout-menu {
+    background-color: var(--mantle);
+}
+.komorebi-layout-menu .menu-item {
+    padding: 8px 16px;
+    font-size: 12px;
+    color: var(--text);
+    font-weight: 600;
+}
+.komorebi-layout-menu .menu-item-icon {
+    color: var(--text);
+    font-size: 16px;
+}
+.komorebi-layout-menu .menu-item-text {
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    padding-left: 4px;
+    font-size: 12px;
+}
+.komorebi-layout-menu .menu-item:hover {
+    background-color: var(--surface1);
+    color: var(--text);
+}
+.komorebi-layout-menu .separator {
+    max-height: 1px;
+    background-color: var(--surface1);
+}
+
+/***----------------------------      • Komorebi Workspace •      -----------------------------***/
+
+.komorebi-workspaces {
+}
+.komorebi-workspaces .widget-container {
+}
+.komorebi-workspaces .ws-btn {
+}
+.komorebi-workspaces .ws-btn.populated {
+}
+.komorebi-workspaces .ws-btn.active {
+}
+.komorebi-workspaces .ws-btn.button-1 {
+}
+.komorebi-workspaces .ws-btn.button-2 {
+}
+.komorebi-workspaces .float-override {
+}
+.komorebi-workspaces .workspace-layer {
+}
+.komorebi-workspaces .workspace-layer.tiling {
+}
+.komorebi-workspaces .workspace-layer.floating {
+}
+
+/* -------------------------------------------------------------------------------------------------- */
+/* 5. Fixes for Icon Clipping & Spacing                                                               */
+/* -------------------------------------------------------------------------------------------------- */
+
+/* Global Icon Fixes */
+.icon {
+    /* Prevent the right side of wide icons (like folders or weather) from being cut off */
+    padding-right: 4px;
+    padding-left: 2px;
+
+    /* Prevent the bottom of the icon from being sliced */
+    padding-bottom: 2px;
+
+    /* Ensure the background doesn't clip the glyph */
+    background-color: transparent;
+
+    /* Center the icon vertically relative to text */
+    vertical-align: middle;
+}
+
+/* Adjust generic labels to accommodate the extra icon padding */
+.widget .label {
+    /* Increased padding slightly (Top/Bottom) to fit 16px icons inside 12px text lines */
+    padding: 3px 4px 3px 4px;
+}
+
+/* Ensure the main bar container has a minimum height so icons don't touch the edges */
+.yasb-bar {
+    min-height: 32px;
 }

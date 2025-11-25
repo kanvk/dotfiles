@@ -50,7 +50,7 @@ bars:
             center: ["active_window"]
             right:
                 [
-                    "llm",
+                    "ai_chat",
                     "vscode",
                     "weather",
                     "volume",
@@ -64,7 +64,7 @@ widgets:
     home:
         type: "yasb.home.HomeWidget"
         options:
-            label: "<span>\udb80\udf5c</span>"
+            label: "<span>\ue70f</span>"  #  (nf-dev-windows)
             menu_list:
                 - { title: "Home", path: "~" }
                 - { title: "Downloads", path: "C:\\Users\\kanvk\\Downloads" }
@@ -90,19 +90,19 @@ widgets:
                 - key: "win"
                   key_replace: "\ue70f"
                 - key: "ctrl"
-                  key_replace: "Ctrl"
+                  key_replace: "\u2303"
                 - key: "alt"
-                  key_replace: "Alt"
+                  key_replace: "\u2325"
                 - key: "shift"
-                  key_replace: "Shift"
+                  key_replace: "\u21e7"
                 - key: "left"
-                  key_replace: "\u2190"
+                  key_replace: "\uf060"
                 - key: "right"
-                  key_replace: "\u2192"
+                  key_replace: "\uf061"
                 - key: "up"
-                  key_replace: "\u2191"
+                  key_replace: "\uf062"
                 - key: "down"
-                  key_replace: "\u2193"
+                  key_replace: "\uf063"
             label_shadow:
                 enabled: true
                 color: "black"
@@ -111,8 +111,8 @@ widgets:
     windows_workspaces:
         type: "yasb.windows_desktops.WorkspaceWidget"
         options:
-            label_workspace_btn: "\udb81\udc3d"
-            label_workspace_active_btn: "\udb81\udc3e"
+            label_workspace_btn: "\uf10c"
+            label_workspace_active_btn: "\uf111"
             btn_shadow:
                 enabled: true
                 color: "black"
@@ -136,20 +136,20 @@ widgets:
                     "right_main_vertical_stack",
                 ]
             layout_icons:
-                bsp: "\uebeb"
-                columns: "\uebf7"
-                rows: "\uec01"
-                grid: "\udb81\udf58"
-                scrolling: "\uebf7"
-                vertical_stack: "\uebee"
-                horizontal_stack: "\uebf0"
-                ultrawide_vertical_stack: "\uebee"
-                right_main_vertical_stack: "\uebf1"
-                monocle: "\uf06f"
-                maximized: "\uf06f"
-                floating: "\uf2d2"
-                paused: "\udb83\udf89"
-                tiling: "\udb81\ude40"
+                bsp:                       "\uebeb"  #  (nf-cod-split_horizontal)
+                columns:                   "\uebf7"  #  (nf-cod-split_vertical)
+                rows:                      "\uec01"  #  (nf-cod-three_bars)
+                grid:                      "\uf00a"  #  (nf-fa-th) - Fixed broken surrogate
+                scrolling:                 "\uebf7"  #  (nf-cod-split_vertical)
+                vertical_stack:            "\uebee"  #  (nf-cod-split_vertical)
+                horizontal_stack:          "\uebf0"  #  (nf-cod-split_horizontal)
+                ultrawide_vertical_stack:  "\uebee"  #  (nf-cod-split_vertical)
+                right_main_vertical_stack: "\uebf1"  #  (nf-cod-split_horizontal)
+                monocle:                   "\uf2d0"  #  (nf-fa-window_maximize) 
+                maximized:                 "\uf2d0"  #  (nf-fa-window_maximize)
+                floating:                  "\uf2d2"  #  (nf-fa-window_restore)
+                paused:                    "\uf04c"  #  (nf-fa-pause)
+                tiling:                    "\ue62a"  #  (nf-cod-layout)
             callbacks:
                 on_left: "toggle_layout_menu"
                 on_middle: "prev_layout"
@@ -235,29 +235,7 @@ widgets:
             max_length: 120
             max_length_ellipsis: "..."
             monitor_exclusive: true
-    vscode:
-        type: "yasb.vscode.VSCodeWidget"
-        options:
-            label: "<span>\udb82\ude1e</span>"
-            label_alt: "<span>\udb82\ude1e</span> recents"
-            menu_title: "<span style='font-weight:bold'>VScode</span> recents"
-            max_field_size: 50
-            folder_icon: "\uf114"
-            file_icon: "\uf016"
-            truncate_to_root_dir: false
-            hide_folder_icon: false
-            hide_file_icon: false
-            max_number_of_folders: 5
-            max_number_of_files: 10
-            modified_date_format: "Date modified: %Y-%m-%d %H:%M"
-            cli_command: "code"
-            menu:
-                blur: true
-                round_corners: true
-                round_corners_type: "small"
-                alignment: "center"
-                offset_top: 0
-    llm:
+    ai_chat:
         type: "yasb.ai_chat.AiChatWidget"
         options:
             label: "<span>\uf086</span>"
@@ -274,7 +252,7 @@ widgets:
                 send: "\uf1d8"
                 stop: "\uf04d"
                 clear: "\uf1f8"
-                assistant: "\udb81\ude74"
+                assistant: "\uebca"
             notification_dot:
                 enabled: false
                 corner: "top_right"
@@ -291,6 +269,28 @@ widgets:
                         label: "Gemma3 27b"
                       - name: "gemma3:12b-it-qat"
                         label: "Gemma3 12b"
+    vscode:
+        type: "yasb.vscode.VSCodeWidget"
+        options:
+            label: "<span>\ue70c</span>"
+            label_alt: "<span>\ue70c</span> recents"
+            menu_title: "VS Code Recents"
+            max_field_size: 50
+            folder_icon: "\uf114"
+            file_icon: "\uf016"
+            truncate_to_root_dir: false
+            hide_folder_icon: false
+            hide_file_icon: false
+            max_number_of_folders: 5
+            max_number_of_files: 10
+            modified_date_format: "Date modified: %Y-%m-%d %H:%M"
+            cli_command: "code"
+            menu:
+                blur: true
+                round_corners: true
+                round_corners_type: "small"
+                alignment: "center"
+                offset_top: 0
     weather:
         type: "yasb.weather.WeatherWidget"
         options:
@@ -304,16 +304,16 @@ widgets:
             callbacks:
                 on_left: "toggle_card"
             icons:
-                sunnyDay: "\udb81\udd99"
-                clearNight: "\ue3c2"
-                cloudyDay: "\ue21d"
-                cloudyNight: "\ue226"
-                rainyDay: "\ue371"
-                rainyNight: "\ue371"
-                snowyIcyDay: "\udb81\udf17"
-                snowyIcyNight: "\udb81\udf17"
-                blizzardDay: "\udb81\udd99"
-                default: "\udb81\udd99"
+                sunnyDay:      "\ue30d"  #   (nf-weather-day_sunny)
+                clearNight:    "\ue32b"  #   (nf-weather-night_clear)
+                cloudyDay:     "\ue302"  #   (nf-weather-day_cloudy)
+                cloudyNight:   "\ue32e"  #   (nf-weather-night_cloudy)
+                rainyDay:      "\ue308"  #   (nf-weather-day_rain)
+                rainyNight:    "\ue333"  #   (nf-weather-night_rain)
+                snowyIcyDay:   "\ue30a"  #   (nf-weather-day_snow)
+                snowyIcyNight: "\ue335"  #   (nf-weather-night_snow)
+                blizzardDay:   "\ue31a"  #   (nf-weather-snow)
+                default:       "\ue30d"  #   (nf-weather-day_sunny)
             weather_card:
                 blur: True
                 round_corners: True
@@ -327,7 +327,7 @@ widgets:
         type: "yasb.volume.VolumeWidget"
         options:
             label: "<span>{icon}</span> {level}"
-            label_alt: "{volume}"
+            label_alt: "<span>{icon}</span> {level}"
             volume_icons:
                 - "\ueee8"
                 - "\uf026"
@@ -342,13 +342,17 @@ widgets:
                 alignment: "right"
                 direction: "down"
                 distance: 6
+                show_apps: true
+                show_app_labels: true
+                show_app_icons: true
+                show_apps_expanded: true
             callbacks:
                 on_left: "toggle_volume_menu"
                 on_right: "exec cmd.exe /c start ms-settings:sound"
     microphone:
         type: "yasb.microphone.MicrophoneWidget"
         options:
-            label: "<span>{icon}</span>"
+            label: "<span>{icon}</span> {level}"
             label_alt: "<span>{icon}</span> {level}"
             mute_text: "mute"
             icons:
@@ -363,7 +367,6 @@ widgets:
                 direction: "down"
             callbacks:
                 on_left: "toggle_mute"
-                on_middle: "toggle_label"
                 on_right: "toggle_mic_menu"
             label_shadow:
                 enabled: true
@@ -380,9 +383,9 @@ widgets:
             max_length: 50
             max_length_ellipsis: "..."
             icons:
-                bluetooth_on: "\udb80\udcaf"
-                bluetooth_off: "\udb80\udcb2"
-                bluetooth_connected: "\udb80\udcb1"
+                bluetooth_on:        "\uf294"  #  (nf-fa-bluetooth_b) - Classic Bluetooth Logo
+                bluetooth_connected: "\uf293"  #  (nf-fa-bluetooth) - Solid/Bold Logo indicating connection
+                bluetooth_off:       "\ue920"  #  (nf-feather-bluetooth_off) - Clean "Slashed" Bluetooth icon
             callbacks:
                 on_left: "toggle_label"
                 on_right: "exec cmd.exe /c start ms-settings:bluetooth"
@@ -394,7 +397,7 @@ widgets:
     clock:
         type: "yasb.clock.ClockWidget"
         options:
-            label: "<span>\ue769</span>{%I:%M:%S %p |  %a %d %b}"
+            label: "<span>\uf017</span>{%I:%M:%S %p |  %a %d %b}"
             label_alt: "{%a, %d %b %H:%M:%S}"
             timezones: [] # Looking up time zone info from registry
     power_menu:
@@ -407,16 +410,16 @@ widgets:
             animation_duration: 250
             button_row: 3
             buttons:
-                signout: ["\udb80\udf43", "Sign out"]
-                shutdown: ["\u23FB", "Shut Down"]
-                restart: ["\uead2", "Restart"]
-                sleep: ["\udb82\udd04", "Sleep"]
-                lock: ["\uf023", "Lock"]
-                cancel: ["\udb81\udf3a", "Cancel"]
+                signout:  ["\uf08b", "Sign out"]   #  (nf-fa-sign_out)
+                shutdown: ["\u23FB", "Shut Down"]  # ⏻ (power off symbol)
+                restart:  ["\uf01e", "Restart"]    #  (nf-fa-repeat)
+                sleep:    ["\uf186", "Sleep"]      #  (nf-fa-moon_o)
+                lock:     ["\uf023", "Lock"]       #  (nf-fa-lock)
+                cancel:   ["\uf00d", "Cancel"]     #  (nf-fa-times)
     komorebi_ctl:
         type: "komorebi.control.KomorebiControlWidget"
         options:
-            label: "<span>\udb80\uddd9</span>"
+            label: "<span>\uf142</span>"
             icons:
                 start: "\uead3"
                 stop: "\uead7"
