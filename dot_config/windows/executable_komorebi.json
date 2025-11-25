@@ -34,10 +34,22 @@
         {
           "name": "V",
           "layout": "BSP"
+        },
+        {
+          "name": "VI",
+          "layout": "BSP"
+        },
+        {
+          "name": "VII",
+          "layout": "BSP"
+        },
+        {
+          "name": "VIII",
+          "layout": "BSP"
         }
       ]
     },
-        {
+    {
       "workspaces": [
         {
           "name": "I",
@@ -58,10 +70,22 @@
         {
           "name": "V",
           "layout": "BSP"
+        },
+        {
+          "name": "VI",
+          "layout": "BSP"
+        },
+        {
+          "name": "VII",
+          "layout": "BSP"
+        },
+        {
+          "name": "VIII",
+          "layout": "BSP"
         }
       ]
     },
-        {
+    {
       "workspaces": [
         {
           "name": "I",
@@ -81,6 +105,18 @@
         },
         {
           "name": "V",
+          "layout": "BSP"
+        },
+        {
+          "name": "VI",
+          "layout": "BSP"
+        },
+        {
+          "name": "VII",
+          "layout": "BSP"
+        },
+        {
+          "name": "VIII",
           "layout": "BSP"
         }
       ]
