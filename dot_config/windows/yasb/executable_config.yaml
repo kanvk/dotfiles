@@ -1,0 +1,440 @@
+watch_stylesheet: true
+watch_config: true
+debug: false
+update_check: true
+show_systray: false
+
+komorebi:
+    start_command: "komorebic start --wkhd"
+    stop_command: "komorebic stop --wkhd"
+    reload_command: "komorebic stop --wkhd && komorebic start --wkhd"
+
+bars:
+    status-bar:
+        enabled: true
+        screens: ["*"]
+        class_name: "yasb-bar"
+        alignment:
+            position: "top"
+            center: false
+        animation:
+            enabled: true
+            duration: 800
+        blur_effect:
+            enabled: false
+            acrylic: false
+            dark_mode: false
+            round_corners: false
+            border_color: None
+        window_flags:
+            always_on_top: false
+            windows_app_bar: true
+        dimensions:
+            width: "100%"
+            height: 35
+        padding:
+            top: 0
+            left: 0
+            bottom: 0
+            right: 0
+        widgets:
+            left:
+                [
+                    "home",
+                    "whkd",
+                    "windows_workspaces",
+                    "komorebi_active_layout",
+                    "komorebi_workspaces",
+                    "taskbar",
+                ]
+            center: ["active_window"]
+            right:
+                [
+                    "llm",
+                    "vscode",
+                    "weather",
+                    "volume",
+                    "microphone",
+                    "bluetooth",
+                    "clock",
+                    "power_menu",
+                    "komorebi_ctl",
+                ]
+widgets:
+    home:
+        type: "yasb.home.HomeWidget"
+        options:
+            label: "<span>\udb80\udf5c</span>"
+            menu_list:
+                - { title: "Home", path: "~" }
+                - { title: "Downloads", path: "C:\\Users\\kanvk\\Downloads" }
+                - { title: "Documents", path: "C:\\Users\\kanvk\\Documents" }
+                - { title: "Dev", path: "X:\\" }
+            system_menu: true
+            power_menu: false
+            blur: true
+            round_corners: true
+            round_corners_type: "normal"
+            border_color: ""
+            distance: 10
+            container_padding:
+                top: 0
+                left: 0
+                bottom: 0
+                right: 0
+    whkd:
+        type: "yasb.whkd.WhkdWidget"
+        options:
+            label: "<span>\uf11c</span>"
+            special_keys:
+                - key: "win"
+                  key_replace: "\ue70f"
+                - key: "ctrl"
+                  key_replace: "Ctrl"
+                - key: "alt"
+                  key_replace: "Alt"
+                - key: "shift"
+                  key_replace: "Shift"
+                - key: "left"
+                  key_replace: "\u2190"
+                - key: "right"
+                  key_replace: "\u2192"
+                - key: "up"
+                  key_replace: "\u2191"
+                - key: "down"
+                  key_replace: "\u2193"
+            label_shadow:
+                enabled: true
+                color: "black"
+                radius: 3
+                offset: [1, 1]
+    windows_workspaces:
+        type: "yasb.windows_desktops.WorkspaceWidget"
+        options:
+            label_workspace_btn: "\udb81\udc3d"
+            label_workspace_active_btn: "\udb81\udc3e"
+            btn_shadow:
+                enabled: true
+                color: "black"
+                radius: 3
+                offset: [1, 1]
+    komorebi_active_layout:
+        type: "komorebi.active_layout.ActiveLayoutWidget"
+        options:
+            hide_if_offline: false
+            label: "{icon} {layout_name}"
+            layouts:
+                [
+                    "bsp",
+                    "columns",
+                    "rows",
+                    "grid",
+                    "scrolling",
+                    "vertical_stack",
+                    "horizontal_stack",
+                    "ultrawide_vertical_stack",
+                    "right_main_vertical_stack",
+                ]
+            layout_icons:
+                bsp: "\uebeb"
+                columns: "\uebf7"
+                rows: "\uec01"
+                grid: "\udb81\udf58"
+                scrolling: "\uebf7"
+                vertical_stack: "\uebee"
+                horizontal_stack: "\uebf0"
+                ultrawide_vertical_stack: "\uebee"
+                right_main_vertical_stack: "\uebf1"
+                monocle: "\uf06f"
+                maximized: "\uf06f"
+                floating: "\uf2d2"
+                paused: "\udb83\udf89"
+                tiling: "\udb81\ude40"
+            callbacks:
+                on_left: "toggle_layout_menu"
+                on_middle: "prev_layout"
+                on_right: "next_layout"
+            layout_menu:
+                blur: true
+                round_corners: true
+                round_corners_type: "normal"
+                border_color: "System"
+                alignment: "left"
+                direction: "down"
+                offset_top: 6
+                offset_left: 0
+                show_layout_icons: true
+            label_shadow:
+                enabled: true
+                color: "black"
+                radius: 3
+                offset: [1, 1]
+    komorebi_workspaces:
+        type: "komorebi.workspaces.WorkspaceWidget"
+        options:
+            label_offline: "Komorebi Offline"
+            label_workspace_btn: "{index}"
+            label_workspace_active_btn: "[{index}]"
+            label_workspace_populated_btn: "{index}"
+            label_default_name: ""
+            label_zero_index: false
+            hide_empty_workspaces: false
+            hide_if_offline: false
+            animation: true
+            enable_scroll_switching: true
+            toggle_workspace_layer:
+                enabled: false
+                tiling_label: "Tiling"
+                floating_label: "Floating"
+            app_icons:
+                enabled_populated: false
+                enabled_active: false
+                size: 12
+                max_icons: 0
+                hide_label: false
+                hide_duplicates: false
+                hide_floating: false
+            btn_shadow:
+                enabled: true
+                color: "black"
+                radius: 3
+                offset: [1, 1]
+    taskbar:
+        type: "yasb.taskbar.TaskbarWidget"
+        options:
+            icon_size: 16
+            tooltip: true
+            show_only_visible: false
+            strict_filtering: true
+            monitor_exclusive: true
+            animation:
+                enabled: true
+            preview:
+                enabled: true
+                width: 240
+                delay: 400
+                padding: 15
+                margin: 15
+            title_label:
+                enabled: false
+                show: "always"
+                min_length: 10
+                max_length: 100
+            ignore_apps:
+                processes: []
+                titles: []
+                classes: []
+    active_window:
+        type: "yasb.active_window.ActiveWindowWidget"
+        options:
+            label: "{win[title]}"
+            label_alt: ""
+            label_no_window: ""
+            label_icon: true
+            label_icon_size: 12
+            max_length: 120
+            max_length_ellipsis: "..."
+            monitor_exclusive: true
+    vscode:
+        type: "yasb.vscode.VSCodeWidget"
+        options:
+            label: "<span>\udb82\ude1e</span>"
+            label_alt: "<span>\udb82\ude1e</span> recents"
+            menu_title: "<span style='font-weight:bold'>VScode</span> recents"
+            max_field_size: 50
+            folder_icon: "\uf114"
+            file_icon: "\uf016"
+            truncate_to_root_dir: false
+            hide_folder_icon: false
+            hide_file_icon: false
+            max_number_of_folders: 5
+            max_number_of_files: 10
+            modified_date_format: "Date modified: %Y-%m-%d %H:%M"
+            cli_command: "code"
+            menu:
+                blur: true
+                round_corners: true
+                round_corners_type: "small"
+                alignment: "center"
+                offset_top: 0
+    llm:
+        type: "yasb.ai_chat.AiChatWidget"
+        options:
+            label: "<span>\uf086</span>"
+            chat:
+                blur: true
+                round_corners: true
+                round_corners_type: "normal"
+                border_color: "system"
+                alignment: "center"
+                direction: "down"
+                offset_left: 0
+                offset_top: 6
+            icons:
+                send: "\uf1d8"
+                stop: "\uf04d"
+                clear: "\uf1f8"
+                assistant: "\udb81\ude74"
+            notification_dot:
+                enabled: false
+                corner: "top_right"
+                color: "red"
+                margin: [0, 2]
+            callbacks:
+                on_left: "toggle_chat"
+            providers:
+                - provider: "Ollama"
+                  api_endpoint: "http://localhost:11434/v1"
+                  credential: "ollama"
+                  models:
+                      - name: "gemma3:27b-it-qat"
+                        label: "Gemma3 27b"
+                      - name: "gemma3:12b-it-qat"
+                        label: "Gemma3 12b"
+    weather:
+        type: "yasb.weather.WeatherWidget"
+        options:
+            label: "<span>{icon}</span> {temp}"
+            label_alt: "{location}: {conditions}, Min {min_temp}, Max {max_temp}, Humidity {humidity}"
+            api_key: env
+            update_interval: 600 #Update interval in seconds, Min 600
+            hide_decimal: true
+            location: env
+            units: "imperial"
+            callbacks:
+                on_left: "toggle_card"
+            icons:
+                sunnyDay: "\udb81\udd99"
+                clearNight: "\ue3c2"
+                cloudyDay: "\ue21d"
+                cloudyNight: "\ue226"
+                rainyDay: "\ue371"
+                rainyNight: "\ue371"
+                snowyIcyDay: "\udb81\udf17"
+                snowyIcyNight: "\udb81\udf17"
+                blizzardDay: "\udb81\udd99"
+                default: "\udb81\udd99"
+            weather_card:
+                blur: True
+                round_corners: True
+                round_corners_type: "normal"
+                border_color: "#45475a"
+                alignment: "right"
+                direction: "down"
+                distance: 6
+                icon_size: 48
+    volume:
+        type: "yasb.volume.VolumeWidget"
+        options:
+            label: "<span>{icon}</span> {level}"
+            label_alt: "{volume}"
+            volume_icons:
+                - "\ueee8"
+                - "\uf026"
+                - "\uf027"
+                - "\uf027"
+                - "\uf028"
+            audio_menu:
+                blur: True
+                round_corners: True
+                round_corners_type: "normal"
+                border_color: "#45475a"
+                alignment: "right"
+                direction: "down"
+                distance: 6
+            callbacks:
+                on_left: "toggle_volume_menu"
+                on_right: "exec cmd.exe /c start ms-settings:sound"
+    microphone:
+        type: "yasb.microphone.MicrophoneWidget"
+        options:
+            label: "<span>{icon}</span>"
+            label_alt: "<span>{icon}</span> {level}"
+            mute_text: "mute"
+            icons:
+                normal: "\uf130"
+                muted: "\uf131"
+            mic_menu:
+                blur: true
+                round_corners: true
+                round_corners_type: "normal"
+                border_color: "system"
+                alignment: "right"
+                direction: "down"
+            callbacks:
+                on_left: "toggle_mute"
+                on_middle: "toggle_label"
+                on_right: "toggle_mic_menu"
+            label_shadow:
+                enabled: true
+                color: "black"
+                radius: 3
+                offset: [1, 1]
+    bluetooth:
+        type: "yasb.bluetooth.BluetoothWidget"
+        options:
+            label: "<span>{icon}</span> {device_count}"
+            label_alt: "{device_name}"
+            label_no_device: "No devices connected"
+            label_device_separator: ", "
+            max_length: 50
+            max_length_ellipsis: "..."
+            icons:
+                bluetooth_on: "\udb80\udcaf"
+                bluetooth_off: "\udb80\udcb2"
+                bluetooth_connected: "\udb80\udcb1"
+            callbacks:
+                on_left: "toggle_label"
+                on_right: "exec cmd.exe /c start ms-settings:bluetooth"
+            label_shadow:
+                enabled: true
+                color: "black"
+                radius: 3
+                offset: [1, 1]
+    clock:
+        type: "yasb.clock.ClockWidget"
+        options:
+            label: "<span>\ue769</span>{%I:%M:%S %p |  %a %d %b}"
+            label_alt: "{%a, %d %b %H:%M:%S}"
+            timezones: [] # Looking up time zone info from registry
+    power_menu:
+        type: "yasb.power_menu.PowerMenuWidget"
+        options:
+            label: "\u23FB"
+            uptime: True
+            blur: False
+            blur_background: True
+            animation_duration: 250
+            button_row: 3
+            buttons:
+                signout: ["\udb80\udf43", "Sign out"]
+                shutdown: ["\u23FB", "Shut Down"]
+                restart: ["\uead2", "Restart"]
+                sleep: ["\udb82\udd04", "Sleep"]
+                lock: ["\uf023", "Lock"]
+                cancel: ["\udb81\udf3a", "Cancel"]
+    komorebi_ctl:
+        type: "komorebi.control.KomorebiControlWidget"
+        options:
+            label: "<span>\udb80\uddd9</span>"
+            icons:
+                start: "\uead3"
+                stop: "\uead7"
+                reload: "\uead2"
+            run_ahk: false
+            run_whkd: true
+            show_version: true
+            komorebi_menu:
+                blur: true
+                round_corners: true
+                round_corners_type: "normal"
+                border_color: "System"
+                alignment: "left"
+                direction: "down"
+                offset_top: 6
+                offset_left: 0
+            label_shadow:
+                enabled: true
+                color: "black"
+                radius: 3
+                offset: [1, 1]

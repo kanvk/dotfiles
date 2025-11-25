@@ -1,0 +1,4 @@
+Alt+Tab per monitor
+Better file sizes in Explorer details
+Taskbar Clock Customization
+Turn off change file extension warning
