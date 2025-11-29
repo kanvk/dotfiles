@@ -1,5 +1,5 @@
-watch_stylesheet: true
-watch_config: true
+watch_stylesheet: false
+watch_config: false
 debug: false
 update_check: true
 show_systray: false
@@ -413,7 +413,7 @@ widgets:
             button_row: 3
             buttons:
                 signout:  ["\uf08b", "Sign out"]   #  (nf-fa-sign_out)
-                shutdown: ["\uf011", "Shut Down"]  #  (nf-fa-power_off) - Power button
+                shutdown: ["\u23FB", "Shut Down"]  #  Power symbol
                 restart:  ["\uf021", "Restart"]    #  (nf-fa-refresh) - Circular arrow
                 sleep:    ["\uf186", "Sleep"]      #  (nf-fa-moon_o)
                 lock:     ["\uf023", "Lock"]       #  (nf-fa-lock)
