@@ -265,11 +265,27 @@
 .volume-widget {
     padding: 0 8px;
 }
+
+.volume-widget .icon {
+    font-size: 16px;
+    margin: 0 2px 0 0;
+    padding-bottom: 2px;
+}
+
+/* Muted State (Red color for Alert/Off) */
+.volume-widget .icon.muted {
+    color: var(--red);
+}
+
 .volume-widget .label {
     margin-right: 4px;    
     color: var(--text);
     font-size: 12px;
     font-weight: 500;
+}
+
+.volume-widget .label.muted {
+    color: var(--subtext0); /* Dim the text when muted */
 }
 
 /* 2. Main Menu Popup (Glassy/Dark Background) */

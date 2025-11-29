@@ -349,6 +349,7 @@ widgets:
             callbacks:
                 on_left: "toggle_volume_menu"
                 on_right: "toggle_mute"
+                on_middle: "do_nothing"
     microphone:
         type: "yasb.microphone.MicrophoneWidget"
         options:
@@ -368,6 +369,7 @@ widgets:
             callbacks:
                 on_left: "toggle_mic_menu"
                 on_right: "toggle_mute"
+                on_middle: "do_nothing"
             label_shadow:
                 enabled: true
                 color: "black"
