@@ -210,10 +210,10 @@ widgets:
             animation:
                 enabled: true
             preview:
-                enabled: true
+                enabled: false
                 width: 240
                 delay: 400
-                padding: 15
+                padding: 30
                 margin: 15
             title_label:
                 enabled: false
@@ -249,10 +249,10 @@ widgets:
                 offset_left: 0
                 offset_top: 6
             icons:
-                send: "\uf1d8"
-                stop: "\uf04d"
-                clear: "\uf1f8"
-                assistant: "\uebca"
+                send: "\uf1d9"     #  (nf-fa-paper_plane) - Send message
+                stop: "\uf04d"     #  (nf-fa-stop) - Stop generation
+                clear: "\uf1f8"    #  (nf-fa-trash) - Clear chat
+                assistant: "\uebca" #  (nf-cod-hubot) - AI assistant
             notification_dot:
                 enabled: false
                 corner: "top_right"
@@ -276,8 +276,8 @@ widgets:
             label_alt: "<span>\ue70c</span> recents"
             menu_title: "VS Code Recents"
             max_field_size: 50
-            folder_icon: "\uf114"
-            file_icon: "\uf016"
+            folder_icon: "\uf07c"  #  (nf-fa-folder) - Folder icon
+            file_icon: "\uf15b"    #  (nf-fa-file) - File icon
             truncate_to_root_dir: false
             hide_folder_icon: false
             hide_file_icon: false
@@ -329,11 +329,11 @@ widgets:
             label: "<span>{icon}</span> {level}"
             label_alt: "<span>{icon}</span> {level}"
             volume_icons:
-                - "\ueee8"
-                - "\uf026"
-                - "\uf027"
-                - "\uf027"
-                - "\uf028"
+                - "\uf026"  #  (nf-fa-volume_off) - Mute
+                - "\uf027"  #  (nf-fa-volume_down) - 0-10% volume
+                - "\uf027"  #  (nf-fa-volume_down) - 11-30% volume
+                - "\uf027"  #  (nf-fa-volume_down) - 31-60% volume
+                - "\uf028"  #  (nf-fa-volume_up) - 61-100% volume
             audio_menu:
                 blur: True
                 round_corners: True
@@ -356,8 +356,8 @@ widgets:
             label_alt: "<span>{icon}</span> {level}"
             mute_text: "mute"
             icons:
-                normal: "\uf130"
-                muted: "\uf131"
+                normal: "\uf130"  #  (nf-fa-microphone) - Microphone active
+                muted: "\uf131"   #  (nf-fa-microphone_slash) - Microphone muted
             mic_menu:
                 blur: true
                 round_corners: true
@@ -366,8 +366,8 @@ widgets:
                 alignment: "right"
                 direction: "down"
             callbacks:
-                on_left: "toggle_mute"
-                on_right: "toggle_mic_menu"
+                on_left: "toggle_mic_menu"
+                on_right: "toggle_mute"
             label_shadow:
                 enabled: true
                 color: "black"
@@ -410,12 +410,12 @@ widgets:
             animation_duration: 250
             button_row: 3
             buttons:
-                signout:  ["\uf08b", "Sign out"]   #  (nf-fa-sign_out)
-                shutdown: ["\u23FB", "Shut Down"]  # ⏻ (power off symbol)
-                restart:  ["\uf01e", "Restart"]    #  (nf-fa-repeat)
-                sleep:    ["\uf186", "Sleep"]      #  (nf-fa-moon_o)
-                lock:     ["\uf023", "Lock"]       #  (nf-fa-lock)
-                cancel:   ["\uf00d", "Cancel"]     #  (nf-fa-times)
+                signout:  ["\uf08b", "Sign out"]   #  (nf-fa-sign_out)
+                shutdown: ["\uf011", "Shut Down"]  #  (nf-fa-power_off) - Power button
+                restart:  ["\uf021", "Restart"]    #  (nf-fa-refresh) - Circular arrow
+                sleep:    ["\uf186", "Sleep"]      #  (nf-fa-moon_o)
+                lock:     ["\uf023", "Lock"]       #  (nf-fa-lock)
+                cancel:   ["\uf00d", "Cancel"]     #  (nf-fa-times)
     komorebi_ctl:
         type: "komorebi.control.KomorebiControlWidget"
         options:

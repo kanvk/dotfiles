@@ -39,8 +39,7 @@
     font-size: 12px;
     color: #cdd6f4;
     font-weight: 500;
-    font-family: "CaskaydiaCove Nerd Font Mono",
-        "JetBrainsMonoNL Nerd Font Mono";
+    font-family: "CaskaydiaCove Nerd Font Mono", "JetBrainsMonoNL Nerd Font Mono";
     margin: 0;
     padding: 0;
 }
@@ -54,10 +53,6 @@
 .widget {
     padding: 0 10px;
     margin: 0;
-}
-
-.widget .label {
-    padding: 2px 2px 1px 2px;
 }
 
 .widget .label.alt {
@@ -126,7 +121,18 @@
 }
 .volume-widget .icon {
     color: var(--mauve);
-    margin: 1px 2px 0 0;
+    
+    /* Force a specific width in pixels. 
+       Standard icons are ~16px, Volume waves usually need ~24px+ */
+    min-width: 24px; 
+
+    /* Force the icon to align left within that 24px box 
+       so the extra space appears on the right side */
+    qproperty-alignment: 'AlignLeft | AlignVCenter';
+
+    /* Reset previous border */
+    border: none;
+    margin: 0;
 }
 .start-menu .icon {
     font-size: 18px;
@@ -140,30 +146,14 @@
 
 /***---------------------------------      • Weather Icons •      ----------------------------------***/
 
-.weather-widget .icon.cloudyDay {
-    color: var(--mauve);
-}
-.weather-widget .icon.cloudyNight {
-    color: var(--mauve);
-}
-.weather-widget .icon.rainyDay {
-    color: var(--mauve);
-}
-.weather-widget .icon.rainyNight {
-    color: var(--mauve);
-}
-.weather-widget .icon.snowyIcyDay {
-    color: var(--mauve);
-}
-.weather-widget .icon.snowyIcyNight {
-    color: var(--mauve);
-}
-.weather-widget .icon.blizzardDay {
-    color: var(--mauve);
-}
-.weather-widget .icon.default {
-    color: var(--mauve);
-}
+.weather-widget .icon.cloudyDay { color: var(--mauve); }
+.weather-widget .icon.cloudyNight { color: var(--mauve); }
+.weather-widget .icon.rainyDay { color: var(--mauve); }
+.weather-widget .icon.rainyNight { color: var(--mauve); }
+.weather-widget .icon.snowyIcyDay { color: var(--mauve); }
+.weather-widget .icon.snowyIcyNight { color: var(--mauve); }
+.weather-widget .icon.blizzardDay { color: var(--mauve); }
+.weather-widget .icon.default { color: var(--mauve); }
 
 /***----------------------------------      • Weather Card •      -----------------------------------***/
 
@@ -437,16 +427,16 @@
 }
 
 .microphone-widget .label.muted {
-    color: var(--subtext0);
+    color: var(--subtext0); /* Dim the text when muted */
 }
 
 /* 2. Menu Popup Styling */
 .microphone-menu {
     background-color: var(--mantle);
-    min-width: 300px;
     border: 1px solid var(--surface0);
     border-radius: 8px;
-    padding: 8px;
+    padding: 12px;
+    min-width: 200px;
 }
 
 /* 3. Device List Styles */
@@ -470,7 +460,7 @@
 }
 
 /* -------------------------------------------------------------------------------------------------- */
-/* Microphone Slider Styling                                                                          */
+/* Microphone Slider Styling (Matches Volume Logic)                                                   */
 /* -------------------------------------------------------------------------------------------------- */
 
 .microphone-menu QSlider {
@@ -487,17 +477,19 @@
     margin: 0px;
 }
 
-/* The Filled Track */
+/* The Filled Track (Peach) */
 .microphone-menu QSlider::sub-page:horizontal {
     border-radius: 2px;
     height: 4px;
-    background: var(--peach); 
+    background: var(--peach); /* Different color than volume */
 }
 
 /* The Knob */
 .microphone-menu QSlider::handle:horizontal {
     background: var(--text);
     border: 2px solid var(--base);
+    
+    /* Centering Math (Same as Volume) */
     width: 14px;
     height: 14px;
     margin-top: -5px; 
@@ -506,9 +498,9 @@
 }
 
 .microphone-menu QSlider::handle:horizontal:hover {
-    background: var(--rosewater); 
+    background: var(--rosewater); /* Hover feedback */
     border-color: var(--surface0);
-}}
+}
 
 /* -------------------------------------------------------------------------------------------------- */
 /* 4. Additional Widgets & Integrations                                                               */
@@ -517,16 +509,40 @@
 /***--------------------------------      • Active Window •      ---------------------------------***/
 
 .active-window-widget {
+    padding: 0 4px;
 }
+
 .active-window-widget.your_class {
 }
+
 .active-window-widget .widget-container {
+    background-color: var(--crust);
+    border-radius: 12px;
+    margin: 4px 0;
+    padding: 0 12px;
+    min-height: 24px;
 }
+
 .active-window-widget .widget-container .label {
+    color: var(--text);
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-weight: 600;
+    font-size: 14px;
 }
+
 .active-window-widget .widget-container .label.alt {
+    color: var(--overlay1);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 12px;
 }
+
 .active-window-widget .widget-container .icon {
+    color: var(--blue);
+    font-size: 16px;
+    margin-right: 8px;
+    padding-bottom: 2px;
+    vertical-align: middle;
 }
 
 /***--------------------------------      • AI Chat Widget •      --------------------------------***/
@@ -678,7 +694,7 @@
 .ai-chat-popup .chat-footer .stop-button {
     background-color: var(--surface0);
     color: var(--text);
-    font-size: 12px;
+    font-size: 14px;
     max-width: 30px;
     min-width: 30px;
     max-height: 30px;
@@ -968,55 +984,147 @@
 /***----------------------------      • Komorebi Workspace •      -----------------------------***/
 
 .komorebi-workspaces {
+    padding: 0 4px;
 }
+
 .komorebi-workspaces .widget-container {
+    background-color: var(--crust);
+    margin: 4px 0 4px 0;
+    border-radius: 12px;
+    padding: 0 10px;
 }
+
 .komorebi-workspaces .ws-btn {
-}
-.komorebi-workspaces .ws-btn.populated {
-}
-.komorebi-workspaces .ws-btn.active {
-}
-.komorebi-workspaces .ws-btn.button-1 {
-}
-.komorebi-workspaces .ws-btn.button-2 {
-}
-.komorebi-workspaces .float-override {
-}
-.komorebi-workspaces .workspace-layer {
-}
-.komorebi-workspaces .workspace-layer.tiling {
-}
-.komorebi-workspaces .workspace-layer.floating {
-}
-
-/* -------------------------------------------------------------------------------------------------- */
-/* 5. Fixes for Icon Clipping & Spacing                                                               */
-/* -------------------------------------------------------------------------------------------------- */
-
-/* Global Icon Fixes */
-.icon {
-    /* Prevent the right side of wide icons (like folders or weather) from being cut off */
-    padding-right: 4px;
-    padding-left: 2px;
-
-    /* Prevent the bottom of the icon from being sliced */
-    padding-bottom: 2px;
-
-    /* Ensure the background doesn't clip the glyph */
     background-color: transparent;
-
-    /* Center the icon vertically relative to text */
-    vertical-align: middle;
+    color: var(--overlay1);
+    border: none;
+    font-size: 14px;
+    margin: 0 2px;
+    padding: 2px 0;
+    font-family: "CaskaydiaCove Nerd Font Mono";
 }
 
-/* Adjust generic labels to accommodate the extra icon padding */
+.komorebi-workspaces .ws-btn.populated {
+    color: var(--mauve);
+}
+
+.komorebi-workspaces .ws-btn.active {
+    color: var(--blue);
+    font-weight: 600;
+}
+
+.komorebi-workspaces .workspace-layer {
+    margin-left: 8px;
+    font-size: 14px;
+    color: var(--text);
+}
+
+.komorebi-workspaces .workspace-layer.tiling {
+    color: var(--green);
+}
+
+.komorebi-workspaces .workspace-layer.floating {
+    color: var(--peach);
+}
+
+.komorebi-workspaces .float-override {
+    color: var(--red);
+    margin-left: 4px;
+}
+
+/***--------------------------------      • Taskbar Widget •      --------------------------------***/
+
+.taskbar-widget .app-container {
+    margin: 4px 2px;
+    border-radius: 6px;
+    padding: 0 6px;
+}
+
+/* Foreground (Active/Focused App) */
+.taskbar-widget .app-container.foreground {
+    background-color: var(--surface2);
+    border: 1px solid var(--overlay0);
+}
+
+/* Flashing (Urgent/Alert) */
+.taskbar-widget .app-container.flashing {
+    background-color: var(--red);
+    color: var(--base);
+}
+
+/* Running (Open but not focused) */
+.taskbar-widget .app-container.running {
+    background-color: var(--surface0);
+}
+
+/* Hover State */
+.taskbar-widget .app-container:hover {
+    background-color: var(--surface1);
+}
+
+.taskbar-widget .app-container .app-title {
+    padding-left: 6px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-weight: 500;
+    color: var(--text);
+}
+
+/* -------------------------- Taskbar Preview Popup -------------------------- */
+
+.taskbar-preview {
+    border-radius: 8px; 
+    background-color: var(--mantle);
+    border: 1px solid var(--surface0);
+}
+
+.taskbar-preview.flashing { 
+    background-color: var(--maroon);
+}
+
+.taskbar-preview .header {
+    padding-bottom: 12px;
+    padding-top: 4px;
+    background-color: var(--base);
+    border-bottom: 1px solid var(--surface0);
+}
+
+.taskbar-preview .header .title {
+    color: var(--text);
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-weight: 600;
+    font-size: 13px;
+}
+
+/* -------------------------------------------------------------------------------------------------- */
+/* 5. Fixes for Icon Clipping (The "Transparent Border" Trick)                                        */
+/* -------------------------------------------------------------------------------------------------- */
+
+.icon {
+    /* 1. Force a transparent border to reserve physical pixels for the glyph */
+    border-right: 4px solid transparent; 
+    border-bottom: 2px solid transparent;
+    border-top: 1px solid transparent;
+
+    /* 2. Reset standard properties */
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+/* Specific fix for Weather & Custom Icons which are often wider */
+.weather-widget .icon, 
+.start-menu .icon {
+    border-right: 6px solid transparent;
+}
+
+/* Adjust the container to handle the invisible borders */
 .widget .label {
-    /* Increased padding slightly (Top/Bottom) to fit 16px icons inside 12px text lines */
-    padding: 3px 4px 3px 4px;
+    /* Remove padding here so we don't double-up with the icon borders */
+    padding: 0 2px 0 0;
+    margin: 0;
 }
 
-/* Ensure the main bar container has a minimum height so icons don't touch the edges */
+/* Ensure the bar is tall enough to encompass the borders */
 .yasb-bar {
     min-height: 32px;
 }
