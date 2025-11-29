@@ -121,5 +121,24 @@
         }
       ]
     }
+  ],
+  "ignore_rules": [
+    {
+      "kind": "Title",
+      "id": "MOTIV Mix",
+      "matching_strategy": "Equals"
+    }
+  ],
+    "floating_applications": [
+    {
+      "kind": "Title",
+      "id": "Untapped.gg Companion",
+      "matching_strategy": "Equals"
+    },
+    {
+      "kind": "Title",
+      "id": "Blitz.exe",
+      "matching_strategy": "Equals"
+    }
   ]
 }
