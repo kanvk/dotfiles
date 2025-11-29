@@ -329,8 +329,8 @@ widgets:
             label: "<span>{icon}</span> {level}"
             label_alt: "<span>{icon}</span> {level}"
             volume_icons:
-                - "\uf026"  #  (nf-fa-volume_off) - Mute
-                - "\uf027"  #  (nf-fa-volume_down) - 0-10% volume
+                - "\ueee8"  #  (nf-fa-volume_xmark) - Mute
+                - "\uf026"  #  (nf-fa-volume_off) - 0-10% volume
                 - "\uf027"  #  (nf-fa-volume_down) - 11-30% volume
                 - "\uf027"  #  (nf-fa-volume_down) - 31-60% volume
                 - "\uf028"  #  (nf-fa-volume_up) - 61-100% volume
@@ -348,7 +348,7 @@ widgets:
                 show_apps_expanded: true
             callbacks:
                 on_left: "toggle_volume_menu"
-                on_right: "exec cmd.exe /c start ms-settings:sound"
+                on_right: "toggle_mute"
     microphone:
         type: "yasb.microphone.MicrophoneWidget"
         options:
