@@ -65,9 +65,9 @@ if [ "$color_prompt" = yes ]; then
 
     # configure_prompt
 
-    # enable syntax-highlighting
-    if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && [ "$color_prompt" = yes ]; then
-        . /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    # zsh-syntax-highlighting config
+    if [ "$color_prompt" = yes ]; then
+        # . /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh  # Installed via sheldon
         ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
         typeset -gA ZSH_HIGHLIGHT_STYLES
         ZSH_HIGHLIGHT_STYLES[default]=none
@@ -190,8 +190,8 @@ zstyle :omz:plugins:ssh-agent quiet yes
 # Oh My ZSH config
 export ZSH="$HOME/.local/share/sheldon/repos/github.com/ohmyzsh/ohmyzsh"
 plugins=(git git-lfs gh pip web-search docker docker-compose poetry copypath copyfile dirhistory
-    history taskwarrior fzf vi-mode colorize colored-man-pages copybuffer jsontools rust 
-    ssh-agent conda brew)
+    history taskwarrior fzf colorize colored-man-pages copybuffer jsontools rust 
+    ssh-agent conda brew vi-mode)
 source $ZSH/oh-my-zsh.sh
 
 # Sheldon config
