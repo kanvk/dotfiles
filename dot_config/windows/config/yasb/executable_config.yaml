@@ -402,6 +402,21 @@ widgets:
             label: "<span>\uf017</span>{%I:%M:%S %p |  %a %d %b}"
             label_alt: "{%a, %d %b %H:%M:%S}"
             timezones: [] # Looking up time zone info from registry
+            calendar: 
+                blur: true
+                round_corners: true
+                round_corners_type: "normal"
+                border_color: "system"
+                alignment: "center"
+                direction: "down"
+                offset_top: 6
+                offset_left: 0
+                show_holidays: false
+                show_week_numbers: true
+                show_years: true
+                country_code: "US"
+                holiday_color: "#FF6464"
+                extended: false
     power_menu:
         type: "yasb.power_menu.PowerMenuWidget"
         options:

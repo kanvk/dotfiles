@@ -13,5 +13,5 @@ less_termcap[so]="${fg_bold[yellow]}${bg[black]}" # Remove man page footer highl
 export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_"
 
 # per-directory-history
-bindkey '^G' per-directory-history-toggle-history
-export HISTORY_START_WITH_GLOBAL=true
+# bindkey '^G' per-directory-history-toggle-history
+# export HISTORY_START_WITH_GLOBAL=true

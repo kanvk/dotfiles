@@ -191,7 +191,7 @@ zstyle :omz:plugins:ssh-agent quiet yes
 export ZSH="$HOME/.local/share/sheldon/repos/github.com/ohmyzsh/ohmyzsh"
 plugins=(git git-lfs gh pip web-search docker docker-compose poetry copypath copyfile dirhistory
     history taskwarrior fzf colorize colored-man-pages copybuffer jsontools rust 
-    ssh-agent conda brew uv per-directory-history vi-mode)
+    ssh-agent conda brew uv vi-mode)
 source $ZSH/oh-my-zsh.sh
 
 # Sheldon config
