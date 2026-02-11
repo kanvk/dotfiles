@@ -37,17 +37,30 @@
 
 * {
     font-size: 12px;
-    color: #cdd6f4;
+    color: var(--text);
     font-weight: 500;
     font-family: "CaskaydiaCove Nerd Font Mono", "JetBrainsMonoNL Nerd Font Mono";
     margin: 0;
     padding: 0;
 }
+
+/* Smooth transitions for interactive elements */
+QPushButton,
+.button,
+.menu-item,
+.device,
+.ws-btn,
+.app-container,
+QSlider::handle {
+    transition: all 0.2s ease;
+}
+
 .yasb-bar {
     padding: 0 8px;
     margin: 0;
-    background-color: #1e1e2e;
-    border-radius: 8px;
+    background-color: var(--base);
+    border-radius: 0;
+    min-height: 32px;
 }
 
 .widget {
@@ -56,7 +69,7 @@
 }
 
 .widget .label.alt {
-    padding: 1px 8px 1px 8px;
+    padding: 1px 8px;
 }
 
 /* -------------------------------------------------------------------------------------------------- */
@@ -71,45 +84,51 @@
 }
 
 .power-menu-widget .label {
-    color: #eba0ac;
+    color: var(--maroon);
     font-size: 16px;
     font-family: "JetBrainsMonoNL Nerd Font Mono";
 }
+
 .power-menu-popup .button {
-    padding: 0px;
+    padding: 0;
     margin: 5px;
     width: 250px;
     height: 175px;
     border-radius: 8px;
     background-color: var(--base);
     font-family: "CaskaydiaCove Nerd Font Mono";
-    color: white;
+    color: var(--text);
 }
-.power-menu-popup .button.hover {
-    background-color: var(--base);
+
+.power-menu-popup .button:hover {
+    background-color: var(--surface0);
 }
+
 .power-menu-popup .button .label {
-    margin-bottom: 0px;
+    margin-bottom: 0;
     font-size: 16px;
     font-weight: 600;
     color: var(--text);
     font-family: "CaskaydiaCove Nerd Font Mono";
 }
+
 .power-menu-popup .button .icon {
     font-size: 55px;
     padding-top: 25px;
     padding-right: 10px;
     color: var(--text);
 }
+
 .power-menu-popup .button.cancel .icon {
     color: var(--red);
 }
+
 .power-menu-popup .button.cancel .label {
     color: var(--red);
 }
 
 .clock-widget {
-    padding: 0 4px 0 4px;
+    padding: 0 4px;
 }
 
 /* --------------------------------------------------------------------------------------------------- */
@@ -119,61 +138,70 @@
 .icon {
     font-size: 16px;
 }
+
 .volume-widget .icon {
     color: var(--mauve);
-    
+
     /* Force a specific width in pixels. 
        Standard icons are ~16px, Volume waves usually need ~24px+ */
-    min-width: 24px; 
+    min-width: 24px;
 
     /* Force the icon to align left within that 24px box 
        so the extra space appears on the right side */
-    qproperty-alignment: 'AlignLeft | AlignVCenter';
+    qproperty-alignment: "AlignLeft | AlignVCenter";
 
     /* Reset previous border */
     border: none;
     margin: 0;
 }
+
 .start-menu .icon {
     font-size: 18px;
-    color: #89b4fa;
+    color: var(--blue);
 }
+
 .clock-widget .icon {
-    color: #cba6f7;
+    color: var(--mauve);
     font-size: 14px;
     margin-right: 7px;
 }
 
 /***---------------------------------      • Weather Icons •      ----------------------------------***/
 
-.weather-widget .icon.cloudyDay { color: var(--mauve); }
-.weather-widget .icon.cloudyNight { color: var(--mauve); }
-.weather-widget .icon.rainyDay { color: var(--mauve); }
-.weather-widget .icon.rainyNight { color: var(--mauve); }
-.weather-widget .icon.snowyIcyDay { color: var(--mauve); }
-.weather-widget .icon.snowyIcyNight { color: var(--mauve); }
-.weather-widget .icon.blizzardDay { color: var(--mauve); }
-.weather-widget .icon.default { color: var(--mauve); }
+.weather-widget .icon.cloudyDay,
+.weather-widget .icon.cloudyNight,
+.weather-widget .icon.rainyDay,
+.weather-widget .icon.rainyNight,
+.weather-widget .icon.snowyDay,
+.weather-widget .icon.snowyNight,
+.weather-widget .icon.blizzardDay,
+.weather-widget .icon.default {
+    color: var(--mauve);
+}
 
 /***----------------------------------      • Weather Card •      -----------------------------------***/
 
 .weather-card {
     background-color: var(--mantle);
 }
+
 .weather-card-today {
     border-radius: 8px;
     background-color: var(--base);
     color: var(--text);
 }
+
 .weather-card-today .label {
     font-size: 12px;
     font-family: "CaskaydiaCove Nerd Font Mono";
 }
+
 .weather-card-today .label.location {
     font-size: 24px;
     font-weight: 800;
     font-family: "CaskaydiaCove Nerd Font Mono";
 }
+
 .weather-card-today .label.alert {
     font-size: 12px;
     font-weight: 700;
@@ -183,10 +211,12 @@
     border-radius: 6px;
     padding: 5px 0;
 }
+
 .weather-card-day {
     border-radius: 8px;
     background-color: var(--base);
 }
+
 .weather-card-day .label {
     font-size: 12px;
     font-family: "CaskaydiaCove Nerd Font Mono";
@@ -195,6 +225,7 @@
 .calendar {
     background-color: var(--mantle);
 }
+
 .calendar .calendar-table,
 .calendar .calendar-table::item {
     background-color: rgba(17, 17, 27, 0);
@@ -207,13 +238,15 @@
 }
 
 .calendar .calendar-table::item:selected {
-    color: #4c4f69;
+    color: var(--crust);
     background: var(--mauve);
     border-radius: 8px;
 }
+
 .calendar .day-label {
     margin-top: 20px;
 }
+
 .calendar .day-label,
 .calendar .month-label,
 .calendar .date-label {
@@ -224,10 +257,12 @@
     min-width: 180px;
     max-width: 180px;
 }
+
 .calendar .month-label {
     font-weight: normal;
     padding-bottom: 12px;
 }
+
 .calendar .date-label {
     font-size: 88px;
     font-weight: 900;
@@ -239,23 +274,26 @@
     background-color: var(--mantle);
     border-radius: 8px;
     padding: 0;
-    margin-left: 0px;
+    margin-left: 0;
 }
+
 .home-menu .menu-item {
     padding: 8px 48px 8px 12px;
     font-size: 13px;
     font-family: "CaskaydiaCove Nerd Font Mono";
     font-weight: 600;
 }
+
 .home-menu .menu-item:hover {
-    background-color: #cba6f4;
-    color: #181825;
+    background-color: var(--mauve);
+    color: var(--crust);
     margin: 4px 6px;
     border-radius: 4px;
 }
+
 .home-menu .separator {
     max-height: 1px;
-    background-color: #45475a;
+    background-color: var(--surface1);
     margin: 0 8px;
 }
 
@@ -278,14 +316,15 @@
 }
 
 .volume-widget .label {
-    margin-right: 4px;    
+    margin-right: 4px;
     color: var(--text);
     font-size: 12px;
     font-weight: 500;
 }
 
 .volume-widget .label.muted {
-    color: var(--subtext0); /* Dim the text when muted */
+    color: var(--subtext0);
+    /* Dim the text when muted */
 }
 
 /* 2. Main Menu Popup (Glassy/Dark Background) */
@@ -313,10 +352,12 @@
     border-radius: 4px;
     color: var(--overlay1);
 }
+
 .audio-menu .audio-container .device:hover {
     background-color: var(--surface0);
     color: var(--text);
 }
+
 .audio-menu .audio-container .device.selected {
     background-color: var(--surface1);
     color: var(--text);
@@ -334,9 +375,11 @@
     border-radius: 4px;
     color: var(--text);
 }
+
 .audio-menu .toggle-apps:hover {
     background-color: var(--surface0);
 }
+
 .audio-menu .toggle-apps.expanded {
     background-color: var(--surface1);
 }
@@ -358,6 +401,7 @@
     margin-right: 8px;
     padding: 4px;
 }
+
 .audio-menu .apps-container .app-volume .app-icon-container:hover {
     background-color: var(--surface1);
 }
@@ -381,31 +425,35 @@
 /* The Background Track (Gray) */
 .audio-menu QSlider::groove:horizontal {
     border-radius: 2px;
-    height: 4px;             /* Thin track */
-    background: var(--surface1); 
-    margin: 0px;             /* Reset margins */
+    height: 4px;
+    /* Thin track */
+    background: var(--surface1);
+    margin: 0px;
+    /* Reset margins */
 }
 
 /* The Active Volume (Purple Fill) */
 .audio-menu QSlider::sub-page:horizontal {
     border-radius: 2px;
-    height: 4px;             /* Must match groove height */
-    background: var(--mauve); 
+    height: 4px;
+    /* Must match groove height */
+    background: var(--mauve);
 }
 
 /* The Circle Knob */
 .audio-menu QSlider::handle:horizontal {
     background: var(--text);
-    border: 2px solid var(--base); /* Dark ring to make it pop */
-    
+    border: 2px solid var(--base);
+    /* Dark ring to make it pop */
+
     /* SIZE CALCULATIONS FOR CENTERING: */
     /* Track height is 4px. Handle height is 14px. */
     /* Difference is 10px. Offset (margin-top) is -5px. */
-    
+
     width: 14px;
     height: 14px;
-    margin-top: -5px; 
-    margin-bottom: -5px; 
+    margin-top: -5px;
+    margin-bottom: -5px;
     border-radius: 9px;
 }
 
@@ -424,7 +472,7 @@
 
 /* Active State (Peach color for Input) */
 .microphone-widget .icon {
-    color: var(--peach); 
+    color: var(--peach);
     font-size: 16px;
     margin: 0 2px 0 0;
     padding-bottom: 2px;
@@ -443,7 +491,8 @@
 }
 
 .microphone-widget .label.muted {
-    color: var(--subtext0); /* Dim the text when muted */
+    color: var(--subtext0);
+    /* Dim the text when muted */
 }
 
 /* 2. Menu Popup Styling */
@@ -465,10 +514,12 @@
     border-radius: 4px;
     color: var(--overlay1);
 }
+
 .microphone-menu .device:hover {
     background-color: var(--surface0);
     color: var(--text);
 }
+
 .microphone-menu .device.selected {
     background-color: var(--surface1);
     color: var(--text);
@@ -497,24 +548,26 @@
 .microphone-menu QSlider::sub-page:horizontal {
     border-radius: 2px;
     height: 4px;
-    background: var(--peach); /* Different color than volume */
+    background: var(--peach);
+    /* Different color than volume */
 }
 
 /* The Knob */
 .microphone-menu QSlider::handle:horizontal {
     background: var(--text);
     border: 2px solid var(--base);
-    
+
     /* Centering Math (Same as Volume) */
     width: 14px;
     height: 14px;
-    margin-top: -5px; 
+    margin-top: -5px;
     margin-bottom: -5px;
     border-radius: 9px;
 }
 
 .microphone-menu QSlider::handle:horizontal:hover {
-    background: var(--rosewater); /* Hover feedback */
+    background: var(--rosewater);
+    /* Hover feedback */
     border-color: var(--surface0);
 }
 
@@ -526,9 +579,6 @@
 
 .active-window-widget {
     padding: 0 4px;
-}
-
-.active-window-widget.your_class {
 }
 
 .active-window-widget .widget-container {
@@ -563,13 +613,24 @@
 
 /***--------------------------------      • AI Chat Widget •      --------------------------------***/
 
+/* 1. Bar Widget */
 .ai-chat-widget {
-    padding: 0 6px 0 6px;
+    padding: 0 6px;
 }
-.ai-chat-widget .icon {
+
+.ai-chat-widget .widget-container .label {
+    color: var(--text);
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.ai-chat-widget .widget-container .icon {
     color: var(--blue);
     font-size: 16px;
 }
+
+/* 2. Chat Popup Container */
 .ai-chat-popup {
     background-color: var(--mantle);
     min-width: 500px;
@@ -577,14 +638,52 @@
     min-height: 600px;
     max-height: 600px;
 }
+
+/* 3. Chat Header */
 .ai-chat-popup .chat-header {
     background-color: var(--base);
     padding: 16px;
 }
-.ai-chat-popup .chat-footer {
-    background-color: transparent;
-    padding: 16px;
+
+.ai-chat-popup .chat-header .float-button {
+    background-color: var(--surface0);
+    color: var(--text);
+    font-size: 14px;
+    min-width: 30px;
+    min-height: 30px;
+    border-radius: 4px;
+    border: none;
+    font-family: "JetBrainsMonoNL Nerd Font Mono";
 }
+
+.ai-chat-popup .chat-header .float-button:hover {
+    background-color: var(--surface1);
+}
+
+.ai-chat-popup .chat-header .close-button {
+    background-color: var(--surface0);
+    color: var(--text);
+    font-size: 14px;
+    min-width: 30px;
+    min-height: 30px;
+    border-radius: 4px;
+    border: none;
+    font-family: "JetBrainsMonoNL Nerd Font Mono";
+}
+
+.ai-chat-popup .chat-header .close-button:hover {
+    background-color: var(--red);
+    color: var(--base);
+}
+
+.ai-chat-popup .chat-header .loader-line {
+    background-color: var(--blue);
+    min-height: 2px;
+    max-height: 2px;
+    border-radius: 2px;
+}
+
+/* Provider & Model Buttons */
 .ai-chat-popup .chat-header .provider-label,
 .ai-chat-popup .chat-header .model-label {
     font-family: "CaskaydiaCove Nerd Font Mono";
@@ -593,6 +692,7 @@
     margin-right: 8px;
     font-weight: 600;
 }
+
 .ai-chat-popup .chat-header .provider-button,
 .ai-chat-popup .chat-header .model-button {
     font-family: "CaskaydiaCove Nerd Font Mono";
@@ -606,12 +706,27 @@
     border-radius: 6px;
     padding: 4px 10px;
 }
+
+.ai-chat-popup .chat-header .provider-button:hover,
+.ai-chat-popup .chat-header .model-button:hover {
+    background-color: var(--surface1);
+}
+
 .ai-chat-popup .chat-header .provider-button:disabled,
 .ai-chat-popup .chat-header .model-button:disabled {
     color: var(--overlay0);
 }
 
-/* Context menu styles for header and chat content */
+/* 4. Context Menus */
+.ai-chat-popup .chat-header .context-menu {
+    background-color: var(--surface0);
+    border: none;
+    padding: 4px 0px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-size: 12px;
+    color: var(--text);
+}
+
 .ai-chat-popup .context-menu {
     background-color: var(--surface0);
     border: none;
@@ -620,6 +735,7 @@
     font-size: 12px;
     color: var(--text);
 }
+
 .ai-chat-popup .context-menu::separator {
     height: 1px;
     background-color: var(--surface1);
@@ -633,41 +749,59 @@
     border-radius: 4px;
     min-width: 100px;
 }
-/* Context menu item styles for header dropdown */
+
 .ai-chat-popup .chat-header .context-menu::item {
     min-width: 130px;
     max-width: 130px;
     padding: 4px;
 }
+
 .ai-chat-popup .context-menu::item:disabled {
     color: var(--overlay0);
 }
+
 .ai-chat-popup .context-menu::item:selected {
     background-color: var(--surface1);
     color: var(--text);
 }
+
 .ai-chat-popup .context-menu::item:checked {
     background-color: var(--blue);
     color: var(--base);
 }
 
+/* 5. Chat Content */
 .ai-chat-popup .chat-content {
     background-color: transparent;
     border: none;
 }
-.ai-chat-popup .chat-content .empty-chat .greeting,
-.ai-chat-popup .chat-content .empty-chat .message {
+
+/* Empty State */
+.ai-chat-popup .chat-content .empty-chat .greeting {
     color: var(--subtext1);
     font-family: "CaskaydiaCove Nerd Font Mono";
     font-size: 48px;
     font-weight: 600;
 }
+
 .ai-chat-popup .chat-content .empty-chat .message {
     color: var(--overlay0);
+    font-family: "CaskaydiaCove Nerd Font Mono";
     font-size: 24px;
+    font-weight: 600;
     padding-top: 8px;
 }
-.ai-chat-popup .chat-content .user-message,
+
+/* Chat Messages */
+.ai-chat-popup .chat-content .user-message {
+    color: var(--text);
+    padding: 8px;
+    border-radius: 4px;
+    margin: 4px 0 4px 26px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-size: 14px;
+}
+
 .ai-chat-popup .chat-content .assistant-message {
     color: var(--text);
     padding: 8px;
@@ -675,14 +809,10 @@
     margin: 4px 0;
     font-family: "CaskaydiaCove Nerd Font Mono";
     font-size: 14px;
-}
-.ai-chat-popup .chat-content .user-message {
-    margin-left: 26px;
-}
-.ai-chat-popup .chat-content .assistant-message {
     background-color: var(--surface0);
     border: 1px solid var(--surface1);
 }
+
 .ai-chat-popup .chat-content .assistant-icon {
     font-size: 24px;
     color: var(--subtext0);
@@ -690,21 +820,73 @@
     font-family: "JetBrainsMonoNL Nerd Font Mono";
 }
 
-.ai-chat-popup .chat-footer .chat-input {
+.ai-chat-popup .chat-content .copy-button {
+    background-color: var(--surface0);
+    color: var(--text);
+    font-size: 12px;
+    min-width: 24px;
+    min-height: 24px;
+    border-radius: 4px;
+    border: none;
+    font-family: "JetBrainsMonoNL Nerd Font Mono";
+}
+
+.ai-chat-popup .chat-content .copy-button:hover {
+    background-color: var(--surface1);
+}
+
+/* 6. Chat Footer */
+.ai-chat-popup .chat-footer {
+    background-color: transparent;
+    padding: 16px;
+}
+
+.ai-chat-popup .chat-footer .attach-button {
+    background-color: var(--surface0);
+    color: var(--text);
+    font-size: 14px;
+    min-width: 30px;
+    min-height: 30px;
+    border-radius: 4px;
+    border: none;
+    margin-top: 8px;
+    font-family: "JetBrainsMonoNL Nerd Font Mono";
+}
+
+.ai-chat-popup .chat-footer .attach-button:hover {
+    background-color: var(--surface1);
+}
+
+.ai-chat-popup .chat-footer .attach-button:disabled {
+    background-color: var(--surface0);
+    color: var(--overlay0);
+}
+
+/* Input Wrapper (handles border, background, and border-radius) */
+.ai-chat-popup .chat-footer .chat-input-wrapper {
     background-color: var(--surface0);
     border: 2px solid var(--surface0);
     border-radius: 4px;
+    margin-top: 8px;
+}
+
+.ai-chat-popup .chat-footer .chat-input-wrapper.focused {
+    border-color: var(--blue);
+}
+
+/* Input Field (handles font styling only) */
+.ai-chat-popup .chat-footer .chat-input {
+    background-color: transparent;
+    border: none;
     padding: 0 8px;
     font-family: "CaskaydiaCove Nerd Font Mono";
     font-size: 14px;
     color: var(--text);
-    margin-top: 8px;
     max-height: 28px;
     min-height: 28px;
 }
-.ai-chat-popup .chat-footer .chat-input:focus {
-    border-color: var(--blue);
-}
+
+/* Action Buttons */
 .ai-chat-popup .chat-footer .clear-button,
 .ai-chat-popup .chat-footer .send-button,
 .ai-chat-popup .chat-footer .stop-button {
@@ -720,20 +902,59 @@
     border: none;
     font-family: "JetBrainsMonoNL Nerd Font Mono";
 }
+
 .ai-chat-popup .chat-footer .stop-button {
     background-color: var(--blue);
     color: var(--base);
 }
+
 .ai-chat-popup .chat-footer .clear-button:hover,
-.ai-chat-popup .chat-footer .send-button:hover,
-.ai-chat-popup .chat-footer .stop-button:hover {
+.ai-chat-popup .chat-footer .send-button:hover {
     background-color: var(--surface1);
 }
+
+.ai-chat-popup .chat-footer .stop-button:hover {
+    background-color: var(--lavender);
+}
+
 .ai-chat-popup .chat-footer .clear-button:disabled,
 .ai-chat-popup .chat-footer .send-button:disabled,
 .ai-chat-popup .chat-footer .stop-button:disabled {
     background-color: var(--surface0);
     color: var(--overlay0);
+}
+
+/* 7. Attachment Chips */
+.ai-chat-popup .attachment-chip {
+    background-color: var(--surface0);
+    border: 1px solid var(--surface1);
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin: 4px 4px 4px 0;
+}
+
+.ai-chat-popup .attachment-label {
+    color: var(--text);
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.ai-chat-popup .attachment-remove-button {
+    background-color: transparent;
+    color: var(--overlay1);
+    font-size: 12px;
+    min-width: 16px;
+    min-height: 16px;
+    border-radius: 2px;
+    border: none;
+    margin-left: 6px;
+    font-family: "JetBrainsMonoNL Nerd Font Mono";
+}
+
+.ai-chat-popup .attachment-remove-button:hover {
+    background-color: var(--red);
+    color: var(--base);
 }
 
 /***--------------------------------      • VSCode Widget •      ---------------------------------***/
@@ -796,15 +1017,17 @@
 /***---------------------------------      • WHKD Widget •      ----------------------------------***/
 
 .whkd-widget {
-    padding: 0 6px 0 6px;
+    padding: 0 6px;
 }
+
 .whkd-widget .icon {
     font-size: 18px;
 }
+
 .whkd-popup .edit-config-button {
     background-color: var(--blue);
     color: var(--base);
-    padding: 4px 8px 6px 8px;
+    padding: 4px 8px 6px;
     font-size: 14px;
     font-weight: 600;
     border-radius: 4px;
@@ -814,10 +1037,11 @@
 .whkd-popup .keybind-buttons-container {
     min-width: 240px;
 }
+
 .whkd-popup .keybind-button {
     background-color: var(--surface0);
     color: var(--text);
-    padding: 4px 8px 6px 8px;
+    padding: 4px 8px 6px;
     font-size: 14px;
     font-weight: 600;
     border: 1px inset var(--surface1);
@@ -825,20 +1049,24 @@
     border-radius: 4px;
     font-family: "JetBrainsMonoNL Nerd Font Mono";
 }
+
 .whkd-popup .keybind-button.special {
     background-color: var(--surface0);
 }
+
 .whkd-popup .keybind-row:hover {
     background-color: var(--surface1);
     border-radius: 8px;
 }
+
 .whkd-popup .plus-separator {
-    padding: 0 0px;
+    padding: 0;
     border: none;
     font-size: 16px;
     font-weight: bold;
     background-color: transparent;
 }
+
 .whkd-popup .filter-input {
     padding: 0 8px 2px 8px;
     font-size: 14px;
@@ -850,12 +1078,15 @@
     background-color: var(--mantle);
     min-height: 32px;
 }
+
 .whkd-popup .filter-input:focus {
     border: 1px solid var(--blue);
 }
+
 .whkd-popup .keybind-command {
     font-size: 14px;
 }
+
 .whkd-popup .keybind-header {
     font-size: 16px;
     font-weight: 600;
@@ -870,15 +1101,16 @@
 /***----------------------------      • Windows Desktops •      -----------------------------***/
 
 .windows-desktops {
-    padding: 0 4px 0 4px;
+    padding: 0 4px;
 }
+
 .windows-desktops .widget-container {
     background-color: var(--crust);
-    margin: 4px 0 4px 0;
+    margin: 4px 0;
     border-radius: 12px;
-    padding-left: 10px;
-    padding-right: 12px;
+    padding: 0 12px 0 10px;
 }
+
 .windows-desktops .ws-btn {
     color: var(--overlay1);
     border: none;
@@ -886,6 +1118,7 @@
     margin: 0 4px;
     padding: 0;
 }
+
 .windows-desktops .ws-btn.active {
     color: var(--blue);
 }
@@ -896,13 +1129,16 @@
     border-radius: 2px;
     padding: 8px 0;
 }
+
 .windows-desktops .context-menu .menu-item {
     padding: 6px 16px;
 }
+
 .windows-desktops .context-menu .menu-item:hover {
     background-color: var(--surface1);
     color: var(--text);
 }
+
 .windows-desktops .context-menu .separator {
     margin: 2px 0px 2px 0px;
     height: 1px;
@@ -912,6 +1148,7 @@
 .windows-desktops .rename-dialog {
     background-color: var(--mantle);
 }
+
 .windows-desktops .rename-dialog QPushButton {
     background-color: var(--surface0);
     color: var(--text);
@@ -919,17 +1156,15 @@
     padding: 4px 12px;
     border-radius: 4px;
 }
+
 .windows-desktops .rename-dialog QPushButton:hover {
     background-color: var(--surface1);
-    color: var(--text);
-    border: none;
-    padding: 4px 12px;
-    border-radius: 4px;
 }
 
 .windows-desktops .rename-dialog QLabel {
     color: var(--text);
 }
+
 .windows-desktops .rename-dialog QLineEdit {
     background-color: transparent;
     border: 1px solid var(--blue);
@@ -944,9 +1179,11 @@
     color: var(--text);
     font-weight: 600;
 }
+
 .komorebi-control-menu {
     background-color: var(--mantle);
 }
+
 .komorebi-control-menu .button {
     color: var(--overlay1);
     padding: 8px 16px;
@@ -954,15 +1191,22 @@
     border-radius: 8px;
     background-color: var(--surface0);
 }
+
+.komorebi-control-menu .button:hover {
+    background-color: var(--surface1);
+}
+
 .komorebi-control-menu .button.active {
     color: var(--text);
-    background-color: var(--surface0);
+    background-color: var(--surface1);
 }
+
 .komorebi-control-menu .button:disabled,
 .komorebi-control-menu .button.active:disabled {
     background-color: var(--surface0);
     color: var(--overlay0);
 }
+
 .komorebi-control-menu .footer .text {
     font-size: 12px;
     color: var(--overlay0);
@@ -973,25 +1217,30 @@
 .komorebi-layout-menu {
     background-color: var(--mantle);
 }
+
 .komorebi-layout-menu .menu-item {
     padding: 8px 16px;
     font-size: 12px;
     color: var(--text);
     font-weight: 600;
 }
+
 .komorebi-layout-menu .menu-item-icon {
     color: var(--text);
     font-size: 16px;
 }
+
 .komorebi-layout-menu .menu-item-text {
     font-family: "CaskaydiaCove Nerd Font Mono";
     padding-left: 4px;
     font-size: 12px;
 }
+
 .komorebi-layout-menu .menu-item:hover {
     background-color: var(--surface1);
     color: var(--text);
 }
+
 .komorebi-layout-menu .separator {
     max-height: 1px;
     background-color: var(--surface1);
@@ -1005,7 +1254,7 @@
 
 .komorebi-workspaces .widget-container {
     background-color: var(--crust);
-    margin: 4px 0 4px 0;
+    margin: 4px 0;
     border-radius: 12px;
     padding: 0 10px;
 }
@@ -1088,12 +1337,12 @@
 /* -------------------------- Taskbar Preview Popup -------------------------- */
 
 .taskbar-preview {
-    border-radius: 8px; 
+    border-radius: 8px;
     background-color: var(--mantle);
     border: 1px solid var(--surface0);
 }
 
-.taskbar-preview.flashing { 
+.taskbar-preview.flashing {
     background-color: var(--maroon);
 }
 
@@ -1117,7 +1366,7 @@
 
 .icon {
     /* 1. Force a transparent border to reserve physical pixels for the glyph */
-    border-right: 4px solid transparent; 
+    border-right: 4px solid transparent;
     border-bottom: 2px solid transparent;
     border-top: 1px solid transparent;
 
@@ -1128,7 +1377,7 @@
 }
 
 /* Specific fix for Weather & Custom Icons which are often wider */
-.weather-widget .icon, 
+.weather-widget .icon,
 .start-menu .icon {
     border-right: 6px solid transparent;
 }
@@ -1138,9 +1387,4 @@
     /* Remove padding here so we don't double-up with the icon borders */
     padding: 0 2px 0 0;
     margin: 0;
-}
-
-/* Ensure the bar is tall enough to encompass the borders */
-.yasb-bar {
-    min-height: 32px;
 }

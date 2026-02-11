@@ -310,8 +310,8 @@ widgets:
                 cloudyNight:   "\ue32e"  #   (nf-weather-night_cloudy)
                 rainyDay:      "\ue308"  #   (nf-weather-day_rain)
                 rainyNight:    "\ue333"  #   (nf-weather-night_rain)
-                snowyIcyDay:   "\ue30a"  #   (nf-weather-day_snow)
-                snowyIcyNight: "\ue335"  #   (nf-weather-night_snow)
+                snowyDay:   "\ue30a"  #   (nf-weather-day_snow)
+                snowyNight: "\ue335"  #   (nf-weather-night_snow)
                 blizzardDay:   "\ue31a"  #   (nf-weather-snow)
                 default:       "\ue30d"  #   (nf-weather-day_sunny)
             weather_card:
