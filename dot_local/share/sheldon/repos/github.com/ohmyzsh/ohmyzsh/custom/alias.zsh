@@ -196,3 +196,4 @@ alias awsl='aws --profile local'
 # misc
 alias sa='source .venv/bin/activate'
 alias pyinstall='TCLTK_PATH=$(brew --prefix tcl-tk) PYTHON_CONFIGURE_OPTS="--with-tcltk-includes=${TCLTK_PATH}/include --with-tcltk-libs=${TCLTK_PATH}/lib" pyenv install'
+alias rcp='rsync -avzPh'
