@@ -209,6 +209,8 @@ zstyle ':fzf-tab:*' switch-group 'left' 'right'
 # Keybindings
 # =============================================================================
 
+bindkey '\t' menu-select "$terminfo[kcbt]" menu-select                           # tab/shift-tab open menu
+bindkey -M menuselect '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete # tab/shift-tab cycle in menu
 bindkey -v                                        # Vi key bindings
 bindkey ' ' magic-space                           # do history expansion on space
 bindkey '^[[3;5~' kill-word                       # ctrl + Supr
