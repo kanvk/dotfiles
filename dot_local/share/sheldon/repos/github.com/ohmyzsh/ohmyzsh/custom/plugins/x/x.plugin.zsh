@@ -2,12 +2,12 @@
 function x() {
   # Exit if env is already active
   if [[ ! -z $X_ENV ]]; then
-      if [[ $X_ENV == $1  ]]; then
-        echo "$X_ENV already active" 1>&2
-      else
-        echo "$X_ENV is active" 1>&2
-      fi
-      return 0
+    if [[ $X_ENV == $1 ]]; then
+      echo "$X_ENV already active" 1>&2
+    else
+      echo "$X_ENV is active" 1>&2
+    fi
+    return 0
   fi
 
   # Exit if no env was provided
@@ -29,9 +29,7 @@ function x() {
     pwsh.exe -noexit -Command 'cd ~; conda activate base'
   elif [[ $1 == "pdl-win" ]]; then
     pwsh.exe -noexit -Command 'cd ~; conda activate pdl'
-  elif [[ $1 == "echolab" ]]; then
-    cd ~/dev/echolab
-    
+
   # Env not found
   else
     echo "$1 not found" 1>&2
@@ -64,15 +62,13 @@ function xx() {
     # Do nothing
   elif [[ $X_ENV == "pdl-win" ]]; then
     # Do nothing
-  elif [[ $X_ENV == "echolab" ]]; then
-    # Do nothing
 
   # Env not found
   else
     echo "Unable to deactivate. $X_ENV not found" 1>&2
     return 1
   fi
-  
+
   # cd back and unset environment variables
   cd $X_ACTIVATE_PATH
   xc

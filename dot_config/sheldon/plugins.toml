@@ -53,9 +53,10 @@ apply = ["defer"]
 github = "Aloxaf/fzf-tab"
 apply = ["defer"]
 
+[plugins.forgit]
+github = "wfxr/forgit"
+use = ["forgit.plugin.zsh"]
+apply = ["source"]
+
 [plugins.powerlevel10k]
 github = "romkatv/powerlevel10k"
-
-[plugins.x]
-local = "~/.local/share/sheldon/repos/github.com/ohmyzsh/ohmyzsh/custom/plugins/x"
-apply = ["defer"]

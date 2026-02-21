@@ -4,7 +4,7 @@
 return {
   "AstroNvim/astrocore",
   opts = function(_, opts)
-    if vim.fn.has "wsl" == 1 then
+    if vim.fn.has "wsl" == 1 and not (vim.env.SSH_TTY or vim.env.SSH_CONNECTION or vim.env.SSH_CLIENT) then
       opts.options.g.clipboard = {
         name = "WSL-Clipboard",
         copy = {
