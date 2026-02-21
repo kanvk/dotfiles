@@ -155,10 +155,7 @@ if [ -x "$(command -v coreutils)" ]; then
   alias yes="command coreutils yes"
 fi
 
-# Enable color support for coreutils
-alias dir='dir --color=auto'
-alias vdir='vdir --color=auto'
-alias ls='ls --color=auto'
+# Enable color support (ls/dir/vdir overridden by eza aliases in .zshrc)
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'

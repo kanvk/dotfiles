@@ -5,52 +5,30 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# ~/.zshrc file for zsh interactive shells.
-# see /usr/share/doc/zsh/examples/zshrc for examples
+# =============================================================================
+# Shell options
+# =============================================================================
 
-# prompt pre-omz config
-# set variable identifying the chroot you work in (used in the prompt below)
+setopt autocd              # change directory just by typing its name
+setopt interactivecomments # allow comments in interactive mode
+setopt magicequalsubst     # enable filename expansion for arguments of the form 'anything=expression'
+setopt nonomatch           # hide error message if there is no match for the pattern
+setopt notify              # report the status of background jobs immediately
+setopt numericglobsort     # sort filenames numerically when it makes sense
+setopt promptsubst         # enable command substitution in prompt
+
+WORDCHARS=${WORDCHARS//\/} # Don't consider certain characters part of the word
+PROMPT_EOL_MARK=""         # hide EOL sign ('%')
+
+# =============================================================================
+# Prompt config
+# =============================================================================
+
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
-esac
-
-# uncomment for a colored prompt, if the terminal has the capability
-force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-        # We have color support; assume it's compliant with Ecma-48
-        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-        # a case would tend to support setf rather than setaf.)
-        color_prompt=yes
-    else
-        color_prompt=
-    fi
-fi
-
-# configure_prompt() {
-#     prompt_symbol=㉿
-#     [ "$EUID" -eq 0 ] && prompt_symbol=💀
-#     case "$PROMPT_ALTERNATIVE" in
-#         twoline)
-#             PROMPT=$'%F{%(#.blue.green)}┌──${debian_chroot:+($debian_chroot)─}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))─}(%B%F{%(#.red.blue)}%n$prompt_symbol%m%b%F{%(#.blue.green)})-[%B%F{reset}%(6~.%-1~/…/%4~.%5~)%b%F{%(#.blue.green)}]\n└─%B%(#.%F{red}#.%F{blue}$)%b%F{reset} '
-#             RPROMPT=$'%(?.. %? %F{red}%B⨯%b%F{reset})%(1j. %j %F{yellow}%B⚙%b%F{reset}.)'
-#             ;;
-#         oneline)
-#             PROMPT=$'${debian_chroot:+($debian_chroot)}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))}%B%F{%(#.red.blue)}%n@%m%b%F{reset}:%B%F{%(#.blue.green)}%~%b%F{reset}%(#.#.$) '
-#             RPROMPT=
-#             ;;
-#         backtrack)
-#             PROMPT=$'${debian_chroot:+($debian_chroot)}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))}%B%F{red}%n@%m%b%F{reset}:%B%F{blue}%~%b%F{reset}%(#.#.$) '
-#             RPROMPT=
-#             ;;
-#     esac
-# }
+VIRTUAL_ENV_DISABLE_PROMPT=1
 
 # The following block is surrounded by two delimiters.
 # These delimiters must not be modified. Thanks.
@@ -59,187 +37,178 @@ PROMPT_ALTERNATIVE=twoline
 NEWLINE_BEFORE_PROMPT=yes
 # STOP KALI CONFIG VARIABLES
 
-if [ "$color_prompt" = yes ]; then
-    # override default virtualenv indicator in prompt
-    VIRTUAL_ENV_DISABLE_PROMPT=1
+# Set terminal title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*|Eterm|aterm|kterm|gnome*|alacritty)
+    TERM_TITLE=$'\e]0;${debian_chroot:+($debian_chroot)}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))}%n@%m: %~\a'
+    ;;
+esac
 
-    # configure_prompt
+# =============================================================================
+# Syntax highlighting (Dracula theme)
+# =============================================================================
 
-    # zsh-syntax-highlighting config
-    if [ "$color_prompt" = yes ]; then
-        # . /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh  # Installed via sheldon
-        ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
-        typeset -gA ZSH_HIGHLIGHT_STYLES
-        ZSH_HIGHLIGHT_STYLES[default]=none
-        ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=red,bold
-        ZSH_HIGHLIGHT_STYLES[reserved-word]=fg=cyan,bold
-        ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg=green,underline
-        ZSH_HIGHLIGHT_STYLES[global-alias]=fg=magenta
-        ZSH_HIGHLIGHT_STYLES[precommand]=fg=green,underline
-        ZSH_HIGHLIGHT_STYLES[commandseparator]=fg=blue,bold
-        ZSH_HIGHLIGHT_STYLES[autodirectory]=fg=green,underline
-        ZSH_HIGHLIGHT_STYLES[path]=underline
-        ZSH_HIGHLIGHT_STYLES[path_pathseparator]=
-        ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]=
-        ZSH_HIGHLIGHT_STYLES[globbing]=fg=blue,bold
-        ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=blue,bold
-        ZSH_HIGHLIGHT_STYLES[command-substitution]=none
-        ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]=fg=magenta
-        ZSH_HIGHLIGHT_STYLES[process-substitution]=none
-        ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]=fg=magenta
-        ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=magenta
-        ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=magenta
-        ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=none
-        ZSH_HIGHLIGHT_STYLES[back-quoted-argument-delimiter]=fg=blue,bold
-        ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=yellow
-        ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=yellow
-        ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]=fg=yellow
-        ZSH_HIGHLIGHT_STYLES[rc-quote]=fg=magenta
-        ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=magenta
-        ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=magenta
-        ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]=fg=magenta
-        ZSH_HIGHLIGHT_STYLES[assign]=none
-        ZSH_HIGHLIGHT_STYLES[redirection]=fg=blue,bold
-        ZSH_HIGHLIGHT_STYLES[comment]=fg=black,bold
-        ZSH_HIGHLIGHT_STYLES[named-fd]=none
-        ZSH_HIGHLIGHT_STYLES[numeric-fd]=none
-        ZSH_HIGHLIGHT_STYLES[arg0]=fg=green
-        ZSH_HIGHLIGHT_STYLES[bracket-error]=fg=red,bold
-        ZSH_HIGHLIGHT_STYLES[bracket-level-1]=fg=blue,bold
-        ZSH_HIGHLIGHT_STYLES[bracket-level-2]=fg=green,bold
-        ZSH_HIGHLIGHT_STYLES[bracket-level-3]=fg=magenta,bold
-        ZSH_HIGHLIGHT_STYLES[bracket-level-4]=fg=yellow,bold
-        ZSH_HIGHLIGHT_STYLES[bracket-level-5]=fg=cyan,bold
-        ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]=standout
-        ## General (Dracula)
-        ### Diffs
-        ### Markup
-        ## Classes
-        ## Comments
-        ZSH_HIGHLIGHT_STYLES[comment]='fg=#6272A4'
-        ## Constants
-        ## Entities
-        ## Functions/methods
-        ZSH_HIGHLIGHT_STYLES[alias]='fg=#50FA7B'
-        ZSH_HIGHLIGHT_STYLES[suffix-alias]='fg=#50FA7B'
-        ZSH_HIGHLIGHT_STYLES[global-alias]='fg=#50FA7B'
-        ZSH_HIGHLIGHT_STYLES[function]='fg=#50FA7B'
-        ZSH_HIGHLIGHT_STYLES[command]='fg=#50FA7B'
-        ZSH_HIGHLIGHT_STYLES[precommand]='fg=#50FA7B,italic'
-        ZSH_HIGHLIGHT_STYLES[autodirectory]='fg=#FFB86C,italic'
-        ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#FFB86C'
-        ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#FFB86C'
-        ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#BD93F9'
-        ## Keywords
-        ## Built ins
-        ZSH_HIGHLIGHT_STYLES[builtin]='fg=#8BE9FD'
-        ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#8BE9FD'
-        ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=#8BE9FD'
-        ## Punctuation
-        ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=#FF79C6'
-        ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]='fg=#F8F8F2'
-        ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter-unquoted]='fg=#F8F8F2'
-        ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]='fg=#F8F8F2'
-        ZSH_HIGHLIGHT_STYLES[back-quoted-argument-delimiter]='fg=#FF79C6'
-        ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]='fg=#FF79C6'
-        ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]='fg=#FF79C6'
-        ## Serializable / Configuration Languages
-        ## Storage
-        ## Strings
-        ZSH_HIGHLIGHT_STYLES[command-substitution-quoted]='fg=#F1FA8C'
-        ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter-quoted]='fg=#F1FA8C'
-        ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#F1FA8C'
-        ZSH_HIGHLIGHT_STYLES[single-quoted-argument-unclosed]='fg=#FF5555'
-        ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#F1FA8C'
-        ZSH_HIGHLIGHT_STYLES[double-quoted-argument-unclosed]='fg=#FF5555'
-        ZSH_HIGHLIGHT_STYLES[rc-quote]='fg=#F1FA8C'
-        ## Variables
-        ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#F8F8F2'
-        ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument-unclosed]='fg=#FF5555'
-        ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='fg=#F8F8F2'
-        ZSH_HIGHLIGHT_STYLES[assign]='fg=#F8F8F2'
-        ZSH_HIGHLIGHT_STYLES[named-fd]='fg=#F8F8F2'
-        ZSH_HIGHLIGHT_STYLES[numeric-fd]='fg=#F8F8F2'
-        ## No category relevant in spec
-        ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#FF5555'
-        ZSH_HIGHLIGHT_STYLES[path]='fg=#F8F8F2'
-        ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=#FF79C6'
-        ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#F8F8F2'
-        ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#FF79C6'
-        ZSH_HIGHLIGHT_STYLES[globbing]='fg=#F8F8F2'
-        ZSH_HIGHLIGHT_STYLES[history-expansion]='fg=#BD93F9'
-        #ZSH_HIGHLIGHT_STYLES[command-substitution]='fg=?'
-        #ZSH_HIGHLIGHT_STYLES[command-substitution-unquoted]='fg=?'
-        #ZSH_HIGHLIGHT_STYLES[process-substitution]='fg=?'
-        #ZSH_HIGHLIGHT_STYLES[arithmetic-expansion]='fg=?'
-        ZSH_HIGHLIGHT_STYLES[back-quoted-argument-unclosed]='fg=#FF5555'
-        ZSH_HIGHLIGHT_STYLES[redirection]='fg=#F8F8F2'
-        ZSH_HIGHLIGHT_STYLES[arg0]='fg=#F8F8F2'
-        ZSH_HIGHLIGHT_STYLES[default]='fg=#F8F8F2'
-        ZSH_HIGHLIGHT_STYLES[cursor]='standout'
-    fi
-else
-    PROMPT='${debian_chroot:+($debian_chroot)}%n@%m:%~%# '
-fi
-unset color_prompt force_color_prompt
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
+typeset -gA ZSH_HIGHLIGHT_STYLES
 
-# ssh-agent config (has to be before loading oh-my-zsh)
+## Comments
+ZSH_HIGHLIGHT_STYLES[comment]='fg=#6272A4'
+## Functions/methods
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#50FA7B'
+ZSH_HIGHLIGHT_STYLES[suffix-alias]='fg=#50FA7B'
+ZSH_HIGHLIGHT_STYLES[global-alias]='fg=#50FA7B'
+ZSH_HIGHLIGHT_STYLES[function]='fg=#50FA7B'
+ZSH_HIGHLIGHT_STYLES[command]='fg=#50FA7B'
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=#50FA7B,italic'
+ZSH_HIGHLIGHT_STYLES[autodirectory]='fg=#FFB86C,italic'
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=#FFB86C'
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=#FFB86C'
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]='fg=#BD93F9'
+## Built ins
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=#8BE9FD'
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#8BE9FD'
+ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=#8BE9FD'
+## Punctuation
+ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=#FF79C6'
+ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]='fg=#F8F8F2'
+ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter-unquoted]='fg=#F8F8F2'
+ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]='fg=#F8F8F2'
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument-delimiter]='fg=#FF79C6'
+ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]='fg=#FF79C6'
+ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]='fg=#FF79C6'
+## Strings
+ZSH_HIGHLIGHT_STYLES[command-substitution-quoted]='fg=#F1FA8C'
+ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter-quoted]='fg=#F1FA8C'
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=#F1FA8C'
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument-unclosed]='fg=#FF5555'
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#F1FA8C'
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument-unclosed]='fg=#FF5555'
+ZSH_HIGHLIGHT_STYLES[rc-quote]='fg=#F1FA8C'
+## Variables
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=#F8F8F2'
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument-unclosed]='fg=#FF5555'
+ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]='fg=#F8F8F2'
+ZSH_HIGHLIGHT_STYLES[assign]='fg=#F8F8F2'
+ZSH_HIGHLIGHT_STYLES[named-fd]='fg=#F8F8F2'
+ZSH_HIGHLIGHT_STYLES[numeric-fd]='fg=#F8F8F2'
+## Misc
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#FF5555'
+ZSH_HIGHLIGHT_STYLES[path]='fg=#F8F8F2'
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=#FF79C6'
+ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=#F8F8F2'
+ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=#FF79C6'
+ZSH_HIGHLIGHT_STYLES[globbing]='fg=#F8F8F2'
+ZSH_HIGHLIGHT_STYLES[history-expansion]='fg=#BD93F9'
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument-unclosed]='fg=#FF5555'
+ZSH_HIGHLIGHT_STYLES[redirection]='fg=#F8F8F2'
+ZSH_HIGHLIGHT_STYLES[arg0]='fg=#F8F8F2'
+ZSH_HIGHLIGHT_STYLES[default]='fg=#F8F8F2'
+ZSH_HIGHLIGHT_STYLES[cursor]='standout'
+## Brackets
+ZSH_HIGHLIGHT_STYLES[bracket-error]='fg=red,bold'
+ZSH_HIGHLIGHT_STYLES[bracket-level-1]='fg=blue,bold'
+ZSH_HIGHLIGHT_STYLES[bracket-level-2]='fg=green,bold'
+ZSH_HIGHLIGHT_STYLES[bracket-level-3]='fg=magenta,bold'
+ZSH_HIGHLIGHT_STYLES[bracket-level-4]='fg=yellow,bold'
+ZSH_HIGHLIGHT_STYLES[bracket-level-5]='fg=cyan,bold'
+ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]='standout'
+
+# =============================================================================
+# Oh My Zsh
+# =============================================================================
+
+# Pre-omz zstyles
+zstyle ':omz:lib:compinit' cache yes
 zstyle :omz:plugins:ssh-agent lazy yes
 zstyle :omz:plugins:ssh-agent quiet yes
 
-# Oh My ZSH config
 export ZSH="$HOME/.local/share/sheldon/repos/github.com/ohmyzsh/ohmyzsh"
 plugins=(git git-lfs gh pip web-search docker docker-compose poetry copypath copyfile dirhistory
-    history taskwarrior fzf colorize colored-man-pages copybuffer jsontools rust 
+    history fzf colorize colored-man-pages copybuffer jsontools rust
     ssh-agent conda brew uv rsync vi-mode)
 source $ZSH/oh-my-zsh.sh
 
-# Sheldon config
+# =============================================================================
+# Sheldon plugin manager
+# =============================================================================
+
 eval "$(sheldon source)"
 
-# zsh-autocomplete post-omz config
-# Reset up, down, ^R, ^S
-# () {
-#    local -a prefix=( '\e'{\[,O} )
-#    local -a up=( ${^prefix}A ) down=( ${^prefix}B )
-#    local key=
-#    for key in $up[@]; do
-#       bindkey "$key" up-line-or-history
-#    done
-#    for key in $down[@]; do
-#       bindkey "$key" down-line-or-history
-#    done
+# =============================================================================
+# Deferred loading (requires zsh-defer from sheldon)
+# =============================================================================
 
-#     zle -A {.,}history-incremental-search-backward
-#     zle -A {.,}vi-history-search-backward
-#     bindkey -M emacs '^S' history-incremental-search-forward
-#     bindkey -M vicmd '/' vi-history-search-forward
-# }
+zsh-defer -c '[ -s "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh" ] && \. "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh"'
+zsh-defer -c '[ -s "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm"'
+zsh-defer source /home/kanvk/.spack/share/spack/setup-env.sh
+zsh-defer -c 'eval "$(pyenv init -)"'
+zsh-defer -c 'eval "$(rbenv init - zsh)"'
 
-# Zfunc
+# >>> conda initialize (deferred) >>>
+zsh-defer -c '
+__conda_setup="$(/home/kanvk/miniforge3/bin/conda shell.zsh hook 2>/dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/kanvk/miniforge3/etc/profile.d/conda.sh" ]; then
+        . "/home/kanvk/miniforge3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/kanvk/miniforge3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+'
+# <<< conda initialize <<<
+
+# >>> mamba initialize (deferred) >>>
+export MAMBA_EXE='/home/kanvk/miniforge3/bin/mamba';
+export MAMBA_ROOT_PREFIX='/home/kanvk/miniforge3';
+zsh-defer -c '
+__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2>/dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__mamba_setup"
+else
+    alias mamba="$MAMBA_EXE"
+fi
+unset __mamba_setup
+'
+# <<< mamba initialize <<<
+
+# =============================================================================
+# Completions
+# =============================================================================
+
 fpath+=~/.zfunc
-
-# Homebrew completions
 FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-
-# asdf completions
 fpath+="$ASDF_DIR/completions"
 
-setopt autocd              # change directory just by typing its name
-#setopt correct            # auto correct mistakes
-setopt interactivecomments # allow comments in interactive mode
-setopt magicequalsubst     # enable filename expansion for arguments of the form ‘anything=expression’
-setopt nonomatch           # hide error message if there is no match for the pattern
-setopt notify              # report the status of background jobs immediately
-setopt numericglobsort     # sort filenames numerically when it makes sense
-setopt promptsubst         # enable command substitution in prompt
+zstyle ':completion:*' auto-description 'specify: %d'
+zstyle ':completion:*' completer _expand _complete
+zstyle ':completion:*' format 'Completing %d'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' rehash true
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' use-compctl false
+zstyle ':completion:*' verbose true
+zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 
-WORDCHARS=${WORDCHARS//\/} # Don't consider certain characters part of the word
+# fzf-tab config
+zstyle ':fzf-tab:*' disabled-on files
+zstyle ':completion:*:git-checkout:*' sort false
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:down,shift-tab:up
+zstyle ':fzf-tab:*' switch-group 'left' 'right'
 
-# hide EOL sign ('%')
-PROMPT_EOL_MARK=""
+# =============================================================================
+# Keybindings
+# =============================================================================
 
-# configure key keybindings
 bindkey -v                                        # Vi key bindings
 bindkey ' ' magic-space                           # do history expansion on space
 bindkey '^[[3;5~' kill-word                       # ctrl + Supr
@@ -252,46 +221,10 @@ bindkey '^[[H' beginning-of-line                  # home
 bindkey '^[[F' end-of-line                        # end
 bindkey '^[[Z' undo                               # shift + tab undo last action
 
-# enable completion features
-autoload -Uz compinit && compinit
-compinit -d ~/.cache/zcompdump
-zstyle ':completion:*:*:*:*:*' menu select
-zstyle ':completion:*' auto-description 'specify: %d'
-zstyle ':completion:*' completer _expand _complete
-zstyle ':completion:*' format 'Completing %d'
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-zstyle ':completion:*' rehash true
-zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
-zstyle ':completion:*' use-compctl false
-zstyle ':completion:*' verbose true
-zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
-zstyle ':completion:*:default' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+# =============================================================================
+# History
+# =============================================================================
 
-# fzf-tab config
-zstyle ':fzf-tab:*' disabled-on files  # disable zsh-tab for files
-# disable sort when completing `git checkout`
-zstyle ':completion:*:git-checkout:*' sort false
-# set descriptions format to enable group support
-# NOTE: don't use escape sequences (like '%F{red}%d%f') here, fzf-tab will ignore them
-zstyle ':completion:*:descriptions' format '[%d]'
-# set list-colors to enable filename colorizing
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-# force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
-zstyle ':completion:*' menu no
-# preview directory's content with eza when completing cd
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
-# custom fzf flags
-# NOTE: fzf-tab does not follow FZF_DEFAULT_OPTS by default
-zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:down,shift-tab:up
-# To make fzf-tab follow FZF_DEFAULT_OPTS.
-# NOTE: This may lead to unexpected behavior since some flags break this plugin. See Aloxaf/fzf-tab#455.
-# zstyle ':fzf-tab:*' use-fzf-default-opts yes
-zstyle ':fzf-tab:*' switch-group 'left' 'right'
-
-# History configurations
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=1000000
@@ -301,100 +234,32 @@ setopt hist_ignore_dups       # ignore duplicated commands history list
 setopt hist_ignore_space      # ignore commands that start with space
 setopt hist_verify            # show command with history expansion to user before running it
 setopt extended_history       # extended history timestamps
-setopt inc_append_history     # Immediately append commands to history
-setopt share_history          # share command history data
+setopt share_history          # share command history data (implies inc_append_history)
 
-# configure `time` format
-TIMEFMT=$'\nreal\t%E\nuser\t%U\nsys\t%S\ncpu\t%P'
+# =============================================================================
+# Aliases
+# =============================================================================
 
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
-# toggle_oneline_prompt(){
-#     if [ "$PROMPT_ALTERNATIVE" = oneline ]; then
-#         PROMPT_ALTERNATIVE=twoline
-#     else
-#         PROMPT_ALTERNATIVE=oneline
-#     fi
-#     configure_prompt
-#     zle reset-prompt
-# }
-# zle -N toggle_oneline_prompt
-# bindkey ^P toggle_oneline_prompt
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*|Eterm|aterm|kterm|gnome*|alacritty)
-    TERM_TITLE=$'\e]0;${debian_chroot:+($debian_chroot)}${VIRTUAL_ENV:+($(basename $VIRTUAL_ENV))}%n@%m: %~\a'
-    ;;
-*)
-    ;;
-esac
-
-# precmd() {
-#     # Print the previously configured title
-#     print -Pnr -- "$TERM_TITLE"
-
-#     # Print a new line before the prompt, but only if it is not the first line
-#     if [ "$NEWLINE_BEFORE_PROMPT" = yes ]; then
-#         if [ -z "$_NEW_LINE_BEFORE_PROMPT" ]; then
-#             _NEW_LINE_BEFORE_PROMPT=1
-#         else
-#             print ""
-#         fi
-#     fi
-# }
-
-# enable auto-suggestions based on the history
-if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
-    . /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-    # change suggestion color
-    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
-fi
-
-# enable command-not-found if installed
-#if [ -f /etc/zsh_command_not_found ]; then
-#    . /etc/zsh_command_not_found
-#fi
-
-# Delayed aliases
 alias ls='eza --icons=auto'
 alias l='eza -F --icons=auto'
 alias ll='eza -lh --icons=auto'
 alias la='eza -lAh --icons=auto'
 
-# Delayed commands
+# =============================================================================
+# Tool hooks
+# =============================================================================
+
+TIMEFMT=$'\nreal\t%E\nuser\t%U\nsys\t%S\ncpu\t%P'
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 eval "$(direnv hook zsh)"
 eval "$(zoxide init zsh)"
 eval "$(mcfly init zsh)"
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/kanvk/miniforge3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/kanvk/miniforge3/etc/profile.d/conda.sh" ]; then
-        . "/home/kanvk/miniforge3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/kanvk/miniforge3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-#
-# >>> mamba initialize >>>
-# !! Contents within this block are managed by 'mamba shell init' !!
-export MAMBA_EXE='/home/kanvk/miniforge3/bin/mamba';
-export MAMBA_ROOT_PREFIX='/home/kanvk/miniforge3';
-__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__mamba_setup"
-else
-    alias mamba="$MAMBA_EXE"  # Fallback on help from mamba activate
-fi
-unset __mamba_setup
-# <<< mamba initialize <<<
+# Autosuggestion style (plugin loaded via sheldon)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# =============================================================================
+# p10k config (must stay at bottom)
+# =============================================================================
+
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

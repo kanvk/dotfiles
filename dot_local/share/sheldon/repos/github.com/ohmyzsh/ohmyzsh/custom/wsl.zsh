@@ -7,15 +7,15 @@ alias ollamaw='\ollama'
 alias llmw='ollamaw'
 alias ts='tailscale.exe'
 
-func openw() {
+openw() {
     cmd.exe /C start "$*"
 }
 
-func cmdw() {
+cmdw() {
     cmd.exe /C "$*"
 }
 
-func pwshw() {
+pwshw() {
     pwsh.exe -C "$*"
 }
 alias pw='pwshw'
