@@ -7,7 +7,9 @@ export COLORTERM=truecolor
 export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_NO_ANALYTICS=1
 export FZF_DEFAULT_OPTS="--bind=tab:down,shift-tab:up"
-export LS_COLORS="$(vivid generate snazzy)"
+VIVID_THEME=snazzy
+export LS_COLORS="$(vivid generate $VIVID_THEME)"
+export LS_COLORS_8BIT="$(vivid -m 8-bit generate $VIVID_THEME)"
 export LD_LIBRARY_PATH="/usr/lib/wsl/lib/:$LD_LIBRARY_PATH"
 export NUMBA_CUDA_DRIVER="/usr/lib/wsl/lib/libcuda.so.1"
 
