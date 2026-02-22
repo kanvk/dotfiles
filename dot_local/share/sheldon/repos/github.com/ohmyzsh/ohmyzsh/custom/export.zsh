@@ -8,8 +8,17 @@ export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_NO_ANALYTICS=1
 export FZF_DEFAULT_OPTS="--bind=tab:down,shift-tab:up"
 VIVID_THEME=snazzy
-export LS_COLORS="$(vivid generate $VIVID_THEME)"
-export LS_COLORS_8BIT="$(vivid -m 8-bit generate $VIVID_THEME)"
+VIVID_CACHE="$HOME/.cache/vivid"
+VIVID_VERSION="$(vivid --version)"
+if [[ ! -f "$VIVID_CACHE/24bit" || "$VIVID_VERSION" != "$(< "$VIVID_CACHE/version")" || "$VIVID_THEME" != "$(< "$VIVID_CACHE/theme")" ]]; then
+    mkdir -p "$VIVID_CACHE"
+    vivid generate $VIVID_THEME > "$VIVID_CACHE/24bit"
+    vivid -m 8-bit generate $VIVID_THEME > "$VIVID_CACHE/8bit"
+    echo "$VIVID_VERSION" > "$VIVID_CACHE/version"
+    echo "$VIVID_THEME" > "$VIVID_CACHE/theme"
+fi
+export LS_COLORS="$(< "$VIVID_CACHE/24bit")"
+export LS_COLORS_8BIT="$(< "$VIVID_CACHE/8bit")"
 export LD_LIBRARY_PATH="/usr/lib/wsl/lib/:$LD_LIBRARY_PATH"
 export NUMBA_CUDA_DRIVER="/usr/lib/wsl/lib/libcuda.so.1"
 
@@ -27,15 +36,15 @@ export LESS_TERMCAP_ue=$'\E[0m'     # reset underline
 # pipx
 export PIPX_DEFAULT_PYTHON='/home/kanvk/.pyenv/shims/python3.12'
 
-# mcfly
-export MCFLY_KEY_SCHEME=vim
-export MCFLY_PROMPT="❯"
-export MCFLY_FUZZY=2
-export MCFLY_RESULTS=30
-export MCFLY_HISTORY_LIMIT=10000
+# mcfly (disabled, using atuin)
+# export MCFLY_KEY_SCHEME=vim
+# export MCFLY_PROMPT="❯"
+# export MCFLY_FUZZY=2
+# export MCFLY_RESULTS=30
+# export MCFLY_HISTORY_LIMIT=10000
 
-# nvm
-export NVM_DIR="$HOME/.nvm"
+# nvm (disabled, using fnm)
+# export NVM_DIR="$HOME/.nvm"
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"

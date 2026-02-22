@@ -125,7 +125,7 @@ zstyle :omz:plugins:ssh-agent quiet yes
 export ZSH="$HOME/.local/share/sheldon/repos/github.com/ohmyzsh/ohmyzsh"
 plugins=(git git-lfs gh pip web-search docker docker-compose poetry copypath copyfile dirhistory
     history fzf colorize colored-man-pages copybuffer jsontools rust
-    ssh-agent conda brew uv rsync vi-mode)
+    ssh-agent conda brew uv rsync)
 source $ZSH/oh-my-zsh.sh
 
 # =============================================================================
@@ -138,11 +138,11 @@ eval "$(sheldon source)"
 # Deferred loading (requires zsh-defer from sheldon)
 # =============================================================================
 
-zsh-defer -c '[ -s "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh" ] && \. "/home/linuxbrew/.linuxbrew/opt/nvm/nvm.sh"'
-zsh-defer -c '[ -s "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm"'
+zsh-defer -c 'eval "$(fnm env --use-on-cd --shell zsh)"'
 zsh-defer source /home/kanvk/.spack/share/spack/setup-env.sh
 zsh-defer -c 'eval "$(pyenv init -)"'
 zsh-defer -c 'eval "$(rbenv init - zsh)"'
+zsh-defer -c 'eval "$(mise activate zsh)"'
 
 # >>> conda initialize (deferred) >>>
 zsh-defer -c '
@@ -228,7 +228,7 @@ bindkey '^[[Z' undo                               # shift + tab undo last action
 # =============================================================================
 
 HISTFILE=~/.zsh_history
-HISTSIZE=10000
+HISTSIZE=100000
 SAVEHIST=1000000
 setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
 setopt hist_find_no_dups      # ignore duplicates when searching in line editor
@@ -253,9 +253,9 @@ alias la='eza -lAh --icons=auto'
 
 TIMEFMT=$'\nreal\t%E\nuser\t%U\nsys\t%S\ncpu\t%P'
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-eval "$(direnv hook zsh)"
-eval "$(zoxide init zsh)"
-eval "$(mcfly init zsh)"
+zsh-defer -c 'eval "$(direnv hook zsh)"'
+zsh-defer -c 'eval "$(zoxide init zsh)"'
+zsh-defer -c 'eval "$(atuin init zsh)"'
 
 # Autosuggestion style (plugin loaded via sheldon)
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'

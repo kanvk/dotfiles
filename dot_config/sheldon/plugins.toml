@@ -53,6 +53,10 @@ apply = ["defer"]
 github = "Aloxaf/fzf-tab"
 apply = ["defer"]
 
+[plugins.zsh-vi-mode]
+github = "jeffreytse/zsh-vi-mode"
+apply = ["defer"]
+
 [plugins.forgit]
 github = "wfxr/forgit"
 use = ["forgit.plugin.zsh"]

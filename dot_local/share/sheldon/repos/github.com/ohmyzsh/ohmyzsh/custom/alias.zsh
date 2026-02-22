@@ -100,7 +100,7 @@ if [ -x "$(command -v coreutils)" ]; then
   alias pinky="command coreutils pinky"
   alias pr="command coreutils pr"
   alias printenv="command coreutils printenv"
-  alias printf="command coreutils printf"
+  # alias printf="command coreutils printf"  # breaks zsh builtin printf -v (used by atuin)
   alias ptx="command coreutils ptx"
   alias pwd="command coreutils pwd"
   alias readlink="command coreutils readlink"
@@ -174,7 +174,6 @@ alias gkr='gitkraken'
 alias asg='ast-grep'
 alias ngr='ranger'
 alias llm='ollama'
-alias bat='batcat'
 alias cat='bat'
 alias less='moor'
 alias yz='yazi'
