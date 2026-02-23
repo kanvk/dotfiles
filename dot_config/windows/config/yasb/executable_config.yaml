@@ -443,8 +443,8 @@ widgets:
                 duration: 200
             callbacks:
                 on_left: "toggle_media_menu"
-                on_middle: "toggle_play_pause"
-                on_right: "toggle_label"
+                on_middle: "toggle_label"
+                on_right: "toggle_play_pause"
             label_shadow:
                 enabled: true
                 color: "black"
