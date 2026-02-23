@@ -41,10 +41,12 @@ bars:
             left:
                 [
                     "home",
+                    "quick_launch",
                     "whkd",
                     "windows_workspaces",
                     "komorebi_active_layout",
                     "komorebi_workspaces",
+                    "media",
                     "taskbar",
                 ]
             center: ["active_window"]
@@ -82,6 +84,125 @@ widgets:
                 left: 0
                 bottom: 0
                 right: 0
+    quick_launch:
+        type: "yasb.quick_launch.QuickLaunchWidget"
+        options:
+            label: "<span>\uf002</span>"
+            search_placeholder: "Search..."
+            max_results: 50
+            show_icons: true
+            icon_size: 32
+            home_page: true
+            compact_mode: false
+            providers:
+                apps:
+                    enabled: true
+                    prefix: "*"
+                    priority: 0
+                    show_recent: true
+                    max_recent: 10
+                    show_description: true
+                calculator:
+                    enabled: true
+                    prefix: "="
+                    priority: 1
+                currency:
+                    enabled: true
+                    prefix: "$"
+                    priority: 2
+                clipboard_history:
+                    enabled: true
+                    prefix: "cb"
+                    priority: 3
+                    max_items: 30
+                bookmarks:
+                    enabled: true
+                    prefix: "*"
+                    priority: 4
+                    browser: "all"
+                    profile: "Default"
+                web_search:
+                    enabled: true
+                    prefix: "?"
+                    priority: 5
+                    engine: "google"
+                system_commands:
+                    enabled: true
+                    prefix: ">"
+                    priority: 6
+                settings:
+                    enabled: true
+                    prefix: "@"
+                    priority: 7
+                kill_process:
+                    enabled: true
+                    prefix: "!"
+                    priority: 8
+                port_viewer:
+                    enabled: true
+                    prefix: "pv"
+                    priority: 9
+                    tcp_listening_only: true
+                    include_established: false
+                file_search:
+                    enabled: true
+                    prefix: "/"
+                    priority: 10
+                    backend: "auto"
+                    show_path: true
+                unit_converter:
+                    enabled: true
+                    prefix: "~"
+                    priority: 11
+                emoji:
+                    enabled: true
+                    prefix: ":"
+                    priority: 12
+                color:
+                    enabled: true
+                    prefix: "c:"
+                    priority: 13
+                world_clock:
+                    enabled: true
+                    prefix: "tz"
+                    priority: 14
+                snippets:
+                    enabled: true
+                    prefix: ";"
+                    priority: 15
+                    type_delay: 200
+                hacker_news:
+                    enabled: true
+                    prefix: "hn"
+                    priority: 16
+                    cache_ttl: 300
+                    max_items: 30
+                dev_tools:
+                    enabled: true
+                    prefix: "dev"
+                    priority: 17
+                ip_info:
+                    enabled: true
+                    prefix: "ip"
+                    priority: 18
+                vscode:
+                    enabled: true
+                    prefix: "vsc"
+                    priority: 19
+            popup:
+                width: 720
+                height: 480
+                screen: "focus"
+                blur: true
+                round_corners: true
+                round_corners_type: "normal"
+                border_color: "system"
+                dark_mode: true
+            callbacks:
+                on_left: "toggle_quick_launch"
+            keybindings:
+                - keys: "ctrl+space"
+                  action: "toggle_quick_launch"
     whkd:
         type: "yasb.whkd.WhkdWidget"
         options:
@@ -291,6 +412,69 @@ widgets:
                 round_corners_type: "small"
                 alignment: "center"
                 offset_top: 0
+    media:
+        type: "yasb.media.MediaWidget"
+        options:
+            label: "{title}{s}{artist}"
+            label_alt: "{title}"
+            separator: " - "
+            hide_empty: true
+            show_thumbnail: true
+            controls_only: false
+            controls_left: true
+            controls_hide: false
+            thumbnail_alpha: 80
+            thumbnail_padding: 8
+            thumbnail_corner_radius: 16
+            symmetric_corner_radius: false
+            thumbnail_edge_fade: true
+            max_field_size:
+                label: 20
+                label_alt: 30
+                truncate_whole_label: false
+            icons:
+                prev_track: "\uf048"  #  (nf-fa-step_backward)
+                next_track: "\uf051"  #  (nf-fa-step_forward)
+                play: "\uf04b"        #  (nf-fa-play)
+                pause: "\uf04c"       #  (nf-fa-pause)
+            animation:
+                enabled: true
+                type: "fadeInOut"
+                duration: 200
+            callbacks:
+                on_left: "toggle_media_menu"
+                on_middle: "toggle_play_pause"
+                on_right: "toggle_label"
+            label_shadow:
+                enabled: true
+                color: "black"
+                radius: 3
+                offset: [1, 1]
+            media_menu:
+                blur: true
+                round_corners: true
+                round_corners_type: "normal"
+                border_color: "#45475a"
+                alignment: "left"
+                direction: "down"
+                offset_top: 6
+                offset_left: 0
+                thumbnail_corner_radius: 8
+                thumbnail_size: 120
+                max_title_size: 60
+                max_artist_size: 20
+                show_source: true
+                show_volume_slider: true
+            media_menu_icons:
+                play: "\ue768"
+                pause: "\ue769"
+                prev_track: "\ue892"
+                next_track: "\ue893"
+                mute: "\ue994"
+                unmute: "\ue74f"
+            progress_bar:
+                enabled: true
+                alignment: "bottom"
     weather:
         type: "yasb.weather.WeatherWidget"
         options:
@@ -322,6 +506,44 @@ widgets:
                 alignment: "right"
                 direction: "down"
                 distance: 6
+                icon_size: 48
+    open_meteo:
+        type: "yasb.open_meteo.OpenMeteoWidget"
+        options:
+            label: "<span>{icon}</span> {temp}"
+            label_alt: "{location}: Min {min_temp}, Max {max_temp}, Humidity {humidity}"
+            tooltip: true
+            update_interval: 600
+            hide_decimal: true
+            units: "imperial"
+            callbacks:
+                on_left: "toggle_card"
+                on_right: "toggle_label"
+            icons:
+                sunnyDay:         "\ue30d"  #  (nf-weather-day_sunny)
+                clearNight:       "\ue32b"  #  (nf-weather-night_clear)
+                cloudyDay:        "\ue302"  #  (nf-weather-day_cloudy)
+                cloudyNight:      "\ue32e"  #  (nf-weather-night_cloudy)
+                drizzleDay:       "\ue309"  #  (nf-weather-day_sprinkle)
+                drizzleNight:     "\ue334"  #  (nf-weather-night_sprinkle)
+                rainyDay:         "\ue308"  #  (nf-weather-day_rain)
+                rainyNight:       "\ue333"  #  (nf-weather-night_rain)
+                snowyDay:         "\ue30a"  #  (nf-weather-day_snow)
+                snowyNight:       "\ue335"  #  (nf-weather-night_snow)
+                foggyDay:         "\ue303"  #  (nf-weather-day_fog)
+                foggyNight:       "\ue346"  #  (nf-weather-night_fog)
+                thunderstormDay:  "\ue30e"  #  (nf-weather-day_lightning)
+                thunderstormNight: "\ue332" #  (nf-weather-night_lightning)
+                default:          "\ue30d"  #  (nf-weather-day_sunny)
+            weather_card:
+                blur: true
+                round_corners: true
+                round_corners_type: "normal"
+                border_color: "#45475a"
+                alignment: "right"
+                direction: "down"
+                offset_top: 6
+                offset_left: 0
                 icon_size: 48
     volume:
         type: "yasb.volume.VolumeWidget"
