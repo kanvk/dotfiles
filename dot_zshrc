@@ -231,7 +231,7 @@ TIMEFMT=$'\nreal\t%E\nuser\t%U\nsys\t%S\ncpu\t%P'
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 zsh-defer -c 'eval "$(direnv hook zsh)"'
 zsh-defer -c 'eval "$(zoxide init zsh)"'
-zsh-defer -c 'eval "$(atuin init zsh)"'
+zsh-defer -c 'eval "$(atuin init zsh --disable-up-arrow)"'
 
 # Autosuggestion style (plugin loaded via sheldon)
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
