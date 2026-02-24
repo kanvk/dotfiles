@@ -18,7 +18,6 @@ setopt numericglobsort     # sort filenames numerically when it makes sense
 setopt promptsubst         # enable command substitution in prompt
 
 WORDCHARS=${WORDCHARS//\/} # Don't consider certain characters part of the word
-PROMPT_EOL_MARK=""         # hide EOL sign ('%')
 
 # =============================================================================
 # Syntax highlighting (Dracula theme)
@@ -88,13 +87,20 @@ ZSH_HIGHLIGHT_STYLES[bracket-level-3]='fg=magenta,bold'
 ZSH_HIGHLIGHT_STYLES[bracket-level-4]='fg=yellow,bold'
 ZSH_HIGHLIGHT_STYLES[bracket-level-5]='fg=cyan,bold'
 ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]='standout'
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
 
 # =============================================================================
-# Oh My Zsh
+# Oh My Zsh and Sheldon
 # =============================================================================
 
 # Pre-omz zstyles
 zstyle ':omz:lib:compinit' cache yes
+
+# fpath must be set before oh-my-zsh calls compinit
+fpath+=~/.zfunc
+FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+fpath+="$ASDF_DIR/completions"
+
 zstyle :omz:plugins:ssh-agent lazy yes
 zstyle :omz:plugins:ssh-agent quiet yes
 
@@ -103,10 +109,6 @@ plugins=(git git-lfs gh pip web-search docker docker-compose poetry copypath cop
     history fzf colorize colored-man-pages copybuffer jsontools rust
     ssh-agent conda brew uv rsync)
 source $ZSH/oh-my-zsh.sh
-
-# =============================================================================
-# Sheldon plugin manager
-# =============================================================================
 
 eval "$(sheldon source)"
 
@@ -153,10 +155,6 @@ unset __mamba_setup
 # =============================================================================
 # Completions
 # =============================================================================
-
-fpath+=~/.zfunc
-FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-fpath+="$ASDF_DIR/completions"
 
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete
@@ -227,14 +225,10 @@ alias la='eza -lAh --icons=auto'
 # Tool hooks
 # =============================================================================
 
-TIMEFMT=$'\nreal\t%E\nuser\t%U\nsys\t%S\ncpu\t%P'
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 zsh-defer -c 'eval "$(direnv hook zsh)"'
 zsh-defer -c 'eval "$(zoxide init zsh)"'
 zsh-defer -c 'eval "$(atuin init zsh --disable-up-arrow)"'
-
-# Autosuggestion style (plugin loaded via sheldon)
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
 
 # =============================================================================
 # p10k config (must stay at bottom)
