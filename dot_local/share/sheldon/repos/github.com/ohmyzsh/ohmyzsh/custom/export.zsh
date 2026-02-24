@@ -23,7 +23,7 @@ export LD_LIBRARY_PATH="/usr/lib/wsl/lib/:$LD_LIBRARY_PATH"
 export NUMBA_CUDA_DRIVER="/usr/lib/wsl/lib/libcuda.so.1"
 
 # Less pager config
-export PAGER=/usr/local/bin/moor
+export PAGER=/usr/bin/moor
 export LESS="-R --mouse --wheel-lines=3"
 export LESS_TERMCAP_mb=$'\E[1;31m'  # begin blink
 export LESS_TERMCAP_md=$'\E[1;36m'  # begin bold

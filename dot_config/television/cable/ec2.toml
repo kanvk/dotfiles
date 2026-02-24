@@ -1,0 +1,54 @@
+[metadata]
+name = "ec2"
+description = "List and manage AWS EC2 Instances"
+requirements = ["aws"]
+
+[source]
+command = "aws ec2 describe-instances --output text --query \"Reservations[*].Instances[*].[InstanceId,Tags[?Key=='Name']|[0].Value]\""
+
+[preview]
+command = "aws ec2 describe-instances --output json --instance-ids {split:\t:0} --query 'Reservations[*].Instances[0]'"
+
+[ui]
+layout = "portrait"
+preview_panel = { size = 60 }
+
+[actions.start]
+description = "Start the selected EC2 instance"
+command = "aws ec2 start-instances --instance-ids {split:\t:0}"
+mode = "fork"
+
+[actions.stop]
+description = "Stop the selected EC2 instance"
+command = "aws ec2 stop-instances --instance-ids {split:\t:0}"
+mode = "fork"
+
+[actions.reboot]
+description = "Reboot the selected EC2 instance"
+command = "aws ec2 reboot-instances --instance-ids {split:\t:0}"
+mode = "fork"
+
+[actions.terminate]
+description = "Terminate the selected EC2 instance (irreversible)"
+command = "bash -c 'read -p \"Type YES to confirm terminating {split:\t:0}: \" CONFIRM && [ \"$CONFIRM\" = \"YES\" ] && aws ec2 terminate-instances --instance-ids {split:\t:0}'"
+mode = "execute"
+
+[actions.status]
+description = "Show instance status (state, type, IPs, AZ)"
+command = "aws ec2 describe-instances --instance-ids {split:\t:0} --output table --query 'Reservations[*].Instances[*].[State.Name,InstanceType,Placement.AvailabilityZone,PublicIpAddress,PrivateIpAddress,LaunchTime]'"
+mode = "execute"
+
+[actions.console-output]
+description = "Get serial console output for debugging"
+command = "aws ec2 get-console-output --instance-id {split:\t:0} --output text"
+mode = "execute"
+
+[actions.change-type]
+description = "Change the instance type (instance must be stopped)"
+command = "bash -c 'read -p \"Enter new instance type (e.g. t3.medium): \" TYPE && aws ec2 modify-instance-attribute --instance-id {split:\t:0} --instance-type Value=$TYPE'"
+mode = "execute"
+
+[actions.create-image]
+description = "Create an AMI from the selected instance"
+command = "bash -c 'read -p \"Enter AMI name: \" NAME && aws ec2 create-image --instance-id {split:\t:0} --name \"$NAME\" --no-reboot'"
+mode = "execute"
