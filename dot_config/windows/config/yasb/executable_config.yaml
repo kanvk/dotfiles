@@ -428,7 +428,7 @@ widgets:
             tooltip: true
             show_only_visible: false
             strict_filtering: true
-            monitor_exclusive: true
+            monitor_exclusive: false
             animation:
                 enabled: true
             preview:
