@@ -229,7 +229,7 @@ alias la='eza -lAh --icons=auto'
 zsh-defer -c 'eval "$(direnv hook zsh)"'
 zsh-defer -c 'eval "$(zoxide init zsh)"'
 zsh-defer -c 'eval "$(atuin init zsh --disable-up-arrow)"'
-zsh-defer -c 'eval "$(tv init zsh)"'
+# zsh-defer -c 'eval "$(tv init zsh)"'
 
 # =============================================================================
 # p10k config (must stay at bottom)
