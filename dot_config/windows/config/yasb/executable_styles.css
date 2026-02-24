@@ -78,9 +78,44 @@ QSlider::handle {
 
 /***-------------------------------      • Power Menu Widget •      --------------------------------***/
 
+.power-menu-overlay {
+    background-color: rgba(17, 17, 27, 0.5);
+}
+
+.power-menu-overlay .uptime {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: var(--subtext0);
+    font-weight: 600;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+}
+
 .power-menu-popup {
-    background: var(--crust);
-    border-radius: 8px;
+    background-color: rgba(30, 30, 46, 0.6);
+    padding: 32px;
+    border-radius: 16px;
+}
+
+.power-menu-popup .profile-info {
+    padding: 0 0 16px 0;
+    border-bottom: 1px solid var(--surface1);
+    background-color: transparent;
+    margin-bottom: 16px;
+}
+
+.power-menu-popup .profile-info .profile-username {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 0;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+}
+
+.power-menu-popup .profile-info .profile-account-type {
+    font-size: 13px;
+    color: var(--subtext0);
+    margin-top: 4px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
 }
 
 .power-menu-widget .label {
@@ -91,32 +126,56 @@ QSlider::handle {
 
 .power-menu-popup .button {
     padding: 0;
-    margin: 5px;
-    width: 250px;
-    height: 175px;
-    border-radius: 8px;
-    background-color: var(--base);
-    font-family: "CaskaydiaCove Nerd Font Mono";
-    color: var(--text);
+    min-width: 140px;
+    max-width: 140px;
+    min-height: 80px;
+    border-radius: 12px;
+    background-color: var(--surface0);
+    border: 8px solid rgba(0, 0, 0, 0);
 }
 
-.power-menu-popup .button:hover {
-    background-color: var(--surface0);
+.power-menu-popup .button.hover {
+    background-color: var(--mauve);
+    border: 8px solid var(--mauve);
 }
 
 .power-menu-popup .button .label {
-    margin-bottom: 0;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--text);
     font-family: "CaskaydiaCove Nerd Font Mono";
 }
 
 .power-menu-popup .button .icon {
-    font-size: 55px;
-    padding-top: 25px;
-    padding-right: 10px;
-    color: var(--text);
+    font-size: 32px;
+    color: var(--lavender);
+    min-width: 48px;
+    min-height: 48px;
+}
+
+.power-menu-popup .button.hover .label,
+.power-menu-popup .button.hover .icon {
+    color: var(--crust);
+}
+
+.power-menu-popup .button.shutdown .icon {
+    color: var(--red);
+}
+
+.power-menu-popup .button.sleep .icon {
+    color: var(--blue);
+}
+
+.power-menu-popup .button.lock .icon {
+    color: var(--green);
+}
+
+.power-menu-popup .button.signout .icon {
+    color: var(--peach);
+}
+
+.power-menu-popup .button.restart .icon {
+    color: var(--yellow);
 }
 
 .power-menu-popup .button.cancel .icon {
@@ -125,6 +184,16 @@ QSlider::handle {
 
 .power-menu-popup .button.cancel .label {
     color: var(--red);
+}
+
+.power-menu-popup .button.cancel.hover {
+    background-color: var(--red);
+    border: 8px solid var(--red);
+}
+
+.power-menu-popup .button.cancel.hover .icon,
+.power-menu-popup .button.cancel.hover .label {
+    color: var(--crust);
 }
 
 .clock-widget {
@@ -1923,6 +1992,370 @@ QSlider::handle {
 
 .quick-launch-popup .preview.edit .preview-btn.save:hover {
     background: var(--lavender);
+}
+
+/***-------------------------------      • System Grouper •      --------------------------------***/
+
+.system-grouper .container {
+    background-color: var(--crust);
+    margin: 4px 0;
+    border-radius: 12px;
+}
+
+.system-grouper .grouper-button {
+    font-size: 10px;
+    color: var(--overlay1);
+    padding: 0 6px;
+    background-color: transparent;
+    border: none;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+}
+
+.system-grouper .grouper-button:hover {
+    color: var(--text);
+}
+
+/***---------------------------------      • CPU Widget •      ------------------------------------***/
+
+.cpu-widget {
+    padding: 0 6px;
+}
+
+.cpu-widget .widget-container .label {
+    font-size: 12px;
+    font-weight: 500;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+}
+
+.cpu-widget .widget-container .icon {
+    font-size: 14px;
+    color: var(--sapphire);
+    margin-right: 2px;
+}
+
+.cpu-widget .widget-container .label.status-low {
+    color: var(--green);
+}
+
+.cpu-widget .widget-container .label.status-medium {
+    color: var(--yellow);
+}
+
+.cpu-widget .widget-container .label.status-high {
+    color: var(--peach);
+}
+
+.cpu-widget .widget-container .label.status-critical {
+    color: var(--red);
+}
+
+/***---------------------------------      • GPU Widget •      ------------------------------------***/
+
+.gpu-widget {
+    padding: 0 6px;
+}
+
+.gpu-widget .widget-container .label {
+    font-size: 12px;
+    font-weight: 500;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+}
+
+.gpu-widget .widget-container .icon {
+    font-size: 14px;
+    color: var(--green);
+    margin-right: 2px;
+}
+
+.gpu-widget .label.status-low {
+    color: var(--green);
+}
+
+.gpu-widget .label.status-medium {
+    color: var(--yellow);
+}
+
+.gpu-widget .label.status-high {
+    color: var(--peach);
+}
+
+.gpu-widget .label.status-critical {
+    color: var(--red);
+}
+
+/***--------------------------------      • Memory Widget •      ----------------------------------***/
+
+.memory-widget {
+    padding: 0 6px;
+}
+
+.memory-widget .widget-container .label {
+    font-size: 12px;
+    font-weight: 500;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+}
+
+.memory-widget .widget-container .icon {
+    font-size: 14px;
+    color: var(--mauve);
+    margin-right: 2px;
+}
+
+.memory-widget .widget-container .label.status-low {
+    color: var(--green);
+}
+
+.memory-widget .widget-container .label.status-medium {
+    color: var(--yellow);
+}
+
+.memory-widget .widget-container .label.status-high {
+    color: var(--peach);
+}
+
+.memory-widget .widget-container .label.status-critical {
+    color: var(--red);
+}
+
+/***---------------------------------      • Disk Widget •      -----------------------------------***/
+
+.disk-widget {
+    padding: 0 6px;
+}
+
+.disk-widget .widget-container .label {
+    font-size: 12px;
+    font-weight: 500;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+}
+
+.disk-widget .widget-container .icon {
+    font-size: 14px;
+    color: var(--peach);
+    margin-right: 2px;
+}
+
+.disk-widget .widget-container .label.status-low {
+    color: var(--green);
+}
+
+.disk-widget .widget-container .label.status-medium {
+    color: var(--yellow);
+}
+
+.disk-widget .widget-container .label.status-high {
+    color: var(--peach);
+}
+
+.disk-widget .widget-container .label.status-critical {
+    color: var(--red);
+}
+
+.disk-group {
+    background-color: var(--mantle);
+}
+
+.disk-group-row {
+    min-width: 220px;
+    max-width: 220px;
+    max-height: 40px;
+    margin: 0;
+    padding: 0;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0);
+}
+
+.disk-group-row:hover {
+    background-color: var(--surface0);
+    border: 1px solid var(--surface1);
+}
+
+.disk-group-label {
+    font-size: 10px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--text);
+}
+
+.disk-group-label-size {
+    font-size: 10px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--overlay0);
+}
+
+.disk-group-label-bar {
+    max-height: 8px;
+    border: 0px solid rgba(0, 0, 0, 0);
+    background-color: var(--surface1);
+    border-radius: 4px;
+}
+
+.disk-group-label-bar::chunk {
+    background-color: var(--peach);
+    border-radius: 4px;
+}
+
+/***--------------------------------      • Traffic Widget •      ---------------------------------***/
+
+.traffic-widget {
+    padding: 0 6px;
+}
+
+.traffic-widget .label {
+    font-size: 12px;
+    font-weight: 500;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--green);
+}
+
+.traffic-widget .icon {
+    font-size: 14px;
+    color: var(--teal);
+    margin-right: 2px;
+}
+
+.traffic-widget .label.offline {
+    color: var(--overlay0);
+}
+
+.traffic-widget .icon.offline {
+    color: var(--overlay0);
+}
+
+.traffic-menu {
+    background-color: var(--mantle);
+    padding: 14px;
+}
+
+.traffic-menu .header {
+    padding-bottom: 8px;
+}
+
+.traffic-menu .header .title {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--text);
+}
+
+.traffic-menu .header .reset-button {
+    font-size: 11px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-weight: 600;
+    color: var(--subtext0);
+    background-color: var(--surface0);
+    border: none;
+    border-radius: 6px;
+    padding: 4px 10px;
+}
+
+.traffic-menu .reset-button:hover {
+    background-color: var(--surface1);
+    color: var(--text);
+}
+
+.traffic-menu .reset-button:pressed {
+    background-color: var(--surface2);
+}
+
+.traffic-menu .section {
+    background-color: var(--base);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 6px;
+}
+
+.traffic-menu .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--overlay1);
+    margin-bottom: 4px;
+}
+
+.traffic-menu .speeds-section {
+    background-color: var(--base);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 6px;
+}
+
+.traffic-menu .download-speed-value {
+    font-size: 16px;
+    font-weight: 600;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--green);
+}
+
+.traffic-menu .upload-speed-value {
+    font-size: 16px;
+    font-weight: 600;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--blue);
+}
+
+.traffic-menu .download-speed-unit,
+.traffic-menu .upload-speed-unit {
+    font-size: 11px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--overlay1);
+}
+
+.traffic-menu .download-speed-placeholder {
+    color: var(--green);
+}
+
+.traffic-menu .upload-speed-placeholder {
+    color: var(--blue);
+}
+
+.traffic-menu .speed-separator {
+    color: var(--surface2);
+}
+
+.traffic-menu .session-section,
+.traffic-menu .today-section,
+.traffic-menu .alltime-section {
+    background-color: var(--base);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 6px;
+}
+
+.traffic-menu .data-text {
+    font-size: 12px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--subtext0);
+}
+
+.traffic-menu .data-value {
+    font-size: 12px;
+    font-weight: 500;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--text);
+}
+
+.traffic-menu .interface-info {
+    font-size: 11px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--overlay1);
+    padding-top: 6px;
+}
+
+.traffic-menu .internet-info {
+    font-size: 11px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+}
+
+.traffic-menu .internet-info.connected {
+    color: var(--green);
+}
+
+.traffic-menu .internet-info.disconnected {
+    color: var(--red);
+}
+
+.traffic-menu .internet-info.checking {
+    color: var(--yellow);
 }
 
 /* -------------------------------------------------------------------------------------------------- */
