@@ -67,6 +67,7 @@ bars:
                     "volume",
                     "microphone",
                     "bluetooth",
+                    "battery",
                     # "system_grouper",  # Contains: cpu, gpu, memory, disk, traffic
                     "clock",
                     "power_menu",
@@ -642,6 +643,46 @@ widgets:
                 radius: 3
                 offset: [1, 1]
 
+    # --- Battery ---
+    battery:
+        type: "yasb.battery.BatteryWidget"
+        options:
+            label: "<span>{icon}</span> {percent}%"
+            label_alt: "<span>{icon}</span> {percent}% {time_remaining}"
+            update_interval: 5000
+            time_remaining_natural: false
+            hide_unsupported: true
+            charging_options:
+                icon_format: "{charging_icon}"
+                blink_charging_icon: false
+                blink_interval: 500
+            status_thresholds:
+                critical: 10
+                low: 25
+                medium: 60
+                high: 80
+                full: 100
+            status_icons:
+                icon_charging: "\uf0e7"     #  (nf-fa-bolt)
+                icon_critical: "\uf244"     #  (nf-fa-battery_empty)
+                icon_low: "\uf243"          #  (nf-fa-battery_quarter)
+                icon_medium: "\uf242"       #  (nf-fa-battery_half)
+                icon_high: "\uf241"         #  (nf-fa-battery_three_quarters)
+                icon_full: "\uf240"         #  (nf-fa-battery_full)
+            callbacks:
+                on_left: "toggle_label"
+                on_middle: "do_nothing"
+                on_right: "do_nothing"
+            animation:
+                enabled: true
+                type: "fadeInOut"
+                duration: 200
+            label_shadow:
+                enabled: true
+                color: "black"
+                radius: 3
+                offset: [1, 1]
+
     # =============================================================================================
     # System Monitor Widgets (Grouped)
     # =============================================================================================
@@ -668,7 +709,6 @@ widgets:
                 label_position: "right"
 
     # --- CPU ---
-    # Default: usage% | Alt: frequency, core/thread count
     cpu:
         type: "yasb.cpu.CpuWidget"
         options:
@@ -706,7 +746,6 @@ widgets:
                 offset: [1, 1]
 
     # --- GPU (NVIDIA) ---
-    # Default: usage%, VRAM | Alt: temp, power draw, fan speed
     gpu:
         type: "yasb.gpu.GpuWidget"
         options:
@@ -746,7 +785,6 @@ widgets:
                 offset: [1, 1]
 
     # --- Memory ---
-    # Default: used/total | Alt: usage%, swap%
     memory:
         type: "yasb.memory.MemoryWidget"
         options:
@@ -783,8 +821,6 @@ widgets:
                 offset: [1, 1]
 
     # --- Disk Storage ---
-    # Default: C: used% | Alt: used/total GB
-    # Left click: disk group popup (C, D, E, F, X) | Middle click: open Explorer
     disk:
         type: "yasb.disk.DiskWidget"
         options:
@@ -823,8 +859,6 @@ widgets:
                 offset: [1, 1]
 
     # --- Network Traffic ---
-    # Default: download/upload speeds | Alt: today's totals
-    # Left click: network menu | Middle click: open Network Settings
     traffic:
         type: "yasb.traffic.TrafficWidget"
         options:
@@ -937,12 +971,7 @@ widgets:
                 radius: 3
                 offset: [1, 1]
 
-    # =============================================================================================
-    # Disabled Widgets (config preserved, not in bar array)
-    # =============================================================================================
-
-    # --- Open-Meteo Weather (API-key-free alternative) ---
-    # To enable: add "open_meteo" to the bar widgets array
+    # --- Open-Meteo Weather ---
     open_meteo:
         type: "yasb.open_meteo.OpenMeteoWidget"
         options:

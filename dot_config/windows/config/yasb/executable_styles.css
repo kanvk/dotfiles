@@ -676,6 +676,70 @@ QSlider::handle {
     font-weight: 500;
 }
 
+/***--------------------------------      • Battery Widget •      --------------------------------***/
+
+/* 1. Bar Widget Style */
+.battery-widget {
+    padding: 0 8px;
+}
+
+.battery-widget .icon {
+    color: var(--green);
+    font-size: 16px;
+    margin: 0 2px 0 0;
+    padding-bottom: 2px;
+}
+
+.battery-widget .label {
+    margin-right: 4px;
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Status-based colors */
+.battery-widget .label.status-critical {
+    color: var(--red);
+}
+
+.battery-widget .icon.status-critical {
+    color: var(--red);
+}
+
+.battery-widget .label.status-low {
+    color: var(--peach);
+}
+
+.battery-widget .icon.status-low {
+    color: var(--peach);
+}
+
+.battery-widget .label.status-medium {
+    color: var(--text);
+}
+
+.battery-widget .icon.status-medium {
+    color: var(--yellow);
+}
+
+.battery-widget .label.status-high,
+.battery-widget .label.status-full {
+    color: var(--text);
+}
+
+.battery-widget .icon.status-high,
+.battery-widget .icon.status-full {
+    color: var(--green);
+}
+
+.battery-widget .label.status-charging {
+    color: var(--text);
+}
+
+.battery-widget .icon.status-charging {
+    color: var(--green);
+}
+
 /***--------------------------------      • Active Window •      ---------------------------------***/
 
 .active-window-widget {
