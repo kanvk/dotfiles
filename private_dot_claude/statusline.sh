@@ -23,7 +23,7 @@
 
 set -f  # disable globbing
 
-# ── ANSI colors (24-bit, oh-my-posh compatible) ─────────────────────────────
+# ── ANSI colors (standard 16-color, terminal theme adaptive) ────────────────
 blue='\033[94m'
 orange='\033[33m'
 green='\033[32m'
@@ -32,7 +32,6 @@ red='\033[91m'
 yellow='\033[93m'
 white='\033[97m'
 gray='\033[90m'
-dim='\033[2m'
 rst='\033[0m'
 sep=" ${gray}|${rst} "
 
@@ -40,12 +39,23 @@ sep=" ${gray}|${rst} "
 # Hot-path functions set REPLY instead of printing to stdout.
 # This avoids subshell forks: "func; x=$REPLY" vs "x=$(func)" (the latter forks).
 
-# Compact token display: 1234→"1234", 50000→"50k", 1500000→"1.5m"
+# Compact token display: 1234→"1234", 15234→"15.2k", 1500000→"1.5m"
 # Pure bash arithmetic — no awk needed.
 format_tokens() {
     local n=$1
     if [ "$n" -ge 1000000 ]; then
         REPLY="$(( n / 1000000 )).$(( (n % 1000000) / 100000 ))m"
+    elif [ "$n" -ge 1000 ]; then
+        REPLY="$(( n / 1000 )).$(( (n % 1000) / 100 ))k"
+    else
+        REPLY="$n"
+    fi
+}
+
+format_tokens_round() {
+    local n=$1
+    if [ "$n" -ge 1000000 ]; then
+        REPLY="$(( n / 1000000 ))m"
     elif [ "$n" -ge 1000 ]; then
         REPLY="$(( n / 1000 ))k"
     else
@@ -79,12 +89,13 @@ if [ -z "$input" ]; then
 fi
 
 # ── Extract all fields from input JSON (single jq invocation) ────────────────
-# jq's @sh produces shell-escaped assignments; eval sets them as local variables.
+# jq's @sh produces shell-escaped assignments; eval sets them as variables.
 # Using <<< (here-string) instead of echo|pipe avoids an extra subprocess.
 eval "$(jq -r '
     @sh "model_name=\(.model.display_name // "Claude")",
     @sh "cwd=\(.workspace.current_dir // .cwd // "")",
-    @sh "ctx_size=\(.context_window.context_window_size // 200000)",
+    @sh "ctx_size=\(.context_window.context_window_size // 0)",
+    @sh "pct_used=\(.context_window.used_percentage // 0)",
     @sh "input_tokens=\(.context_window.current_usage.input_tokens // 0)",
     @sh "cache_create=\(.context_window.current_usage.cache_creation_input_tokens // 0)",
     @sh "cache_read=\(.context_window.current_usage.cache_read_input_tokens // 0)",
@@ -98,16 +109,18 @@ eval "$(jq -r '
 ' <<< "$input" 2>/dev/null)"
 
 # Fallbacks if jq eval produced empty/missing values (e.g. malformed JSON)
-: "${model_name:=Claude}" "${ctx_size:=200000}"
-: "${input_tokens:=0}" "${cache_create:=0}" "${cache_read:=0}"
-: "${total_dur_ms:=0}" "${api_dur_ms:=0}"
-: "${lines_added:=0}" "${lines_removed:=0}" "${total_cost:=0}"
-: "${total_in:=0}" "${total_out:=0}"
+: "${model_name:=Claude}" "${ctx_size:=}" "${pct_used:=}"
+: "${input_tokens:=}" "${cache_create:=}" "${cache_read:=}"
+: "${total_dur_ms:=}" "${api_dur_ms:=}"
+: "${lines_added:=}" "${lines_removed:=}" "${total_cost:=}"
+: "${total_in:=}" "${total_out:=}"
 
-# Context window: uses current_usage (actual context state), NOT cumulative totals
-[ "$ctx_size" -eq 0 ] 2>/dev/null && ctx_size=200000
-current=$(( input_tokens + cache_create + cache_read ))
-pct_used=$(( ctx_size > 0 ? current * 100 / ctx_size : 0 ))
+# Context window
+if [ -n "$ctx_size" ] && [ "$ctx_size" -gt 0 ] 2>/dev/null && [ -n "$pct_used" ]; then
+    current=$(( ${input_tokens:-0} + ${cache_create:-0} + ${cache_read:-0} ))
+else
+    current="" ctx_size="" pct_used=""
+fi
 
 # ── Effort level (env var takes precedence over settings.json) ───────────────
 effort_level="high"
@@ -119,11 +132,11 @@ elif [ -f "$HOME/.claude/settings.json" ]; then
 fi
 
 # ── Pre-compute display values (zero subshells — all via REPLY) ──────────────
-format_tokens "$current";  ctx_used_fmt=$REPLY
-format_tokens "$ctx_size"; ctx_total_fmt=$REPLY
-usage_color "$pct_used";   ctx_color=$REPLY
-fmt_dur "$api_dur_ms";     api_dur_fmt=$REPLY
-fmt_dur "$total_dur_ms";   total_dur_fmt=$REPLY
+if [ -n "$current" ]; then format_tokens "$current"; ctx_used_fmt=$REPLY; else ctx_used_fmt="NA"; fi
+if [ -n "$ctx_size" ]; then format_tokens_round "$ctx_size"; ctx_total_fmt=$REPLY; else ctx_total_fmt="NA"; fi
+if [ -n "$pct_used" ]; then usage_color "$pct_used"; ctx_color=$REPLY; else ctx_color=$gray; fi
+if [ -n "$api_dur_ms" ]; then fmt_dur "$api_dur_ms"; api_dur_fmt=$REPLY; else api_dur_fmt="NA"; fi
+if [ -n "$total_dur_ms" ]; then fmt_dur "$total_dur_ms"; total_dur_fmt=$REPLY; else total_dur_fmt="NA"; fi
 
 # ── Build output string ─────────────────────────────────────────────────────
 out=""
@@ -152,21 +165,24 @@ if [ -n "$cwd" ]; then
     fi
 fi
 
-# Segment 3: Context window — current_usage tokens / max (color-coded %)
+# Segment 3: Context window — tokens / max (color-coded %)
 out+="${sep}${orange}${ctx_used_fmt}${gray}/${rst}${orange}${ctx_total_fmt}${rst}"
-out+=" ${gray}(${rst}${ctx_color}${pct_used}%${rst}${gray})${rst}"
+if [ -n "$pct_used" ]; then
+    out+=" ${gray}(${rst}${ctx_color}${pct_used}%${rst}${gray})${rst}"
+else
+    out+=" ${gray}(${rst}${ctx_color}NA${rst}${gray})${rst}"
+fi
 
 # Segment 4: API response time / total session wall-clock time
 out+="${sep}${cyan}${api_dur_fmt}${rst}${gray}/${rst}${cyan}${total_dur_fmt}${rst}"
 
-# Segment 5: Lines added/removed (hidden when both zero)
-if [ "$lines_added" -gt 0 ] || [ "$lines_removed" -gt 0 ]; then
-    out+="${sep}${green}+${lines_added}${rst}${gray}/${rst}${red}-${lines_removed}${rst}"
-fi
+# Segment 5: Lines added/removed
+if [ -n "$lines_added" ]; then la_fmt="+${lines_added}"; else la_fmt="NA"; fi
+if [ -n "$lines_removed" ]; then lr_fmt="-${lines_removed}"; else lr_fmt="NA"; fi
+out+="${sep}${green}${la_fmt}${rst}${gray}/${rst}${red}${lr_fmt}${rst}"
 
 # ── OAuth token resolution ───────────────────────────────────────────────────
-# Tries credential sources in priority order. Prints token to stdout; nothing if not found.
-# Only called on cache miss (~once per 60s), so subprocess cost here is acceptable.
+# Tries credential sources in priority order.
 get_oauth_token() {
     # 1. Explicit env var override
     if [ -n "$CLAUDE_CODE_OAUTH_TOKEN" ]; then
@@ -237,8 +253,6 @@ if ! $has_usage_data; then
 fi
 
 # ── ISO 8601 → epoch (cross-platform) ───────────────────────────────────────
-# Called ~2x per render in subscription mode (for reset times).
-# Subshells here are acceptable since this only runs in the subscription branch.
 iso_to_epoch() {
     local iso_str="$1" epoch
     # GNU date (Linux) — handles ISO 8601 natively
@@ -297,7 +311,6 @@ if $has_usage_data; then
         @sh "extra_limit=\(.extra_usage.monthly_limit // 0)"
     ' <<< "$usage_data" 2>/dev/null)"
 
-    # Round utilization floats to integers (printf -v is a bash builtin — no subprocess)
     LC_NUMERIC=C printf -v five_hour_pct '%.0f' "${five_hour_pct:-0}" 2>/dev/null
     LC_NUMERIC=C printf -v seven_day_pct '%.0f' "${seven_day_pct:-0}" 2>/dev/null
 
@@ -329,12 +342,16 @@ if $has_usage_data; then
     fi
 else
     # API key mode — cumulative session tokens and cost
-    format_tokens "$total_in";  in_fmt=$REPLY
-    format_tokens "$total_out"; out_fmt=$REPLY
+    if [ -n "$total_in" ]; then format_tokens "$total_in"; in_fmt=$REPLY; else in_fmt="NA"; fi
+    if [ -n "$total_out" ]; then format_tokens "$total_out"; out_fmt=$REPLY; else out_fmt="NA"; fi
     out+="${sep}${gray}in:${rst}${orange}${in_fmt}${rst}"
     out+=" ${gray}out:${rst}${orange}${out_fmt}${rst}"
-    LC_NUMERIC=C printf -v cost_fmt '%.2f' "${total_cost:-0}" 2>/dev/null
-    out+="${sep}${yellow}\$${cost_fmt}${rst}"
+    if [ -n "$total_cost" ]; then
+        LC_NUMERIC=C printf -v cost_fmt '%.2f' "$total_cost" 2>/dev/null
+        out+="${sep}${yellow}\$${cost_fmt}${rst}"
+    else
+        out+="${sep}${gray}NA${rst}"
+    fi
 fi
 
 # ── Output ───────────────────────────────────────────────────────────────────

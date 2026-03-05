@@ -1,10 +1,19 @@
 {
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)"
+    ],
+    "defaultMode": "default"
+  },
   "statusLine": {
     "type": "command",
     "command": "bash /home/kanvk/.claude/statusline.sh"
   },
   "enabledPlugins": {
-    "frontend-design@claude-code-plugins": true
+    "frontend-design@claude-code-plugins": true,
+    "feature-dev@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high"
