@@ -1,11 +1,14 @@
 #!/bin/bash
-# Claude Code statusline — single-line status bar
+# Claude Code statusline
 #
-# Subscription layout:
-#   Model (effort) | dir@branch (+N -M) | ctx/max (%) | api/session | +lines/-lines | 5h %@reset | 7d %@reset [| extra $used/$limit]
+# Line 1 (always):
+#   Subscription:
+#     Model (effort) | dir@branch (+N -M) | ctx/max (%) | api/session | +lines/-lines | 5h %@reset | 7d %@reset [| extra $used/$limit]
+#   API key:
+#     Model (effort) | dir@branch (+N -M) | ctx/max (%) | api/session | +lines/-lines | in:Nk out:Nk | $cost
 #
-# API key layout:
-#   Model (effort) | dir@branch (+N -M) | ctx/max (%) | api/session | +lines/-lines | in:Nk out:Nk | $cost
+# Line 2 (worktree sessions only):
+#   name@wt-branch | dir@orig-branch | ~/orig/cwd
 #
 # Mode auto-detection: if the OAuth usage API returns data → subscription mode
 # (show 5h/7d rate limits); otherwise → API key mode (show cumulative tokens + cost).
@@ -105,7 +108,11 @@ eval "$(jq -r '
     @sh "api_dur_ms=\(.cost.total_api_duration_ms // 0)",
     @sh "lines_added=\(.cost.total_lines_added // 0)",
     @sh "lines_removed=\(.cost.total_lines_removed // 0)",
-    @sh "total_cost=\(.cost.total_cost_usd // 0)"
+    @sh "total_cost=\(.cost.total_cost_usd // 0)",
+    @sh "wt_name=\(.worktree.name // "")",
+    @sh "wt_branch=\(.worktree.branch // "")",
+    @sh "wt_orig_cwd=\(.worktree.original_cwd // "")",
+    @sh "wt_orig_branch=\(.worktree.original_branch // "")"
 ' <<< "$input" 2>/dev/null)"
 
 # Fallbacks if jq eval produced empty/missing values (e.g. malformed JSON)
@@ -352,6 +359,21 @@ else
     else
         out+="${sep}${gray}NA${rst}"
     fi
+fi
+
+# ── Line 2 (worktree, conditional) ────────────────────────────────────────────
+if [ -n "$wt_name" ]; then
+    wt_line="${cyan}${wt_name}${rst}"
+    [ -n "$wt_branch" ] && wt_line+="${gray}@${rst}${green}${wt_branch}${rst}"
+    if [ -n "$wt_orig_cwd" ] || [ -n "$wt_orig_branch" ]; then
+        wt_line+="${sep}${cyan}${wt_orig_cwd##*/}${rst}"
+        [ -n "$wt_orig_branch" ] && wt_line+="${gray}@${rst}${green}${wt_orig_branch}${rst}"
+    fi
+    if [ -n "$wt_orig_cwd" ]; then
+        orig_path="${wt_orig_cwd/#$HOME/\~}"
+        wt_line+="${sep}${gray}${orig_path}${rst}"
+    fi
+    out+="\n${wt_line}"
 fi
 
 # ── Output ───────────────────────────────────────────────────────────────────
