@@ -107,7 +107,7 @@ zstyle :omz:plugins:ssh-agent quiet yes
 export ZSH="$HOME/.local/share/sheldon/repos/github.com/ohmyzsh/ohmyzsh"
 plugins=(git git-lfs gh pip web-search docker docker-compose poetry copypath copyfile dirhistory
     history fzf colorize colored-man-pages copybuffer jsontools rust
-    ssh-agent conda brew uv rsync)
+    ssh-agent conda brew uv rsync extract)
 source $ZSH/oh-my-zsh.sh
 
 eval "$(sheldon source)"
