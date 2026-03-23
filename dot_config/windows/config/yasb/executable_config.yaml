@@ -11,1002 +11,999 @@ show_systray: false
 
 # --- Komorebi (Tiling Window Manager) ---
 komorebi:
-    start_command: "komorebic start --wkhd"
-    stop_command: "komorebic stop --wkhd"
-    reload_command: "komorebic stop --wkhd && komorebic start --wkhd"
+  start_command: "komorebic start --wkhd"
+  stop_command: "komorebic stop --wkhd"
+  reload_command: "komorebic stop --wkhd && komorebic start --wkhd"
 
 # =================================================================================================
 # Bar Layout
 # =================================================================================================
 bars:
-    status-bar:
-        enabled: true
-        screens: ["*"]
-        class_name: "yasb-bar"
-        alignment:
-            position: "top"
-            center: false
-        animation:
-            enabled: true
-            duration: 800
-        blur_effect:
-            enabled: false
-            acrylic: false
-            dark_mode: false
-            round_corners: false
-            border_color: None
-        window_flags:
-            always_on_top: false
-            windows_app_bar: true
-        dimensions:
-            width: "100%"
-            height: 35
-        padding:
-            top: 0
-            left: 0
-            bottom: 0
-            right: 0
-        widgets:
-            left:
-                [
-                    "home",
-                    "quick_launch",
-                    "whkd",
-                    "windows_workspaces",
-                    "komorebi_active_layout",
-                    "komorebi_workspaces",
-                    "media",
-                    "taskbar",
-                ]
-            center: ["active_window"]
-            right:
-                [
-                    "ai_chat",
-                    "vscode",
-                    "weather",
-                    "volume",
-                    "microphone",
-                    "bluetooth",
-                    "battery",
-                    # "system_grouper",  # Contains: cpu, gpu, memory, disk, traffic
-                    "clock",
-                    "power_menu",
-                    "komorebi_ctl",
-                ]
+  status-bar:
+    enabled: true
+    screens: ["*"]
+    class_name: "yasb-bar"
+    alignment:
+      position: "top"
+      center: false
+    animation:
+      enabled: true
+      duration: 800
+    blur_effect:
+      enabled: false
+      acrylic: false
+      dark_mode: false
+      round_corners: false
+      border_color: None
+    window_flags:
+      always_on_top: false
+      windows_app_bar: true
+    dimensions:
+      width: "100%"
+      height: 35
+    padding:
+      top: 0
+      left: 0
+      bottom: 0
+      right: 0
+    widgets:
+      left:
+        [
+          "home",
+          "quick_launch",
+          "whkd",
+          "windows_workspaces",
+          "komorebi_active_layout",
+          "komorebi_workspaces",
+          "media",
+          "taskbar",
+        ]
+      center: ["active_window"]
+      right: [
+          "ai_chat",
+          "vscode",
+          "weather",
+          "volume",
+          "microphone",
+          "bluetooth",
+          "battery",
+          # "system_grouper",  # Contains: cpu, gpu, memory, disk, traffic
+          "clock",
+          "power_menu",
+          "komorebi_ctl",
+        ]
 
 # =================================================================================================
 # Widget Definitions
 # =================================================================================================
 widgets:
+  # =============================================================================================
+  # Left Bar Widgets
+  # =============================================================================================
 
-    # =============================================================================================
-    # Left Bar Widgets
-    # =============================================================================================
+  # --- Home (Start Menu) ---
+  home:
+    type: "yasb.home.HomeWidget"
+    options:
+      label: "<span>\ue70f</span>" #  (nf-dev-windows)
+      menu_list:
+        - { title: "Home", path: "~" }
+        - { title: "Downloads", path: "C:\\Users\\kanvk\\Downloads" }
+        - { title: "Documents", path: "C:\\Users\\kanvk\\Documents" }
+        - { title: "Dev", path: "X:\\" }
+      system_menu: true
+      power_menu: false
+      blur: true
+      round_corners: true
+      round_corners_type: "normal"
+      border_color: ""
+      distance: 10
+      container_padding:
+        top: 0
+        left: 0
+        bottom: 0
+        right: 0
 
-    # --- Home (Start Menu) ---
-    home:
-        type: "yasb.home.HomeWidget"
-        options:
-            label: "<span>\ue70f</span>"  #  (nf-dev-windows)
-            menu_list:
-                - { title: "Home", path: "~" }
-                - { title: "Downloads", path: "C:\\Users\\kanvk\\Downloads" }
-                - { title: "Documents", path: "C:\\Users\\kanvk\\Documents" }
-                - { title: "Dev", path: "X:\\" }
-            system_menu: true
-            power_menu: false
-            blur: true
-            round_corners: true
-            round_corners_type: "normal"
-            border_color: ""
-            distance: 10
-            container_padding:
-                top: 0
-                left: 0
-                bottom: 0
-                right: 0
+  # --- Quick Launch (Ctrl+Space) ---
+  # Providers: apps, calculator, currency, clipboard, bookmarks, web search, system commands,
+  #            settings, kill process, port viewer, file search, unit converter, emoji, color,
+  #            world clock, snippets, hacker news, dev tools, ip info, vscode
+  quick_launch:
+    type: "yasb.quick_launch.QuickLaunchWidget"
+    options:
+      label: "<span>\uf002</span>"
+      search_placeholder: "Search..."
+      max_results: 50
+      show_icons: true
+      icon_size: 32
+      home_page: true
+      compact_mode: false
+      providers:
+        apps:
+          enabled: true
+          prefix: "*"
+          priority: 0
+          show_recent: true
+          max_recent: 10
+          show_description: true
+        calculator:
+          enabled: true
+          prefix: "="
+          priority: 1
+        currency:
+          enabled: true
+          prefix: "$"
+          priority: 2
+        clipboard_history:
+          enabled: true
+          prefix: "cb"
+          priority: 3
+          max_items: 30
+        bookmarks:
+          enabled: true
+          prefix: "*"
+          priority: 4
+          browser: "all"
+          profile: "Default"
+        web_search:
+          enabled: true
+          prefix: "?"
+          priority: 5
+          engine: "google"
+        system_commands:
+          enabled: true
+          prefix: ">"
+          priority: 6
+        settings:
+          enabled: true
+          prefix: "@"
+          priority: 7
+        kill_process:
+          enabled: true
+          prefix: "!"
+          priority: 8
+        port_viewer:
+          enabled: true
+          prefix: "pv"
+          priority: 9
+          tcp_listening_only: true
+          include_established: false
+        file_search:
+          enabled: true
+          prefix: "/"
+          priority: 10
+          backend: "auto"
+          show_path: true
+        unit_converter:
+          enabled: true
+          prefix: "~"
+          priority: 11
+        emoji:
+          enabled: true
+          prefix: ":"
+          priority: 12
+        color:
+          enabled: true
+          prefix: "c:"
+          priority: 13
+        world_clock:
+          enabled: true
+          prefix: "tz"
+          priority: 14
+        snippets:
+          enabled: true
+          prefix: ";"
+          priority: 15
+          type_delay: 200
+        hacker_news:
+          enabled: true
+          prefix: "hn"
+          priority: 16
+          cache_ttl: 300
+          max_items: 30
+        dev_tools:
+          enabled: true
+          prefix: "dev"
+          priority: 17
+        ip_info:
+          enabled: true
+          prefix: "ip"
+          priority: 18
+        vscode:
+          enabled: true
+          prefix: "vsc"
+          priority: 19
+      popup:
+        width: 720
+        height: 480
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "system"
+        dark_mode: true
+      callbacks:
+        on_left: "toggle_quick_launch"
+      keybindings:
+        - keys: "ctrl+space"
+          action: "toggle_quick_launch"
 
-    # --- Quick Launch (Ctrl+Space) ---
-    # Providers: apps, calculator, currency, clipboard, bookmarks, web search, system commands,
-    #            settings, kill process, port viewer, file search, unit converter, emoji, color,
-    #            world clock, snippets, hacker news, dev tools, ip info, vscode
-    quick_launch:
-        type: "yasb.quick_launch.QuickLaunchWidget"
-        options:
-            label: "<span>\uf002</span>"
-            search_placeholder: "Search..."
-            max_results: 50
-            show_icons: true
-            icon_size: 32
-            home_page: true
-            compact_mode: false
-            providers:
-                apps:
-                    enabled: true
-                    prefix: "*"
-                    priority: 0
-                    show_recent: true
-                    max_recent: 10
-                    show_description: true
-                calculator:
-                    enabled: true
-                    prefix: "="
-                    priority: 1
-                currency:
-                    enabled: true
-                    prefix: "$"
-                    priority: 2
-                clipboard_history:
-                    enabled: true
-                    prefix: "cb"
-                    priority: 3
-                    max_items: 30
-                bookmarks:
-                    enabled: true
-                    prefix: "*"
-                    priority: 4
-                    browser: "all"
-                    profile: "Default"
-                web_search:
-                    enabled: true
-                    prefix: "?"
-                    priority: 5
-                    engine: "google"
-                system_commands:
-                    enabled: true
-                    prefix: ">"
-                    priority: 6
-                settings:
-                    enabled: true
-                    prefix: "@"
-                    priority: 7
-                kill_process:
-                    enabled: true
-                    prefix: "!"
-                    priority: 8
-                port_viewer:
-                    enabled: true
-                    prefix: "pv"
-                    priority: 9
-                    tcp_listening_only: true
-                    include_established: false
-                file_search:
-                    enabled: true
-                    prefix: "/"
-                    priority: 10
-                    backend: "auto"
-                    show_path: true
-                unit_converter:
-                    enabled: true
-                    prefix: "~"
-                    priority: 11
-                emoji:
-                    enabled: true
-                    prefix: ":"
-                    priority: 12
-                color:
-                    enabled: true
-                    prefix: "c:"
-                    priority: 13
-                world_clock:
-                    enabled: true
-                    prefix: "tz"
-                    priority: 14
-                snippets:
-                    enabled: true
-                    prefix: ";"
-                    priority: 15
-                    type_delay: 200
-                hacker_news:
-                    enabled: true
-                    prefix: "hn"
-                    priority: 16
-                    cache_ttl: 300
-                    max_items: 30
-                dev_tools:
-                    enabled: true
-                    prefix: "dev"
-                    priority: 17
-                ip_info:
-                    enabled: true
-                    prefix: "ip"
-                    priority: 18
-                vscode:
-                    enabled: true
-                    prefix: "vsc"
-                    priority: 19
-            popup:
-                width: 720
-                height: 480
-                screen: "focus"
-                blur: true
-                round_corners: true
-                round_corners_type: "normal"
-                border_color: "system"
-                dark_mode: true
-            callbacks:
-                on_left: "toggle_quick_launch"
-            keybindings:
-                - keys: "ctrl+space"
-                  action: "toggle_quick_launch"
+  # --- WHKD (Hotkey Daemon Indicator) ---
+  whkd:
+    type: "yasb.whkd.WhkdWidget"
+    options:
+      label: "<span>\uf11c</span>"
+      special_keys:
+        - key: "win"
+          key_replace: "\ue70f"
+        - key: "ctrl"
+          key_replace: "\u2303"
+        - key: "alt"
+          key_replace: "\u2325"
+        - key: "shift"
+          key_replace: "\u21e7"
+        - key: "left"
+          key_replace: "\uf060"
+        - key: "right"
+          key_replace: "\uf061"
+        - key: "up"
+          key_replace: "\uf062"
+        - key: "down"
+          key_replace: "\uf063"
+      label_shadow:
+        enabled: true
+        color: "black"
+        radius: 3
+        offset: [1, 1]
 
-    # --- WHKD (Hotkey Daemon Indicator) ---
-    whkd:
-        type: "yasb.whkd.WhkdWidget"
-        options:
-            label: "<span>\uf11c</span>"
-            special_keys:
-                - key: "win"
-                  key_replace: "\ue70f"
-                - key: "ctrl"
-                  key_replace: "\u2303"
-                - key: "alt"
-                  key_replace: "\u2325"
-                - key: "shift"
-                  key_replace: "\u21e7"
-                - key: "left"
-                  key_replace: "\uf060"
-                - key: "right"
-                  key_replace: "\uf061"
-                - key: "up"
-                  key_replace: "\uf062"
-                - key: "down"
-                  key_replace: "\uf063"
-            label_shadow:
-                enabled: true
-                color: "black"
-                radius: 3
-                offset: [1, 1]
+  # --- Windows Virtual Desktops ---
+  windows_workspaces:
+    type: "yasb.windows_desktops.WorkspaceWidget"
+    options:
+      label_workspace_btn: "\uf10c"
+      label_workspace_active_btn: "\uf111"
+      btn_shadow:
+        enabled: true
+        color: "black"
+        radius: 3
+        offset: [1, 1]
 
-    # --- Windows Virtual Desktops ---
-    windows_workspaces:
-        type: "yasb.windows_desktops.WorkspaceWidget"
-        options:
-            label_workspace_btn: "\uf10c"
-            label_workspace_active_btn: "\uf111"
-            btn_shadow:
-                enabled: true
-                color: "black"
-                radius: 3
-                offset: [1, 1]
+  # --- Komorebi Layout Switcher ---
+  komorebi_active_layout:
+    type: "komorebi.active_layout.ActiveLayoutWidget"
+    options:
+      hide_if_offline: false
+      label: "{icon} {layout_name}"
+      layouts:
+        [
+          "bsp",
+          "columns",
+          "rows",
+          "grid",
+          "scrolling",
+          "vertical_stack",
+          "horizontal_stack",
+          "ultrawide_vertical_stack",
+          "right_main_vertical_stack",
+        ]
+      layout_icons:
+        bsp: "\uebeb" #  (nf-cod-split_horizontal)
+        columns: "\uebf7" #  (nf-cod-split_vertical)
+        rows: "\uec01" #  (nf-cod-three_bars)
+        grid: "\uf00a" #  (nf-fa-th)
+        scrolling: "\uebf7" #  (nf-cod-split_vertical)
+        vertical_stack: "\uebee" #  (nf-cod-split_vertical)
+        horizontal_stack: "\uebf0" #  (nf-cod-split_horizontal)
+        ultrawide_vertical_stack: "\uebee" #  (nf-cod-split_vertical)
+        right_main_vertical_stack: "\uebf1" #  (nf-cod-split_horizontal)
+        monocle: "\uf2d0" #  (nf-fa-window_maximize)
+        maximized: "\uf2d0" #  (nf-fa-window_maximize)
+        floating: "\uf2d2" #  (nf-fa-window_restore)
+        paused: "\uf04c" #  (nf-fa-pause)
+        tiling: "\ue62a" #  (nf-cod-layout)
+      callbacks:
+        on_left: "toggle_layout_menu"
+        on_middle: "prev_layout"
+        on_right: "next_layout"
+      layout_menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "System"
+        alignment: "left"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+        show_layout_icons: true
+      label_shadow:
+        enabled: true
+        color: "black"
+        radius: 3
+        offset: [1, 1]
 
-    # --- Komorebi Layout Switcher ---
-    komorebi_active_layout:
-        type: "komorebi.active_layout.ActiveLayoutWidget"
-        options:
-            hide_if_offline: false
-            label: "{icon} {layout_name}"
-            layouts:
-                [
-                    "bsp",
-                    "columns",
-                    "rows",
-                    "grid",
-                    "scrolling",
-                    "vertical_stack",
-                    "horizontal_stack",
-                    "ultrawide_vertical_stack",
-                    "right_main_vertical_stack",
-                ]
-            layout_icons:
-                bsp:                       "\uebeb"  #  (nf-cod-split_horizontal)
-                columns:                   "\uebf7"  #  (nf-cod-split_vertical)
-                rows:                      "\uec01"  #  (nf-cod-three_bars)
-                grid:                      "\uf00a"  #  (nf-fa-th)
-                scrolling:                 "\uebf7"  #  (nf-cod-split_vertical)
-                vertical_stack:            "\uebee"  #  (nf-cod-split_vertical)
-                horizontal_stack:          "\uebf0"  #  (nf-cod-split_horizontal)
-                ultrawide_vertical_stack:  "\uebee"  #  (nf-cod-split_vertical)
-                right_main_vertical_stack: "\uebf1"  #  (nf-cod-split_horizontal)
-                monocle:                   "\uf2d0"  #  (nf-fa-window_maximize)
-                maximized:                 "\uf2d0"  #  (nf-fa-window_maximize)
-                floating:                  "\uf2d2"  #  (nf-fa-window_restore)
-                paused:                    "\uf04c"  #  (nf-fa-pause)
-                tiling:                    "\ue62a"  #  (nf-cod-layout)
-            callbacks:
-                on_left: "toggle_layout_menu"
-                on_middle: "prev_layout"
-                on_right: "next_layout"
-            layout_menu:
-                blur: true
-                round_corners: true
-                round_corners_type: "normal"
-                border_color: "System"
-                alignment: "left"
-                direction: "down"
-                offset_top: 6
-                offset_left: 0
-                show_layout_icons: true
-            label_shadow:
-                enabled: true
-                color: "black"
-                radius: 3
-                offset: [1, 1]
+  # --- Komorebi Workspaces ---
+  komorebi_workspaces:
+    type: "komorebi.workspaces.WorkspaceWidget"
+    options:
+      label_offline: "Komorebi Offline"
+      label_workspace_btn: "{index}"
+      label_workspace_active_btn: "[{index}]"
+      label_workspace_populated_btn: "{index}"
+      label_default_name: ""
+      label_zero_index: false
+      hide_empty_workspaces: false
+      hide_if_offline: false
+      animation: true
+      enable_scroll_switching: true
+      toggle_workspace_layer:
+        enabled: false
+        tiling_label: "Tiling"
+        floating_label: "Floating"
+      app_icons:
+        enabled_populated: false
+        enabled_active: false
+        size: 12
+        max_icons: 0
+        hide_label: false
+        hide_duplicates: false
+        hide_floating: false
+      btn_shadow:
+        enabled: true
+        color: "black"
+        radius: 3
+        offset: [1, 1]
 
-    # --- Komorebi Workspaces ---
-    komorebi_workspaces:
-        type: "komorebi.workspaces.WorkspaceWidget"
-        options:
-            label_offline: "Komorebi Offline"
-            label_workspace_btn: "{index}"
-            label_workspace_active_btn: "[{index}]"
-            label_workspace_populated_btn: "{index}"
-            label_default_name: ""
-            label_zero_index: false
-            hide_empty_workspaces: false
-            hide_if_offline: false
-            animation: true
-            enable_scroll_switching: true
-            toggle_workspace_layer:
-                enabled: false
-                tiling_label: "Tiling"
-                floating_label: "Floating"
-            app_icons:
-                enabled_populated: false
-                enabled_active: false
-                size: 12
-                max_icons: 0
-                hide_label: false
-                hide_duplicates: false
-                hide_floating: false
-            btn_shadow:
-                enabled: true
-                color: "black"
-                radius: 3
-                offset: [1, 1]
+  # --- Media Player ---
+  # Left click: media menu | Middle click: toggle label | Right click: play/pause
+  media:
+    type: "yasb.media.MediaWidget"
+    options:
+      label: "{title}{s}{artist}"
+      label_alt: "{title}"
+      separator: " - "
+      hide_empty: true
+      show_thumbnail: true
+      controls_only: false
+      controls_left: true
+      controls_hide: false
+      thumbnail_alpha: 80
+      thumbnail_padding: 8
+      thumbnail_corner_radius: 16
+      symmetric_corner_radius: false
+      thumbnail_edge_fade: true
+      max_field_size:
+        label: 20
+        label_alt: 30
+        truncate_whole_label: false
+      icons:
+        prev_track: "\uf048" #  (nf-fa-step_backward)
+        next_track: "\uf051" #  (nf-fa-step_forward)
+        play: "\uf04b" #  (nf-fa-play)
+        pause: "\uf04c" #  (nf-fa-pause)
+      animation:
+        enabled: true
+        type: "fadeInOut"
+        duration: 200
+      callbacks:
+        on_left: "toggle_media_menu"
+        on_middle: "toggle_label"
+        on_right: "toggle_play_pause"
+      label_shadow:
+        enabled: true
+        color: "black"
+        radius: 3
+        offset: [1, 1]
+      media_menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "#45475a"
+        alignment: "left"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+        thumbnail_corner_radius: 8
+        thumbnail_size: 120
+        max_title_size: 60
+        max_artist_size: 20
+        show_source: true
+        show_volume_slider: true
+      media_menu_icons:
+        play: "\ue768"
+        pause: "\ue769"
+        prev_track: "\ue892"
+        next_track: "\ue893"
+        mute: "\ue994"
+        unmute: "\ue74f"
+      progress_bar:
+        enabled: true
+        alignment: "bottom"
 
-    # --- Media Player ---
-    # Left click: media menu | Middle click: toggle label | Right click: play/pause
-    media:
-        type: "yasb.media.MediaWidget"
-        options:
-            label: "{title}{s}{artist}"
-            label_alt: "{title}"
-            separator: " - "
-            hide_empty: true
-            show_thumbnail: true
-            controls_only: false
-            controls_left: true
-            controls_hide: false
-            thumbnail_alpha: 80
-            thumbnail_padding: 8
-            thumbnail_corner_radius: 16
-            symmetric_corner_radius: false
-            thumbnail_edge_fade: true
-            max_field_size:
-                label: 20
-                label_alt: 30
-                truncate_whole_label: false
-            icons:
-                prev_track: "\uf048"  #  (nf-fa-step_backward)
-                next_track: "\uf051"  #  (nf-fa-step_forward)
-                play: "\uf04b"        #  (nf-fa-play)
-                pause: "\uf04c"       #  (nf-fa-pause)
-            animation:
-                enabled: true
-                type: "fadeInOut"
-                duration: 200
-            callbacks:
-                on_left: "toggle_media_menu"
-                on_middle: "toggle_label"
-                on_right: "toggle_play_pause"
-            label_shadow:
-                enabled: true
-                color: "black"
-                radius: 3
-                offset: [1, 1]
-            media_menu:
-                blur: true
-                round_corners: true
-                round_corners_type: "normal"
-                border_color: "#45475a"
-                alignment: "left"
-                direction: "down"
-                offset_top: 6
-                offset_left: 0
-                thumbnail_corner_radius: 8
-                thumbnail_size: 120
-                max_title_size: 60
-                max_artist_size: 20
-                show_source: true
-                show_volume_slider: true
-            media_menu_icons:
-                play: "\ue768"
-                pause: "\ue769"
-                prev_track: "\ue892"
-                next_track: "\ue893"
-                mute: "\ue994"
-                unmute: "\ue74f"
-            progress_bar:
-                enabled: true
-                alignment: "bottom"
+  # --- Taskbar ---
+  taskbar:
+    type: "yasb.taskbar.TaskbarWidget"
+    options:
+      icon_size: 16
+      tooltip: true
+      show_only_visible: false
+      strict_filtering: true
+      monitor_exclusive: false
+      animation:
+        enabled: true
+      preview:
+        enabled: false
+        width: 240
+        delay: 400
+        padding: 30
+        margin: 15
+      title_label:
+        enabled: false
+        show: "always"
+        min_length: 10
+        max_length: 100
+      ignore_apps:
+        processes: []
+        titles: []
+        classes: []
 
-    # --- Taskbar ---
-    taskbar:
-        type: "yasb.taskbar.TaskbarWidget"
-        options:
-            icon_size: 16
-            tooltip: true
-            show_only_visible: false
-            strict_filtering: true
-            monitor_exclusive: false
-            animation:
-                enabled: true
-            preview:
-                enabled: false
-                width: 240
-                delay: 400
-                padding: 30
-                margin: 15
-            title_label:
-                enabled: false
-                show: "always"
-                min_length: 10
-                max_length: 100
-            ignore_apps:
-                processes: []
-                titles: []
-                classes: []
+  # =============================================================================================
+  # Center Bar Widgets
+  # =============================================================================================
 
-    # =============================================================================================
-    # Center Bar Widgets
-    # =============================================================================================
+  # --- Active Window Title ---
+  # Shows: Title [PID] | Alt: Title [PID] {hwnd, mhwnd}
+  active_window:
+    type: "yasb.active_window.ActiveWindowWidget"
+    options:
+      label: "{win[title]} [{win[process][pid]}]"
+      label_alt: "{win[title]} [{win[process][pid]}] {{hwnd:{win[hwnd]}, mhwnd:{win[monitor_hwnd]}}}"
+      label_no_window: "No Window Active"
+      label_icon: true
+      label_icon_size: 12
+      max_length: 120
+      max_length_ellipsis: "..."
+      monitor_exclusive: false
 
-    # --- Active Window Title ---
-    # Shows: Title [PID] | Alt: Title [PID] {hwnd, mhwnd}
-    active_window:
-        type: "yasb.active_window.ActiveWindowWidget"
-        options:
-            label: "{win[title]} [{win[process][pid]}]"
-            label_alt: "{win[title]} [{win[process][pid]}] {{hwnd:{win[hwnd]}, mhwnd:{win[monitor_hwnd]}}}"
-            label_no_window: "No Window Active"
-            label_icon: true
-            label_icon_size: 12
-            max_length: 120
-            max_length_ellipsis: "..."
-            monitor_exclusive: false
+  # =============================================================================================
+  # Right Bar Widgets
+  # =============================================================================================
 
-    # =============================================================================================
-    # Right Bar Widgets
-    # =============================================================================================
+  # --- AI Chat (Ollama) ---
+  ai_chat:
+    type: "yasb.ai_chat.AiChatWidget"
+    options:
+      label: "<span>\uf086</span>"
+      chat:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "system"
+        alignment: "center"
+        direction: "down"
+        offset_left: 0
+        offset_top: 6
+      icons:
+        send: "\uf1d9" #  (nf-fa-paper_plane)
+        stop: "\uf04d" #  (nf-fa-stop)
+        clear: "\uf1f8" #  (nf-fa-trash)
+        assistant: "\uebca" #  (nf-cod-hubot)
+      notification_dot:
+        enabled: false
+        corner: "top_right"
+        color: "red"
+        margin: [0, 2]
+      callbacks:
+        on_left: "toggle_chat"
+      providers:
+        - provider: "Ollama"
+          api_endpoint: "http://localhost:11434/v1"
+          credential: "ollama"
+          models:
+            - name: "gemma3:27b-it-qat"
+              label: "Gemma3 27b"
+            - name: "gemma3:12b-it-qat"
+              label: "Gemma3 12b"
 
-    # --- AI Chat (Ollama) ---
-    ai_chat:
-        type: "yasb.ai_chat.AiChatWidget"
-        options:
-            label: "<span>\uf086</span>"
-            chat:
-                blur: true
-                round_corners: true
-                round_corners_type: "normal"
-                border_color: "system"
-                alignment: "center"
-                direction: "down"
-                offset_left: 0
-                offset_top: 6
-            icons:
-                send: "\uf1d9"     #  (nf-fa-paper_plane)
-                stop: "\uf04d"     #  (nf-fa-stop)
-                clear: "\uf1f8"    #  (nf-fa-trash)
-                assistant: "\uebca" #  (nf-cod-hubot)
-            notification_dot:
-                enabled: false
-                corner: "top_right"
-                color: "red"
-                margin: [0, 2]
-            callbacks:
-                on_left: "toggle_chat"
-            providers:
-                - provider: "Ollama"
-                  api_endpoint: "http://localhost:11434/v1"
-                  credential: "ollama"
-                  models:
-                      - name: "gemma3:27b-it-qat"
-                        label: "Gemma3 27b"
-                      - name: "gemma3:12b-it-qat"
-                        label: "Gemma3 12b"
+  # --- VS Code Recents ---
+  vscode:
+    type: "yasb.vscode.VSCodeWidget"
+    options:
+      label: "<span>\ue70c</span>"
+      label_alt: "<span>\ue70c</span> recents"
+      menu_title: "VS Code Recents"
+      max_field_size: 50
+      folder_icon: "\uf07c" #  (nf-fa-folder)
+      file_icon: "\uf15b" #  (nf-fa-file)
+      truncate_to_root_dir: false
+      hide_folder_icon: false
+      hide_file_icon: false
+      max_number_of_folders: 5
+      max_number_of_files: 10
+      modified_date_format: "Date modified: %Y-%m-%d %H:%M"
+      cli_command: "code"
+      menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "small"
+        alignment: "center"
+        offset_top: 0
 
-    # --- VS Code Recents ---
-    vscode:
-        type: "yasb.vscode.VSCodeWidget"
-        options:
-            label: "<span>\ue70c</span>"
-            label_alt: "<span>\ue70c</span> recents"
-            menu_title: "VS Code Recents"
-            max_field_size: 50
-            folder_icon: "\uf07c"  #  (nf-fa-folder)
-            file_icon: "\uf15b"    #  (nf-fa-file)
-            truncate_to_root_dir: false
-            hide_folder_icon: false
-            hide_file_icon: false
-            max_number_of_folders: 5
-            max_number_of_files: 10
-            modified_date_format: "Date modified: %Y-%m-%d %H:%M"
-            cli_command: "code"
-            menu:
-                blur: true
-                round_corners: true
-                round_corners_type: "small"
-                alignment: "center"
-                offset_top: 0
+  # --- Weather (API key required) ---
+  weather:
+    type: "yasb.weather.WeatherWidget"
+    options:
+      label: "<span>{icon}</span> {temp}"
+      label_alt: "{location}: {conditions}, Min {min_temp}, Max {max_temp}, Humidity {humidity}"
+      api_key: env
+      update_interval: 600
+      hide_decimal: true
+      location: env
+      units: "imperial"
+      callbacks:
+        on_left: "toggle_card"
+      icons:
+        sunnyDay: "\ue30d" #  (nf-weather-day_sunny)
+        clearNight: "\ue32b" #  (nf-weather-night_clear)
+        cloudyDay: "\ue302" #  (nf-weather-day_cloudy)
+        cloudyNight: "\ue32e" #  (nf-weather-night_cloudy)
+        rainyDay: "\ue308" #  (nf-weather-day_rain)
+        rainyNight: "\ue333" #  (nf-weather-night_rain)
+        snowyDay: "\ue30a" #  (nf-weather-day_snow)
+        snowyNight: "\ue335" #  (nf-weather-night_snow)
+        blizzardDay: "\ue31a" #  (nf-weather-snow)
+        default: "\ue30d" #  (nf-weather-day_sunny)
+      weather_card:
+        blur: True
+        round_corners: True
+        round_corners_type: "normal"
+        border_color: "#45475a"
+        alignment: "right"
+        direction: "down"
+        distance: 6
+        icon_size: 48
 
-    # --- Weather (API key required) ---
-    weather:
-        type: "yasb.weather.WeatherWidget"
-        options:
-            label: "<span>{icon}</span> {temp}"
-            label_alt: "{location}: {conditions}, Min {min_temp}, Max {max_temp}, Humidity {humidity}"
-            api_key: env
-            update_interval: 600
-            hide_decimal: true
-            location: env
-            units: "imperial"
-            callbacks:
-                on_left: "toggle_card"
-            icons:
-                sunnyDay:      "\ue30d"  #  (nf-weather-day_sunny)
-                clearNight:    "\ue32b"  #  (nf-weather-night_clear)
-                cloudyDay:     "\ue302"  #  (nf-weather-day_cloudy)
-                cloudyNight:   "\ue32e"  #  (nf-weather-night_cloudy)
-                rainyDay:      "\ue308"  #  (nf-weather-day_rain)
-                rainyNight:    "\ue333"  #  (nf-weather-night_rain)
-                snowyDay:   "\ue30a"  #  (nf-weather-day_snow)
-                snowyNight: "\ue335"  #  (nf-weather-night_snow)
-                blizzardDay:   "\ue31a"  #  (nf-weather-snow)
-                default:       "\ue30d"  #  (nf-weather-day_sunny)
-            weather_card:
-                blur: True
-                round_corners: True
-                round_corners_type: "normal"
-                border_color: "#45475a"
-                alignment: "right"
-                direction: "down"
-                distance: 6
-                icon_size: 48
+  # --- Volume ---
+  volume:
+    type: "yasb.volume.VolumeWidget"
+    options:
+      label: "<span>{icon}</span> {level}"
+      label_alt: "<span>{icon}</span> {level}"
+      volume_icons:
+        - "\ueee8" #  Mute
+        - "\uf026" #  0-10%
+        - "\uf027" #  11-30%
+        - "\uf027" #  31-60%
+        - "\uf028" #  61-100%
+      audio_menu:
+        blur: True
+        round_corners: True
+        round_corners_type: "normal"
+        border_color: "#45475a"
+        alignment: "right"
+        direction: "down"
+        distance: 6
+        show_apps: true
+        show_app_labels: true
+        show_app_icons: true
+        show_apps_expanded: true
+      callbacks:
+        on_left: "toggle_volume_menu"
+        on_right: "toggle_mute"
+        on_middle: "do_nothing"
 
-    # --- Volume ---
-    volume:
-        type: "yasb.volume.VolumeWidget"
-        options:
-            label: "<span>{icon}</span> {level}"
-            label_alt: "<span>{icon}</span> {level}"
-            volume_icons:
-                - "\ueee8"  #  Mute
-                - "\uf026"  #  0-10%
-                - "\uf027"  #  11-30%
-                - "\uf027"  #  31-60%
-                - "\uf028"  #  61-100%
-            audio_menu:
-                blur: True
-                round_corners: True
-                round_corners_type: "normal"
-                border_color: "#45475a"
-                alignment: "right"
-                direction: "down"
-                distance: 6
-                show_apps: true
-                show_app_labels: true
-                show_app_icons: true
-                show_apps_expanded: true
-            callbacks:
-                on_left: "toggle_volume_menu"
-                on_right: "toggle_mute"
-                on_middle: "do_nothing"
+  # --- Microphone ---
+  microphone:
+    type: "yasb.microphone.MicrophoneWidget"
+    options:
+      label: "<span>{icon}</span> {level}"
+      label_alt: "<span>{icon}</span> {level}"
+      mute_text: "mute"
+      icons:
+        normal: "\uf130" #  (nf-fa-microphone)
+        muted: "\uf131" #  (nf-fa-microphone_slash)
+      mic_menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "system"
+        alignment: "right"
+        direction: "down"
+      callbacks:
+        on_left: "toggle_mic_menu"
+        on_right: "toggle_mute"
+        on_middle: "do_nothing"
+      label_shadow:
+        enabled: true
+        color: "black"
+        radius: 3
+        offset: [1, 1]
 
-    # --- Microphone ---
-    microphone:
-        type: "yasb.microphone.MicrophoneWidget"
-        options:
-            label: "<span>{icon}</span> {level}"
-            label_alt: "<span>{icon}</span> {level}"
-            mute_text: "mute"
-            icons:
-                normal: "\uf130"  #  (nf-fa-microphone)
-                muted: "\uf131"   #  (nf-fa-microphone_slash)
-            mic_menu:
-                blur: true
-                round_corners: true
-                round_corners_type: "normal"
-                border_color: "system"
-                alignment: "right"
-                direction: "down"
-            callbacks:
-                on_left: "toggle_mic_menu"
-                on_right: "toggle_mute"
-                on_middle: "do_nothing"
-            label_shadow:
-                enabled: true
-                color: "black"
-                radius: 3
-                offset: [1, 1]
+  # --- Bluetooth ---
+  bluetooth:
+    type: "yasb.bluetooth.BluetoothWidget"
+    options:
+      label: "<span>{icon}</span> {device_count}"
+      label_alt: "{device_name}"
+      label_no_device: "No devices connected"
+      label_device_separator: ", "
+      max_length: 50
+      max_length_ellipsis: "..."
+      icons:
+        bluetooth_on: "\uf294" #  (nf-fa-bluetooth_b)
+        bluetooth_connected: "\uf293" #  (nf-fa-bluetooth)
+        bluetooth_off: "\ue920" #  (nf-feather-bluetooth_off)
+      callbacks:
+        on_left: "toggle_label"
+        on_right: "exec cmd.exe /c start ms-settings:bluetooth"
+      label_shadow:
+        enabled: true
+        color: "black"
+        radius: 3
+        offset: [1, 1]
 
-    # --- Bluetooth ---
-    bluetooth:
-        type: "yasb.bluetooth.BluetoothWidget"
-        options:
-            label: "<span>{icon}</span> {device_count}"
-            label_alt: "{device_name}"
-            label_no_device: "No devices connected"
-            label_device_separator: ", "
-            max_length: 50
-            max_length_ellipsis: "..."
-            icons:
-                bluetooth_on:        "\uf294"  #  (nf-fa-bluetooth_b)
-                bluetooth_connected: "\uf293"  #  (nf-fa-bluetooth)
-                bluetooth_off:       "\ue920"  #  (nf-feather-bluetooth_off)
-            callbacks:
-                on_left: "toggle_label"
-                on_right: "exec cmd.exe /c start ms-settings:bluetooth"
-            label_shadow:
-                enabled: true
-                color: "black"
-                radius: 3
-                offset: [1, 1]
+  # --- Battery ---
+  battery:
+    type: "yasb.battery.BatteryWidget"
+    options:
+      label: "<span>{icon}</span> {percent}%"
+      label_alt: "<span>{icon}</span> {percent}% {time_remaining}"
+      update_interval: 5000
+      time_remaining_natural: false
+      hide_unsupported: true
+      charging_options:
+        icon_format: "{charging_icon}"
+        blink_charging_icon: false
+        blink_interval: 500
+      status_thresholds:
+        critical: 10
+        low: 25
+        medium: 60
+        high: 80
+        full: 100
+      status_icons:
+        icon_charging: "\uf0e7" #  (nf-fa-bolt)
+        icon_critical: "\uf244" #  (nf-fa-battery_empty)
+        icon_low: "\uf243" #  (nf-fa-battery_quarter)
+        icon_medium: "\uf242" #  (nf-fa-battery_half)
+        icon_high: "\uf241" #  (nf-fa-battery_three_quarters)
+        icon_full: "\uf240" #  (nf-fa-battery_full)
+      callbacks:
+        on_left: "toggle_label"
+        on_middle: "do_nothing"
+        on_right: "do_nothing"
+      animation:
+        enabled: true
+        type: "fadeInOut"
+        duration: 200
+      label_shadow:
+        enabled: true
+        color: "black"
+        radius: 3
+        offset: [1, 1]
 
-    # --- Battery ---
-    battery:
-        type: "yasb.battery.BatteryWidget"
-        options:
-            label: "<span>{icon}</span> {percent}%"
-            label_alt: "<span>{icon}</span> {percent}% {time_remaining}"
-            update_interval: 5000
-            time_remaining_natural: false
-            hide_unsupported: true
-            charging_options:
-                icon_format: "{charging_icon}"
-                blink_charging_icon: false
-                blink_interval: 500
-            status_thresholds:
-                critical: 10
-                low: 25
-                medium: 60
-                high: 80
-                full: 100
-            status_icons:
-                icon_charging: "\uf0e7"     #  (nf-fa-bolt)
-                icon_critical: "\uf244"     #  (nf-fa-battery_empty)
-                icon_low: "\uf243"          #  (nf-fa-battery_quarter)
-                icon_medium: "\uf242"       #  (nf-fa-battery_half)
-                icon_high: "\uf241"         #  (nf-fa-battery_three_quarters)
-                icon_full: "\uf240"         #  (nf-fa-battery_full)
-            callbacks:
-                on_left: "toggle_label"
-                on_middle: "do_nothing"
-                on_right: "do_nothing"
-            animation:
-                enabled: true
-                type: "fadeInOut"
-                duration: 200
-            label_shadow:
-                enabled: true
-                color: "black"
-                radius: 3
-                offset: [1, 1]
+  # =============================================================================================
+  # System Monitor Widgets (Grouped)
+  # =============================================================================================
+  # These widgets are NOT in the bar array directly — they're inside system_grouper.
+  # Right-click the collapse arrow to expand/collapse all system monitors.
+  #
+  # Callback convention:
+  #   Left click  = toggle_label (or popup if widget has one)
+  #   Middle click = open relevant app (Task Manager, Explorer, Network Settings)
+  #   Right click = do_nothing (or toggle_label if left is a popup)
 
-    # =============================================================================================
-    # System Monitor Widgets (Grouped)
-    # =============================================================================================
-    # These widgets are NOT in the bar array directly — they're inside system_grouper.
-    # Right-click the collapse arrow to expand/collapse all system monitors.
-    #
-    # Callback convention:
-    #   Left click  = toggle_label (or popup if widget has one)
-    #   Middle click = open relevant app (Task Manager, Explorer, Network Settings)
-    #   Right click = do_nothing (or toggle_label if left is a popup)
+  # --- System Grouper (Container) ---
+  system_grouper:
+    type: "yasb.grouper.GrouperWidget"
+    options:
+      class_name: "system-grouper"
+      widgets: ["cpu", "gpu", "memory", "disk", "traffic"]
+      hide_empty: false
+      collapse_options:
+        enabled: true
+        exclude_widgets: []
+        expanded_label: "\uf054"
+        collapsed_label: "\uf053"
+        label_position: "right"
 
-    # --- System Grouper (Container) ---
-    system_grouper:
-        type: "yasb.grouper.GrouperWidget"
-        options:
-            class_name: "system-grouper"
-            widgets: ["cpu", "gpu", "memory", "disk", "traffic"]
-            hide_empty: false
-            collapse_options:
-                enabled: true
-                exclude_widgets: []
-                expanded_label: "\uf054"
-                collapsed_label: "\uf053"
-                label_position: "right"
+  # --- CPU ---
+  cpu:
+    type: "yasb.cpu.CpuWidget"
+    options:
+      label: "<span>\uf4bc</span> {info[percent][total]}%"
+      label_alt: "<span>\uf4bc</span> {info[percent][total]}% ({info[freq][current]} MHz)"
+      update_interval: 2000
+      hide_decimal: false
+      cpu_thresholds:
+        low: 25
+        medium: 50
+        high: 90
+      histogram_icons:
+        - "\u2581"
+        - "\u2581"
+        - "\u2582"
+        - "\u2583"
+        - "\u2584"
+        - "\u2585"
+        - "\u2586"
+        - "\u2587"
+        - "\u2588"
+      histogram_num_columns: 8
+      callbacks:
+        on_left: "toggle_label"
+        on_middle: "exec cmd /c Taskmgr"
+        on_right: "do_nothing"
+      animation:
+        enabled: true
+        type: "fadeInOut"
+        duration: 200
+      label_shadow:
+        enabled: true
+        color: "black"
+        radius: 3
+        offset: [1, 1]
 
-    # --- CPU ---
-    cpu:
-        type: "yasb.cpu.CpuWidget"
-        options:
-            label: "<span>\uf4bc</span> {info[percent][total]}%"
-            label_alt: "<span>\uf4bc</span> {info[percent][total]}% ({info[freq][current]} MHz)"
-            update_interval: 2000
-            hide_decimal: false
-            cpu_thresholds:
-                low: 25
-                medium: 50
-                high: 90
-            histogram_icons:
-                - "\u2581"
-                - "\u2581"
-                - "\u2582"
-                - "\u2583"
-                - "\u2584"
-                - "\u2585"
-                - "\u2586"
-                - "\u2587"
-                - "\u2588"
-            histogram_num_columns: 8
-            callbacks:
-                on_left: "toggle_label"
-                on_middle: "exec cmd /c Taskmgr"
-                on_right: "do_nothing"
-            animation:
-                enabled: true
-                type: "fadeInOut"
-                duration: 200
-            label_shadow:
-                enabled: true
-                color: "black"
-                radius: 3
-                offset: [1, 1]
+  # --- GPU (NVIDIA) ---
+  gpu:
+    type: "yasb.gpu.GpuWidget"
+    options:
+      label: "<span>\uf1b2</span> {info[utilization]}% | {info[mem_used]}/{info[mem_total]}"
+      label_alt: "<span>\uf1b2</span> {info[utilization]}% | {info[mem_used]}/{info[mem_total]} | {info[temp]}°C | {info[power_draw]}W"
+      update_interval: 2000
+      gpu_index: 0
+      hide_decimal: false
+      units: "metric"
+      gpu_thresholds:
+        low: 25
+        medium: 50
+        high: 90
+      histogram_icons:
+        - "\u2581"
+        - "\u2581"
+        - "\u2582"
+        - "\u2583"
+        - "\u2584"
+        - "\u2585"
+        - "\u2586"
+        - "\u2587"
+        - "\u2588"
+      histogram_num_columns: 8
+      callbacks:
+        on_left: "toggle_label"
+        on_middle: "exec cmd /c Taskmgr"
+        on_right: "do_nothing"
+      animation:
+        enabled: true
+        type: "fadeInOut"
+        duration: 200
+      label_shadow:
+        enabled: true
+        color: "black"
+        radius: 3
+        offset: [1, 1]
 
-    # --- GPU (NVIDIA) ---
-    gpu:
-        type: "yasb.gpu.GpuWidget"
-        options:
-            label: "<span>\uf1b2</span> {info[utilization]}% | {info[mem_used]}/{info[mem_total]}"
-            label_alt: "<span>\uf1b2</span> {info[utilization]}% | {info[mem_used]}/{info[mem_total]} | {info[temp]}°C | {info[power_draw]}W"
-            update_interval: 2000
-            gpu_index: 0
-            hide_decimal: false
-            units: "metric"
-            gpu_thresholds:
-                low: 25
-                medium: 50
-                high: 90
-            histogram_icons:
-                - "\u2581"
-                - "\u2581"
-                - "\u2582"
-                - "\u2583"
-                - "\u2584"
-                - "\u2585"
-                - "\u2586"
-                - "\u2587"
-                - "\u2588"
-            histogram_num_columns: 8
-            callbacks:
-                on_left: "toggle_label"
-                on_middle: "exec cmd /c Taskmgr"
-                on_right: "do_nothing"
-            animation:
-                enabled: true
-                type: "fadeInOut"
-                duration: 200
-            label_shadow:
-                enabled: true
-                color: "black"
-                radius: 3
-                offset: [1, 1]
+  # --- Memory ---
+  memory:
+    type: "yasb.memory.MemoryWidget"
+    options:
+      label: "<span>\uf2db</span> {virtual_mem_used}/{virtual_mem_total}"
+      label_alt: "<span>\uf2db</span> {virtual_mem_used}/{virtual_mem_total} | Swap: {swap_mem_percent}%"
+      update_interval: 5000
+      hide_decimal: false
+      memory_thresholds:
+        low: 25
+        medium: 50
+        high: 90
+      histogram_icons:
+        - "\u2581"
+        - "\u2581"
+        - "\u2582"
+        - "\u2583"
+        - "\u2584"
+        - "\u2585"
+        - "\u2586"
+        - "\u2587"
+        - "\u2588"
+      callbacks:
+        on_left: "toggle_label"
+        on_middle: "exec cmd /c Taskmgr"
+        on_right: "do_nothing"
+      animation:
+        enabled: true
+        type: "fadeInOut"
+        duration: 200
+      label_shadow:
+        enabled: true
+        color: "black"
+        radius: 3
+        offset: [1, 1]
 
-    # --- Memory ---
-    memory:
-        type: "yasb.memory.MemoryWidget"
-        options:
-            label: "<span>\uf2db</span> {virtual_mem_used}/{virtual_mem_total}"
-            label_alt: "<span>\uf2db</span> {virtual_mem_used}/{virtual_mem_total} | Swap: {swap_mem_percent}%"
-            update_interval: 5000
-            hide_decimal: false
-            memory_thresholds:
-                low: 25
-                medium: 50
-                high: 90
-            histogram_icons:
-                - "\u2581"
-                - "\u2581"
-                - "\u2582"
-                - "\u2583"
-                - "\u2584"
-                - "\u2585"
-                - "\u2586"
-                - "\u2587"
-                - "\u2588"
-            callbacks:
-                on_left: "toggle_label"
-                on_middle: "exec cmd /c Taskmgr"
-                on_right: "do_nothing"
-            animation:
-                enabled: true
-                type: "fadeInOut"
-                duration: 200
-            label_shadow:
-                enabled: true
-                color: "black"
-                radius: 3
-                offset: [1, 1]
+  # --- Disk Storage ---
+  disk:
+    type: "yasb.disk.DiskWidget"
+    options:
+      label: "<span>\uf0a0</span> {volume_label}: {space[used][percent]}%"
+      label_alt: "<span>\uf0a0</span> {volume_label}: {space[used][gb]}/{space[total][gb]} GB"
+      volume_label: "C"
+      decimal_display: 1
+      update_interval: 60
+      disk_thresholds:
+        low: 25
+        medium: 50
+        high: 90
+      group_label:
+        volume_labels: ["C", "D", "E", "F", "X"]
+        show_label_name: true
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "System"
+        alignment: "right"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+      callbacks:
+        on_left: "toggle_group"
+        on_middle: "exec explorer C:\\"
+        on_right: "toggle_label"
+      animation:
+        enabled: true
+        type: "fadeInOut"
+        duration: 200
+      label_shadow:
+        enabled: true
+        color: "black"
+        radius: 3
+        offset: [1, 1]
 
-    # --- Disk Storage ---
-    disk:
-        type: "yasb.disk.DiskWidget"
-        options:
-            label: "<span>\uf0a0</span> {volume_label}: {space[used][percent]}%"
-            label_alt: "<span>\uf0a0</span> {volume_label}: {space[used][gb]}/{space[total][gb]} GB"
-            volume_label: "C"
-            decimal_display: 1
-            update_interval: 60
-            disk_thresholds:
-                low: 25
-                medium: 50
-                high: 90
-            group_label:
-                volume_labels: ["C", "D", "E", "F", "X"]
-                show_label_name: true
-                blur: true
-                round_corners: true
-                round_corners_type: "normal"
-                border_color: "System"
-                alignment: "right"
-                direction: "down"
-                offset_top: 6
-                offset_left: 0
-            callbacks:
-                on_left: "toggle_group"
-                on_middle: "exec explorer C:\\"
-                on_right: "toggle_label"
-            animation:
-                enabled: true
-                type: "fadeInOut"
-                duration: 200
-            label_shadow:
-                enabled: true
-                color: "black"
-                radius: 3
-                offset: [1, 1]
+  # --- Network Traffic ---
+  traffic:
+    type: "yasb.traffic.TrafficWidget"
+    options:
+      label: "<span>\uf0ac</span> \ueab4 {download_speed} \ueab7 {upload_speed}"
+      label_alt: "<span>\uf0ac</span> \u2193 {today_downloaded} \u2191 {today_uploaded}"
+      update_interval: 1000
+      interface: "Auto"
+      hide_if_offline: false
+      speed_unit: "bits"
+      hide_decimal: false
+      speed_threshold:
+        min_upload: 1000
+        min_download: 1000
+      menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "system"
+        alignment: "right"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+        show_interface_name: true
+        show_internet_info: true
+      callbacks:
+        on_left: "toggle_menu"
+        on_middle: "exec cmd /c start ms-settings:network"
+        on_right: "toggle_label"
+      animation:
+        enabled: true
+        type: "fadeInOut"
+        duration: 200
+      label_shadow:
+        enabled: true
+        color: "black"
+        radius: 3
+        offset: [1, 1]
 
-    # --- Network Traffic ---
-    traffic:
-        type: "yasb.traffic.TrafficWidget"
-        options:
-            label: "<span>\uf0ac</span> \ueab4 {download_speed} \ueab7 {upload_speed}"
-            label_alt: "<span>\uf0ac</span> \u2193 {today_downloaded} \u2191 {today_uploaded}"
-            update_interval: 1000
-            interface: "Auto"
-            hide_if_offline: false
-            speed_unit: "bits"
-            hide_decimal: false
-            speed_threshold:
-                min_upload: 1000
-                min_download: 1000
-            menu:
-                blur: true
-                round_corners: true
-                round_corners_type: "normal"
-                border_color: "system"
-                alignment: "right"
-                direction: "down"
-                offset_top: 6
-                offset_left: 0
-                show_interface_name: true
-                show_internet_info: true
-            callbacks:
-                on_left: "toggle_menu"
-                on_middle: "exec cmd /c start ms-settings:network"
-                on_right: "toggle_label"
-            animation:
-                enabled: true
-                type: "fadeInOut"
-                duration: 200
-            label_shadow:
-                enabled: true
-                color: "black"
-                radius: 3
-                offset: [1, 1]
+  # =============================================================================================
+  # Right Bar Widgets (continued)
+  # =============================================================================================
 
-    # =============================================================================================
-    # Right Bar Widgets (continued)
-    # =============================================================================================
+  # --- Clock & Calendar ---
+  clock:
+    type: "yasb.clock.ClockWidget"
+    options:
+      label: "<span>\uf017</span>{%I:%M:%S %p |  %a %d %b}"
+      label_alt: "{%a, %d %b %H:%M:%S}"
+      timezones: []
+      calendar:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "system"
+        alignment: "center"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+        show_holidays: false
+        show_week_numbers: true
+        show_years: true
+        country_code: "US"
+        holiday_color: "#FF6464"
+        extended: false
 
-    # --- Clock & Calendar ---
-    clock:
-        type: "yasb.clock.ClockWidget"
-        options:
-            label: "<span>\uf017</span>{%I:%M:%S %p |  %a %d %b}"
-            label_alt: "{%a, %d %b %H:%M:%S}"
-            timezones: []
-            calendar:
-                blur: true
-                round_corners: true
-                round_corners_type: "normal"
-                border_color: "system"
-                alignment: "center"
-                direction: "down"
-                offset_top: 6
-                offset_left: 0
-                show_holidays: false
-                show_week_numbers: true
-                show_years: true
-                country_code: "US"
-                holiday_color: "#FF6464"
-                extended: false
+  # --- Power Menu (Fullscreen) ---
+  # Blur background, colorful per-button icons
+  power_menu:
+    type: "yasb.power_menu.PowerMenuWidget"
+    options:
+      label: "\u23FB"
+      uptime: true
+      show_user: true
+      blur: true
+      blur_background: true
+      animation_duration: 250
+      button_row: 3
+      buttons:
+        signout: ["\uf08b", "Sign out"] #  (nf-fa-sign_out)
+        shutdown: ["\u23FB", "Shut Down"] #  Power symbol
+        restart: ["\uf021", "Restart"] #  (nf-fa-refresh)
+        sleep: ["\uf186", "Sleep"] #  (nf-fa-moon_o)
+        lock: ["\uf023", "Lock"] #  (nf-fa-lock)
+        cancel: ["\uf00d", "Cancel"] #  (nf-fa-times)
 
-    # --- Power Menu (Fullscreen) ---
-    # Blur background, colorful per-button icons
-    power_menu:
-        type: "yasb.power_menu.PowerMenuWidget"
-        options:
-            label: "\u23FB"
-            uptime: true
-            show_user: true
-            blur: true
-            blur_background: true
-            animation_duration: 250
-            button_row: 3
-            buttons:
-                signout:  ["\uf08b", "Sign out"]   #  (nf-fa-sign_out)
-                shutdown: ["\u23FB", "Shut Down"]  #  Power symbol
-                restart:  ["\uf021", "Restart"]    #  (nf-fa-refresh)
-                sleep:    ["\uf186", "Sleep"]      #  (nf-fa-moon_o)
-                lock:     ["\uf023", "Lock"]       #  (nf-fa-lock)
-                cancel:   ["\uf00d", "Cancel"]     #  (nf-fa-times)
+  # --- Komorebi Control ---
+  komorebi_ctl:
+    type: "komorebi.control.KomorebiControlWidget"
+    options:
+      label: "<span>\uf142</span>"
+      icons:
+        start: "\uead3"
+        stop: "\uead7"
+        reload: "\uead2"
+      run_ahk: false
+      run_whkd: true
+      show_version: true
+      komorebi_menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "System"
+        alignment: "left"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+      label_shadow:
+        enabled: true
+        color: "black"
+        radius: 3
+        offset: [1, 1]
 
-    # --- Komorebi Control ---
-    komorebi_ctl:
-        type: "komorebi.control.KomorebiControlWidget"
-        options:
-            label: "<span>\uf142</span>"
-            icons:
-                start: "\uead3"
-                stop: "\uead7"
-                reload: "\uead2"
-            run_ahk: false
-            run_whkd: true
-            show_version: true
-            komorebi_menu:
-                blur: true
-                round_corners: true
-                round_corners_type: "normal"
-                border_color: "System"
-                alignment: "left"
-                direction: "down"
-                offset_top: 6
-                offset_left: 0
-            label_shadow:
-                enabled: true
-                color: "black"
-                radius: 3
-                offset: [1, 1]
-
-    # --- Open-Meteo Weather ---
-    open_meteo:
-        type: "yasb.open_meteo.OpenMeteoWidget"
-        options:
-            label: "<span>{icon}</span> {temp}"
-            label_alt: "{location}: Min {min_temp}, Max {max_temp}, Humidity {humidity}"
-            tooltip: true
-            update_interval: 600
-            hide_decimal: true
-            units: "imperial"
-            callbacks:
-                on_left: "toggle_card"
-                on_right: "toggle_label"
-            icons:
-                sunnyDay:         "\ue30d"  #  (nf-weather-day_sunny)
-                clearNight:       "\ue32b"  #  (nf-weather-night_clear)
-                cloudyDay:        "\ue302"  #  (nf-weather-day_cloudy)
-                cloudyNight:      "\ue32e"  #  (nf-weather-night_cloudy)
-                drizzleDay:       "\ue309"  #  (nf-weather-day_sprinkle)
-                drizzleNight:     "\ue334"  #  (nf-weather-night_sprinkle)
-                rainyDay:         "\ue308"  #  (nf-weather-day_rain)
-                rainyNight:       "\ue333"  #  (nf-weather-night_rain)
-                snowyDay:         "\ue30a"  #  (nf-weather-day_snow)
-                snowyNight:       "\ue335"  #  (nf-weather-night_snow)
-                foggyDay:         "\ue303"  #  (nf-weather-day_fog)
-                foggyNight:       "\ue346"  #  (nf-weather-night_fog)
-                thunderstormDay:  "\ue30e"  #  (nf-weather-day_lightning)
-                thunderstormNight: "\ue332" #  (nf-weather-night_lightning)
-                default:          "\ue30d"  #  (nf-weather-day_sunny)
-            weather_card:
-                blur: true
-                round_corners: true
-                round_corners_type: "normal"
-                border_color: "#45475a"
-                alignment: "right"
-                direction: "down"
-                offset_top: 6
-                offset_left: 0
-                icon_size: 48
+  # --- Open-Meteo Weather ---
+  open_meteo:
+    type: "yasb.open_meteo.OpenMeteoWidget"
+    options:
+      label: "<span>{icon}</span> {temp}"
+      label_alt: "{location}: Min {min_temp}, Max {max_temp}, Humidity {humidity}"
+      tooltip: true
+      update_interval: 600
+      hide_decimal: true
+      units: "imperial"
+      callbacks:
+        on_left: "toggle_card"
+        on_right: "toggle_label"
+      icons:
+        sunnyDay: "\ue30d" #  (nf-weather-day_sunny)
+        clearNight: "\ue32b" #  (nf-weather-night_clear)
+        cloudyDay: "\ue302" #  (nf-weather-day_cloudy)
+        cloudyNight: "\ue32e" #  (nf-weather-night_cloudy)
+        drizzleDay: "\ue309" #  (nf-weather-day_sprinkle)
+        drizzleNight: "\ue334" #  (nf-weather-night_sprinkle)
+        rainyDay: "\ue308" #  (nf-weather-day_rain)
+        rainyNight: "\ue333" #  (nf-weather-night_rain)
+        snowyDay: "\ue30a" #  (nf-weather-day_snow)
+        snowyNight: "\ue335" #  (nf-weather-night_snow)
+        foggyDay: "\ue303" #  (nf-weather-day_fog)
+        foggyNight: "\ue346" #  (nf-weather-night_fog)
+        thunderstormDay: "\ue30e" #  (nf-weather-day_lightning)
+        thunderstormNight: "\ue332" #  (nf-weather-night_lightning)
+        default: "\ue30d" #  (nf-weather-day_sunny)
+      weather_card:
+        blur: true
+        round_corners: true
+        round_corners_type: "normal"
+        border_color: "#45475a"
+        alignment: "right"
+        direction: "down"
+        offset_top: 6
+        offset_left: 0
+        icon_size: 48
