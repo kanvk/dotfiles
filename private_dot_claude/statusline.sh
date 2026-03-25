@@ -2,18 +2,17 @@
 # Claude Code statusline
 #
 # Line 1 (always):
-#   Subscription:
-#     Model (effort) | dir@branch (+N -M) | ctx/max (%) | api/session | +lines/-lines | 5h %@reset | 7d %@reset [| extra $used/$limit]
-#   API key:
-#     Model (effort) | dir@branch (+N -M) | ctx/max (%) | api/session | +lines/-lines | in:Nk out:Nk | $cost
+#   Model (effort) | dir@branch (+N -M) | ctx/max (%) | api/session | +lines/-lines | 5h %@reset | 7d %@reset [| extra $used/$limit]
 #
 # Line 2 (worktree sessions only):
 #   name@wt-branch | dir@orig-branch | ~/orig/cwd
 #
-# Mode auto-detection: if the native rate_limits field is present in the input JSON →
-# subscription mode (show 5h/7d rate limits); otherwise → API key mode (cumulative tokens + cost).
+# Segment 6 fallback chain:
+#   1. Native rate_limits from input JSON (after first API response)
+#   2. OAuth usage API with 60s cache (before first message / session start)
+#   3. Cumulative tokens + cost (API key users / no OAuth token)
 #
-# Dependencies: jq, git, curl (extra credits only, opt-in)
+# Dependencies: jq, git, curl (OAuth fallback only)
 #
 # Performance:
 # - All input JSON fields extracted in a single jq call (not 15+ separate invocations)
@@ -24,11 +23,6 @@
 # - Here-strings (<<<) used instead of echo|pipe where possible
 
 set -f  # disable globbing
-
-# ── Feature flags ────────────────────────────────────────────────────────────
-# Set to "true" to fetch and display extra usage credits from the OAuth API.
-# When disabled (default), no network calls, caching, or token resolution occur.
-STATUSLINE_SHOW_EXTRA_CREDITS=false
 
 # ── ANSI colors (standard 16-color, terminal theme adaptive) ────────────────
 blue='\033[94m'
@@ -87,83 +81,6 @@ fmt_dur() {
     else REPLY="${s}s"
     fi
 }
-
-# ── Extra credits helpers (only defined when STATUSLINE_SHOW_EXTRA_CREDITS=true) ──
-if [ "$STATUSLINE_SHOW_EXTRA_CREDITS" = "true" ]; then
-
-    # OAuth token resolution — tries credential sources in priority order.
-    get_oauth_token() {
-        # 1. Explicit env var override
-        if [ -n "$CLAUDE_CODE_OAUTH_TOKEN" ]; then
-            printf '%s' "$CLAUDE_CODE_OAUTH_TOKEN"; return 0
-        fi
-        local token blob
-        # 2. macOS Keychain
-        if command -v security >/dev/null 2>&1; then
-            blob=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null)
-            token=$(jq -r '.claudeAiOauth.accessToken // empty' <<< "$blob" 2>/dev/null)
-            if [ -n "$token" ] && [ "$token" != "null" ]; then printf '%s' "$token"; return 0; fi
-        fi
-        # 3. Linux credentials file
-        if [ -f "$HOME/.claude/.credentials.json" ]; then
-            token=$(jq -r '.claudeAiOauth.accessToken // empty' "$HOME/.claude/.credentials.json" 2>/dev/null)
-            if [ -n "$token" ] && [ "$token" != "null" ]; then printf '%s' "$token"; return 0; fi
-        fi
-        # 4. GNOME Keyring (2s timeout to avoid hangs if keyring is locked)
-        if command -v secret-tool >/dev/null 2>&1; then
-            blob=$(timeout 2 secret-tool lookup service "Claude Code-credentials" 2>/dev/null)
-            token=$(jq -r '.claudeAiOauth.accessToken // empty' <<< "$blob" 2>/dev/null)
-            if [ -n "$token" ] && [ "$token" != "null" ]; then printf '%s' "$token"; return 0; fi
-        fi
-    }
-
-    # Fetch usage data (60s cache with atomic writes)
-    extra_cache_file="/tmp/claude/statusline-usage-cache.json"
-    extra_cache_max_age=60
-
-    fetch_extra_credits() {
-        local usage_data="" has_data=false
-        mkdir -p /tmp/claude 2>/dev/null
-        # Read cache if fresh enough
-        if [ -f "$extra_cache_file" ]; then
-            local cache_mtime
-            cache_mtime=$(stat -c %Y "$extra_cache_file" 2>/dev/null || stat -f %m "$extra_cache_file" 2>/dev/null)
-            if [ $(( $(date +%s) - cache_mtime )) -lt "$extra_cache_max_age" ]; then
-                usage_data=$(<"$extra_cache_file")
-                has_data=true
-            fi
-        fi
-        # Refresh from API if cache is stale
-        if ! $has_data; then
-            local token response
-            token=$(get_oauth_token)
-            if [ -n "$token" ]; then
-                response=$(curl -s --max-time 5 \
-                    -H "Accept: application/json" \
-                    -H "Content-Type: application/json" \
-                    -H "Authorization: Bearer $token" \
-                    -H "anthropic-beta: oauth-2025-04-20" \
-                    -H "User-Agent: claude-code/2.1.34" \
-                    "https://api.anthropic.com/api/oauth/usage" 2>/dev/null)
-                if [ -n "$response" ] && jq -e . <<< "$response" >/dev/null 2>&1; then
-                    usage_data="$response"
-                    has_data=true
-                    # Atomic write: temp file + rename prevents concurrent partial reads
-                    local tmp_cache
-                    tmp_cache=$(mktemp "${extra_cache_file}.XXXXXX" 2>/dev/null) \
-                        && printf '%s' "$response" > "$tmp_cache" \
-                        && mv "$tmp_cache" "$extra_cache_file"
-                fi
-            fi
-            # Fall back to stale cache if API call failed
-            if ! $has_data && [ -f "$extra_cache_file" ]; then
-                usage_data=$(<"$extra_cache_file")
-                has_data=true
-            fi
-        fi
-        $has_data && printf '%s' "$usage_data"
-    }
-fi
 
 # ── Read stdin ───────────────────────────────────────────────────────────────
 input=$(cat)
@@ -235,7 +152,7 @@ if [ -n "$total_dur_ms" ]; then fmt_dur "$total_dur_ms"; total_dur_fmt=$REPLY; e
 # Styles: "time"→"7:00pm", "datetime"→"Mar 6, 10:00am"
 format_reset_epoch() {
     local epoch="$1" style="$2" result
-    [ -z "$epoch" ] || [ "$epoch" = "null" ] && return
+    { [ -z "$epoch" ] || [ "$epoch" = "null" ]; } && return
     case "$style" in
         time)
             # BSD date (macOS) then GNU date (Linux)
@@ -247,6 +164,124 @@ format_reset_epoch() {
             result=$(date -j -r "$epoch" +"%b %-d, %l:%M%p" 2>/dev/null)
             if [ -n "$result" ]; then echo "$result" | sed 's/  / /g; s/^ //' | tr '[:upper:]' '[:lower:]'
             else date -d "@$epoch" +"%b %-d, %l:%M%P" 2>/dev/null | sed 's/  / /g; s/^ //'
+            fi ;;
+    esac
+}
+
+# ── OAuth token resolution ───────────────────────────────────────────────────
+# Tries credential sources in priority order.
+get_oauth_token() {
+    # 1. Explicit env var override
+    if [ -n "$CLAUDE_CODE_OAUTH_TOKEN" ]; then
+        printf '%s' "$CLAUDE_CODE_OAUTH_TOKEN"; return 0
+    fi
+    local token blob
+    # 2. macOS Keychain
+    if command -v security >/dev/null 2>&1; then
+        blob=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null)
+        token=$(jq -r '.claudeAiOauth.accessToken // empty' <<< "$blob" 2>/dev/null)
+        if [ -n "$token" ] && [ "$token" != "null" ]; then printf '%s' "$token"; return 0; fi
+    fi
+    # 3. Linux credentials file
+    if [ -f "$HOME/.claude/.credentials.json" ]; then
+        token=$(jq -r '.claudeAiOauth.accessToken // empty' "$HOME/.claude/.credentials.json" 2>/dev/null)
+        if [ -n "$token" ] && [ "$token" != "null" ]; then printf '%s' "$token"; return 0; fi
+    fi
+    # 4. GNOME Keyring (2s timeout to avoid hangs if keyring is locked)
+    if command -v secret-tool >/dev/null 2>&1; then
+        blob=$(timeout 2 secret-tool lookup service "Claude Code-credentials" 2>/dev/null)
+        token=$(jq -r '.claudeAiOauth.accessToken // empty' <<< "$blob" 2>/dev/null)
+        if [ -n "$token" ] && [ "$token" != "null" ]; then printf '%s' "$token"; return 0; fi
+    fi
+}
+
+# ── Fetch usage data (60s cache with atomic writes) ──────────────────────────
+cache_file="/tmp/claude/statusline-usage-cache.json"
+cache_max_age=60
+
+fetch_usage_data() {
+    local usage_data="" has_data=false
+    mkdir -p /tmp/claude 2>/dev/null
+    # Read cache if fresh enough
+    if [ -f "$cache_file" ]; then
+        local cache_mtime
+        cache_mtime=$(stat -c %Y "$cache_file" 2>/dev/null || stat -f %m "$cache_file" 2>/dev/null)
+        if [ $(( $(date +%s) - cache_mtime )) -lt "$cache_max_age" ]; then
+            usage_data=$(<"$cache_file")
+            has_data=true
+        fi
+    fi
+    # Refresh from API if cache is stale
+    if ! $has_data; then
+        local token response
+        token=$(get_oauth_token)
+        if [ -n "$token" ]; then
+            response=$(curl -s --max-time 5 \
+                -H "Accept: application/json" \
+                -H "Content-Type: application/json" \
+                -H "Authorization: Bearer $token" \
+                -H "anthropic-beta: oauth-2025-04-20" \
+                -H "User-Agent: claude-code/2.1.34" \
+                "https://api.anthropic.com/api/oauth/usage" 2>/dev/null)
+            if [ -n "$response" ] && jq -e . <<< "$response" >/dev/null 2>&1; then
+                usage_data="$response"
+                has_data=true
+                # Atomic write: temp file + rename prevents concurrent partial reads
+                local tmp_cache
+                tmp_cache=$(mktemp "${cache_file}.XXXXXX" 2>/dev/null) \
+                    && printf '%s' "$response" > "$tmp_cache" \
+                    && mv "$tmp_cache" "$cache_file"
+            fi
+        fi
+        # Fall back to stale cache if API call failed
+        if ! $has_data && [ -f "$cache_file" ]; then
+            usage_data=$(<"$cache_file")
+            has_data=true
+        fi
+    fi
+    $has_data && printf '%s' "$usage_data"
+}
+
+# ── ISO 8601 → epoch (cross-platform) ───────────────────────────────────────
+iso_to_epoch() {
+    local iso_str="$1" epoch
+    # GNU date (Linux) — handles ISO 8601 natively
+    epoch=$(date -d "$iso_str" +%s 2>/dev/null)
+    if [ -n "$epoch" ]; then echo "$epoch"; return 0; fi
+    # BSD date (macOS) — strip fractional seconds and timezone suffix
+    local stripped="${iso_str%%.*}"
+    stripped="${stripped%%Z}"; stripped="${stripped%%+*}"
+    stripped="${stripped%%-[0-9][0-9]:[0-9][0-9]}"
+    if [[ "$iso_str" == *"Z"* ]] || [[ "$iso_str" == *"+00:00"* ]] || [[ "$iso_str" == *"-00:00"* ]]; then
+        epoch=$(env TZ=UTC date -j -f "%Y-%m-%dT%H:%M:%S" "$stripped" +%s 2>/dev/null)
+    else
+        epoch=$(date -j -f "%Y-%m-%dT%H:%M:%S" "$stripped" +%s 2>/dev/null)
+    fi
+    if [ -n "$epoch" ]; then echo "$epoch"; return 0; fi
+    return 1
+}
+
+# Format ISO timestamp → compact local time string
+# Styles: "time"→"7:00pm", "datetime"→"Mar 6, 10:00am", default→"Mar 6"
+format_reset_time() {
+    local iso_str="$1" style="$2" epoch result
+    { [ -z "$iso_str" ] || [ "$iso_str" = "null" ]; } && return
+    epoch=$(iso_to_epoch "$iso_str") || return
+    case "$style" in
+        time)
+            result=$(date -j -r "$epoch" +"%l:%M%p" 2>/dev/null)
+            if [ -n "$result" ]; then echo "$result" | sed 's/^ //' | tr '[:upper:]' '[:lower:]'
+            else date -d "@$epoch" +"%l:%M%P" 2>/dev/null | sed 's/^ //'
+            fi ;;
+        datetime)
+            result=$(date -j -r "$epoch" +"%b %-d, %l:%M%p" 2>/dev/null)
+            if [ -n "$result" ]; then echo "$result" | sed 's/  / /g; s/^ //' | tr '[:upper:]' '[:lower:]'
+            else date -d "@$epoch" +"%b %-d, %l:%M%P" 2>/dev/null | sed 's/  / /g; s/^ //'
+            fi ;;
+        *)
+            result=$(date -j -r "$epoch" +"%b %-d" 2>/dev/null)
+            if [ -n "$result" ]; then echo "$result" | tr '[:upper:]' '[:lower:]'
+            else date -d "@$epoch" +"%b %-d" 2>/dev/null
             fi ;;
     esac
 }
@@ -294,11 +329,13 @@ if [ -n "$lines_added" ]; then la_fmt="+${lines_added}"; else la_fmt="NA"; fi
 if [ -n "$lines_removed" ]; then lr_fmt="-${lines_removed}"; else lr_fmt="NA"; fi
 out+="${sep}${green}${la_fmt}${rst}${gray}/${rst}${red}${lr_fmt}${rst}"
 
-# ── Segment 6: Rate limits (subscription) or tokens+cost (API key) ──────────
-# Native rate_limits data is present only for subscription users after the first API response.
-if [ -n "$rl_five_pct" ] || [ -n "$rl_seven_pct" ]; then
-    # Subscription mode — use native rate_limits fields from input JSON
+# ── Segment 6: Rate limits (3-tier fallback) ─────────────────────────────────
+# 1. Native rate_limits from input JSON (after first API response)
+# 2. OAuth usage API (before first message / session start)
+# 3. Cumulative tokens + cost (API key users / no OAuth token)
 
+if [ -n "$rl_five_pct" ] || [ -n "$rl_seven_pct" ]; then
+    # ── Tier 1: Native rate_limits fields ────────────────────────────────────
     # 5-hour rate limit with reset time
     if [ -n "$rl_five_pct" ]; then
         LC_NUMERIC=C printf -v five_pct_int '%.0f' "$rl_five_pct" 2>/dev/null
@@ -321,42 +358,64 @@ if [ -n "$rl_five_pct" ] || [ -n "$rl_seven_pct" ]; then
         fi
     fi
 
-    # Extra usage credits (opt-in, requires OAuth API fetch)
-    if [ "$STATUSLINE_SHOW_EXTRA_CREDITS" = "true" ]; then
-        extra_json=$(fetch_extra_credits)
-        if [ -n "$extra_json" ]; then
-            eval "$(jq -r '
-                @sh "extra_enabled=\(.extra_usage.is_enabled // false)",
-                @sh "extra_pct=\(.extra_usage.utilization // 0)",
-                @sh "extra_used=\(.extra_usage.used_credits // 0)",
-                @sh "extra_limit=\(.extra_usage.monthly_limit // 0)"
-            ' <<< "$extra_json" 2>/dev/null)"
-            if [ "$extra_enabled" = "true" ]; then
-                LC_NUMERIC=C printf -v extra_pct_int '%.0f' "${extra_pct:-0}" 2>/dev/null
-                # Credits are in cents — divide by 100 for dollars (needs awk for float division)
-                extra_used_fmt=$(LC_NUMERIC=C awk "BEGIN {printf \"%.2f\", ${extra_used:-0}/100}" 2>/dev/null)
-                extra_limit_fmt=$(LC_NUMERIC=C awk "BEGIN {printf \"%.2f\", ${extra_limit:-0}/100}" 2>/dev/null)
-                if [ -n "$extra_used_fmt" ] && [ -n "$extra_limit_fmt" ] \
-                   && [[ "$extra_used_fmt" != *'$'* ]] && [[ "$extra_limit_fmt" != *'$'* ]]; then
-                    usage_color "$extra_pct_int"; extra_color=$REPLY
-                    out+="${sep}${white}extra${rst} ${extra_color}\$${extra_used_fmt}/\$${extra_limit_fmt}${rst}"
-                else
-                    out+="${sep}${white}extra${rst} ${green}enabled${rst}"
-                fi
+else
+    # ── Tier 2: OAuth usage API fallback (session start, before first message) ──
+    usage_data=$(fetch_usage_data)
+
+    if [ -n "$usage_data" ]; then
+        eval "$(jq -r '
+            @sh "five_hour_pct=\(.five_hour.utilization // 0)",
+            @sh "five_hour_reset_iso=\(.five_hour.resets_at // "")",
+            @sh "seven_day_pct=\(.seven_day.utilization // 0)",
+            @sh "seven_day_reset_iso=\(.seven_day.resets_at // "")",
+            @sh "extra_enabled=\(.extra_usage.is_enabled // false)",
+            @sh "extra_pct=\(.extra_usage.utilization // 0)",
+            @sh "extra_used=\(.extra_usage.used_credits // 0)",
+            @sh "extra_limit=\(.extra_usage.monthly_limit // 0)"
+        ' <<< "$usage_data" 2>/dev/null)"
+
+        LC_NUMERIC=C printf -v five_hour_pct '%.0f' "${five_hour_pct:-0}" 2>/dev/null
+        LC_NUMERIC=C printf -v seven_day_pct '%.0f' "${seven_day_pct:-0}" 2>/dev/null
+
+        # 5-hour rate limit with reset time
+        usage_color "$five_hour_pct"; five_hour_color=$REPLY
+        out+="${sep}${white}5h${rst} ${five_hour_color}${five_hour_pct}%${rst}"
+        five_hour_reset=$(format_reset_time "$five_hour_reset_iso" "time")
+        [ -n "$five_hour_reset" ] && out+=" ${gray}@${five_hour_reset}${rst}"
+
+        # 7-day rate limit with reset datetime
+        usage_color "$seven_day_pct"; seven_day_color=$REPLY
+        out+="${sep}${white}7d${rst} ${seven_day_color}${seven_day_pct}%${rst}"
+        seven_day_reset=$(format_reset_time "$seven_day_reset_iso" "datetime")
+        [ -n "$seven_day_reset" ] && out+=" ${gray}@${seven_day_reset}${rst}"
+
+        # Extra usage credits (only shown when enabled on the account)
+        if [ "$extra_enabled" = "true" ]; then
+            LC_NUMERIC=C printf -v extra_pct_int '%.0f' "${extra_pct:-0}" 2>/dev/null
+            # Credits are in cents — divide by 100 for dollars (needs awk for float division)
+            extra_used_fmt=$(LC_NUMERIC=C awk "BEGIN {printf \"%.2f\", ${extra_used:-0}/100}" 2>/dev/null)
+            extra_limit_fmt=$(LC_NUMERIC=C awk "BEGIN {printf \"%.2f\", ${extra_limit:-0}/100}" 2>/dev/null)
+            if [ -n "$extra_used_fmt" ] && [ -n "$extra_limit_fmt" ] \
+               && [[ "$extra_used_fmt" != *'$'* ]] && [[ "$extra_limit_fmt" != *'$'* ]]; then
+                usage_color "$extra_pct_int"; extra_color=$REPLY
+                out+="${sep}${white}extra${rst} ${extra_color}\$${extra_used_fmt}/\$${extra_limit_fmt}${rst}"
+            else
+                out+="${sep}${white}extra${rst} ${green}enabled${rst}"
             fi
         fi
-    fi
-else
-    # API key mode — cumulative session tokens and cost
-    if [ -n "$total_in" ]; then format_tokens "$total_in"; in_fmt=$REPLY; else in_fmt="NA"; fi
-    if [ -n "$total_out" ]; then format_tokens "$total_out"; out_fmt=$REPLY; else out_fmt="NA"; fi
-    out+="${sep}${gray}in:${rst}${orange}${in_fmt}${rst}"
-    out+=" ${gray}out:${rst}${orange}${out_fmt}${rst}"
-    if [ -n "$total_cost" ]; then
-        LC_NUMERIC=C printf -v cost_fmt '%.2f' "$total_cost" 2>/dev/null
-        out+="${sep}${yellow}\$${cost_fmt}${rst}"
+
     else
-        out+="${sep}${gray}NA${rst}"
+        # ── Tier 3: API key fallback — cumulative session tokens and cost ────
+        if [ -n "$total_in" ]; then format_tokens "$total_in"; in_fmt=$REPLY; else in_fmt="NA"; fi
+        if [ -n "$total_out" ]; then format_tokens "$total_out"; out_fmt=$REPLY; else out_fmt="NA"; fi
+        out+="${sep}${gray}in: ${rst}${orange}${in_fmt}${rst}"
+        out+=" ${gray}out: ${rst}${orange}${out_fmt}${rst}"
+        if [ -n "$total_cost" ]; then
+            LC_NUMERIC=C printf -v cost_fmt '%.2f' "$total_cost" 2>/dev/null
+            out+="${sep}${yellow}\$${cost_fmt}${rst}"
+        else
+            out+="${sep}${gray}NA${rst}"
+        fi
     fi
 fi
 
