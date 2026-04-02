@@ -1,4 +1,4 @@
-export PATH=/home/kanvk/.local/bin:/home/kanvk/.cargo/bin:/home/kanvk/go/bin:$PATH
+export PATH=/home/kanvk/.local/bin:/home/kanvk/.cargo/bin:/home/kanvk/go/bin:/home/kanvk/.bun/bin:$PATH
 export VISUAL='nvim'
 export EDITOR='nvim'
 export SUDO_EDITOR='/home/linuxbrew/.linuxbrew/bin/nvim'
@@ -10,15 +10,15 @@ export FZF_DEFAULT_OPTS="--bind=tab:down,shift-tab:up"
 VIVID_THEME=snazzy
 VIVID_CACHE="$HOME/.cache/vivid"
 VIVID_VERSION="$(vivid --version)"
-if [[ ! -f "$VIVID_CACHE/24bit" || "$VIVID_VERSION" != "$(< "$VIVID_CACHE/version")" || "$VIVID_THEME" != "$(< "$VIVID_CACHE/theme")" ]]; then
-    mkdir -p "$VIVID_CACHE"
-    vivid generate $VIVID_THEME > "$VIVID_CACHE/24bit"
-    vivid -m 8-bit generate $VIVID_THEME > "$VIVID_CACHE/8bit"
-    echo "$VIVID_VERSION" > "$VIVID_CACHE/version"
-    echo "$VIVID_THEME" > "$VIVID_CACHE/theme"
+if [[ ! -f "$VIVID_CACHE/24bit" || "$VIVID_VERSION" != "$(<"$VIVID_CACHE/version")" || "$VIVID_THEME" != "$(<"$VIVID_CACHE/theme")" ]]; then
+  mkdir -p "$VIVID_CACHE"
+  vivid generate $VIVID_THEME >"$VIVID_CACHE/24bit"
+  vivid -m 8-bit generate $VIVID_THEME >"$VIVID_CACHE/8bit"
+  echo "$VIVID_VERSION" >"$VIVID_CACHE/version"
+  echo "$VIVID_THEME" >"$VIVID_CACHE/theme"
 fi
-export LS_COLORS="$(< "$VIVID_CACHE/24bit")"
-export LS_COLORS_8BIT="$(< "$VIVID_CACHE/8bit")"
+export LS_COLORS="$(<"$VIVID_CACHE/24bit")"
+export LS_COLORS_8BIT="$(<"$VIVID_CACHE/8bit")"
 export LD_LIBRARY_PATH="/usr/lib/wsl/lib/:$LD_LIBRARY_PATH"
 export NUMBA_CUDA_DRIVER="/usr/lib/wsl/lib/libcuda.so.1"
 
