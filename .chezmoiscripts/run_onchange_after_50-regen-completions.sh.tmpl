@@ -21,15 +21,60 @@ _regen() {
   fi
 }
 
-_regen poetry  _poetry   "poetry completions zsh"
-_regen rustup  _rustup   "rustup completions zsh"
-_regen atuin   _atuin    "atuin gen-completions --shell zsh"
-_regen mise    _mise     "mise completion zsh"
-_regen uv      _uv       "uv generate-shell-completion zsh"
-_regen sesh    _sesh     "sesh completion zsh"
-_regen chezmoi _chezmoi  "chezmoi completion zsh"
-_regen just    _just     "just --completions zsh"
-_regen gh      _gh       "gh completion -s zsh"
+# Tools that expose a "generate me a zsh completion script" subcommand.
+# Each one is gated on `command -v <tool>` so missing tools are silent no-ops.
+# To add another: confirm `<cmd> > /tmp/x` produces a non-empty file, then list it here.
+_regen poetry   _poetry   "poetry completions zsh"
+_regen rustup   _rustup   "rustup completions zsh"
+_regen atuin    _atuin    "atuin gen-completions --shell zsh"
+_regen mise     _mise     "mise completion zsh"
+_regen uv       _uv       "uv generate-shell-completion zsh"
+_regen sesh     _sesh     "sesh completion zsh"
+_regen chezmoi  _chezmoi  "chezmoi completion zsh"
+_regen just     _just     "just --completions zsh"
+_regen gh       _gh       "gh completion -s zsh"
+_regen bat      _bat      "bat --completion zsh"
+_regen fd       _fd       "fd --gen-completions zsh"
+_regen rg       _rg       "rg --generate complete-zsh"
+_regen sheldon  _sheldon  "sheldon completions --shell zsh"
+_regen starship _starship "starship completions zsh"
+_regen zellij   _zellij   "zellij setup --generate-completion zsh"
+_regen caddy    _caddy    "caddy completion zsh"
+_regen bun      _bun      "bun completions zsh"
+_regen typst    _typst    "typst completions zsh"
+
+# --- npm-installed CLIs ---
+_regen codex    _codex    "codex completion zsh"
+
+# --- nala via argcomplete (apt-installed, Python with argcomplete) ---
+if command -v nala >/dev/null 2>&1 && command -v register-python-argcomplete >/dev/null 2>&1; then
+  register-python-argcomplete nala > "$HOME/.zfunc/_nala" 2>/dev/null || true
+fi
+
+# --- Click-based CLIs (pipx-installed) ---
+# Click's standard "_<TOOL>_COMPLETE=zsh_source <tool>" dance produces a
+# loadable zsh completion script. Tool name → env-var name conversion replaces
+# '-' with '_' and uppercases.
+_regen_click() {
+  local tool="$1" outfile="$2"
+  if command -v "$tool" >/dev/null 2>&1; then
+    local upper
+    upper="$(echo "$tool" | tr 'a-z-' 'A-Z_')"
+    env "_${upper}_COMPLETE=zsh_source" "$tool" > "$HOME/.zfunc/$outfile" 2>/dev/null || true
+  fi
+}
+_regen_click ggshield        _ggshield
+_regen_click pgcli           _pgcli
+_regen_click hatch           _hatch
+_regen_click bump-my-version _bump-my-version
+_regen_click mkdocs          _mkdocs
+_regen_click dvc             _dvc
+_regen_click wandb           _wandb
+_regen_click mlflow          _mlflow
+_regen_click apprise         _apprise
+_regen_click pip-audit       _pip-audit
+_regen_click dynaconf        _dynaconf
+_regen_click vllm            _vllm
 
 # forgit ships its own _git-forgit; sheldon clones it, but doesn't add the
 # completions dir to fpath. Copy it into ~/.zfunc so it's reachable.
