@@ -198,3 +198,7 @@ alias ts='tv sesh'
 alias pyinstall='TCLTK_PATH=$(brew --prefix tcl-tk) PYTHON_CONFIGURE_OPTS="--with-tcltk-includes=${TCLTK_PATH}/include --with-tcltk-libs=${TCLTK_PATH}/lib" pyenv install'
 alias rcp='rsync -avzPh'
 alias gsww='git switch'
+
+# chezmoi
+alias chez='chezmoi'
+alias cvim='chezmoi edit --apply'
