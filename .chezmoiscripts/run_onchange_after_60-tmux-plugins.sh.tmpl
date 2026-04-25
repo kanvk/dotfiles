@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+#
+# Installs tmux plugins via TPM headlessly so the user doesn't have to launch
+# tmux and press `prefix + I`. Re-fires whenever .tmux.conf changes (since
+# that's where plugins are declared).
+#
+# tmux-conf-hash: {{ include "dot_tmux.conf" | sha256sum }}
+
+set -euo pipefail
+
+if ! command -v tmux >/dev/null 2>&1; then
+  echo "tmux not installed yet — skipping TPM plugin install"
+  exit 0
+fi
+
+INSTALL="$HOME/.tmux/plugins/tpm/bin/install_plugins"
+if [ ! -x "$INSTALL" ]; then
+  echo "TPM not yet cloned (.chezmoiexternal pulls it on apply) — skipping for now"
+  exit 0
+fi
+
+# install_plugins reads the plugin list via a running tmux server — spawn a
+# transient one on a private socket, run the install, kill the server.
+TPM_SOCK_DIR="$(mktemp -d)"
+trap 'tmux -S "$TPM_SOCK_DIR/sock" kill-server >/dev/null 2>&1 || true; rm -rf "$TPM_SOCK_DIR"' EXIT
+
+tmux -S "$TPM_SOCK_DIR/sock" new-session -d -s _tpm_install 2>/dev/null
+
+echo "==> Installing tmux plugins via TPM"
+TMUX_PLUGIN_MANAGER_PATH="$HOME/.tmux/plugins/" "$INSTALL" 2>&1 | tail -10
