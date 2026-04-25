@@ -198,5 +198,4 @@ encrypted_*                   # age-encrypted source files; targets land at $HOM
 - **Kali on WSL2 and Ubuntu are the supported targets.** The `apt` branch gates on `is_debian_like` (also catches Debian itself). Homebrew is the source of truth for anything version-sensitive — apt only handles dev-essentials, build deps for pyenv, and a handful of system tools.
 - **Research/HPC tools (Spack, Miniforge/conda/mamba, NVIDIA HPC SDK, pyenv)** are soft-detected: the config stays in-tree but the shell startup ignores them unless the tool is actually installed. Just `brew install pyenv` (or install miniforge into `~/miniforge3`, or Spack into `~/.spack`) and open a new shell — no config changes needed.
 - **Don't commit to the vendored sheldon cache** at `~/.local/share/sheldon/repos/`. Sheldon manages it; `.chezmoiignore` has a defensive rule.
-- **tmux plugin install on first apply** — TPM is cloned but the plugins aren't installed automatically. Open tmux and hit `prefix + I` once.
 - **Auto-generated shell completions** (`~/.zfunc/_*`) come from `run_onchange_after_50-regen-completions.sh`. After a major `brew upgrade`, run `chezmoi apply --force` to refresh.
