@@ -96,7 +96,6 @@ packages:
     # git / VCS
     - difftastic
     - gh
-    - gh-dash
     - git-cliff
     - git-delta
     - git-extras
@@ -105,10 +104,12 @@ packages:
     - lazygit
 
     # language toolchains needed BEFORE the per-language install steps
-    # below (rustup → cargo, go → go install, node → npm -g, bun → bun add).
+    # below (rustup → cargo, go → go install, node → npm -g).
     # Install scripts soft-detect the binaries; without these, those steps
     # silently skip on fresh machines.
-    - bun
+    # bun is intentionally NOT here — it's not in homebrew/core on Linux
+    # (would need oven-sh/bun tap), and packages.bun is empty so nothing
+    # depends on it. Install via `npm i -g bun` or the official curl-pipe.
     - go
     - node         # provides npm; fnm-managed versions take over on PATH later
     - rustup       # bootstrap step in 00-install-packages handles `rustup-init -y`
