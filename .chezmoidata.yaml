@@ -104,6 +104,15 @@ packages:
     - jj
     - lazygit
 
+    # language toolchains needed BEFORE the per-language install steps
+    # below (rustup → cargo, go → go install, node → npm -g, bun → bun add).
+    # Install scripts soft-detect the binaries; without these, those steps
+    # silently skip on fresh machines.
+    - bun
+    - go
+    - node         # provides npm; fnm-managed versions take over on PATH later
+    - rustup       # bootstrap step in 00-install-packages handles `rustup-init -y`
+
     # version / language managers
     - asdf
     - fnm
