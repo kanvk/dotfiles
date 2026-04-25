@@ -12,6 +12,18 @@
 {{- $githubUser := promptStringOnce . "github_user" "GitHub username" -}}
 {{- $gpgSigningKey := promptStringOnce . "gpg_signing_key" "GPG signing key fingerprint (leave blank to skip commit signing)" -}}
 
+{{/*
+   Optional age encryption using an existing SSH key. age supports SSH keys
+   (ed25519/rsa) as identities directly — see https://github.com/FiloSottile/age#ssh-keys.
+   Leave both blank to disable encryption. Recommended on machines that hold
+   personal SSH keys; skip on disposable / shared boxes.
+*/}}
+{{- $sshAgeIdentity := promptStringOnce . "ssh_age_identity"  "Path to SSH key for chezmoi-age encryption (blank = disable)" -}}
+{{- $sshAgeRecipient := "" -}}
+{{- if $sshAgeIdentity -}}
+{{- $sshAgeRecipient = promptStringOnce . "ssh_age_recipient" (printf "Public-key string for %s.pub (paste contents)" $sshAgeIdentity) -}}
+{{- end -}}
+
 {{/* Derived facts - computed, not prompted */}}
 {{- $kernelOsRelease := "" -}}
 {{- if hasKey .chezmoi.kernel "osrelease" -}}
@@ -31,10 +43,20 @@
     (eq $osId "kali")
     (contains "debian" $osIdLike) -}}
 
+{{- if and $sshAgeIdentity $sshAgeRecipient }}
+encryption = "age"
+
+[age]
+    identity  = {{ $sshAgeIdentity | quote }}
+    recipient = {{ $sshAgeRecipient | quote }}
+{{- end }}
+
 [data]
     name = {{ $name | quote }}
     email = {{ $email | quote }}
     github_user = {{ $githubUser | quote }}
     gpg_signing_key = {{ $gpgSigningKey | quote }}
+    ssh_age_identity = {{ $sshAgeIdentity | quote }}
+    ssh_age_recipient = {{ $sshAgeRecipient | quote }}
     is_wsl = {{ $isWsl }}
     is_debian_like = {{ $isDebianLike }}
