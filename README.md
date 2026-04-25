@@ -18,10 +18,15 @@ On first run, chezmoi prompts for:
 | Email | `~/.gitconfig` user.email |
 | GitHub username | `~/.gitconfig` insteadOf rules (currently NCSU-only) |
 | GPG signing key fingerprint | `~/.gitconfig` user.signingKey; leave blank to disable commit signing |
+| SSH key path for age encryption | `~/.config/chezmoi/chezmoi.toml` `[age]` block — leave blank to disable encryption |
+| SSH public key string (.pub contents) | recipient for age encryption — only prompted when identity is set |
 
 Answers are saved to `~/.config/chezmoi/chezmoi.toml` and reused on subsequent applies. To re-prompt, delete that file and run `chezmoi init` again.
 
-Prerequisites on a bare system: `curl`, `git`, `sudo` (for the apt install pass on Debian-like distros). Everything else is installed by the apply pipeline.
+**Requirements:**
+- chezmoi `>= 2.50` (uses `.chezmoiexternal`, `lookPath`, `promptStringOnce`, `[age].identity` with SSH keys). The `get.chezmoi.io` install bootstrap pulls the latest stable.
+- On a bare system: `curl`, `git`, `sudo` (only for the apt install pass on Debian-likes — install script bootstraps `nala` and `build-essential` from there).
+- Everything else (Homebrew, brew packages, pipx packages, etc.) is installed by the apply pipeline.
 
 ## What chezmoi does on first apply
 
@@ -41,7 +46,7 @@ The apt-pass uses `nala` once it's installed (better progress UI + parallel down
 
 ## After-apply checklist
 
-Things `chezmoi apply` cannot do automatically — do these once on a new machine:
+Things `chezmoi apply` cannot do automatically — do these once on a new machine. The `run_once_after_99-summary.sh` script also prints this list to your terminal on the first apply so you don't need to re-read this file.
 
 1. **Drop in machine-local secrets**, if needed:
    ```sh
@@ -53,9 +58,25 @@ Things `chezmoi apply` cannot do automatically — do these once on a new machin
    ```
    This file is sourced by OMZ at shell start. It lives **outside** the chezmoi source tree by design — the source is public.
 
-2. **Authenticate the GitHub CLI**: `gh auth login`. The gitconfig credential helper (`!gh auth git-credential`) routes git pushes through gh's token store.
+2. **Personal SSH hosts** — the tracked `~/.ssh/config` only has universal entries (Host *, github.com, github.com-ghe) and an `Include ~/.ssh/config.local` directive. Per-machine hosts (lab boxes, home network, internal `*.priv` hosts) go in `~/.ssh/config.local` so they don't leak into the public repo.
 
-3. **Install tmux plugins**: open a tmux session and press `prefix + I` (default prefix `Ctrl+a`). TPM is already cloned by the time you get here.
+   **If you're migrating from an existing setup with personal hosts in `~/.ssh/config` already, do this BEFORE you `chezmoi apply` — apply will overwrite `~/.ssh/config`:**
+   ```sh
+   # Extract everything except the universal Hosts into config.local
+   awk '
+     BEGIN { keep=0; buf="" }
+     /^Host / {
+       if (keep && buf) print buf; buf=""
+       keep = !($0 ~ /^Host \*$/ || $0 ~ /^Host github\.com$/ || $0 ~ /^Host github\.com-ghe$/)
+     }
+     { if (keep) buf = buf $0 ORS }
+     END { if (keep && buf) print buf }
+   ' ~/.ssh/config > ~/.ssh/config.local
+   chmod 600 ~/.ssh/config.local
+   ```
+   See `~/.ssh/config.local.example` (chezmoi-applied) for a starter template.
+
+3. **Authenticate the GitHub CLI**: `gh auth login`. The gitconfig credential helper (`!gh auth git-credential`) routes git pushes through gh's token store.
 
 4. **Set up apprise notifications** (optional), if you use them: drop URLs into `~/.config/apprise` (one per line; tags via `tag=url://...`). This file is **not** chezmoi-managed because the URLs are bearer secrets.
 
@@ -64,6 +85,16 @@ Things `chezmoi apply` cannot do automatically — do these once on a new machin
 6. **(Windows host only) Apply Windows-side configs**: chezmoi extracts `dot_config/windows/**` to `%USERPROFILE%\.config\windows\` but does not move things into their canonical Windows locations. See `dot_config/windows/terminal/README.md` for the Windows Terminal copy/symlink procedure; do similar for komorebi (`%USERPROFILE%\.config\komorebi`), yasb (`%USERPROFILE%\.config\yasb`), and whkdrc.
 
 7. **(Optional research/HPC tools)** — Spack, Miniforge/conda/mamba, and the NVIDIA HPC SDK are soft-detected by the shell init. To activate them, just install them at their canonical locations (`~/.spack`, `~/miniforge3`, `/opt/nvidia/hpc_sdk`) and open a new shell. No config changes needed.
+
+8. **(Optional) Encrypt a file with age** — if you provided an SSH identity at init, chezmoi is wired for age encryption:
+   ```sh
+   chezmoi add --encrypt ~/.netrc       # or any file you want versioned + encrypted
+   chezmoi edit ~/.netrc                # round-trips through age + $EDITOR
+   ssh-add ~/.ssh/personal              # so apply doesn't ask for the SSH passphrase each time
+   ```
+   No secrets are committed by default; encryption is per-file and opt-in.
+
+Tmux plugins are installed automatically by `run_onchange_after_60-tmux-plugins.sh` — no need to press `prefix + I` unless you add new plugins.
 
 ## Editing packages
 
