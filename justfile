@@ -13,15 +13,17 @@ default:
 # toolchain + plugin tree. Run `lint` during dev for fast feedback; run
 # `test-smoke` before commit; run `test-full` before merge.
 
-# Smoke test on both distros (alias for `test-smoke`).
+# Smoke test (alias for `test-smoke`).
 test: test-smoke
 
-# Apply dotfiles in fresh Kali / Ubuntu containers; verify modes, gates, idempotence.
-test-smoke distro="all":
+# Apply dotfiles in a fresh container; verify modes, gates, idempotence. Default: ubuntu.
+test-smoke distro="ubuntu":
     ./tests/run.sh {{distro}} smoke
 
 # Full bootstrap (apt + brew bundle + pipx + cargo + ...). Strict superset of test-smoke. Slow.
-test-full distro="all":
+# Default: ubuntu, since CLAUDE.md's policy is that ubuntu-only is the routine green-light
+# bar (kali shares the same install pipeline). Pass `all` for both distros when distro-specific.
+test-full distro="ubuntu":
     ./tests/run.sh {{distro}} full
 
 # Render every .tmpl, sweep for hardcoded refs, validate YAML, shellcheck. No Docker.
