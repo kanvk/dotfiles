@@ -118,9 +118,11 @@ export ZSH_CUSTOM="$HOME/.config/zsh/omz-custom"
 plugins=(git web-search docker docker-compose dirhistory
     fzf colored-man-pages copybuffer
     ssh-agent conda)
-# OMZ is pulled in by sheldon; skip quietly on first apply before sheldon has run.
-[ -f "$ZSH/oh-my-zsh.sh" ] && source "$ZSH/oh-my-zsh.sh"
 
+# sheldon's eval sources oh-my-zsh.sh (via the [plugins.oh-my-zsh] entry) and
+# then queues the deferred plugins. No manual source is needed here — doing it
+# would call compinit twice. On a fresh machine before sheldon is installed
+# this no-ops, and OMZ comes online on the first shell after sheldon's bootstrap.
 command -v sheldon >/dev/null 2>&1 && eval "$(sheldon source)"
 
 # =============================================================================
