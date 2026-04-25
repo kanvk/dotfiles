@@ -71,3 +71,14 @@ private_dot_claude/        # Claude Code user config (SAFE files only — no cre
   - Switched install script to use `nala` after bootstrapping it via apt-get.
   - Added cleaned Windows Terminal `settings.json` at `dot_config/windows/terminal/` with stripped machine-specific profiles (VS Dev prompts, archlinux/podman/julia/Git Bash); kept kali-linux, Ubuntu, PowerShell Core, Command Prompt, Windows PowerShell, Azure Cloud Shell. Sibling README documents Windows-side install path.
   - README now has an "After-apply checklist" enumerating user-creatable files (hidden.zsh, apprise URLs, gh auth login, tmux `prefix+I`, Nerd Font, Windows-side copy steps).
+
+- **2026-04-25** — Reliability + privacy hot-fixes for `just test-full`; both Ubuntu and Kali full runs now PASS end-to-end including idempotence.
+  - Bounded `nvim --headless +Lazy! restore +qa` with a 10-min `timeout` to defuse the lazy.nvim `+qa` deadlock that hung a 25-min run indefinitely; mirrored the same fix on the user-facing `vimup` alias.
+  - Disabled analytics for the install pipeline (`HOMEBREW_NO_ANALYTICS`, `HOMEBREW_NO_ENV_HINTS`, `DO_NOT_TRACK` set inside the install script — `export.zsh` doesn't load until the user's interactive shell, too late for chezmoi-apply-time installs). Added `DO_NOT_TRACK`, `CHECKPOINT_DISABLE`, `LOCALSTACK_DISABLE_EVENTS` to `export.zsh` for steady-state coverage.
+  - Dropped the `ts='tailscale.exe'` WSL alias (was shadowing the more-frequently-used `ts='tv sesh'` in `alias.zsh`).
+  - Scrubbed real host/user/IP from `private_dot_ssh/private_config.local.example` (had carried a real LAN IP, public NCSU host, and an SSH key filename).
+  - **Brew-PATH bootstrap for after-scripts.** Each `.chezmoiscripts/run_onchange_after_*` was running in a fresh subshell without linuxbrew on PATH, so `command -v sheldon`/`just`/`broot` silently no-op'd and the full-mode validation reported "sheldon never ran" + "_just/_poetry not regenerated". Factored a shared snippet to `.chezmoitemplates/brew-path-bootstrap`, included via `{{ template … }}` at the top of every after-script. Same snippet also adds `~/.cargo/bin`, `~/.local/bin`, `~/go/bin` to PATH.
+  - Added `just` to the brew list (it was missing despite being the test runner) and `libpcsclite-dev` to apt (build-time dep for `age-plugin-yubikey`).
+  - Made the cargo install loop tolerant of single-crate failures (per-package `cargo install || echo warning…`) so a missing system-lib in one crate no longer aborts the whole install pipeline.
+  - Bootstrap idempotence test now (a) pre-syncs Lazy's drift on `lazy-lock.json` with a `--force` apply, then (b) does the real no-prompt re-apply check; previously the prompt for "destination changed since I last wrote it" hung in non-TTY container runs. Also surfaces underlying chezmoi errors instead of silently aborting via `set -e`.
+  - Added `age-plugin-yubikey` to the cargo list (user runs YubiKey-backed age identities).
