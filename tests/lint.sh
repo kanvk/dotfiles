@@ -35,7 +35,6 @@ hits=$(rg -n 'kanvk|/home/kanvk|kkhare|linuxbrew|pyenv/shims' --no-heading \
 # Filter out the known-intentional hits
 unexpected=$(echo "${hits:-}" | grep -vE \
     -e '^$' \
-    -e 'dot_gitconfig\.tmpl:.*internal-handle' \
     -e 'dot_zprofile:.*linuxbrew' \
     -e 'dot_config/zsh/omz-custom/export\.zsh:.*linuxbrew' \
     -e 'dot_config/sheldon/plugins\.toml:.*kanvk/zsh-ssh' \
