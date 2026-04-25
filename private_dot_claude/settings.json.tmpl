@@ -1,4 +1,7 @@
 {
+  "permissions": {
+    "defaultMode": "auto"
+  },
   "statusLine": {
     "type": "command",
     "command": "bash {{ .chezmoi.homeDir }}/.claude/statusline.sh"
@@ -10,5 +13,9 @@
     "code-review@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high"
+  "effortLevel": "xhigh",
+  "tui": "fullscreen",
+  "skipAutoPermissionPrompt": true,
+  "editorMode": "vim",
+  "remoteControlAtStartup": false
 }
