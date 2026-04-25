@@ -1,0 +1,65 @@
+[url "git@github.com-ghe:internal-org/"]
+	insteadOf = git@github.com:internal-org/
+[url "git@github.com-ghe:internal-handle/"]
+	insteadOf = git@github.com:internal-handle/
+[credential "https://github.com"]
+	helper =
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !/usr/bin/gh auth git-credential
+[user]
+	email = kkhare@ncsu.edu
+	name = Kanv Khare
+	signingKey = 1A85FACE83565207960532B4A95B4F4C51AAE297
+[core]
+	editor = nvim
+	pager = delta
+[commit]
+	gpgsign = true
+[gpg]
+	format = openpgp
+[tag]
+	forceSignAnnotated = true
+	gpgsign = true
+[credential "https://huggingface.co"]
+	provider = generic
+[init]
+	defaultBranch = main
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[credential "https://git.overleaf.com"]
+	provider = generic
+[alias]
+	ignore   = update-index --skip-worktree
+	unignore = update-index --no-skip-worktree
+	ignored = !git ls-files -v | grep '^S'
+[diff "jupyternotebook"]
+	command = git-nbdiffdriver diff
+[merge "jupyternotebook"]
+	driver = git-nbmergedriver merge %O %A %B %L %P
+	name = jupyter notebook merge driver
+[interactive]
+	difffilter = delta --color-only
+[delta]
+	navigate = true
+	line-numbers = true
+[merge]
+	conflictStyle = zdiff3
+[pull]
+	rebase = false
+	ff = only
+[push]
+	followTags = true
+	autoSetupRemote = true
+[difftool]
+	prompt = false
+[mergetool]
+	prompt = false
+[difftool "nbdime"]
+	cmd = git-nbdifftool diff \"$LOCAL\" \"$REMOTE\" \"$BASE\"
+[mergetool "nbdime"]
+	cmd = git-nbmergetool merge \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
