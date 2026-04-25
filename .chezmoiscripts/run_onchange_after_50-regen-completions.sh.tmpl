@@ -10,7 +10,7 @@
 # install-trigger: {{ include ".chezmoiscripts/run_onchange_before_00-install-packages.sh.tmpl" | sha256sum }}
 
 set -euo pipefail
-
+{{ template "brew-path-bootstrap" . }}
 mkdir -p "$HOME/.zfunc"
 
 _regen() {

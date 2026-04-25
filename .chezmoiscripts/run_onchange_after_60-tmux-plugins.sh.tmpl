@@ -7,7 +7,9 @@
 # tmux-conf-hash: {{ include "dot_tmux.conf" | sha256sum }}
 
 set -euo pipefail
-
+{{ template "brew-path-bootstrap" . }}
+# Note: several TPM plugins build via cargo (tmux-thumbs in particular) — the
+# bootstrap above puts ~/.cargo/bin on PATH so those builds resolve `cargo`.
 if ! command -v tmux >/dev/null 2>&1; then
   echo "tmux not installed yet — skipping TPM plugin install"
   exit 0

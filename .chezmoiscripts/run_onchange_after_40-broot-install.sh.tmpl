@@ -7,7 +7,7 @@
 # broot-present: {{ if lookPath "broot" }}yes{{ else }}no{{ end }}
 
 set -euo pipefail
-
+{{ template "brew-path-bootstrap" . }}
 if ! command -v broot >/dev/null 2>&1; then
   echo "broot not installed yet — skipping launcher install"
   exit 0
