@@ -15,8 +15,8 @@ See `README.md` for the user-facing version of the same story.
 ## Hard invariants
 
 - **Repo is public** (temporarily private during the 2026-04 refactor). Never commit plaintext secrets, OAuth tokens, API keys, signed JWTs, or private SSH keys. Machine-local secrets belong at `~/.config/zsh/omz-custom/hidden.zsh`, which is gitignored and sourced by OMZ at shell start. This file must never move into the chezmoi source tree.
-- **OS scope:** Linux native + WSL2. macOS is not targeted; don't add macOS-specific branches unless they're free (no added complexity). Windows-native configs (`dot_config/windows/**`) are kept in the source tree but excluded from apply on non-Windows machines — the user moves them manually on a Windows box.
-- **Primary dev machine is Kali on WSL2.** `apt` install logic gates on `.chezmoi.osRelease.idLike` (or `.id`) containing `debian` — Kali's `ID=kali` but `ID_LIKE=debian`. Don't assume Ubuntu.
+- **OS scope:** Officially supports Kali (WSL2) and Ubuntu (native or WSL2). macOS is not targeted; don't add macOS-specific branches unless they're free (no added complexity). Windows-native configs (`dot_config/windows/**`, including Windows Terminal `settings.json`) are kept in the source tree but excluded from apply on non-Windows machines — the user moves them manually on a Windows box (see `dot_config/windows/terminal/README.md`).
+- **`is_debian_like` covers all three:** Debian's `ID=debian`, Ubuntu's `ID=ubuntu`, Kali's `ID=kali` + `ID_LIKE=debian`. Branch on this, not on a single distro id.
 - **`hidden.zsh` invariant:** never put secrets inside the chezmoi source tree, even if excluded. The whole idea of this refactor is that the source tree is safe to publish.
 
 ## Conventions
@@ -29,6 +29,8 @@ See `README.md` for the user-facing version of the same story.
   - `{{ ne .chezmoi.os "windows" }}` for excluding `dot_config/windows/**` on apply (in `.chezmoiignore.tmpl`).
 - **Soft-detect optional tools:** for Spack, Miniforge/conda, mamba, NVIDIA HPC SDK, pyenv — wrap in `[[ -d … ]]` or `[[ -x $(command -v …) ]]` checks so the config is inert when the tool isn't installed. The user keeps the config in-tree so it "just works" the moment the tool arrives.
 - **Plugin installs are delegated to their native managers:** sheldon owns `~/.local/share/sheldon/repos/**` (don't vendor it); tpm owns `~/.tmux/plugins/**`; lazy.nvim owns `~/.local/share/nvim/lazy/**`; Mason owns LSP servers. Our `.chezmoiscripts/` just kick these off.
+- **apt is via nala when available.** The install script bootstraps nala via apt-get on first run, then uses nala (parallel downloads, nicer UI) for everything subsequent. Falls back to apt-get if nala is unavailable.
+- **Package lists in `.chezmoidata.yaml` are the source of truth.** When the user installs a new tool via brew/pipx/cargo/npm/go, add it to the list — don't expect the install script to re-snapshot from the system. The list captures the user's intent; the system installs from the list.
 - **Completion files are regenerated, not vendored.** Do not commit `dot_zfunc/_poetry`, `_rustup`, `_atuin`, etc. The `run_onchange_after_50-regen-completions.sh.tmpl` script handles these.
 - **OMZ custom dir lives at `dot_config/zsh/omz-custom/`** (not inside sheldon's cache). The user's `dot_zshrc` sets `ZSH_CUSTOM` to that path. Preserve the `plugins/` and `themes/` subtree structure.
 
@@ -65,3 +67,7 @@ private_dot_claude/        # Claude Code user config (SAFE files only — no cre
   - Templatization sweep: all `/home/kanvk` → `$HOME` (shell) or `{{ .chezmoi.homeDir }}` (non-shell); spack/conda/mamba/NV HPC/pyenv all soft-detected; brew paths soft-detected with macOS fallback; WSL CUDA lib paths gated on `[ -d /usr/lib/wsl/lib ]`.
   - Added `.chezmoiscripts/` for install automation (apt/brew/pipx/npm/cargo/go/bun), sheldon lock, nvim Lazy sync, broot launcher install, completion regen. All triggered by content-hash changes.
   - Rewrote README with bootstrap instructions.
+  - Expanded `.chezmoidata.yaml` from actual `brew leaves` / `pipx list` / `cargo install --list` / `npm ls -g` / `~/go/bin` (~80 brew, ~35 pipx, 7 cargo, 2 npm, 1 go); apt list curated to dev-essentials + pyenv build deps + media tools used by nvim/yazi previews.
+  - Switched install script to use `nala` after bootstrapping it via apt-get.
+  - Added cleaned Windows Terminal `settings.json` at `dot_config/windows/terminal/` with stripped machine-specific profiles (VS Dev prompts, archlinux/podman/julia/Git Bash); kept kali-linux, Ubuntu, PowerShell Core, Command Prompt, Windows PowerShell, Azure Cloud Shell. Sibling README documents Windows-side install path.
+  - README now has an "After-apply checklist" enumerating user-creatable files (hidden.zsh, apprise URLs, gh auth login, tmux `prefix+I`, Nerd Font, Windows-side copy steps).

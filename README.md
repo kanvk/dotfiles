@@ -2,7 +2,7 @@
 
 Kanv's dotfiles, managed with [chezmoi](https://www.chezmoi.io/).
 
-Targets **Linux** (including **WSL2** on Windows). macOS is not supported; Windows-native configs (komorebi, yasb, whkd) are kept in the source tree as a reference but are not applied automatically.
+Officially supports **Kali on WSL2** and **Ubuntu** (native or WSL2). macOS is not targeted. Windows-native configs (komorebi, yasb, whkd, Windows Terminal) live in `dot_config/windows/` as a reference but are not applied to Linux home directories.
 
 ## Bootstrap a new machine
 
@@ -36,6 +36,34 @@ Prerequisites on a bare system: `curl`, `git`, `sudo` (for the apt install pass 
    - `run_onchange_after_50-regen-completions.sh.tmpl` — regenerates `~/.zfunc/_*` from each tool's native completion generator.
 
 Subsequent applies are fast: `run_onchange_*` scripts only re-run when their source content (or an embedded trigger hash) changes.
+
+The apt-pass uses `nala` once it's installed (better progress UI + parallel downloads); the script bootstraps nala via `apt-get` on the first run.
+
+## After-apply checklist
+
+Things `chezmoi apply` cannot do automatically — do these once on a new machine:
+
+1. **Drop in machine-local secrets**, if needed:
+   ```sh
+   cat > ~/.config/zsh/omz-custom/hidden.zsh <<'EOF'
+   # export LOCALSTACK_AUTH_TOKEN=...
+   # export ANTHROPIC_AUTH_TOKEN=...
+   EOF
+   chmod 600 ~/.config/zsh/omz-custom/hidden.zsh
+   ```
+   This file is sourced by OMZ at shell start. It lives **outside** the chezmoi source tree by design — the source is public.
+
+2. **Authenticate the GitHub CLI**: `gh auth login`. The gitconfig credential helper (`!gh auth git-credential`) routes git pushes through gh's token store.
+
+3. **Install tmux plugins**: open a tmux session and press `prefix + I` (default prefix `Ctrl+a`). TPM is already cloned by the time you get here.
+
+4. **Set up apprise notifications** (optional), if you use them: drop URLs into `~/.config/apprise` (one per line; tags via `tag=url://...`). This file is **not** chezmoi-managed because the URLs are bearer secrets.
+
+5. **Install a Nerd Font** if your terminal uses CaskaydiaCove (the default in Windows Terminal and in `dot_p10k.zsh`). On Windows: `winget install Microsoft.CascadiaCode` + manually download CaskaydiaCove from [Nerd Fonts](https://www.nerdfonts.com/font-downloads). On Linux, the font is rendered by the host terminal — install via your platform's font manager.
+
+6. **(Windows host only) Apply Windows-side configs**: chezmoi extracts `dot_config/windows/**` to `%USERPROFILE%\.config\windows\` but does not move things into their canonical Windows locations. See `dot_config/windows/terminal/README.md` for the Windows Terminal copy/symlink procedure; do similar for komorebi (`%USERPROFILE%\.config\komorebi`), yasb (`%USERPROFILE%\.config\yasb`), and whkdrc.
+
+7. **(Optional research/HPC tools)** — Spack, Miniforge/conda/mamba, and the NVIDIA HPC SDK are soft-detected by the shell init. To activate them, just install them at their canonical locations (`~/.spack`, `~/miniforge3`, `/opt/nvidia/hpc_sdk`) and open a new shell. No config changes needed.
 
 ## Editing packages
 
@@ -98,7 +126,7 @@ private_dot_claude/           # Claude Code user config (mode 0600 on apply)
 
 ## Notes
 
-- **Kali-on-WSL2 is the primary dev machine.** The `apt` branch of the install script gates on `is_debian_like` (Debian / Ubuntu / Kali); it's best-effort on non-Kali Debian-likes because Kali package names drift at the toolchain edges (nodejs, golang, python3-*). Homebrew is the source of truth for anything version-sensitive.
+- **Kali on WSL2 and Ubuntu are the supported targets.** The `apt` branch gates on `is_debian_like` (also catches Debian itself). Homebrew is the source of truth for anything version-sensitive — apt only handles dev-essentials, build deps for pyenv, and a handful of system tools.
 - **Research/HPC tools (Spack, Miniforge/conda/mamba, NVIDIA HPC SDK, pyenv)** are soft-detected: the config stays in-tree but the shell startup ignores them unless the tool is actually installed. Just `brew install pyenv` (or install miniforge into `~/miniforge3`, or Spack into `~/.spack`) and open a new shell — no config changes needed.
 - **Don't commit to the vendored sheldon cache** at `~/.local/share/sheldon/repos/`. Sheldon manages it; `.chezmoiignore` has a defensive rule.
 - **tmux plugin install on first apply** — TPM is cloned but the plugins aren't installed automatically. Open tmux and hit `prefix + I` once.
