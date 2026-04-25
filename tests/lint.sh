@@ -38,8 +38,7 @@ unexpected=$(echo "${hits:-}" | grep -vE \
     -e 'dot_zprofile:.*linuxbrew' \
     -e 'dot_config/zsh/omz-custom/export\.zsh:.*linuxbrew' \
     -e 'dot_config/sheldon/plugins\.toml:.*kanvk/zsh-ssh' \
-    -e 'private_dot_ssh/private_config\.local\.example:' \
-    -e 'private_dot_ssh/private_config:.*#.*internal-handle')
+    -e 'private_dot_ssh/private_config\.local\.example:')
 if [ -n "$unexpected" ]; then
     echo "  FAIL: unexpected hardcoded references:"
     echo "$unexpected" | head -15 | sed 's/^/    /'

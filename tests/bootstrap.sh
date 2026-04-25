@@ -45,6 +45,7 @@ cat > "$HOME/.config/chezmoi/chezmoi.toml" <<'EOF'
     gpg_signing_key   = ""
     ssh_age_identity  = ""
     ssh_age_recipient = ""
+    encrypt_locals    = false
     is_wsl            = false
     is_debian_like    = true
 EOF
@@ -133,8 +134,12 @@ contains "$HOME/.gnupg/gpg-agent.conf" '^pinentry-program /'
 
 # --- SSH config preserves key entries ---
 contains "$HOME/.ssh/config" '^Host github\.com$'
-contains "$HOME/.ssh/config" '^Host github\.com-ghe$'
 contains "$HOME/.ssh/config" '^Include ~/.ssh/config\.local'
+contains "$HOME/.ssh/config" '^Include ~/.ssh/config\.machine'
+# encrypt_locals=false in the test container, so the encrypted GHE alias is
+# ignored and ~/.ssh/config.local should NOT exist.
+absent "$HOME/.ssh/config.local"
+absent "$HOME/.gitconfig.local"
 
 # --- Claude statusline command is templated to actual home dir, not /home/kanvk ---
 contains "$HOME/.claude/settings.json" "bash $HOME/\.claude/statusline\.sh"
