@@ -15,4 +15,10 @@ echo "==> nvim +Lazy! restore +qa"
 # Lazy.nvim bootstraps itself on first nvim launch from init.lua, so this call
 # both installs and restores to the locked versions. Errors ignored to keep
 # apply flowing even if a single plugin temporarily fails to fetch.
-nvim --headless "+Lazy! restore" +qa 2>/dev/null || true
+#
+# `timeout` guards against a known lazy.nvim race where `+qa` deadlocks with an
+# in-flight async restore task and nvim hangs indefinitely. 10 min is well
+# above a real first-time restore (~1–3 min) but bounded — if it actually does
+# hang, the rest of apply still proceeds (errors are tolerated below).
+timeout --kill-after=30s 10m \
+  nvim --headless "+Lazy! restore" +qa 2>/dev/null || true
