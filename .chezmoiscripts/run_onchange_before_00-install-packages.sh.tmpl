@@ -9,6 +9,15 @@
 
 set -euo pipefail
 
+# --- disable analytics / telemetry for the install run ---
+# These env vars are also set by dot_config/zsh/omz-custom/export.zsh, but that
+# only takes effect inside an interactive zsh — `chezmoi apply` runs this
+# script under bash before the user's shell ever loads. Set them here so the
+# very first install (and every subsequent re-run) is opted out by default.
+export HOMEBREW_NO_ANALYTICS=1
+export HOMEBREW_NO_ENV_HINTS=1
+export DO_NOT_TRACK=1   # community-standard env honored by gh, glab, others
+
 # --- chezmoi version check (advisory) ---
 # Features used: .chezmoiexternal, lookPath, promptStringOnce, age+SSH identity.
 # All present in 2.50+; warn (don't fail) if older.
