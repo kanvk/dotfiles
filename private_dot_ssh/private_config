@@ -1,0 +1,29 @@
+# SSH config — universal entries.
+# Per-machine / network-internal hosts go in ~/.ssh/config.local (NOT tracked
+# by chezmoi); see README "After-apply checklist" for what to put there.
+
+Host *
+  ServerAliveInterval 30
+  ServerAliveCountMax 3
+
+# Pulls user-specific hosts (NCSU-LAS internal, home network, lab boxes, etc.)
+# Create this file manually per machine; it is intentionally outside the
+# chezmoi source so the public repo doesn't leak internal hostnames or IPs.
+Include ~/.ssh/config.local
+
+# GitHub default — used by `git@github.com:…` URLs.
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/las
+    IdentitiesOnly yes
+    AddKeysToAgent yes
+
+# Alias used by the dot_gitconfig.tmpl insteadOf rules to route git@github.com:
+# pushes for internal-org/* and internal-handle/* through a separate identity.
+Host github.com-ghe
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/las-ghe
+    IdentitiesOnly yes
+    AddKeysToAgent yes

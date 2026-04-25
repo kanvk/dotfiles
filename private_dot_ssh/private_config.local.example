@@ -1,0 +1,38 @@
+# Starter for ~/.ssh/config.local — copy this to ~/.ssh/config.local and fill in
+# host entries for your network/lab/home boxes. Not tracked by chezmoi.
+#
+# Do NOT commit this file to a public repo.
+
+# Example: home Raspberry Pi
+# Host rpi
+#     HostName 10.0.0.1
+#     User kanvk
+#     Port 22
+#     IdentityFile ~/.ssh/personal
+#     IdentitiesOnly yes
+#     AddKeysToAgent yes
+
+# Example: NCSU public login servers
+# Host arc
+#     HostName uni.example.edu
+#     User kkhare
+#     IdentityFile ~/.ssh/ncsu
+#     IdentitiesOnly yes
+#     AddKeysToAgent yes
+
+# Example: lab proxy + internal hosts via ProxyJump
+# Host las-proxy
+#     HostName <proxy-ip>
+#     Port <port>
+#     ForwardAgent yes
+#     User <user>
+#     IdentityFile ~/.ssh/las
+#     IdentitiesOnly yes
+#     AddKeysToAgent yes
+#
+# Host *.internal-lab.priv
+#     ProxyJump las-proxy
+#     User <user>
+#     IdentityFile ~/.ssh/las
+#     IdentitiesOnly yes
+#     AddKeysToAgent yes
