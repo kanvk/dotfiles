@@ -203,8 +203,16 @@ echo "==> Testing idempotence (re-apply files should be a no-op)"
 # We're testing that *file* state is idempotent; script-rerun behaviour is
 # tested separately by their respective onchange-hash invariants.
 #
-# Wrap the apply in `if !` so its non-zero exit doesn't trip `set -e` and
-# silently abort the script — we want to surface the underlying error.
+# Full mode runs `nvim --headless +Lazy! restore +qa` which can rewrite
+# `~/.config/nvim/lazy-lock.json` in place — chezmoi then sees a "destination
+# changed since I last wrote it" prompt that hangs in non-TTY runs. Do a
+# preliminary `--force` apply that quietly resets lazy-lock.json (and any
+# similar Lazy-modified state) back to source. THEN run the real idempotence
+# check: a non-force apply that should be a true no-op.
+chezmoi apply --force --source="$SOURCE" --exclude=scripts,externals > /dev/null 2>&1 || true
+
+# `if !` keeps `set -e` from silently aborting on a non-zero apply exit;
+# we want the underlying error visible.
 if ! chezmoi apply --source="$SOURCE" --exclude=scripts,externals -v > /tmp/reapply.log 2>&1; then
     echo "  FAIL: idempotence re-apply errored:"
     tail -40 /tmp/reapply.log | sed 's/^/    /'
