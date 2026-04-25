@@ -10,16 +10,12 @@
 # Source-tree docs + dev tooling: never apply to $HOME
 README.md
 CLAUDE.md
-test/**
+tests/**
+justfile
 
 # Example file shown in docs as a starter for the user-created config.local;
 # we don't want it landing as the actual ~/.ssh/config.local.example file.
 .ssh/config.local.example
-
-# Legacy machine-local secret pattern (superseded by ~/.config/zsh/omz-custom/hidden.zsh
-# which lives outside this repo entirely). Defense in depth — if someone ever drops a
-# file named hidden.zsh anywhere in the source, it won't be applied.
-hidden.zsh
 
 {{- if ne .chezmoi.os "windows" }}
 # Windows-native GUI configs — kept in the source repo as a reference, but the user

@@ -3,8 +3,9 @@
 # Top-level Docker test runner. Builds + runs bootstrap.sh inside Kali / Ubuntu
 # containers against the local working tree (mounted read-only at /dotfiles).
 #
-# Usage:
-#   ./test/run.sh <kali|ubuntu|all> [smoke|full]
+# Usually invoked via the top-level `justfile` (just test, just test-full, etc.)
+# rather than directly. Direct usage:
+#   ./tests/run.sh <kali|ubuntu|all> [smoke|full]
 #
 # smoke (default): chezmoi apply with --exclude=scripts,externals (~30s).
 #                   Verifies templates render and dotfiles + identity templating
@@ -16,7 +17,7 @@
 set -euo pipefail
 
 cd "$(dirname "$0")"
-TEST_DIR="$(pwd)"
+TESTS_DIR="$(pwd)"
 REPO_ROOT="$(cd .. && pwd)"
 
 usage() {
@@ -26,7 +27,7 @@ usage() {
 build() {
     local distro="$1"
     echo "==> Building chezmoi-test:$distro"
-    docker build --quiet -t "chezmoi-test:$distro" -f "$TEST_DIR/Dockerfile.$distro" "$TEST_DIR"
+    docker build --quiet -t "chezmoi-test:$distro" -f "$TESTS_DIR/Dockerfile.$distro" "$TESTS_DIR"
 }
 
 run() {
@@ -38,7 +39,7 @@ run() {
     docker run --rm \
         -v "$REPO_ROOT":/dotfiles:ro \
         "chezmoi-test:$distro" \
-        bash -c "/dotfiles/test/bootstrap.sh '$mode' /dotfiles"
+        bash -c "/dotfiles/tests/bootstrap.sh '$mode' /dotfiles"
 }
 
 DISTRO="${1:-}"
