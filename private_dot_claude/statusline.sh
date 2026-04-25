@@ -2,7 +2,7 @@
 # Claude Code statusline
 #
 # Line 1 (always):
-#   Model (effort) | dir@branch (+N -M) | ctx/max (%) | api/session | +lines/-lines | 5h %@reset | 7d %@reset [| extra $used/$limit]
+#   Model | dir@branch (+N -M) | ctx/max (%) | api/session | +lines/-lines | 5h %@reset | 7d %@reset [| extra $used/$limit]
 #
 # Line 2 (worktree sessions only):
 #   name@wt-branch | dir@orig-branch | ~/orig/cwd
@@ -22,7 +22,7 @@
 # - Git commands use --no-optional-locks to prevent lock contention
 # - Here-strings (<<<) used instead of echo|pipe where possible
 
-set -f  # disable globbing
+set -f # disable globbing
 
 # ── ANSI colors (standard 16-color, terminal theme adaptive) ────────────────
 blue='\033[94m'
@@ -45,9 +45,9 @@ sep=" ${gray}|${rst} "
 format_tokens() {
     local n=$1
     if [ "$n" -ge 1000000 ]; then
-        REPLY="$(( n / 1000000 )).$(( (n % 1000000) / 100000 ))m"
+        REPLY="$((n / 1000000)).$(((n % 1000000) / 100000))m"
     elif [ "$n" -ge 1000 ]; then
-        REPLY="$(( n / 1000 )).$(( (n % 1000) / 100 ))k"
+        REPLY="$((n / 1000)).$(((n % 1000) / 100))k"
     else
         REPLY="$n"
     fi
@@ -56,9 +56,9 @@ format_tokens() {
 format_tokens_round() {
     local n=$1
     if [ "$n" -ge 1000000 ]; then
-        REPLY="$(( n / 1000000 ))m"
+        REPLY="$((n / 1000000))m"
     elif [ "$n" -ge 1000 ]; then
-        REPLY="$(( n / 1000 ))k"
+        REPLY="$((n / 1000))k"
     else
         REPLY="$n"
     fi
@@ -66,19 +66,26 @@ format_tokens_round() {
 
 # Color-code a percentage: green <50% < yellow <70% < orange <90% < red
 usage_color() {
-    if   [ "$1" -ge 90 ]; then REPLY=$red
-    elif [ "$1" -ge 70 ]; then REPLY=$orange
-    elif [ "$1" -ge 50 ]; then REPLY=$yellow
-    else REPLY=$green
+    if [ "$1" -ge 90 ]; then
+        REPLY=$red
+    elif [ "$1" -ge 70 ]; then
+        REPLY=$orange
+    elif [ "$1" -ge 50 ]; then
+        REPLY=$yellow
+    else
+        REPLY=$green
     fi
 }
 
 # Format milliseconds → compact duration: 345000→"5m45s", 8000→"8s"
 fmt_dur() {
-    local sec=$(( $1 / 1000 )) m s
-    m=$(( sec / 60 )); s=$(( sec % 60 ))
-    if [ "$m" -gt 0 ]; then REPLY="${m}m${s}s"
-    else REPLY="${s}s"
+    local sec=$(($1 / 1000)) m s
+    m=$((sec / 60))
+    s=$((sec % 60))
+    if [ "$m" -gt 0 ]; then
+        REPLY="${m}m${s}s"
+    else
+        REPLY="${s}s"
     fi
 }
 
@@ -115,7 +122,7 @@ eval "$(jq -r '
     @sh "rl_five_reset=\(.rate_limits.five_hour.resets_at // "")",
     @sh "rl_seven_pct=\(.rate_limits.seven_day.used_percentage // "")",
     @sh "rl_seven_reset=\(.rate_limits.seven_day.resets_at // "")"
-' <<< "$input" 2>/dev/null)"
+' <<<"$input" 2>/dev/null)"
 
 # Fallbacks if jq eval produced empty/missing values (e.g. malformed JSON)
 : "${model_name:=Claude}" "${ctx_size:=}" "${pct_used:=}"
@@ -127,26 +134,32 @@ eval "$(jq -r '
 
 # Context window
 if [ -n "$ctx_size" ] && [ "$ctx_size" -gt 0 ] 2>/dev/null && [ -n "$pct_used" ]; then
-    current=$(( ${input_tokens:-0} + ${cache_create:-0} + ${cache_read:-0} ))
+    current=$((${input_tokens:-0} + ${cache_create:-0} + ${cache_read:-0}))
 else
     current="" ctx_size="" pct_used=""
 fi
 
-# ── Effort level (env var takes precedence over settings.json) ───────────────
-effort_level="high"
-if [ -n "$CLAUDE_CODE_EFFORT_LEVEL" ]; then
-    effort_level="$CLAUDE_CODE_EFFORT_LEVEL"
-elif [ -f "$HOME/.claude/settings.json" ]; then
-    effort_val=$(jq -r '.effortLevel // empty' "$HOME/.claude/settings.json" 2>/dev/null)
-    [ -n "$effort_val" ] && effort_level="$effort_val"
-fi
-
 # ── Pre-compute display values (zero subshells — all via REPLY) ──────────────
-if [ -n "$current" ]; then format_tokens "$current"; ctx_used_fmt=$REPLY; else ctx_used_fmt="NA"; fi
-if [ -n "$ctx_size" ]; then format_tokens_round "$ctx_size"; ctx_total_fmt=$REPLY; else ctx_total_fmt="NA"; fi
-if [ -n "$pct_used" ]; then usage_color "$pct_used"; ctx_color=$REPLY; else ctx_color=$gray; fi
-if [ -n "$api_dur_ms" ]; then fmt_dur "$api_dur_ms"; api_dur_fmt=$REPLY; else api_dur_fmt="NA"; fi
-if [ -n "$total_dur_ms" ]; then fmt_dur "$total_dur_ms"; total_dur_fmt=$REPLY; else total_dur_fmt="NA"; fi
+if [ -n "$current" ]; then
+    format_tokens "$current"
+    ctx_used_fmt=$REPLY
+else ctx_used_fmt="NA"; fi
+if [ -n "$ctx_size" ]; then
+    format_tokens_round "$ctx_size"
+    ctx_total_fmt=$REPLY
+else ctx_total_fmt="NA"; fi
+if [ -n "$pct_used" ]; then
+    usage_color "$pct_used"
+    ctx_color=$REPLY
+else ctx_color=$gray; fi
+if [ -n "$api_dur_ms" ]; then
+    fmt_dur "$api_dur_ms"
+    api_dur_fmt=$REPLY
+else api_dur_fmt="NA"; fi
+if [ -n "$total_dur_ms" ]; then
+    fmt_dur "$total_dur_ms"
+    total_dur_fmt=$REPLY
+else total_dur_fmt="NA"; fi
 
 # Format epoch seconds → compact local time string (native rate_limits.resets_at is already epoch)
 # Styles: "time"→"7:00pm", "datetime"→"Mar 6, 10:00am"
@@ -154,17 +167,23 @@ format_reset_epoch() {
     local epoch="$1" style="$2" result
     { [ -z "$epoch" ] || [ "$epoch" = "null" ]; } && return
     case "$style" in
-        time)
-            # BSD date (macOS) then GNU date (Linux)
-            result=$(date -j -r "$epoch" +"%l:%M%p" 2>/dev/null)
-            if [ -n "$result" ]; then echo "$result" | sed 's/^ //' | tr '[:upper:]' '[:lower:]'
-            else date -d "@$epoch" +"%l:%M%P" 2>/dev/null | sed 's/^ //'
-            fi ;;
-        datetime)
-            result=$(date -j -r "$epoch" +"%b %-d, %l:%M%p" 2>/dev/null)
-            if [ -n "$result" ]; then echo "$result" | sed 's/  / /g; s/^ //' | tr '[:upper:]' '[:lower:]'
-            else date -d "@$epoch" +"%b %-d, %l:%M%P" 2>/dev/null | sed 's/  / /g; s/^ //'
-            fi ;;
+    time)
+        # BSD date (macOS) then GNU date (Linux)
+        result=$(date -j -r "$epoch" +"%l:%M%p" 2>/dev/null)
+        if [ -n "$result" ]; then
+            echo "$result" | sed 's/^ //' | tr '[:upper:]' '[:lower:]'
+        else
+            date -d "@$epoch" +"%l:%M%P" 2>/dev/null | sed 's/^ //'
+        fi
+        ;;
+    datetime)
+        result=$(date -j -r "$epoch" +"%b %-d, %l:%M%p" 2>/dev/null)
+        if [ -n "$result" ]; then
+            echo "$result" | sed 's/  / /g; s/^ //' | tr '[:upper:]' '[:lower:]'
+        else
+            date -d "@$epoch" +"%b %-d, %l:%M%P" 2>/dev/null | sed 's/  / /g; s/^ //'
+        fi
+        ;;
     esac
 }
 
@@ -173,25 +192,35 @@ format_reset_epoch() {
 get_oauth_token() {
     # 1. Explicit env var override
     if [ -n "$CLAUDE_CODE_OAUTH_TOKEN" ]; then
-        printf '%s' "$CLAUDE_CODE_OAUTH_TOKEN"; return 0
+        printf '%s' "$CLAUDE_CODE_OAUTH_TOKEN"
+        return 0
     fi
     local token blob
     # 2. macOS Keychain
     if command -v security >/dev/null 2>&1; then
         blob=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null)
-        token=$(jq -r '.claudeAiOauth.accessToken // empty' <<< "$blob" 2>/dev/null)
-        if [ -n "$token" ] && [ "$token" != "null" ]; then printf '%s' "$token"; return 0; fi
+        token=$(jq -r '.claudeAiOauth.accessToken // empty' <<<"$blob" 2>/dev/null)
+        if [ -n "$token" ] && [ "$token" != "null" ]; then
+            printf '%s' "$token"
+            return 0
+        fi
     fi
     # 3. Linux credentials file
     if [ -f "$HOME/.claude/.credentials.json" ]; then
         token=$(jq -r '.claudeAiOauth.accessToken // empty' "$HOME/.claude/.credentials.json" 2>/dev/null)
-        if [ -n "$token" ] && [ "$token" != "null" ]; then printf '%s' "$token"; return 0; fi
+        if [ -n "$token" ] && [ "$token" != "null" ]; then
+            printf '%s' "$token"
+            return 0
+        fi
     fi
     # 4. GNOME Keyring (2s timeout to avoid hangs if keyring is locked)
     if command -v secret-tool >/dev/null 2>&1; then
         blob=$(timeout 2 secret-tool lookup service "Claude Code-credentials" 2>/dev/null)
-        token=$(jq -r '.claudeAiOauth.accessToken // empty' <<< "$blob" 2>/dev/null)
-        if [ -n "$token" ] && [ "$token" != "null" ]; then printf '%s' "$token"; return 0; fi
+        token=$(jq -r '.claudeAiOauth.accessToken // empty' <<<"$blob" 2>/dev/null)
+        if [ -n "$token" ] && [ "$token" != "null" ]; then
+            printf '%s' "$token"
+            return 0
+        fi
     fi
 }
 
@@ -206,7 +235,7 @@ fetch_usage_data() {
     if [ -f "$cache_file" ]; then
         local cache_mtime
         cache_mtime=$(stat -c %Y "$cache_file" 2>/dev/null || stat -f %m "$cache_file" 2>/dev/null)
-        if [ $(( $(date +%s) - cache_mtime )) -lt "$cache_max_age" ]; then
+        if [ $(($(date +%s) - cache_mtime)) -lt "$cache_max_age" ]; then
             usage_data=$(<"$cache_file")
             has_data=true
         fi
@@ -223,14 +252,14 @@ fetch_usage_data() {
                 -H "anthropic-beta: oauth-2025-04-20" \
                 -H "User-Agent: claude-code/2.1.34" \
                 "https://api.anthropic.com/api/oauth/usage" 2>/dev/null)
-            if [ -n "$response" ] && jq -e . <<< "$response" >/dev/null 2>&1; then
+            if [ -n "$response" ] && jq -e . <<<"$response" >/dev/null 2>&1; then
                 usage_data="$response"
                 has_data=true
                 # Atomic write: temp file + rename prevents concurrent partial reads
                 local tmp_cache
-                tmp_cache=$(mktemp "${cache_file}.XXXXXX" 2>/dev/null) \
-                    && printf '%s' "$response" > "$tmp_cache" \
-                    && mv "$tmp_cache" "$cache_file"
+                tmp_cache=$(mktemp "${cache_file}.XXXXXX" 2>/dev/null) &&
+                    printf '%s' "$response" >"$tmp_cache" &&
+                    mv "$tmp_cache" "$cache_file"
             fi
         fi
         # Fall back to stale cache if API call failed
@@ -247,17 +276,24 @@ iso_to_epoch() {
     local iso_str="$1" epoch
     # GNU date (Linux) — handles ISO 8601 natively
     epoch=$(date -d "$iso_str" +%s 2>/dev/null)
-    if [ -n "$epoch" ]; then echo "$epoch"; return 0; fi
+    if [ -n "$epoch" ]; then
+        echo "$epoch"
+        return 0
+    fi
     # BSD date (macOS) — strip fractional seconds and timezone suffix
     local stripped="${iso_str%%.*}"
-    stripped="${stripped%%Z}"; stripped="${stripped%%+*}"
+    stripped="${stripped%%Z}"
+    stripped="${stripped%%+*}"
     stripped="${stripped%%-[0-9][0-9]:[0-9][0-9]}"
     if [[ "$iso_str" == *"Z"* ]] || [[ "$iso_str" == *"+00:00"* ]] || [[ "$iso_str" == *"-00:00"* ]]; then
         epoch=$(env TZ=UTC date -j -f "%Y-%m-%dT%H:%M:%S" "$stripped" +%s 2>/dev/null)
     else
         epoch=$(date -j -f "%Y-%m-%dT%H:%M:%S" "$stripped" +%s 2>/dev/null)
     fi
-    if [ -n "$epoch" ]; then echo "$epoch"; return 0; fi
+    if [ -n "$epoch" ]; then
+        echo "$epoch"
+        return 0
+    fi
     return 1
 }
 
@@ -268,35 +304,38 @@ format_reset_time() {
     { [ -z "$iso_str" ] || [ "$iso_str" = "null" ]; } && return
     epoch=$(iso_to_epoch "$iso_str") || return
     case "$style" in
-        time)
-            result=$(date -j -r "$epoch" +"%l:%M%p" 2>/dev/null)
-            if [ -n "$result" ]; then echo "$result" | sed 's/^ //' | tr '[:upper:]' '[:lower:]'
-            else date -d "@$epoch" +"%l:%M%P" 2>/dev/null | sed 's/^ //'
-            fi ;;
-        datetime)
-            result=$(date -j -r "$epoch" +"%b %-d, %l:%M%p" 2>/dev/null)
-            if [ -n "$result" ]; then echo "$result" | sed 's/  / /g; s/^ //' | tr '[:upper:]' '[:lower:]'
-            else date -d "@$epoch" +"%b %-d, %l:%M%P" 2>/dev/null | sed 's/  / /g; s/^ //'
-            fi ;;
-        *)
-            result=$(date -j -r "$epoch" +"%b %-d" 2>/dev/null)
-            if [ -n "$result" ]; then echo "$result" | tr '[:upper:]' '[:lower:]'
-            else date -d "@$epoch" +"%b %-d" 2>/dev/null
-            fi ;;
+    time)
+        result=$(date -j -r "$epoch" +"%l:%M%p" 2>/dev/null)
+        if [ -n "$result" ]; then
+            echo "$result" | sed 's/^ //' | tr '[:upper:]' '[:lower:]'
+        else
+            date -d "@$epoch" +"%l:%M%P" 2>/dev/null | sed 's/^ //'
+        fi
+        ;;
+    datetime)
+        result=$(date -j -r "$epoch" +"%b %-d, %l:%M%p" 2>/dev/null)
+        if [ -n "$result" ]; then
+            echo "$result" | sed 's/  / /g; s/^ //' | tr '[:upper:]' '[:lower:]'
+        else
+            date -d "@$epoch" +"%b %-d, %l:%M%P" 2>/dev/null | sed 's/  / /g; s/^ //'
+        fi
+        ;;
+    *)
+        result=$(date -j -r "$epoch" +"%b %-d" 2>/dev/null)
+        if [ -n "$result" ]; then
+            echo "$result" | tr '[:upper:]' '[:lower:]'
+        else
+            date -d "@$epoch" +"%b %-d" 2>/dev/null
+        fi
+        ;;
     esac
 }
 
 # ── Build output string ─────────────────────────────────────────────────────
 out=""
 
-# Segment 1: Model (effort) — green/orange/red for low/med/high
-out+="${blue}${model_name}${rst} ${gray}(${rst}"
-case "$effort_level" in
-    low)    out+="${green}low${rst}" ;;
-    medium) out+="${orange}med${rst}" ;;
-    *)      out+="${red}high${rst}" ;;
-esac
-out+="${gray})${rst}"
+# Segment 1: Model
+out+="${blue}${model_name}${rst}"
 
 # Segment 2: workspace dir@branch (+added -removed)
 # --no-optional-locks prevents git from writing lock files that block other processes
@@ -305,8 +344,8 @@ if [ -n "$cwd" ]; then
     git_branch=$(git -C "$cwd" --no-optional-locks rev-parse --abbrev-ref HEAD 2>/dev/null)
     if [ -n "$git_branch" ]; then
         out+="${gray}@${rst}${green}${git_branch}${rst}"
-        git_stat=$(git -C "$cwd" --no-optional-locks diff --numstat 2>/dev/null \
-            | awk '{a+=$1; d+=$2} END {if (a+d>0) printf "+%d -%d", a, d}')
+        git_stat=$(git -C "$cwd" --no-optional-locks diff --numstat 2>/dev/null |
+            awk '{a+=$1; d+=$2} END {if (a+d>0) printf "+%d -%d", a, d}')
         if [ -n "$git_stat" ]; then
             out+=" ${gray}(${rst}${green}${git_stat%% *}${rst} ${red}${git_stat##* }${rst}${gray})${rst}"
         fi
@@ -339,7 +378,8 @@ if [ -n "$rl_five_pct" ] || [ -n "$rl_seven_pct" ]; then
     # 5-hour rate limit with reset time
     if [ -n "$rl_five_pct" ]; then
         LC_NUMERIC=C printf -v five_pct_int '%.0f' "$rl_five_pct" 2>/dev/null
-        usage_color "$five_pct_int"; five_color=$REPLY
+        usage_color "$five_pct_int"
+        five_color=$REPLY
         out+="${sep}${white}5h${rst} ${five_color}${five_pct_int}%${rst}"
         if [ -n "$rl_five_reset" ]; then
             five_reset=$(format_reset_epoch "$rl_five_reset" "time")
@@ -350,7 +390,8 @@ if [ -n "$rl_five_pct" ] || [ -n "$rl_seven_pct" ]; then
     # 7-day rate limit with reset datetime
     if [ -n "$rl_seven_pct" ]; then
         LC_NUMERIC=C printf -v seven_pct_int '%.0f' "$rl_seven_pct" 2>/dev/null
-        usage_color "$seven_pct_int"; seven_color=$REPLY
+        usage_color "$seven_pct_int"
+        seven_color=$REPLY
         out+="${sep}${white}7d${rst} ${seven_color}${seven_pct_int}%${rst}"
         if [ -n "$rl_seven_reset" ]; then
             seven_reset=$(format_reset_epoch "$rl_seven_reset" "datetime")
@@ -372,19 +413,21 @@ else
             @sh "extra_pct=\(.extra_usage.utilization // 0)",
             @sh "extra_used=\(.extra_usage.used_credits // 0)",
             @sh "extra_limit=\(.extra_usage.monthly_limit // 0)"
-        ' <<< "$usage_data" 2>/dev/null)"
+        ' <<<"$usage_data" 2>/dev/null)"
 
         LC_NUMERIC=C printf -v five_hour_pct '%.0f' "${five_hour_pct:-0}" 2>/dev/null
         LC_NUMERIC=C printf -v seven_day_pct '%.0f' "${seven_day_pct:-0}" 2>/dev/null
 
         # 5-hour rate limit with reset time
-        usage_color "$five_hour_pct"; five_hour_color=$REPLY
+        usage_color "$five_hour_pct"
+        five_hour_color=$REPLY
         out+="${sep}${white}5h${rst} ${five_hour_color}${five_hour_pct}%${rst}"
         five_hour_reset=$(format_reset_time "$five_hour_reset_iso" "time")
         [ -n "$five_hour_reset" ] && out+=" ${gray}@${five_hour_reset}${rst}"
 
         # 7-day rate limit with reset datetime
-        usage_color "$seven_day_pct"; seven_day_color=$REPLY
+        usage_color "$seven_day_pct"
+        seven_day_color=$REPLY
         out+="${sep}${white}7d${rst} ${seven_day_color}${seven_day_pct}%${rst}"
         seven_day_reset=$(format_reset_time "$seven_day_reset_iso" "datetime")
         [ -n "$seven_day_reset" ] && out+=" ${gray}@${seven_day_reset}${rst}"
@@ -395,9 +438,10 @@ else
             # Credits are in cents — divide by 100 for dollars (needs awk for float division)
             extra_used_fmt=$(LC_NUMERIC=C awk "BEGIN {printf \"%.2f\", ${extra_used:-0}/100}" 2>/dev/null)
             extra_limit_fmt=$(LC_NUMERIC=C awk "BEGIN {printf \"%.2f\", ${extra_limit:-0}/100}" 2>/dev/null)
-            if [ -n "$extra_used_fmt" ] && [ -n "$extra_limit_fmt" ] \
-               && [[ "$extra_used_fmt" != *'$'* ]] && [[ "$extra_limit_fmt" != *'$'* ]]; then
-                usage_color "$extra_pct_int"; extra_color=$REPLY
+            if [ -n "$extra_used_fmt" ] && [ -n "$extra_limit_fmt" ] &&
+                [[ "$extra_used_fmt" != *'$'* ]] && [[ "$extra_limit_fmt" != *'$'* ]]; then
+                usage_color "$extra_pct_int"
+                extra_color=$REPLY
                 out+="${sep}${white}extra${rst} ${extra_color}\$${extra_used_fmt}/\$${extra_limit_fmt}${rst}"
             else
                 out+="${sep}${white}extra${rst} ${green}enabled${rst}"
@@ -406,8 +450,14 @@ else
 
     else
         # ── Tier 3: API key fallback — cumulative session tokens and cost ────
-        if [ -n "$total_in" ]; then format_tokens "$total_in"; in_fmt=$REPLY; else in_fmt="NA"; fi
-        if [ -n "$total_out" ]; then format_tokens "$total_out"; out_fmt=$REPLY; else out_fmt="NA"; fi
+        if [ -n "$total_in" ]; then
+            format_tokens "$total_in"
+            in_fmt=$REPLY
+        else in_fmt="NA"; fi
+        if [ -n "$total_out" ]; then
+            format_tokens "$total_out"
+            out_fmt=$REPLY
+        else out_fmt="NA"; fi
         out+="${sep}${gray}in: ${rst}${orange}${in_fmt}${rst}"
         out+=" ${gray}out: ${rst}${orange}${out_fmt}${rst}"
         if [ -n "$total_cost" ]; then
