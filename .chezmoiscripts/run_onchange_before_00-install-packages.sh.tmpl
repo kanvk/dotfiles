@@ -5,6 +5,12 @@
 # happens automatically when any package list in .chezmoidata.yaml is edited
 # (the hash below captures that).
 #
+# Additivity contract: every step here is install-or-upgrade only — never
+# uninstall, prune, or autoremove. Anything the user installs ad-hoc on a
+# machine survives a later `chezmoi apply`. Cleanup is opt-in and manual
+# (`brew bundle cleanup --file=<bundle>`, `nala autoremove`, etc.). See the
+# CLAUDE.md "user intent, not exclusivity" bullet for the rationale.
+#
 # packages-hash: {{ .packages | toYaml | sha256sum }}
 
 set -euo pipefail
