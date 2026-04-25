@@ -227,10 +227,11 @@ packages:
 
   # ---- cargo (Rust-only — things in brew are NOT duplicated here) ----
   cargo:
+    - age-plugin-yubikey   # age plugin for YubiKey-backed identities
     - cargo-update
     - choose
     - code-minimap
-    - coreutils       # rust uutils — used by alias.zsh `command coreutils <cmd>`
+    - coreutils            # rust uutils — used by alias.zsh `command coreutils <cmd>`
     - du-dust
     - gitoxide
     - numbat-cli
