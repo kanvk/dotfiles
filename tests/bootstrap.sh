@@ -165,7 +165,7 @@ if grep -rl '/home/kanvk' "$HOME/.zshrc" "$HOME/.zshenv" "$HOME/.zprofile" "$HOM
 fi
 
 # --- the example file (kept in source as docs) should NOT be applied ---
-absent "$HOME/.ssh/config.local.example"
+absent "$HOME/.ssh/config.machine.example"
 
 # --- full mode: validate the install pipeline outputs ---
 if [ "$MODE" = "full" ]; then

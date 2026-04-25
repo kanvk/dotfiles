@@ -1,7 +1,12 @@
-# Starter for ~/.ssh/config.local — copy this to ~/.ssh/config.local and fill in
-# host entries for your network/lab/home boxes. Not tracked by chezmoi.
+# Starter for ~/.ssh/config.machine — copy this to ~/.ssh/config.machine and
+# fill in entries for THIS machine's network. Intentionally outside the chezmoi
+# source so machine-specific IPs / hostnames never land in the public repo.
 #
-# Do NOT commit this file to a public repo.
+# Personal-but-portable hosts that you want synced across all your machines
+# go in ~/.ssh/config.local instead — that path is encrypted-tracked under
+# chezmoi when encrypt_locals=true at init time.
+#
+# Do NOT commit this file or its eventual ~/.ssh/config.machine to a public repo.
 
 # Example: home box on the LAN
 # Host rpi
@@ -21,7 +26,7 @@
 #     AddKeysToAgent yes
 
 # Example: lab proxy + internal hosts via ProxyJump
-# Host las-proxy
+# Host lab-proxy
 #     HostName <proxy-ip>
 #     Port <port>
 #     ForwardAgent yes
@@ -31,7 +36,7 @@
 #     AddKeysToAgent yes
 #
 # Host *.internal.example
-#     ProxyJump las-proxy
+#     ProxyJump lab-proxy
 #     User <user>
 #     IdentityFile ~/.ssh/<key>
 #     IdentitiesOnly yes

@@ -13,9 +13,9 @@ CLAUDE.md
 tests/**
 justfile
 
-# Example file shown in docs as a starter for the user-created config.local;
-# we don't want it landing as the actual ~/.ssh/config.local.example file.
-.ssh/config.local.example
+# Example file shown in docs as a starter for the user-created config.machine;
+# we don't want it landing as the actual ~/.ssh/config.machine.example file.
+.ssh/config.machine.example
 
 {{- if not (and (hasKey . "encrypt_locals") .encrypt_locals) }}
 # Encrypted personal-but-not-secret locals (insteadOf rules, GHE SSH alias).
