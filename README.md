@@ -16,7 +16,8 @@ On first run, chezmoi prompts for:
 | --- | --- |
 | Full name | `~/.gitconfig` user.name |
 | Email | `~/.gitconfig` user.email |
-| GPG signing key fingerprint | `~/.gitconfig` user.signingKey; leave blank to disable commit signing |
+| Sign git commits with GPG? | yes/no gate; only prompts for the fingerprint below if yes |
+| GPG signing key fingerprint | `~/.gitconfig` user.signingKey; only prompted when GPG signing is enabled |
 | SSH key path for age encryption | `~/.config/chezmoi/chezmoi.toml` `[age]` block — leave blank to disable encryption |
 | SSH public key string (.pub contents) | recipient for age encryption — only prompted when identity is set |
 | Apply encrypted personal locals? | gates the encrypted-tracked `~/.gitconfig.local` and `~/.ssh/config.local` files; only prompted when an age identity is set |

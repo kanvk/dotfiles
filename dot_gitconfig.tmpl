@@ -7,13 +7,13 @@
 [user]
 	email = {{ .email }}
 	name = {{ .name }}
-{{- if .gpg_signing_key }}
+{{- if and (hasKey . "use_gpg_signing") .use_gpg_signing }}
 	signingKey = {{ .gpg_signing_key }}
 {{- end }}
 [core]
 	editor = nvim
 	pager = delta
-{{- if .gpg_signing_key }}
+{{- if and (hasKey . "use_gpg_signing") .use_gpg_signing }}
 [commit]
 	gpgsign = true
 [gpg]
