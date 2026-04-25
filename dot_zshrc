@@ -99,7 +99,7 @@ zstyle ':omz:lib:compinit' cache yes
 fpath+=~/.zfunc
 # Homebrew site-functions — only if brew is available (avoids slow shell startup otherwise)
 if command -v brew >/dev/null 2>&1; then
-  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+  fpath=("$(brew --prefix)/share/zsh/site-functions" $fpath)
 fi
 [ -n "$ASDF_DIR" ] && fpath+="$ASDF_DIR/completions"
 
