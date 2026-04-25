@@ -38,6 +38,17 @@ chezmoi --version
 # --- pre-populate config so init does NOT prompt (no TTY in CI/container) ---
 mkdir -p "$HOME/.config/chezmoi"
 cat > "$HOME/.config/chezmoi/chezmoi.toml" <<'EOF'
+# Placeholder age config — chezmoi needs `encryption = "age"` set so it can
+# recognise the .age suffix on encrypted source files and strip it during
+# destination-path resolution. The identity/recipient are never actually
+# used because the encrypted-locals files are filtered out by .chezmoiignore
+# (encrypt_locals = false). Without this stanza, chezmoi errors with
+# "encryption not configured" before ignore patterns are evaluated.
+encryption = "age"
+[age]
+    identity  = "/dev/null"
+    recipient = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA placeholder"
+
 [data]
     name              = "Test User"
     email             = "test@example.com"
