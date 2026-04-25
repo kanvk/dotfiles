@@ -34,6 +34,24 @@ export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_ENV_HINTS=1
 export DO_NOT_TRACK=1   # community-standard env honored by gh, glab, others
 
+# --- sudo keepalive ---
+# One up-front sudo prompt instead of two-or-three: apt at the start, brew's
+# installer mid-pipeline, and the post-install `usermod` in
+# run_once_after_70-default-shell each consume their own creds and the
+# default 5-minute sudo cache typically expires across the brew install.
+# Validate creds once, then refresh in the background every minute. The loop
+# self-terminates when this script's PID is gone (kill -0 $$ guard inside the
+# subshell — $$ stays the parent PID across `( )`), so an orphaned keepalive
+# can't survive a hard chezmoi crash. The trap covers normal exits.
+#
+# Skipped silently if sudo is unavailable or the user has no sudo (the rest
+# of the pipeline already gates each `sudo` invocation on `command -v sudo`).
+if command -v sudo >/dev/null 2>&1 && sudo -v 2>/dev/null; then
+  ( while kill -0 $$ 2>/dev/null; do sudo -n true 2>/dev/null; sleep 60; done ) &
+  _sudo_keepalive_pid=$!
+  trap 'kill "$_sudo_keepalive_pid" 2>/dev/null || true' EXIT
+fi
+
 # --- install-error capture ---
 # Each install step appends to _install_errors on failure instead of aborting
 # the pipeline. The "==> Install summary" block at the end of this script
