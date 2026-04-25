@@ -7,16 +7,17 @@ Validates the chezmoi bootstrap on fresh Kali rolling + Ubuntu latest containers
 `lint` is a static, no-Docker pass; runs in seconds. `test-smoke` applies dotfiles inside fresh containers but skips the install-script chain. `test-full` is a **strict superset of `test-smoke`** — it also runs the install scripts and verifies the resulting toolchains. So:
 
 - During dev iteration: `just lint` (fast feedback on template / shellcheck issues).
-- Before commit: `just test-smoke`.
-- Before merge: `just test-full` (no need to also run smoke — full covers it).
+- Before commit: `just test-smoke ubuntu`.
+- Before merge: `just test-full ubuntu` (no need to also run smoke — full covers it). Per CLAUDE.md, Ubuntu-only is the routine green-light bar; Kali and Ubuntu share the same install pipeline, so running both is wasted cycles unless a change is distro-specific.
 
 ## Via `just`
 
 ```sh
 just lint
-just test                # alias for test-smoke (both distros)
-just test-smoke kali     # one distro
-just test-full           # both distros, full pipeline
+just test                # alias for test-smoke (default: ubuntu)
+just test-smoke kali     # other distro
+just test-full           # default: ubuntu
+just test-full all       # both distros (only when distro-specific changes warrant it)
 ```
 
 `just -l` for the menu.
@@ -41,8 +42,9 @@ just test-full           # both distros, full pipeline
 
 **`smoke`**
 - `chezmoi apply --exclude=scripts,externals` — no Homebrew install, no apt install, no plugin clones.
-- Validates: every expected file exists at the right target path; modes are correct (`~/.ssh/` is 0700, `~/.ssh/config` is 0600, `private_dot_*` files are 0600); shell init has valid zsh syntax (`zsh -n`); identity templating is correct (`name = Test User` / `email = test@example.com` end up in `.gitconfig`); `gpgsign = false` when no GPG key was provided; `ZSH_CUSTOM` is set; gpg-agent.conf has a `pinentry-program`; SSH config preserves `Host github.com-ghe` + `Include ~/.ssh/config.local`.
-- OS gates: `wsl.zsh` is NOT applied (`is_wsl=false`); `dot_config/windows/**` is NOT applied (Linux); `tests/`, `README.md`, `CLAUDE.md`, `justfile`, `.ssh/config.local.example` are NOT applied (chezmoiignore).
+- Validates: every expected file exists at the right target path; modes are correct (`~/.ssh/` is 0700, `~/.ssh/config` is 0600, `private_dot_*` files are 0600); shell init has valid zsh syntax (`zsh -n`); identity templating is correct (`name = Test User` / `email = test@example.com` end up in `.gitconfig`); `gpgsign = false` when no GPG key was provided; `ZSH_CUSTOM` is set; gpg-agent.conf has a `pinentry-program`; SSH config has `Host github.com` + `Include ~/.ssh/config.local` + `Include ~/.ssh/config.machine`.
+- Encrypted-locals gating: with `encrypt_locals = false` in the test container, `~/.ssh/config.local` and `~/.gitconfig.local` should NOT exist.
+- OS gates: `wsl.zsh` is NOT applied (`is_wsl=false`); `dot_config/windows/**` is NOT applied (Linux); `tests/`, `README.md`, `CLAUDE.md`, `justfile`, `.ssh/config.machine.example` are NOT applied (chezmoiignore).
 - No `/home/kanvk` leak in any rendered shell file.
 - Idempotence: re-apply produces zero file changes.
 
