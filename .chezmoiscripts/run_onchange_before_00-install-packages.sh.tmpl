@@ -131,8 +131,14 @@ fi
 if command -v cargo >/dev/null 2>&1; then
   echo "==> Installing cargo packages"
   # `cargo install` is idempotent (no-ops if already at requested version).
-  # Use `cargo install-update -a` (from cargo-update) afterward to refresh.
-  cargo install{{ range .packages.cargo }} {{ . | quote }}{{ end }}
+  # Install one-at-a-time + `|| true` so a single bad crate (e.g. missing
+  # system lib at build time) doesn't abort the whole apply pipeline. Use
+  # `cargo install-update -a` (from cargo-update) afterward to refresh.
+  for _crate in{{ range .packages.cargo }} {{ . | quote }}{{ end }}; do
+    cargo install "$_crate" || \
+      echo "warning: cargo install $_crate failed (missing system dep? check apt list)" >&2
+  done
+  unset _crate
 fi
 {{- end }}
 
