@@ -11,6 +11,16 @@ export GPG_TTY=$TTY
 export COLORTERM=truecolor
 export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_NO_ANALYTICS=1
+
+# --- analytics / telemetry opt-outs ---
+# DO_NOT_TRACK is a community-standard env (see consoledonottrack.com); honored
+# by gh, glab, gitleaks, charmbracelet tools, and a long tail of others.
+export DO_NOT_TRACK=1
+# HashiCorp's "checkpoint" telemetry — covers `vault` (and any future hc tools).
+export CHECKPOINT_DISABLE=1
+# LocalStack CLI events.
+export LOCALSTACK_DISABLE_EVENTS=1
+
 export FZF_DEFAULT_OPTS="--bind=tab:down,shift-tab:up"
 
 # vivid generates LS_COLORS on demand; skip silently if vivid isn't installed.
