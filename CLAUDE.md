@@ -22,7 +22,7 @@ See `README.md` for the user-facing version of the same story.
 ## Conventions
 
 - **Path templating:** prefer `$HOME` in shell contexts (the shell expands at runtime, template stays portable), use `{{ .chezmoi.homeDir }}` in non-shell contexts (Nix, JSON, Lua, symlink targets).
-- **Identity templating:** `{{ .name }}`, `{{ .email }}`, `{{ .github_user }}` — seeded by `promptStringOnce` in `.chezmoi.toml.tmpl`.
+- **Identity templating:** `{{ .name }}`, `{{ .email }}` — seeded by `promptStringOnce` in `.chezmoi.toml.tmpl`.
 - **OS gates:**
   - `{{ if .is_wsl }}` for WSL-only blocks (derived from `.chezmoi.kernel.osrelease` containing `microsoft` OR `$WSL_DISTRO_NAME` set).
   - `{{ if .is_debian_like }}` for apt logic.

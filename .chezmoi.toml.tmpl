@@ -9,8 +9,6 @@
 
 {{- $name := promptStringOnce . "name" "Full name (for git config)" -}}
 {{- $email := promptStringOnce . "email" "Email (for git config)" -}}
-{{- $githubUser := promptStringOnce . "github_user" "GitHub username" -}}
-{{- $gpgSigningKey := promptStringOnce . "gpg_signing_key" "GPG signing key fingerprint (leave blank to skip commit signing)" -}}
 
 {{/*
    Optional age encryption using an existing SSH key. age supports SSH keys
@@ -76,7 +74,6 @@ encryption = "age"
 [data]
     name = {{ $name | quote }}
     email = {{ $email | quote }}
-    github_user = {{ $githubUser | quote }}
     gpg_signing_key = {{ $gpgSigningKey | quote }}
     ssh_age_identity = {{ $sshAgeIdentity | quote }}
     ssh_age_recipient = {{ $sshAgeRecipient | quote }}

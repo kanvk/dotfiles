@@ -16,7 +16,6 @@ On first run, chezmoi prompts for:
 | --- | --- |
 | Full name | `~/.gitconfig` user.name |
 | Email | `~/.gitconfig` user.email |
-| GitHub username | reserved for future templating; tracked in chezmoi.toml `[data]` |
 | GPG signing key fingerprint | `~/.gitconfig` user.signingKey; leave blank to disable commit signing |
 | SSH key path for age encryption | `~/.config/chezmoi/chezmoi.toml` `[age]` block — leave blank to disable encryption |
 | SSH public key string (.pub contents) | recipient for age encryption — only prompted when identity is set |

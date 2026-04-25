@@ -48,7 +48,6 @@ encryption = "age"
 [data]
     name              = "Test User"
     email             = "test@example.com"
-    github_user       = "testuser"
     gpg_signing_key   = ""
     ssh_age_identity  = ""
     ssh_age_recipient = ""
