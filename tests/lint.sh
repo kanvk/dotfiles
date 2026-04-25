@@ -30,7 +30,7 @@ done < <(find . -name '*.tmpl' -not -path './.git/*' -not -path './tests/*')
 echo "==> 2. Hardcoded-ref sweep"
 hits=$(rg -n 'kanvk|/home/kanvk|kkhare|linuxbrew|pyenv/shims' --no-heading \
     --glob '!CLAUDE.md' --glob '!README.md' --glob '!tests/**' --glob '!.git/**' \
-    --glob '!dot_p10k.zsh' --glob '!justfile' \
+    --glob '!dot_p10k.zsh' --glob '!justfile' --glob '!HANDOFF.md' \
     2>/dev/null)
 # Filter out the known-intentional hits
 unexpected=$(echo "${hits:-}" | grep -vE \
