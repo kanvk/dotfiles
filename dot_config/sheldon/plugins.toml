@@ -24,12 +24,10 @@ github = "romkatv/zsh-defer"
 [plugins.oh-my-zsh]
 github = "ohmyzsh/ohmyzsh"
 
-# OMZ plugins loaded via sheldon with deferred sourcing instead of through
-# OMZ's `plugins=(...)` array. Each one is a simple function/alias bundle
-# that does not need to be available the instant the prompt appears, so
-# pushing them off the critical-path keeps shell startup snappy. The dir
-# directives reference the same OMZ clone sheldon already maintains for the
-# oh-my-zsh entry above (sheldon de-dupes by github URL).
+# OMZ plugins sourced lazily via zsh-defer. Each is a simple function or
+# alias bundle that doesn't need to be in scope before the first prompt.
+# The `dir` directives reference the OMZ clone shared with the oh-my-zsh
+# entry above (sheldon de-dupes by github URL).
 [plugins.omz-extract]
 github = "ohmyzsh/ohmyzsh"
 dir = "plugins/extract"

@@ -129,11 +129,11 @@ packages:
     - rbenv
     - ruby
 
-    # uuu chain prerequisites — installed for `uuu`'s update sweep but NOT
-    # initialised (no eval/init in the shell). cpanminus gives perlup its
-    # `cpanm`; haskell-stack gives haskellup its `stack`. cpan-outdated is
-    # provided by the `App::cpanoutdated` CPAN module — install on demand
-    # via `cpanm App::cpanoutdated` if the perlup chain needs it.
+    # `uu`/`uuu` update-sweep prerequisites — invoked directly as binaries,
+    # never sourced into the shell. cpanminus provides `cpanm` (perlup);
+    # haskell-stack provides `stack` (haskellup). `cpan-outdated` is a
+    # CPAN module not a brew formula; install with `cpanm App::cpanoutdated`
+    # if you want perlup's outdated-list step to work end-to-end.
     - cpanminus
     - haskell-stack
 

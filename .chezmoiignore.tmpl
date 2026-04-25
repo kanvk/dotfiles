@@ -21,8 +21,8 @@ justfile
 # Encrypted personal-but-not-secret locals (insteadOf rules, GHE SSH alias).
 # Excluded unless the user opted in at init time AND has the age identity in
 # place. Without the identity, decryption would fail and apply would error.
-# `hasKey` keeps older chezmoi.toml files (pre encrypt_locals prompt) from
-# erroring out — they default to "ignore" until the user re-runs init.
+# The `hasKey` guard makes a chezmoi.toml without `encrypt_locals` set
+# default to "ignore" rather than erroring on a missing-key template lookup.
 .gitconfig.local
 .ssh/config.local
 {{- end }}

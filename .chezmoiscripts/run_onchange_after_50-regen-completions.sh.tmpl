@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
 # Regenerates zsh completion files in $HOME/.zfunc from each tool's native
-# completion generator. These used to be vendored in the repo but bake in
-# machine-specific absolute paths, so now they're regenerated on apply.
+# completion generator. Vendoring these would bake machine-specific absolute
+# paths into the repo, so they're regenerated on every apply instead.
 #
 # Re-fires when the package-install script changes (proxy for "tools may
 # have updated"). Force a rerun after `brew upgrade` with `chezmoi apply --force`.
