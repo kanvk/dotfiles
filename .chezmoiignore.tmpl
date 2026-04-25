@@ -1,15 +1,20 @@
 {{/*
    Files and patterns excluded from `chezmoi apply`.
+   IMPORTANT: chezmoi matches these against DESTINATION paths (i.e. how the
+   file appears under $HOME), not source paths. So write `.config/foo` and
+   `.ssh/bar`, NOT `dot_config/foo` or `private_dot_ssh/bar`.
+
    This file is itself a template — use {{ if ... }} for OS/host-conditional ignores.
 */}}
 
-# Source-tree docs: never apply to $HOME
+# Source-tree docs + dev tooling: never apply to $HOME
 README.md
 CLAUDE.md
+test/**
 
 # Example file shown in docs as a starter for the user-created config.local;
 # we don't want it landing as the actual ~/.ssh/config.local.example file.
-private_dot_ssh/private_config.local.example
+.ssh/config.local.example
 
 # Legacy machine-local secret pattern (superseded by ~/.config/zsh/omz-custom/hidden.zsh
 # which lives outside this repo entirely). Defense in depth — if someone ever drops a
@@ -19,26 +24,26 @@ hidden.zsh
 {{- if ne .chezmoi.os "windows" }}
 # Windows-native GUI configs — kept in the source repo as a reference, but the user
 # moves them manually on a Windows box since this chezmoi config targets Linux+WSL.
-dot_config/windows/**
+.config/windows/**
 {{- end }}
 
 {{- if not .is_wsl }}
 # WSL-only shell aliases (win32yank, cmd.exe, pwsh.exe, tailscale.exe, ollama.exe)
 # are useless off WSL; OMZ would source them for no effect. Skip entirely.
-dot_config/zsh/omz-custom/wsl.zsh
+.config/zsh/omz-custom/wsl.zsh
 {{- end }}
 
 # Defensive: never vendor sheldon's plugin cache, even if accidentally re-added.
-dot_local/share/sheldon/repos/**
+.local/share/sheldon/repos/**
 
 # Runtime/ephemeral Claude Code state — managed at runtime, not tracked.
-private_dot_claude/.credentials.json
-private_dot_claude/history.jsonl
-private_dot_claude/projects/**
-private_dot_claude/shell-snapshots/**
-private_dot_claude/todos/**
-private_dot_claude/ide/**
-private_dot_claude/statsig/**
-private_dot_claude/backups/**
-private_dot_claude/logs/**
-private_dot_claude/settings.local.json
+.claude/.credentials.json
+.claude/history.jsonl
+.claude/projects/**
+.claude/shell-snapshots/**
+.claude/todos/**
+.claude/ide/**
+.claude/statsig/**
+.claude/backups/**
+.claude/logs/**
+.claude/settings.local.json
