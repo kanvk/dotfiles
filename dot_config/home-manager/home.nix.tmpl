@@ -3,8 +3,8 @@
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
-  home.username = "kanvk";
-  home.homeDirectory = "/home/kanvk";
+  home.username = "{{ .chezmoi.username }}";
+  home.homeDirectory = "{{ .chezmoi.homeDir }}";
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -58,7 +58,7 @@
   #
   # or
   #
-  #  /etc/profiles/per-user/kanvk/etc/profile.d/hm-session-vars.sh
+  #  /etc/profiles/per-user/{{ .chezmoi.username }}/etc/profile.d/hm-session-vars.sh
   #
   # if you don't want to manage your shell through Home Manager.
   home.sessionVariables = {

@@ -88,8 +88,8 @@ widgets:
       label: "<span>\ue70f</span>" #  (nf-dev-windows)
       menu_list:
         - { title: "Home", path: "~" }
-        - { title: "Downloads", path: "C:\\Users\\kanvk\\Downloads" }
-        - { title: "Documents", path: "C:\\Users\\kanvk\\Documents" }
+        - { title: "Downloads", path: '{{ .chezmoi.homeDir }}\Downloads' }
+        - { title: "Documents", path: '{{ .chezmoi.homeDir }}\Documents' }
         - { title: "Dev", path: "X:\\" }
       system_menu: true
       power_menu: false

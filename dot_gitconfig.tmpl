@@ -4,17 +4,20 @@
 	insteadOf = git@github.com:internal-handle/
 [credential "https://github.com"]
 	helper =
-	helper = !/usr/bin/gh auth git-credential
+	helper = !gh auth git-credential
 [credential "https://gist.github.com"]
 	helper =
-	helper = !/usr/bin/gh auth git-credential
+	helper = !gh auth git-credential
 [user]
-	email = kkhare@ncsu.edu
-	name = Kanv Khare
-	signingKey = 1A85FACE83565207960532B4A95B4F4C51AAE297
+	email = {{ .email }}
+	name = {{ .name }}
+{{- if .gpg_signing_key }}
+	signingKey = {{ .gpg_signing_key }}
+{{- end }}
 [core]
 	editor = nvim
 	pager = delta
+{{- if .gpg_signing_key }}
 [commit]
 	gpgsign = true
 [gpg]
@@ -22,6 +25,10 @@
 [tag]
 	forceSignAnnotated = true
 	gpgsign = true
+{{- else }}
+[commit]
+	gpgsign = false
+{{- end }}
 [credential "https://huggingface.co"]
 	provider = generic
 [init]

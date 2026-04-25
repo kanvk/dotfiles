@@ -5,8 +5,8 @@ shell = ""
 [dirs]
 project = []
 python = "isolated"
-data = "/home/kanvk/.local/share/hatch"
-cache = "/home/kanvk/.cache/hatch"
+data = "{{ .chezmoi.homeDir }}/.local/share/hatch"
+cache = "{{ .chezmoi.homeDir }}/.cache/hatch"
 
 [dirs.env]
 
@@ -16,8 +16,8 @@ cache = "/home/kanvk/.cache/hatch"
 repo = "main"
 
 [template]
-name = "Kanv Khare"
-email = "kkhare@ncsu.edu"
+name = "{{ .name }}"
+email = "{{ .email }}"
 
 [template.licenses]
 headers = true
