@@ -51,6 +51,10 @@ packages:
     - tk-dev
     - zlib1g-dev
 
+    # smartcard / yubikey: needed by `age-plugin-yubikey` (pcsc-sys) and
+    # anything else that talks to the smartcard daemon
+    - libpcsclite-dev
+
     # media (referenced by nvim/yazi image previews + alias workflows)
     - chafa
     - ffmpeg
