@@ -195,15 +195,21 @@ if [ "$MODE" = "full" ]; then
     [ -f "$HOME/.zfunc/_poetry"  ] || { echo "  FAIL: ~/.zfunc/_poetry not regenerated"; fail=1; }
 fi
 
-# --- idempotence (smoke only  ---
+# --- idempotence ---
 echo
 echo "==> Testing idempotence (re-apply files should be a no-op)"
 # Always exclude scripts/externals on the re-apply check — full-mode scripts
 # emit their content in -v output, which would otherwise look like file diffs.
 # We're testing that *file* state is idempotent; script-rerun behaviour is
 # tested separately by their respective onchange-hash invariants.
-chezmoi apply --source="$SOURCE" --exclude=scripts,externals -v > /tmp/reapply.log 2>&1
-if grep -qE '^[+-][^+-]' /tmp/reapply.log; then
+#
+# Wrap the apply in `if !` so its non-zero exit doesn't trip `set -e` and
+# silently abort the script — we want to surface the underlying error.
+if ! chezmoi apply --source="$SOURCE" --exclude=scripts,externals -v > /tmp/reapply.log 2>&1; then
+    echo "  FAIL: idempotence re-apply errored:"
+    tail -40 /tmp/reapply.log | sed 's/^/    /'
+    fail=1
+elif grep -qE '^[+-][^+-]' /tmp/reapply.log; then
     echo "  FAIL: re-apply attempted to write changes:"
     grep -E '^[+-][^+-]' /tmp/reapply.log | head -20
     fail=1
