@@ -144,3 +144,25 @@ if command -v bun >/dev/null 2>&1; then
   bun add -g{{ range .packages.bun }} {{ . | quote }}{{ end }}
 fi
 {{- end }}
+
+{{ if .packages.gh_extensions -}}
+# --- gh CLI extensions ---
+# `gh extension install OWNER/REPO` works without `gh auth login` for public
+# extensions (uses the unauth GitHub API), but rate-limit failures or sandbox
+# quirks shouldn't break the rest of the install pipeline — fall through to a
+# warning. Re-runs are handled by `gh extension upgrade` (install fails with
+# "already installed" otherwise).
+if command -v gh >/dev/null 2>&1; then
+  echo "==> Installing gh extensions"
+  for _ext in{{ range .packages.gh_extensions }} {{ . | quote }}{{ end }}; do
+    if gh extension list 2>/dev/null | grep -q "$_ext"; then
+      gh extension upgrade "$_ext" >/dev/null 2>&1 || \
+        echo "warning: gh extension upgrade $_ext failed (transient?)" >&2
+    else
+      gh extension install "$_ext" >/dev/null 2>&1 || \
+        echo "warning: gh extension install $_ext failed (rate-limited or unauth)" >&2
+    fi
+  done
+  unset _ext
+fi
+{{- end }}
