@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+#
+# Prints the after-apply checklist on the very first apply on a new machine.
+# Re-runs only if this script itself is edited (run_once semantics tied to a
+# state hash chezmoi keeps internally). Manual rerun: `chezmoi state
+# delete-bucket --bucket=scriptState && chezmoi apply`.
+
+set -euo pipefail
+
+bold='\033[1m'; dim='\033[2m'; green='\033[32m'; yellow='\033[33m'; reset='\033[0m'
+
+cat <<EOF
+
+${bold}${green}===========================================================
+  chezmoi apply complete — manual steps that remain
+===========================================================${reset}
+
+${bold}1. Machine-local secrets${reset}
+   ${dim}# Anything sensitive (LocalStack tokens, ad-hoc API keys, etc.)
+   # OMZ sources this file at shell start; it is intentionally NOT
+   # tracked by chezmoi (the repo is public).${reset}
+   touch ~/.config/zsh/omz-custom/hidden.zsh
+   chmod 600 ~/.config/zsh/omz-custom/hidden.zsh
+
+${bold}2. Personal SSH hosts${reset}
+   ${dim}# The tracked ~/.ssh/config has only universal entries (Host *,
+   # github.com, github.com-ghe). It does \`Include ~/.ssh/config.local\`
+   # for everything else. See:${reset}
+   ~/.ssh/config.local.example  # template for your machine-specific hosts
+
+${bold}3. GitHub CLI auth${reset}
+   gh auth login
+
+${bold}4. Apprise notification URLs (optional)${reset}
+   ${dim}# Add your Discord/Slack/etc. webhook URLs:${reset}
+   \$EDITOR ~/.config/apprise
+
+${bold}5. Nerd Font on Windows${reset}
+   ${dim}# Required for Powerlevel10k icons. CaskaydiaCove Nerd Font Mono
+   # is the default in your Windows Terminal config:${reset}
+   winget install Microsoft.CascadiaCode  # plus manual NF download
+
+${bold}6. Windows-side configs (Windows hosts only)${reset}
+   ${dim}# komorebi, yasb, whkd, Windows Terminal — chezmoi extracts these
+   # to %USERPROFILE%\.config\windows\ but does NOT move them into their
+   # canonical Windows install paths. See:${reset}
+   ${HOME}/.config/windows/terminal/README.md  # Terminal copy/symlink procedure
+
+${bold}7. Optional research / HPC tools${reset}
+   ${dim}# Soft-detected. Just install at the canonical paths and reopen a shell:${reset}
+   ~/miniforge3            # conda + mamba
+   ~/.spack                # Spack
+   /opt/nvidia/hpc_sdk     # NVIDIA HPC SDK
+
+${bold}8. age encryption (optional)${reset}
+   ${dim}# Already wired to your SSH key. Encrypt a file:${reset}
+   chezmoi add --encrypt ~/.netrc
+   ${dim}# To decrypt without typing the SSH passphrase each time:${reset}
+   ssh-add ~/.ssh/personal
+
+${yellow}Tmux plugins were installed automatically via TPM — no need to press
+prefix+I unless you add new plugins later.${reset}
+
+${dim}This message will not show again on this machine. To see it: re-run
+\`chezmoi apply --force\` after editing the summary script, or read
+README.md.${reset}
+
+EOF
