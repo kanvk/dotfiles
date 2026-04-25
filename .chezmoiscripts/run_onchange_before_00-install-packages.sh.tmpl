@@ -24,6 +24,18 @@ export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_ENV_HINTS=1
 export DO_NOT_TRACK=1   # community-standard env honored by gh, glab, others
 
+# --- install-error capture ---
+# Each install step appends to _install_errors on failure instead of aborting
+# the pipeline. The "==> Install summary" block at the end of this script
+# surfaces every recorded failure in one place — a single visual target instead
+# of having to scroll the install log. Per-item loops (pipx, cargo, npm, go,
+# bun, gh-extensions) record one entry per failed item; the apt batch and
+# brew-bundle batch record one entry per failed batch (scroll up for the
+# specific formula). The script always exits 0 so chezmoi proceeds to
+# run_onchange_after scripts even when individual packages didn't install.
+_install_errors=()
+_record_install_failure() { _install_errors+=("$1"); }
+
 # --- chezmoi version check (advisory) ---
 # Features used: .chezmoiexternal, lookPath, promptStringOnce, age+SSH identity.
 # All present in 2.50+; warn (don't fail) if older.
@@ -51,11 +63,13 @@ if command -v sudo >/dev/null 2>&1 && command -v apt-get >/dev/null 2>&1; then
   if command -v nala >/dev/null 2>&1; then
     echo "==> Installing apt packages via nala"
     sudo nala update
-    sudo nala install -y{{ range .packages.apt }} {{ . | quote }}{{ end }}
+    sudo nala install -y{{ range .packages.apt }} {{ . | quote }}{{ end }} \
+      || _record_install_failure "apt: nala batch reported errors (see log above)"
   else
     echo "==> Installing apt packages via apt-get (nala unavailable)"
     sudo apt-get update -y
-    sudo apt-get install -y --no-install-recommends{{ range .packages.apt }} {{ . | quote }}{{ end }}
+    sudo apt-get install -y --no-install-recommends{{ range .packages.apt }} {{ . | quote }}{{ end }} \
+      || _record_install_failure "apt: apt-get batch reported errors (see log above)"
   fi
 fi
 {{- end }}
@@ -94,6 +108,7 @@ brew bundle install --file="$_brewfile" || _bundle_rc=$?
 if [ "${_bundle_rc:-0}" -ne 0 ]; then
   echo "==> brew bundle reported errors — checking what's still missing:"
   brew bundle check --file="$_brewfile" --verbose || true
+  _record_install_failure "brew: bundle reported errors (scroll up for which formulas)"
 fi
 unset _bundle_rc
 rm -f "$_brewfile"
@@ -104,7 +119,9 @@ unset _brewfile
 if command -v pipx >/dev/null 2>&1; then
   echo "==> Installing pipx packages"
   for _pkg in{{ range .packages.pipx }} {{ . | quote }}{{ end }}; do
-    pipx install --include-deps "$_pkg" 2>/dev/null || pipx upgrade "$_pkg" || true
+    pipx install --include-deps "$_pkg" 2>/dev/null \
+      || pipx upgrade "$_pkg" \
+      || _record_install_failure "pipx: $_pkg"
   done
   unset _pkg
 fi
@@ -114,7 +131,10 @@ fi
 # --- npm (global) ---
 if command -v npm >/dev/null 2>&1; then
   echo "==> Installing npm global packages"
-  npm install -g{{ range .packages.npm }} {{ . | quote }}{{ end }}
+  for _pkg in{{ range .packages.npm }} {{ . | quote }}{{ end }}; do
+    npm install -g "$_pkg" || _record_install_failure "npm: $_pkg"
+  done
+  unset _pkg
 fi
 {{- end }}
 
@@ -141,8 +161,10 @@ if command -v cargo >/dev/null 2>&1; then
   # system lib at build time) doesn't abort the whole apply pipeline. Use
   # `cargo install-update -a` (from cargo-update) afterward to refresh.
   for _crate in{{ range .packages.cargo }} {{ . | quote }}{{ end }}; do
-    cargo install "$_crate" || \
+    cargo install "$_crate" || {
       echo "warning: cargo install $_crate failed (missing system dep? check apt list)" >&2
+      _record_install_failure "cargo: $_crate"
+    }
   done
   unset _crate
 fi
@@ -152,9 +174,10 @@ fi
 # --- go install <module>@latest ---
 if command -v go >/dev/null 2>&1; then
   echo "==> Installing go packages"
-  {{ range .packages.go -}}
-  go install {{ . | quote }}@latest
-  {{ end }}
+  for _mod in{{ range .packages.go }} {{ . | quote }}{{ end }}; do
+    go install "${_mod}@latest" || _record_install_failure "go: $_mod"
+  done
+  unset _mod
 fi
 {{- end }}
 
@@ -162,7 +185,10 @@ fi
 # --- bun (global) ---
 if command -v bun >/dev/null 2>&1; then
   echo "==> Installing bun global packages"
-  bun add -g{{ range .packages.bun }} {{ . | quote }}{{ end }}
+  for _pkg in{{ range .packages.bun }} {{ . | quote }}{{ end }}; do
+    bun add -g "$_pkg" || _record_install_failure "bun: $_pkg"
+  done
+  unset _pkg
 fi
 {{- end }}
 
@@ -177,13 +203,38 @@ if command -v gh >/dev/null 2>&1; then
   echo "==> Installing gh extensions"
   for _ext in{{ range .packages.gh_extensions }} {{ . | quote }}{{ end }}; do
     if gh extension list 2>/dev/null | grep -q "$_ext"; then
-      gh extension upgrade "$_ext" >/dev/null 2>&1 || \
+      gh extension upgrade "$_ext" >/dev/null 2>&1 || {
         echo "warning: gh extension upgrade $_ext failed (transient?)" >&2
+        _record_install_failure "gh-ext: $_ext (upgrade)"
+      }
     else
-      gh extension install "$_ext" >/dev/null 2>&1 || \
+      gh extension install "$_ext" >/dev/null 2>&1 || {
         echo "warning: gh extension install $_ext failed (rate-limited or unauth)" >&2
+        _record_install_failure "gh-ext: $_ext (install)"
+      }
     fi
   done
   unset _ext
 fi
 {{- end }}
+
+# --- install summary ---
+# Always print a single-block recap at the end of the script. If anything was
+# recorded, it surfaces here as one short list; if not, the user gets one green
+# line confirming the run was clean. Either way the script exits 0 so chezmoi
+# can proceed to run_onchange_after scripts.
+echo
+echo "================================================================"
+if [ "${#_install_errors[@]}" -eq 0 ]; then
+  echo "==> Install summary: all packages installed successfully"
+else
+  echo "==> Install summary: ${#_install_errors[@]} item(s) reported errors"
+  for _err in "${_install_errors[@]}"; do
+    echo "    - $_err"
+  done
+  echo
+  echo "    The pipeline continued past these failures. Re-run"
+  echo "    \`chezmoi apply --force\` after fixing the underlying issue,"
+  echo "    or scroll up for the per-tool error output."
+fi
+echo "================================================================"
