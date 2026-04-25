@@ -46,10 +46,20 @@ elif [ -x /opt/homebrew/bin/brew ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-echo "==> Installing brew packages"
-# `brew install` is idempotent: already-installed packages are a no-op.
-# Tap-prefixed entries (foo/tap/bar) auto-tap.
-brew install{{ range .packages.brew }} {{ . | quote }}{{ end }}
+echo "==> Installing brew packages via brew bundle"
+# Generate Brewfile from .chezmoidata.yaml at apply time. Tap-prefixed entries
+# (foo/tap/bar) auto-tap. We deliberately don't pass `--cleanup` — it removes
+# anything not in the Brewfile, which is too aggressive for a dotfiles repo;
+# the user can run `brew bundle cleanup --file=...` manually if they want it.
+_brewfile="$(mktemp)"
+cat > "$_brewfile" <<'BREWFILE'
+{{- range .packages.brew }}
+brew "{{ . }}"
+{{- end }}
+BREWFILE
+brew bundle install --file="$_brewfile" --no-lock --quiet || true
+rm -f "$_brewfile"
+unset _brewfile
 
 {{ if .packages.pipx -}}
 # --- pipx ---
