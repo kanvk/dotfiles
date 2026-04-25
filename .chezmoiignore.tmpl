@@ -17,6 +17,16 @@ justfile
 # we don't want it landing as the actual ~/.ssh/config.local.example file.
 .ssh/config.local.example
 
+{{- if not (and (hasKey . "encrypt_locals") .encrypt_locals) }}
+# Encrypted personal-but-not-secret locals (insteadOf rules, GHE SSH alias).
+# Excluded unless the user opted in at init time AND has the age identity in
+# place. Without the identity, decryption would fail and apply would error.
+# `hasKey` keeps older chezmoi.toml files (pre encrypt_locals prompt) from
+# erroring out — they default to "ignore" until the user re-runs init.
+.gitconfig.local
+.ssh/config.local
+{{- end }}
+
 {{- if ne .chezmoi.os "windows" }}
 # Windows-native GUI configs — kept in the source repo as a reference, but the user
 # moves them manually on a Windows box since this chezmoi config targets Linux+WSL.

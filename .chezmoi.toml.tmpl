@@ -24,6 +24,18 @@
 {{- $sshAgeRecipient = promptStringOnce . "ssh_age_recipient" (printf "Public-key string for %s.pub (paste contents)" $sshAgeIdentity) -}}
 {{- end -}}
 
+{{/*
+   Opt-in to applying the personal-but-not-secret encrypted "locals" tracked
+   under encrypted_dot_gitconfig.local etc. (insteadOf rules, GHE alias).
+   Disabled by default: someone else cloning this repo can't decrypt these
+   anyway, and disposable / test boxes shouldn't pull them in. Enable on
+   machines where the matching age identity is available.
+*/}}
+{{- $encryptLocals := false -}}
+{{- if $sshAgeIdentity -}}
+{{- $encryptLocals = promptBoolOnce . "encrypt_locals" "Apply encrypted personal locals (~/.gitconfig.local, ~/.ssh/config.local)?" -}}
+{{- end -}}
+
 {{/* Derived facts - computed, not prompted */}}
 {{- $kernelOsRelease := "" -}}
 {{- if hasKey .chezmoi.kernel "osrelease" -}}
@@ -58,5 +70,6 @@ encryption = "age"
     gpg_signing_key = {{ $gpgSigningKey | quote }}
     ssh_age_identity = {{ $sshAgeIdentity | quote }}
     ssh_age_recipient = {{ $sshAgeRecipient | quote }}
+    encrypt_locals = {{ $encryptLocals }}
     is_wsl = {{ $isWsl }}
     is_debian_like = {{ $isDebianLike }}
