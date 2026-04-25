@@ -1,0 +1,40 @@
+{{/*
+   chezmoi init-time config.
+
+   This template runs on `chezmoi init` and writes the rendered config to
+   ~/.config/chezmoi/chezmoi.toml. Answers are cached via promptStringOnce;
+   re-running `chezmoi init` will NOT re-prompt. To re-prompt, edit or
+   delete ~/.config/chezmoi/chezmoi.toml then run `chezmoi init` again.
+*/}}
+
+{{- $name := promptStringOnce . "name" "Full name (for git config)" -}}
+{{- $email := promptStringOnce . "email" "Email (for git config)" -}}
+{{- $githubUser := promptStringOnce . "github_user" "GitHub username" -}}
+{{- $gpgSigningKey := promptStringOnce . "gpg_signing_key" "GPG signing key fingerprint (leave blank to skip commit signing)" -}}
+
+{{/* Derived facts - computed, not prompted */}}
+{{- $kernelOsRelease := "" -}}
+{{- if hasKey .chezmoi.kernel "osrelease" -}}
+  {{- $kernelOsRelease = .chezmoi.kernel.osrelease -}}
+{{- end -}}
+{{- $isWsl := or (contains "microsoft" (lower $kernelOsRelease)) (ne (env "WSL_DISTRO_NAME") "") -}}
+
+{{- $osId := "" -}}
+{{- $osIdLike := "" -}}
+{{- if hasKey .chezmoi "osRelease" -}}
+  {{- $osId = (.chezmoi.osRelease.id | default "") -}}
+  {{- $osIdLike = (.chezmoi.osRelease.idLike | default "") -}}
+{{- end -}}
+{{- $isDebianLike := or
+    (eq $osId "debian")
+    (eq $osId "ubuntu")
+    (eq $osId "kali")
+    (contains "debian" $osIdLike) -}}
+
+[data]
+    name = {{ $name | quote }}
+    email = {{ $email | quote }}
+    github_user = {{ $githubUser | quote }}
+    gpg_signing_key = {{ $gpgSigningKey | quote }}
+    is_wsl = {{ $isWsl }}
+    is_debian_like = {{ $isDebianLike }}

@@ -1,0 +1,14 @@
+{{/*
+   External sources pulled in at `chezmoi apply` time.
+
+   Plugin managers (sheldon, lazy.nvim, TPM itself, Mason) are authoritative for
+   their own trees — we don't double-manage their content here. Just the manager
+   entrypoints that aren't installed by a package manager:
+*/}}
+
+# TPM (Tmux Plugin Manager) — required by dot_tmux.conf for plugin loading.
+# After first apply, run `prefix + I` inside a tmux session to install plugins.
+[".tmux/plugins/tpm"]
+    type = "git-repo"
+    url = "https://github.com/tmux-plugins/tpm.git"
+    refreshPeriod = "168h"

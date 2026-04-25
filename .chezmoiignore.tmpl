@@ -1,0 +1,34 @@
+{{/*
+   Files and patterns excluded from `chezmoi apply`.
+   This file is itself a template — use {{ if ... }} for OS/host-conditional ignores.
+*/}}
+
+# Source-tree docs: never apply to $HOME
+README.md
+CLAUDE.md
+
+# Legacy machine-local secret pattern (superseded by ~/.config/zsh/omz-custom/hidden.zsh
+# which lives outside this repo entirely). Defense in depth — if someone ever drops a
+# file named hidden.zsh anywhere in the source, it won't be applied.
+hidden.zsh
+
+{{- if ne .chezmoi.os "windows" }}
+# Windows-native GUI configs — kept in the source repo as a reference, but the user
+# moves them manually on a Windows box since this chezmoi config targets Linux+WSL.
+dot_config/windows/**
+{{- end }}
+
+# Defensive: never vendor sheldon's plugin cache, even if accidentally re-added.
+dot_local/share/sheldon/repos/**
+
+# Runtime/ephemeral Claude Code state — managed at runtime, not tracked.
+private_dot_claude/.credentials.json
+private_dot_claude/history.jsonl
+private_dot_claude/projects/**
+private_dot_claude/shell-snapshots/**
+private_dot_claude/todos/**
+private_dot_claude/ide/**
+private_dot_claude/statsig/**
+private_dot_claude/backups/**
+private_dot_claude/logs/**
+private_dot_claude/settings.local.json

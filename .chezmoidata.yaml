@@ -1,0 +1,86 @@
+# Declarative package lists consumed by .chezmoiscripts/run_onchange_before_00-install-packages.sh.tmpl
+# Edit this file to add/remove tools; the install script detects content changes via hash.
+
+packages:
+  # System packages (apt) — installed only on Debian-like distros (Debian, Ubuntu, Kali).
+  # Intentionally minimal: just what's required to bootstrap Homebrew and the rest.
+  apt:
+    - build-essential
+    - ca-certificates
+    - curl
+    - file
+    - git
+    - git-lfs
+    - gnupg
+    - procps
+    - tmux
+    - wget
+    - xclip
+    - zsh
+
+  # Homebrew packages — source of truth for version-current user tooling.
+  brew:
+    # Editors / multiplexer
+    - neovim
+    - tmux
+    - zsh
+    - sheldon
+    # File nav / listing
+    - bat
+    - broot
+    - eza
+    - fd
+    - fzf
+    - lsd
+    - moor
+    - ripgrep
+    - television
+    - yazi
+    - zoxide
+    # Git tooling
+    - gh
+    - gh-dash
+    - git-delta
+    - git-lfs
+    - lazygit
+    # Version / language managers
+    - fnm
+    - mise
+    - pyenv
+    - rbenv
+    # Python
+    - pipx
+    - uv
+    # Observability / system
+    - atuin
+    - bottom
+    - btop
+    - lazydocker
+    - neofetch
+    # Misc CLI
+    - ast-grep
+    - direnv
+    - jq
+    - yq
+    - sesh
+    - tldr
+    - vivid
+    - powerlevel10k
+
+  # pipx — isolated Python apps (not libraries).
+  pipx:
+    - hatch
+    - pgcli
+    - poetry
+
+  # npm -g
+  npm: []
+
+  # cargo install
+  cargo: []
+
+  # go install <module>@latest — listed as full module paths.
+  go: []
+
+  # bun add -g
+  bun: []
