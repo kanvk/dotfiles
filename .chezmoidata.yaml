@@ -104,12 +104,11 @@ packages:
     - lazygit
 
     # language toolchains needed BEFORE the per-language install steps
-    # below (rustup → cargo, go → go install, node → npm -g).
+    # below (rustup → cargo, go → go install, node → npm -g, npm → bun).
     # Install scripts soft-detect the binaries; without these, those steps
     # silently skip on fresh machines.
-    # bun is intentionally NOT here — it's not in homebrew/core on Linux
-    # (would need oven-sh/bun tap), and packages.bun is empty so nothing
-    # depends on it. Install via `npm i -g bun` or the official curl-pipe.
+    # bun is NOT here: not in homebrew/core on Linux. Installed via npm
+    # globals instead (see packages.npm below).
     - go
     - node         # provides npm; fnm-managed versions take over on PATH later
     - rustup       # bootstrap step in 00-install-packages handles `rustup-init -y`
@@ -239,6 +238,7 @@ packages:
   # ---- npm globals ----
   npm:
     - "@openai/codex"
+    - bun             # bun isn't in homebrew/core on Linux; npm-global is the simplest portable path
     - neovim          # node provider for nvim plugins
 
   # ---- go install <module>@latest ----
@@ -247,3 +247,7 @@ packages:
 
   # ---- bun add -g ----
   bun: []
+
+  # ---- gh CLI extensions (require `gh` from brew) ----
+  gh_extensions:
+    - dlvhdr/gh-dash
