@@ -16,6 +16,7 @@ On first run, chezmoi prompts for:
 | --- | --- |
 | Full name | `~/.gitconfig` user.name |
 | Email | `~/.gitconfig` user.email |
+| Package tier (minimal \| base \| full) | which package set to install (see [Package tiers](#package-tiers) below); default `full` |
 | Sign git commits with GPG? | yes/no gate; only prompts for the fingerprint below if yes |
 | GPG signing key fingerprint | `~/.gitconfig` user.signingKey; only prompted when GPG signing is enabled |
 | SSH key path for age encryption | `~/.config/chezmoi/chezmoi.toml` `[age]` block — leave blank to disable encryption |
@@ -23,6 +24,18 @@ On first run, chezmoi prompts for:
 | Apply encrypted personal locals? | gates the encrypted-tracked `~/.gitconfig.local` and `~/.ssh/config.local` files; only prompted when an age identity is set |
 
 Answers are saved to `~/.config/chezmoi/chezmoi.toml` and reused on subsequent applies. To re-prompt, delete that file and run `chezmoi init` again.
+
+### Package tiers
+
+The bootstrap installs one of three nested tiers (full ⊇ base ⊇ minimal):
+
+- **minimal** — shell, git, and a handful of CLI niceties (`bat`, `eza`, `fd`, `fzf`, `ripgrep`, `zoxide`, `gh`, `jq`, `lazygit`, `delta`). Suitable for disposable boxes, shared servers, or short-lived containers.
+- **base** — minimal **plus** daily-driver dev tooling: build deps, language toolchains (rustup, go, node, python via pyenv/uv/pipx), prompts (starship), TUIs (broot, lsd, yazi, btop, lazydocker), security/secret tools (ggshield, gitleaks). The default for personal dev machines.
+- **full** — base **plus** ML / specialty / heavy tools (`llama.cpp`, `ollama`, `vllm`, `wandb`, `caddy`, `duckdb`, `keydb`, `rclone`, `pixi`, `typst`, the `uuu` update-sweep prerequisites). The default chosen at the prompt; the user's main box runs this.
+
+Inspect what a tier resolves to with `just show-tier <name>` (or `./tests/show-tier.sh <name>`). To switch tiers on an existing machine: edit `tier = "..."` in `~/.config/chezmoi/chezmoi.toml` and run `chezmoi apply`. **Downgrades don't uninstall** — per the additivity contract, switching `full → minimal` only stops adding new packages; existing extras stay until you `brew bundle cleanup` (or equivalent) by hand.
+
+Tiers live in `.chezmoidata.yaml` under the `tiers:` map. Each tier has `inherits`, `include`, and `exclude` blocks (per-manager). Adding a new tier is a matter of declaring it there; the install script resolves whichever name `tier` points to.
 
 **Requirements:**
 - chezmoi `>= 2.50` (uses `.chezmoiexternal`, `lookPath`, `promptStringOnce`, `[age].identity` with SSH keys). The `get.chezmoi.io` install bootstrap pulls the latest stable.
