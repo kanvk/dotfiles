@@ -225,11 +225,12 @@ tiers:
         # AI / ML
         - llama.cpp
         - ollama
+        # python (specialty libs)
+        - python-tk@3.12
         # additional language managers
         - ghcup
         - juliaup
         - nvm
-        - python-tk@3.12
         - rbenv
         - ruby
         # `uu`/`uuu` update-sweep prerequisites — invoked directly as binaries,
