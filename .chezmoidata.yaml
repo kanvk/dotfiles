@@ -63,6 +63,9 @@ packages:
     # python provider for nvim (apt is the canonical install path; pipx is for apps)
     - python3-pynvim
 
+    # GPG: TUI passphrase prompt (avoids "no pinentry" hangs on WSL/headless)
+    - pinentry-curses
+
   # ---- Homebrew ----
   brew:
     # editors / shell / multiplexer

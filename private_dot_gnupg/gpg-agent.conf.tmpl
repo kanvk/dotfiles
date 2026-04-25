@@ -1,0 +1,10 @@
+{{- /*
+   gpg-agent configuration. Forces pinentry-curses (TUI) so passphrase prompts
+   work on headless / WSL / SSH sessions where the X11/Wayland pinentry hangs.
+   Path is resolved at apply time; falls back to the canonical Debian path.
+*/ -}}
+{{- $pinentry := lookPath "pinentry-curses" -}}
+{{- if not $pinentry -}}
+{{- $pinentry = "/usr/bin/pinentry-curses" -}}
+{{- end -}}
+pinentry-program {{ $pinentry }}
