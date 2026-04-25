@@ -10,11 +10,26 @@
 set -euo pipefail
 
 {{ if .is_debian_like -}}
-# --- apt (Debian/Ubuntu/Kali) ---
+# --- apt / nala (Debian/Ubuntu/Kali) ---
 if command -v sudo >/dev/null 2>&1 && command -v apt-get >/dev/null 2>&1; then
-  echo "==> Installing apt packages"
-  sudo apt-get update -y
-  sudo apt-get install -y --no-install-recommends {{ range .packages.apt }} {{ . | quote }}{{ end }}
+  # Bootstrap nala first so the rest of this run benefits from its parallel
+  # downloads + nicer progress UI. nala is itself in the apt list, so this is a
+  # one-time bootstrap on a brand-new machine.
+  if ! command -v nala >/dev/null 2>&1; then
+    echo "==> Bootstrapping nala via apt-get"
+    sudo apt-get update -y
+    sudo apt-get install -y --no-install-recommends nala || true
+  fi
+
+  if command -v nala >/dev/null 2>&1; then
+    echo "==> Installing apt packages via nala"
+    sudo nala update
+    sudo nala install -y{{ range .packages.apt }} {{ . | quote }}{{ end }}
+  else
+    echo "==> Installing apt packages via apt-get (nala unavailable)"
+    sudo apt-get update -y
+    sudo apt-get install -y --no-install-recommends{{ range .packages.apt }} {{ . | quote }}{{ end }}
+  fi
 fi
 {{- end }}
 
@@ -33,6 +48,7 @@ fi
 
 echo "==> Installing brew packages"
 # `brew install` is idempotent: already-installed packages are a no-op.
+# Tap-prefixed entries (foo/tap/bar) auto-tap.
 brew install{{ range .packages.brew }} {{ . | quote }}{{ end }}
 
 {{ if .packages.pipx -}}
@@ -58,12 +74,14 @@ fi
 # --- cargo ---
 if command -v cargo >/dev/null 2>&1; then
   echo "==> Installing cargo packages"
+  # `cargo install` is idempotent (no-ops if already at requested version).
+  # Use `cargo install-update -a` (from cargo-update) afterward to refresh.
   cargo install{{ range .packages.cargo }} {{ . | quote }}{{ end }}
 fi
 {{- end }}
 
 {{ if .packages.go -}}
-# --- go install ---
+# --- go install <module>@latest ---
 if command -v go >/dev/null 2>&1; then
   echo "==> Installing go packages"
   {{ range .packages.go -}}

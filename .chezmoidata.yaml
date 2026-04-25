@@ -1,31 +1,80 @@
 # Declarative package lists consumed by .chezmoiscripts/run_onchange_before_00-install-packages.sh.tmpl
 # Edit this file to add/remove tools; the install script detects content changes via hash.
+#
+# Conventions:
+# - apt: minimal dev-essentials + system-level things brew can't / shouldn't own
+#   (shell, tmux, build deps for pyenv-built Python, media for nvim/yazi previews).
+# - brew: source of truth for version-current user tooling. Most things go here.
+#   Tap-prefixed entries (e.g. hashicorp/tap/vault) auto-tap on install.
+# - pipx: isolated Python applications.
+# - cargo: Rust-only tools that aren't in brew (or for which the cargo build
+#   is preferred). Things available via brew live in `brew`, not here.
+# - npm/go/bun: language-specific globals where there's no brew equivalent.
 
 packages:
-  # System packages (apt) — installed only on Debian-like distros (Debian, Ubuntu, Kali).
-  # Intentionally minimal: just what's required to bootstrap Homebrew and the rest.
+  # ---- apt (Debian/Ubuntu/Kali) ----
   apt:
+    # bootstrap (also satisfies Homebrew install prereqs)
     - build-essential
     - ca-certificates
     - curl
     - file
     - git
-    - git-lfs
     - gnupg
     - procps
-    - tmux
     - wget
-    - xclip
-    - zsh
 
-  # Homebrew packages — source of truth for version-current user tooling.
+    # apt frontend (the install script switches to nala once present)
+    - nala
+
+    # core shell / terminal
+    - tmux
+    - zsh
+    - xclip
+
+    # build tooling
+    - cmake
+    - pkg-config
+    - shellcheck
+
+    # python build deps (so `pyenv install <X>` works without errors)
+    - libbz2-dev
+    - libffi-dev
+    - liblzma-dev
+    - libncurses-dev
+    - libreadline-dev
+    - libsqlite3-dev
+    - libssl-dev
+    - libxml2-dev
+    - libxmlsec1-dev
+    - python3-tk
+    - tk-dev
+    - zlib1g-dev
+
+    # media (referenced by nvim/yazi image previews + alias workflows)
+    - chafa
+    - ffmpeg
+    - ffmpegthumbnailer
+
+    # CLI utilities referenced in dot_config/zsh/omz-custom/alias.zsh
+    - ranger
+    - trash-cli
+
+    # python provider for nvim (apt is the canonical install path; pipx is for apps)
+    - python3-pynvim
+
+  # ---- Homebrew ----
   brew:
-    # Editors / multiplexer
+    # editors / shell / multiplexer
     - neovim
     - tmux
     - zsh
     - sheldon
-    # File nav / listing
+    - powerlevel10k
+    - starship
+    - zellij
+
+    # file nav / listing / preview
     - bat
     - broot
     - eza
@@ -34,53 +83,154 @@ packages:
     - lsd
     - moor
     - ripgrep
+    - ripgrep-all
     - television
+    - tree-sitter-cli
+    - ugrep
     - yazi
     - zoxide
-    # Git tooling
+
+    # git / VCS
+    - difftastic
     - gh
     - gh-dash
+    - git-cliff
     - git-delta
+    - git-extras
     - git-lfs
+    - jj
     - lazygit
-    # Version / language managers
+
+    # version / language managers
+    - asdf
     - fnm
+    - ghcup
+    - juliaup
     - mise
+    - nvm
     - pyenv
+    - python-tk@3.12
     - rbenv
-    # Python
+    - ruby
+
+    # python (apps + tooling)
     - pipx
     - uv
-    # Observability / system
+
+    # observability / system
     - atuin
     - bottom
     - btop
     - lazydocker
     - neofetch
-    # Misc CLI
+
+    # build / quality
+    - act
     - ast-grep
+    - cloc
+    - scc
+
+    # secrets / security
+    - ggshield
+    - gitleaks
+    - rustscan
+
+    # data / storage
+    - duckdb
+    - keydb
+    - rclone
+
+    # network / sharing
+    - caddy
+    - curlie
+    - dumbpipe
+    - magic-wormhole
+    - xh
+
+    # AI / ML
+    - llama.cpp
+    - ollama
+
+    # misc
+    - chezmoi
+    - cheat
     - direnv
+    - f2
     - jq
-    - yq
+    - mcfly        # zshrc has it disabled; keep installable for parity
+    - pastel
+    - pixi
+    - pkl
     - sesh
     - tldr
+    - tlrc
+    - typst
     - vivid
-    - powerlevel10k
+    - yq
 
-  # pipx — isolated Python apps (not libraries).
+    # taps (full path auto-taps on install)
+    - anomalyco/tap/opencode
+    - hashicorp/tap/vault
+    - localstack/tap/localstack-cli
+    - mutagen-io/mutagen/mutagen
+
+  # ---- pipx ----
   pipx:
+    - apprise
+    - bandit
+    - build
+    - bump-my-version
+    - conda-lock
+    - dvc
+    - dynaconf
+    - glances
+    - gpustack
+    - gpustat
     - hatch
+    - huggingface-hub
+    - kaggle
+    - markitdown
+    - mkdocs
+    - mlflow
+    - nbdime
+    - nox
+    - nvitop
+    - open-webui
+    - openai-whisper
     - pgcli
+    - pip-audit
+    - pip-tools
     - poetry
+    - pre-commit
+    - prek
+    - pysentry-rs
+    - python-semantic-release
+    - roboflow
+    - shell-functools
+    - tox
+    - twine
+    - vllm
+    - wandb
+    - ydiff
 
-  # npm -g
-  npm: []
+  # ---- cargo (Rust-only — things in brew are NOT duplicated here) ----
+  cargo:
+    - cargo-update
+    - choose
+    - code-minimap
+    - coreutils       # rust uutils — used by alias.zsh `command coreutils <cmd>`
+    - du-dust
+    - gitoxide
+    - numbat-cli
 
-  # cargo install
-  cargo: []
+  # ---- npm globals ----
+  npm:
+    - "@openai/codex"
+    - neovim          # node provider for nvim plugins
 
-  # go install <module>@latest — listed as full module paths.
-  go: []
+  # ---- go install <module>@latest ----
+  go:
+    - github.com/Gelio/go-global-update    # `uu` alias uses go-global-update for goup
 
-  # bun add -g
+  # ---- bun add -g ----
   bun: []
