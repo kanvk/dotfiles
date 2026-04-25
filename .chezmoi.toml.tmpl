@@ -55,8 +55,18 @@
     (eq $osId "kali")
     (contains "debian" $osIdLike) -}}
 
-{{- if and $sshAgeIdentity $sshAgeRecipient }}
+{{/*
+   Always declare age as the encryption backend so chezmoi can recognize the
+   .age suffix on encrypted source files and resolve their destination paths.
+   Without this declaration, chezmoi errors with "encryption not configured"
+   the moment it scans an encrypted_*.age file — even when .chezmoiignore
+   would have filtered the file out anyway. The [age] block (with real
+   identity + recipient) is only emitted when the user provided an SSH age
+   identity at init time; without it, decryption is never attempted because
+   the encrypted-locals files are gated on encrypt_locals=true.
+*/}}
 encryption = "age"
+{{- if and $sshAgeIdentity $sshAgeRecipient }}
 
 [age]
     identity  = {{ $sshAgeIdentity | quote }}
