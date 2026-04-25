@@ -1,0 +1,54 @@
+{{- /*
+  resolve-tier — recursive tier-graph walker.
+
+  Args (passed as a single dict):
+    .tier   string         tier name to resolve
+    .tiers  map[string]    full tiers map from .chezmoidata.yaml
+    .acc    map[string]list  accumulator (per-manager package lists). Pass an
+                             empty dict on the initial call.
+
+  Returns: a JSON string of {manager: [pkgs]} with this tier's full effective
+  set, after walking inherits, applying include, then applying exclude.
+
+  Resolution semantics:
+    1. Recurse into each parent in `inherits` (left-to-right). The accumulator
+       is threaded through, so later parents see the merged state of earlier
+       ones. Diamond inheritance is handled by the per-step union/dedupe.
+    2. Add this tier's `include.<manager>` lists to the accumulator (union).
+    3. Subtract this tier's `exclude.<manager>` lists from the accumulator.
+
+  Excludes are eager (per-level): a child tier inheriting from a parent that
+  excludes X starts without X. This matches "derive a tier by adjusting another"
+  intuition (e.g. full-without-git inherits from full and excludes git stuff).
+
+  Cycle handling: NONE. Don't write circular inherits. The resolver will recur
+  until Go's template engine bails with a stack-overflow-shaped error.
+*/ -}}
+{{- $acc := .acc -}}
+{{- $tierName := .tier -}}
+{{- $tiers := .tiers -}}
+{{- $tier := index $tiers $tierName -}}
+{{- if not $tier -}}
+{{-   fail (printf "tier %q not in .chezmoidata.yaml's tiers map" $tierName) -}}
+{{- end -}}
+{{- /* recurse into parents first, threading the accumulator */ -}}
+{{- range $parent := (index $tier "inherits") | default list -}}
+{{-   $resolvedJson := includeTemplate "resolve-tier" (dict "tier" $parent "tiers" $tiers "acc" $acc) -}}
+{{-   $acc = $resolvedJson | fromJson -}}
+{{- end -}}
+{{- /* add this tier's includes (union per manager) */ -}}
+{{- range $mgr, $pkgs := (index $tier "include") | default dict -}}
+{{-   $existing := default list (index $acc $mgr) -}}
+{{-   $merged := concat $existing $pkgs | uniq -}}
+{{-   $acc = set $acc $mgr $merged -}}
+{{- end -}}
+{{- /* subtract this tier's excludes (set-diff per manager) */ -}}
+{{- range $mgr, $pkgs := (index $tier "exclude") | default dict -}}
+{{-   $existing := default list (index $acc $mgr) -}}
+{{-   $remaining := list -}}
+{{-   range $existing -}}
+{{-     if not (has . $pkgs) -}}{{- $remaining = append $remaining . -}}{{- end -}}
+{{-   end -}}
+{{-   $acc = set $acc $mgr $remaining -}}
+{{- end -}}
+{{- $acc | toJson -}}

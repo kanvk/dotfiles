@@ -1,9 +1,18 @@
+{{- /*
+  Resolve the chosen tier (default "full" if the cached chezmoi.toml predates
+  the tier prompt) into a flat per-manager package set. After this block,
+  $resolved is a dict like {apt: [...], brew: [...], pipx: [...], ...} that
+  the rest of the script consumes via $resolved.<manager>.
+*/ -}}
+{{- $tierName := "full" -}}
+{{- if hasKey . "tier" -}}{{- $tierName = .tier -}}{{- end -}}
+{{- $resolved := includeTemplate "resolve-tier" (dict "tier" $tierName "tiers" .tiers "acc" dict) | fromJson -}}
 #!/usr/bin/env bash
 #
-# Installs packages declared in .chezmoidata.yaml.
+# Installs packages declared in .chezmoidata.yaml for the chosen tier.
 # chezmoi re-runs this script whenever its rendered content changes — which
-# happens automatically when any package list in .chezmoidata.yaml is edited
-# (the hash below captures that).
+# happens automatically when any package list is edited or when the user's
+# selected tier changes (the hash below captures both).
 #
 # Additivity contract: every step here is install-or-upgrade only — never
 # uninstall, prune, or autoremove. Anything the user installs ad-hoc on a
@@ -11,7 +20,8 @@
 # (`brew bundle cleanup --file=<bundle>`, `nala autoremove`, etc.). See the
 # CLAUDE.md "user intent, not exclusivity" bullet for the rationale.
 #
-# packages-hash: {{ .packages | toYaml | sha256sum }}
+# tier: {{ $tierName }}
+# packages-hash: {{ $resolved | toYaml | sha256sum }}
 
 set -euo pipefail
 
@@ -36,6 +46,8 @@ export DO_NOT_TRACK=1   # community-standard env honored by gh, glab, others
 _install_errors=()
 _record_install_failure() { _install_errors+=("$1"); }
 
+echo "==> Installing tier: {{ $tierName }}"
+
 # --- chezmoi version check (advisory) ---
 # Features used: .chezmoiexternal, lookPath, promptStringOnce, age+SSH identity.
 # All present in 2.50+; warn (don't fail) if older.
@@ -48,7 +60,7 @@ if command -v chezmoi >/dev/null 2>&1; then
   unset _czm_ver _czm_major _czm_minor
 fi
 
-{{ if .is_debian_like -}}
+{{ if and .is_debian_like (index $resolved "apt") -}}
 # --- apt / nala (Debian/Ubuntu/Kali) ---
 if command -v sudo >/dev/null 2>&1 && command -v apt-get >/dev/null 2>&1; then
   # Bootstrap nala first so the rest of this run benefits from its parallel
@@ -63,17 +75,18 @@ if command -v sudo >/dev/null 2>&1 && command -v apt-get >/dev/null 2>&1; then
   if command -v nala >/dev/null 2>&1; then
     echo "==> Installing apt packages via nala"
     sudo nala update
-    sudo nala install -y{{ range .packages.apt }} {{ . | quote }}{{ end }} \
+    sudo nala install -y{{ range (index $resolved "apt") }} {{ . | quote }}{{ end }} \
       || _record_install_failure "apt: nala batch reported errors (see log above)"
   else
     echo "==> Installing apt packages via apt-get (nala unavailable)"
     sudo apt-get update -y
-    sudo apt-get install -y --no-install-recommends{{ range .packages.apt }} {{ . | quote }}{{ end }} \
+    sudo apt-get install -y --no-install-recommends{{ range (index $resolved "apt") }} {{ . | quote }}{{ end }} \
       || _record_install_failure "apt: apt-get batch reported errors (see log above)"
   fi
 fi
 {{- end }}
 
+{{ if index $resolved "brew" -}}
 # --- Homebrew ---
 if ! command -v brew >/dev/null 2>&1; then
   echo "==> Installing Homebrew (NONINTERACTIVE)"
@@ -88,13 +101,13 @@ elif [ -x /opt/homebrew/bin/brew ]; then
 fi
 
 echo "==> Installing brew packages via brew bundle"
-# Generate Brewfile from .chezmoidata.yaml at apply time. Tap-prefixed entries
-# (foo/tap/bar) auto-tap. We deliberately don't pass `--cleanup` — it removes
-# anything not in the Brewfile, which is too aggressive for a dotfiles repo;
-# the user can run `brew bundle cleanup --file=...` manually if they want it.
+# Generate Brewfile from the resolved tier set at apply time. Tap-prefixed
+# entries (foo/tap/bar) auto-tap. We deliberately don't pass `--cleanup` — it
+# removes anything not in the Brewfile, which is too aggressive for a dotfiles
+# repo; the user can run `brew bundle cleanup --file=...` manually if they want it.
 _brewfile="$(mktemp)"
 cat > "$_brewfile" <<'BREWFILE'
-{{- range .packages.brew }}
+{{- range (index $resolved "brew") }}
 brew "{{ . }}"
 {{- end }}
 BREWFILE
@@ -113,12 +126,13 @@ fi
 unset _bundle_rc
 rm -f "$_brewfile"
 unset _brewfile
+{{- end }}
 
-{{ if .packages.pipx -}}
+{{ if index $resolved "pipx" -}}
 # --- pipx ---
 if command -v pipx >/dev/null 2>&1; then
   echo "==> Installing pipx packages"
-  for _pkg in{{ range .packages.pipx }} {{ . | quote }}{{ end }}; do
+  for _pkg in{{ range (index $resolved "pipx") }} {{ . | quote }}{{ end }}; do
     pipx install --include-deps "$_pkg" 2>/dev/null \
       || pipx upgrade "$_pkg" \
       || _record_install_failure "pipx: $_pkg"
@@ -127,18 +141,18 @@ if command -v pipx >/dev/null 2>&1; then
 fi
 {{- end }}
 
-{{ if .packages.npm -}}
+{{ if index $resolved "npm" -}}
 # --- npm (global) ---
 if command -v npm >/dev/null 2>&1; then
   echo "==> Installing npm global packages"
-  for _pkg in{{ range .packages.npm }} {{ . | quote }}{{ end }}; do
+  for _pkg in{{ range (index $resolved "npm") }} {{ . | quote }}{{ end }}; do
     npm install -g "$_pkg" || _record_install_failure "npm: $_pkg"
   done
   unset _pkg
 fi
 {{- end }}
 
-{{ if .packages.cargo -}}
+{{ if index $resolved "cargo" -}}
 # --- rustup bootstrap (so `cargo install` below has a toolchain) ---
 # Brew installs rustup-init only; we still have to run it to pull a stable
 # toolchain. Skip if cargo is already on PATH (existing rustup install,
@@ -160,7 +174,7 @@ if command -v cargo >/dev/null 2>&1; then
   # Install one-at-a-time + `|| true` so a single bad crate (e.g. missing
   # system lib at build time) doesn't abort the whole apply pipeline. Use
   # `cargo install-update -a` (from cargo-update) afterward to refresh.
-  for _crate in{{ range .packages.cargo }} {{ . | quote }}{{ end }}; do
+  for _crate in{{ range (index $resolved "cargo") }} {{ . | quote }}{{ end }}; do
     cargo install "$_crate" || {
       echo "warning: cargo install $_crate failed (missing system dep? check apt list)" >&2
       _record_install_failure "cargo: $_crate"
@@ -170,29 +184,29 @@ if command -v cargo >/dev/null 2>&1; then
 fi
 {{- end }}
 
-{{ if .packages.go -}}
+{{ if index $resolved "go" -}}
 # --- go install <module>@latest ---
 if command -v go >/dev/null 2>&1; then
   echo "==> Installing go packages"
-  for _mod in{{ range .packages.go }} {{ . | quote }}{{ end }}; do
+  for _mod in{{ range (index $resolved "go") }} {{ . | quote }}{{ end }}; do
     go install "${_mod}@latest" || _record_install_failure "go: $_mod"
   done
   unset _mod
 fi
 {{- end }}
 
-{{ if .packages.bun -}}
+{{ if index $resolved "bun" -}}
 # --- bun (global) ---
 if command -v bun >/dev/null 2>&1; then
   echo "==> Installing bun global packages"
-  for _pkg in{{ range .packages.bun }} {{ . | quote }}{{ end }}; do
+  for _pkg in{{ range (index $resolved "bun") }} {{ . | quote }}{{ end }}; do
     bun add -g "$_pkg" || _record_install_failure "bun: $_pkg"
   done
   unset _pkg
 fi
 {{- end }}
 
-{{ if .packages.gh_extensions -}}
+{{ if index $resolved "gh_extensions" -}}
 # --- gh CLI extensions ---
 # `gh extension install OWNER/REPO` works without `gh auth login` for public
 # extensions (uses the unauth GitHub API), but rate-limit failures or sandbox
@@ -201,7 +215,7 @@ fi
 # "already installed" otherwise).
 if command -v gh >/dev/null 2>&1; then
   echo "==> Installing gh extensions"
-  for _ext in{{ range .packages.gh_extensions }} {{ . | quote }}{{ end }}; do
+  for _ext in{{ range (index $resolved "gh_extensions") }} {{ . | quote }}{{ end }}; do
     if gh extension list 2>/dev/null | grep -q "$_ext"; then
       gh extension upgrade "$_ext" >/dev/null 2>&1 || {
         echo "warning: gh extension upgrade $_ext failed (transient?)" >&2

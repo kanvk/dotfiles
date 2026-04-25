@@ -11,6 +11,15 @@
 {{- $email := promptStringOnce . "email" "Email (for git config)" -}}
 
 {{/*
+   Package tier — selects which tier from .chezmoidata.yaml's `tiers` map
+   the install script resolves. Tiers nest (full ⊇ base ⊇ minimal); see the
+   tier documentation at the top of .chezmoidata.yaml. "full" is the default
+   for personal machines; pick "minimal" or "base" on disposable / shared
+   boxes where the heavy ML and specialty tools aren't wanted.
+*/}}
+{{- $tier := promptStringOnce . "tier" "Package tier (minimal/base/full)" "full" -}}
+
+{{/*
    Optional GPG commit signing. Gated as a yes/no first so test / disposable
    boxes can opt out without typing an empty fingerprint. The fingerprint
    prompt only fires when the user said yes here.
@@ -85,6 +94,7 @@ encryption = "age"
 [data]
     name = {{ $name | quote }}
     email = {{ $email | quote }}
+    tier = {{ $tier | quote }}
     use_gpg_signing = {{ $useGpgSigning }}
     gpg_signing_key = {{ $gpgSigningKey | quote }}
     ssh_age_identity = {{ $sshAgeIdentity | quote }}

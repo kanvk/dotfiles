@@ -1,6 +1,13 @@
 # Declarative package lists consumed by .chezmoiscripts/run_onchange_before_00-install-packages.sh.tmpl
 # Edit this file to add/remove tools; the install script detects content changes via hash.
 #
+# Schema: tiers, each with optional `inherits`, `include`, and `exclude` blocks.
+# The user's `tier` data var (set in ~/.config/chezmoi/chezmoi.toml, prompted at
+# init) selects which tier to resolve. Resolution = walk inherits, union all
+# `include.<manager>` lists, subtract all `exclude.<manager>` lists. Excludes
+# are eager (per-level): a child of a tier that excludes X starts without X.
+# See .chezmoitemplates/resolve-tier for the resolver itself.
+#
 # Conventions:
 # - apt: minimal dev-essentials + system-level things brew can't / shouldn't own
 #   (shell, tmux, build deps for pyenv-built Python, media for nvim/yazi previews).
@@ -10,258 +17,254 @@
 # - cargo: Rust-only tools that aren't in brew (or for which the cargo build
 #   is preferred). Things available via brew live in `brew`, not here.
 # - npm/go/bun: language-specific globals where there's no brew equivalent.
+#
+# Tier intent:
+# - minimal: shell + git + the few CLI niceties so a fresh box is usable. Picked
+#   on disposable / shared / minimal containers.
+# - base: minimal + the user's daily-driver tooling. The default for personal
+#   machines.
+# - full: base + ML/specialty/heavy tools the user only wants on their main box.
 
-packages:
-  # ---- apt (Debian/Ubuntu/Kali) ----
-  apt:
-    # bootstrap (also satisfies Homebrew install prereqs)
-    - build-essential
-    - ca-certificates
-    - curl
-    - file
-    - git
-    - gnupg
-    - procps
-    - wget
+tiers:
 
-    # apt frontend (the install script switches to nala once present)
-    - nala
+  # ---- minimal ----------------------------------------------------------------
+  minimal:
+    inherits: []
+    include:
+      apt:
+        # bootstrap (also satisfies Homebrew install prereqs)
+        - build-essential
+        - ca-certificates
+        - curl
+        - file
+        - git
+        - gnupg
+        - procps
+        - wget
+        # apt frontend (the install script switches to nala once present)
+        - nala
+        # core shell / terminal
+        - tmux
+        - zsh
+        - xclip
+      brew:
+        # editors / shell / multiplexer / prompt
+        - neovim
+        - tmux
+        - zsh
+        - sheldon
+        - powerlevel10k
+        # the test runner + chezmoi itself
+        - just
+        - chezmoi
+        # the few CLI tools that earn "minimal" — used in nearly every shell session
+        - bat
+        - eza
+        - fd
+        - fzf
+        - ripgrep
+        - zoxide
+        - direnv
+        - gh
+        - git-delta
+        - jq
+        - lazygit
 
-    # core shell / terminal
-    - tmux
-    - zsh
-    - xclip
+  # ---- base -------------------------------------------------------------------
+  # Daily-driver dev box. Most personal machines run this tier.
+  base:
+    inherits: [minimal]
+    include:
+      apt:
+        # build tooling
+        - cmake
+        - pkg-config
+        - shellcheck
+        # python build deps (so `pyenv install <X>` works without errors)
+        - libbz2-dev
+        - libffi-dev
+        - liblzma-dev
+        - libncurses-dev
+        - libreadline-dev
+        - libsqlite3-dev
+        - libssl-dev
+        - libxml2-dev
+        - libxmlsec1-dev
+        - python3-tk
+        - tk-dev
+        - zlib1g-dev
+        # media (referenced by nvim/yazi image previews + alias workflows)
+        - chafa
+        - ffmpeg
+        - ffmpegthumbnailer
+        # CLI utilities referenced in dot_config/zsh/omz-custom/alias.zsh
+        - ranger
+        - trash-cli
+        # python provider for nvim (apt is the canonical install path; pipx is for apps)
+        - python3-pynvim
+        # GPG: TUI passphrase prompt (avoids "no pinentry" hangs on WSL/headless)
+        - pinentry-curses
+      brew:
+        # extra prompts / multiplexers
+        - starship
+        - zellij
+        # rest of file nav / listing / preview
+        - broot
+        - lsd
+        - moor
+        - ripgrep-all
+        - television
+        - tree-sitter-cli
+        - ugrep
+        - yazi
+        # rest of git / VCS
+        - difftastic
+        - git-cliff
+        - git-extras
+        - git-lfs
+        # language toolchains needed BEFORE the per-language install steps
+        # (rustup → cargo, go → go install, node → npm -g, npm → bun).
+        # bun is NOT here: not in homebrew/core on Linux. Installed via npm
+        # globals instead (see npm below).
+        - go
+        - node
+        - rustup
+        # version / language managers (the daily ones)
+        - asdf
+        - fnm
+        - mise
+        - pyenv
+        # python (apps + tooling)
+        - pipx
+        - uv
+        # observability / system
+        - atuin
+        - bottom
+        - btop
+        - lazydocker
+        - neofetch
+        # build / quality
+        - ast-grep
+        - cloc
+        - scc
+        # secrets / security
+        - ggshield
+        - gitleaks
+        # network / sharing
+        - curlie
+        - xh
+        # misc
+        - cheat
+        - f2
+        - pastel
+        - sesh
+        - tldr
+        - tlrc
+        - vivid
+        - yq
+      pipx:
+        - bandit
+        - build
+        - bump-my-version
+        - dvc
+        - dynaconf
+        - glances
+        - hatch
+        - mkdocs
+        - nbdime
+        - nox
+        - pgcli
+        - pip-audit
+        - pip-tools
+        - poetry
+        - pre-commit
+        - prek
+        - python-semantic-release
+        - shell-functools
+        - tox
+        - twine
+        - ydiff
+      cargo:
+        - cargo-update
+        - choose
+        - code-minimap
+        - coreutils            # rust uutils — used by alias.zsh `command coreutils <cmd>`
+        - du-dust
+        - gitoxide
+      npm:
+        - "@openai/codex"
+        - bun                  # bun isn't in homebrew/core on Linux; npm-global is the simplest portable path
+        - neovim               # node provider for nvim plugins
+      go:
+        - github.com/Gelio/go-global-update    # `uu` alias uses go-global-update for goup
+      gh_extensions:
+        - dlvhdr/gh-dash
 
-    # build tooling
-    - cmake
-    - pkg-config
-    - shellcheck
-
-    # python build deps (so `pyenv install <X>` works without errors)
-    - libbz2-dev
-    - libffi-dev
-    - liblzma-dev
-    - libncurses-dev
-    - libreadline-dev
-    - libsqlite3-dev
-    - libssl-dev
-    - libxml2-dev
-    - libxmlsec1-dev
-    - python3-tk
-    - tk-dev
-    - zlib1g-dev
-
-    # smartcard / yubikey: needed by `age-plugin-yubikey` (pcsc-sys) and
-    # anything else that talks to the smartcard daemon
-    - libpcsclite-dev
-
-    # media (referenced by nvim/yazi image previews + alias workflows)
-    - chafa
-    - ffmpeg
-    - ffmpegthumbnailer
-
-    # CLI utilities referenced in dot_config/zsh/omz-custom/alias.zsh
-    - ranger
-    - trash-cli
-
-    # python provider for nvim (apt is the canonical install path; pipx is for apps)
-    - python3-pynvim
-
-    # GPG: TUI passphrase prompt (avoids "no pinentry" hangs on WSL/headless)
-    - pinentry-curses
-
-  # ---- Homebrew ----
-  brew:
-    # editors / shell / multiplexer
-    - neovim
-    - tmux
-    - zsh
-    - sheldon
-    - powerlevel10k
-    - starship
-    - zellij
-
-    # file nav / listing / preview
-    - bat
-    - broot
-    - eza
-    - fd
-    - fzf
-    - lsd
-    - moor
-    - ripgrep
-    - ripgrep-all
-    - television
-    - tree-sitter-cli
-    - ugrep
-    - yazi
-    - zoxide
-
-    # git / VCS
-    - difftastic
-    - gh
-    - git-cliff
-    - git-delta
-    - git-extras
-    - git-lfs
-    - jj
-    - lazygit
-
-    # language toolchains needed BEFORE the per-language install steps
-    # below (rustup → cargo, go → go install, node → npm -g, npm → bun).
-    # Install scripts soft-detect the binaries; without these, those steps
-    # silently skip on fresh machines.
-    # bun is NOT here: not in homebrew/core on Linux. Installed via npm
-    # globals instead (see packages.npm below).
-    - go
-    - node         # provides npm; fnm-managed versions take over on PATH later
-    - rustup       # bootstrap step in 00-install-packages handles `rustup-init -y`
-
-    # version / language managers
-    - asdf
-    - fnm
-    - ghcup
-    - juliaup
-    - mise
-    - nvm
-    - pyenv
-    - python-tk@3.12
-    - rbenv
-    - ruby
-
-    # `uu`/`uuu` update-sweep prerequisites — invoked directly as binaries,
-    # never sourced into the shell. cpanminus provides `cpanm` (perlup);
-    # haskell-stack provides `stack` (haskellup). `cpan-outdated` is a
-    # CPAN module not a brew formula; install with `cpanm App::cpanoutdated`
-    # if you want perlup's outdated-list step to work end-to-end.
-    - cpanminus
-    - haskell-stack
-
-    # python (apps + tooling)
-    - pipx
-    - uv
-
-    # observability / system
-    - atuin
-    - bottom
-    - btop
-    - lazydocker
-    - neofetch
-
-    # build / quality
-    - act
-    - ast-grep
-    - cloc
-    - just
-    - scc
-
-    # secrets / security
-    - betterleaks
-    - ggshield
-    - gitleaks
-    - rustscan
-
-    # data / storage
-    - duckdb
-    - keydb
-    - rclone
-
-    # network / sharing
-    - caddy
-    - curlie
-    - dumbpipe
-    - magic-wormhole
-    - xh
-
-    # AI / ML
-    - llama.cpp
-    - ollama
-
-    # misc
-    - chezmoi
-    - cheat
-    - direnv
-    - f2
-    - jq
-    - pastel
-    - pixi
-    - pkl
-    - sesh
-    - tldr
-    - tlrc
-    - typst
-    - vivid
-    - yq
-
-    # taps (full path auto-taps on install)
-    - anomalyco/tap/opencode
-    - hashicorp/tap/vault
-    - localstack/tap/localstack-cli
-    - mutagen-io/mutagen/mutagen
-
-  # ---- pipx ----
-  pipx:
-    - apprise
-    - bandit
-    - build
-    - bump-my-version
-    - conda-lock
-    - dvc
-    - dynaconf
-    - glances
-    - gpustack
-    - gpustat
-    - hatch
-    - huggingface-hub
-    - kaggle
-    - markitdown
-    - mkdocs
-    - mlflow
-    - nbdime
-    - nox
-    - nvitop
-    - open-webui
-    - openai-whisper
-    - pgcli
-    - pip-audit
-    - pip-tools
-    - poetry
-    - pre-commit
-    - prek
-    - pysentry-rs
-    - python-semantic-release
-    - roboflow
-    - shell-functools
-    - tox
-    - twine
-    - vllm
-    - wandb
-    - ydiff
-
-  # ---- cargo (Rust-only — things in brew are NOT duplicated here) ----
-  cargo:
-    - age-plugin-yubikey   # age plugin for YubiKey-backed identities
-    - cargo-update
-    - choose
-    - code-minimap
-    - coreutils            # rust uutils — used by alias.zsh `command coreutils <cmd>`
-    - du-dust
-    - gitoxide
-    - numbat-cli
-
-  # ---- npm globals ----
-  npm:
-    - "@openai/codex"
-    - bun             # bun isn't in homebrew/core on Linux; npm-global is the simplest portable path
-    - neovim          # node provider for nvim plugins
-
-  # ---- go install <module>@latest ----
-  go:
-    - github.com/Gelio/go-global-update    # `uu` alias uses go-global-update for goup
-
-  # ---- bun add -g ----
-  bun: []
-
-  # ---- gh CLI extensions (require `gh` from brew) ----
-  gh_extensions:
-    - dlvhdr/gh-dash
+  # ---- full -------------------------------------------------------------------
+  # base + ML/specialty/heavy. The user's main box runs this tier.
+  full:
+    inherits: [base]
+    include:
+      apt:
+        # smartcard / yubikey: needed by `age-plugin-yubikey` (pcsc-sys)
+        - libpcsclite-dev
+      brew:
+        # heavier daily-driver / specialty
+        - act
+        - betterleaks
+        - rustscan
+        - jj
+        # data / storage
+        - duckdb
+        - keydb
+        - rclone
+        # network / sharing
+        - caddy
+        - dumbpipe
+        - magic-wormhole
+        # AI / ML
+        - llama.cpp
+        - ollama
+        # additional language managers
+        - ghcup
+        - juliaup
+        - nvm
+        - python-tk@3.12
+        - rbenv
+        - ruby
+        # `uu`/`uuu` update-sweep prerequisites — invoked directly as binaries,
+        # never sourced into the shell. cpanminus provides `cpanm` (perlup);
+        # haskell-stack provides `stack` (haskellup). `cpan-outdated` is a
+        # CPAN module not a brew formula; install with `cpanm App::cpanoutdated`
+        # if you want perlup's outdated-list step to work end-to-end.
+        - cpanminus
+        - haskell-stack
+        # specialty / niche
+        - pixi
+        - pkl
+        - typst
+        # taps (full path auto-taps on install)
+        - anomalyco/tap/opencode
+        - hashicorp/tap/vault
+        - localstack/tap/localstack-cli
+        - mutagen-io/mutagen/mutagen
+      pipx:
+        - apprise
+        - conda-lock
+        - gpustack
+        - gpustat
+        - huggingface-hub
+        - kaggle
+        - markitdown
+        - mlflow
+        - nvitop
+        - open-webui
+        - openai-whisper
+        - pysentry-rs
+        - roboflow
+        - vllm
+        - wandb
+      cargo:
+        - age-plugin-yubikey   # age plugin for YubiKey-backed identities
+        - numbat-cli
+      bun: []
