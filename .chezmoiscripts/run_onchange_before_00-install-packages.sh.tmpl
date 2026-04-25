@@ -74,7 +74,8 @@ BREWFILE
 # visible. `brew bundle install` already continues past per-formula failures
 # and reports a summary. Don't use `|| true` — let pipefail surface errors,
 # but ALSO follow up with `brew bundle check` to make missing formulas obvious.
-brew bundle install --file="$_brewfile" --no-lock || _bundle_rc=$?
+# (No --no-lock: the flag was removed when bundle stopped emitting Brewfile.lock.json.)
+brew bundle install --file="$_brewfile" || _bundle_rc=$?
 if [ "${_bundle_rc:-0}" -ne 0 ]; then
   echo "==> brew bundle reported errors — checking what's still missing:"
   brew bundle check --file="$_brewfile" --verbose || true
