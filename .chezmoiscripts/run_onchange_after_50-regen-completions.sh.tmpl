@@ -21,9 +21,20 @@ _regen() {
   fi
 }
 
-_regen poetry _poetry "poetry completions zsh"
-_regen rustup _rustup "rustup completions zsh"
-_regen atuin  _atuin  "atuin gen-completions --shell zsh"
-_regen mise   _mise   "mise completion zsh"
-_regen uv     _uv     "uv generate-shell-completion zsh"
-_regen sesh   _sesh   "sesh completion zsh"
+_regen poetry  _poetry   "poetry completions zsh"
+_regen rustup  _rustup   "rustup completions zsh"
+_regen atuin   _atuin    "atuin gen-completions --shell zsh"
+_regen mise    _mise     "mise completion zsh"
+_regen uv      _uv       "uv generate-shell-completion zsh"
+_regen sesh    _sesh     "sesh completion zsh"
+_regen chezmoi _chezmoi  "chezmoi completion zsh"
+_regen just    _just     "just --completions zsh"
+_regen gh      _gh       "gh completion -s zsh"
+
+# forgit ships its own _git-forgit; sheldon clones it, but doesn't add the
+# completions dir to fpath. Copy it into ~/.zfunc so it's reachable.
+_forgit_completion="$HOME/.local/share/sheldon/repos/github.com/wfxr/forgit/completions/_git-forgit"
+if [ -f "$_forgit_completion" ]; then
+  cp "$_forgit_completion" "$HOME/.zfunc/_git-forgit"
+fi
+unset _forgit_completion
