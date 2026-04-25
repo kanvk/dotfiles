@@ -7,10 +7,16 @@
 # Usage (run by tests/run.sh, not directly — or via the top-level justfile):
 #   bootstrap.sh <smoke|full> [source-dir]
 #
-# smoke: applies dotfiles only (--exclude scripts); ~30s. Validates templates
-#        render and structure is sane. Does NOT install Homebrew/apt/pipx etc.
-# full:  full bootstrap including the install-packages script chain. Slow
-#        (~60-120 minutes) but proves the whole pipeline works end-to-end.
+# smoke: applies dotfiles only (--exclude=scripts,externals). Validates that
+#        templates render, files end up at the right paths with the right
+#        modes, identity templating works, OS gates fire, idempotence holds.
+# full:  everything smoke does, PLUS runs the install-packages script chain
+#        (apt, Homebrew, brew bundle, pipx, npm, cargo via rustup-init, go,
+#        bun) and verifies the resulting toolchains + plugin clones.
+#
+# `just test-full` is a strict superset of `just test-smoke`. There is NO
+# need to run smoke before full — but `just lint` (static, no Docker) is
+# orthogonal and worth running during local iteration for fast feedback.
 
 set -euo pipefail
 
@@ -189,18 +195,18 @@ if [ "$MODE" = "full" ]; then
     [ -f "$HOME/.zfunc/_poetry"  ] || { echo "  FAIL: ~/.zfunc/_poetry not regenerated"; fail=1; }
 fi
 
-# --- idempotence (smoke only — full re-runs install scripts which are designed to re-run) ---
-if [ "$MODE" = "smoke" ]; then
-    echo
-    echo "==> Testing idempotence (re-apply should be a no-op)"
-    # shellcheck disable=SC2086
-    chezmoi apply --source="$SOURCE" $EXCLUDE_FLAG -v > /tmp/reapply.log 2>&1
-    # `-v` shows diff lines starting with `+`/`-`. If any survive, target changed.
-    if grep -qE '^[+-][^+-]' /tmp/reapply.log; then
-        echo "  FAIL: re-apply attempted to write changes:"
-        grep -E '^[+-][^+-]' /tmp/reapply.log | head -20
-        fail=1
-    fi
+# --- idempotence (smoke only  ---
+echo
+echo "==> Testing idempotence (re-apply files should be a no-op)"
+# Always exclude scripts/externals on the re-apply check — full-mode scripts
+# emit their content in -v output, which would otherwise look like file diffs.
+# We're testing that *file* state is idempotent; script-rerun behaviour is
+# tested separately by their respective onchange-hash invariants.
+chezmoi apply --source="$SOURCE" --exclude=scripts,externals -v > /tmp/reapply.log 2>&1
+if grep -qE '^[+-][^+-]' /tmp/reapply.log; then
+    echo "  FAIL: re-apply attempted to write changes:"
+    grep -E '^[+-][^+-]' /tmp/reapply.log | head -20
+    fail=1
 fi
 
 if [ "$fail" -eq 0 ]; then

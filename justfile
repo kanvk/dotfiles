@@ -6,19 +6,25 @@ default:
     @just --list
 
 # === Tests ===
+#
+# Hierarchy: `lint` is a no-Docker static pass. `test-smoke` applies dotfiles
+# inside fresh containers but skips install scripts. `test-full` is a strict
+# superset of test-smoke — it also runs the install scripts and verifies the
+# toolchain + plugin tree. Run `lint` during dev for fast feedback; run
+# `test-smoke` before commit; run `test-full` before merge.
 
-# Run smoke tests on both distros (~5 min total).
+# Smoke test on both distros (alias for `test-smoke`).
 test: test-smoke
 
-# Smoke test on Ubuntu, Kali, or both — fast (~30s each).
+# Apply dotfiles in fresh Kali / Ubuntu containers; verify modes, gates, idempotence.
 test-smoke distro="all":
     ./tests/run.sh {{distro}} smoke
 
-# Full bootstrap test (apt + brew bundle + pipx + cargo + …). SLOW: ~60–120 min per distro.
+# Full bootstrap (apt + brew bundle + pipx + cargo + ...). Strict superset of test-smoke. Slow.
 test-full distro="all":
     ./tests/run.sh {{distro}} full
 
-# Render every .tmpl, sweep for hardcoded refs, validate YAML — no Docker, <5s.
+# Render every .tmpl, sweep for hardcoded refs, validate YAML, shellcheck. No Docker.
 lint:
     ./tests/lint.sh
 

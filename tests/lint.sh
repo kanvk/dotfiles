@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 #
-# Local-only lint pass — no Docker required.
+# Static lint pass — no Docker required, runs locally.
 # Renders every *.tmpl, sweeps for hardcoded paths/identity, validates
 # .chezmoidata.yaml is valid YAML and runs shellcheck on .chezmoiscripts/.
+# Orthogonal to the bootstrap tests — run during dev iteration.
 #
 # Run via `just lint`.
 

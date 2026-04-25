@@ -7,12 +7,14 @@
 # rather than directly. Direct usage:
 #   ./tests/run.sh <kali|ubuntu|all> [smoke|full]
 #
-# smoke (default): chezmoi apply with --exclude=scripts,externals (~30s).
-#                   Verifies templates render and dotfiles + identity templating
-#                   work. Tests idempotence on re-apply.
-# full:            full bootstrap including the install-packages chain (~60-120m).
-#                   Real validation of the install script — installs Homebrew,
-#                   brew bundle, pipx, etc. inside the container.
+# smoke (default): chezmoi apply with --exclude=scripts,externals. Verifies
+#                  templates render, files end up at the right paths with the
+#                  right modes, identity templating works, OS gates fire,
+#                  idempotence holds.
+# full:            strict superset of smoke. Also runs the install-packages
+#                  chain (Homebrew bootstrap, brew bundle, pipx, npm, cargo
+#                  via rustup-init, go, bun, plugin clones, completion regen)
+#                  and verifies the toolchain comes up. Slow.
 
 set -euo pipefail
 
