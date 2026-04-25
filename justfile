@@ -58,6 +58,11 @@ verify:
 re-add target:
     chezmoi re-add {{target}}
 
+# Print the resolved package set for a tier (walks inherits, applies include/exclude).
+# Usage: just show-tier minimal | just show-tier full
+show-tier name="full":
+    @./tests/show-tier.sh {{name}}
+
 # Open a shell in the source directory.
 cd:
     chezmoi cd

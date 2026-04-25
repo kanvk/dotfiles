@@ -32,6 +32,7 @@ See `README.md` for the user-facing version of the same story.
 - **Plugin installs are delegated to their native managers:** sheldon owns `~/.local/share/sheldon/repos/**` (don't vendor it); tpm owns `~/.tmux/plugins/**`; lazy.nvim owns `~/.local/share/nvim/lazy/**`; Mason owns LSP servers. Our `.chezmoiscripts/` just kick these off.
 - **apt is via nala when available.** The install script bootstraps nala via apt-get on first run, then uses nala (parallel downloads, nicer UI) for everything subsequent. Falls back to apt-get if nala is unavailable.
 - **Package lists in `.chezmoidata.yaml` are user intent, not exclusivity.** The install pipeline is **additive only** — `chezmoi apply` ensures listed packages are installed but never uninstalls anything missing from the list. If the user `brew install`s something ad-hoc, a later apply leaves it alone. Concretely: brew bundle runs without `--cleanup`; nala/apt-get use `install`, never `purge`/`autoremove`; pipx/cargo/go/npm/bun/gh-extension steps only install or upgrade. To prune, the user runs the manager's cleanup directly (`brew bundle cleanup --file=<bundle>`, `nala autoremove`, …) — chezmoi never does it. When installing a new tool the user wants on every machine, add it to the list — don't expect the install script to re-snapshot from the system.
+- **Tier-based package selection.** `.chezmoidata.yaml` is structured as `tiers: { <name>: { inherits: [...], include: { <mgr>: [...] }, exclude: { <mgr>: [...] } } }`. The user's `.tier` data var (set in `~/.config/chezmoi/chezmoi.toml`, prompted at init, default `full`) selects which tier to resolve. Resolution = walk inherits, union per-manager `include`s, subtract per-manager `exclude`s. **Excludes are eager**: a child of a tier that excludes X starts without X; this is what makes a `full-without-foo`-style sibling tier expressible. Resolver lives in `.chezmoitemplates/resolve-tier`; `just show-tier <name>` prints the resolved set for any tier. **`exclude` does not uninstall** — per the additivity bullet above, it just means "don't install henceforth." Switching `full → minimal` on an existing machine leaves the previously-installed extras in place; manual `brew bundle cleanup` etc. is the only way to actually shrink the system.
 - **Completion files are regenerated, not vendored.** Do not commit `dot_zfunc/_poetry`, `_rustup`, `_atuin`, etc. The `run_onchange_after_50-regen-completions.sh.tmpl` script handles these.
 - **OMZ custom dir lives at `dot_config/zsh/omz-custom/`** (not inside sheldon's cache). The user's `dot_zshrc` sets `ZSH_CUSTOM` to that path. Preserve the `plugins/` and `themes/` subtree structure.
 - **`run_onchange_after_*` scripts must include `{{ template "brew-path-bootstrap" . }}`** at the top (right after `set -euo pipefail`). chezmoi runs each script in a fresh subshell — PATH changes from `run_onchange_before_00-install-packages.sh.tmpl` (e.g. `eval "$(brew shellenv)"`) do *not* propagate. Without the template, `command -v sheldon`/`just`/`broot`/etc. silently no-op on first apply. The template lives at `.chezmoitemplates/brew-path-bootstrap` and also adds `~/.cargo/bin`, `~/.local/bin`, `~/go/bin` to PATH.
@@ -42,10 +43,11 @@ See `README.md` for the user-facing version of the same story.
 
 ```
 .chezmoi.toml.tmpl         # init-time prompts + computed vars
-.chezmoidata.yaml          # declarative package lists (apt/brew/pipx/npm/cargo/go/bun)
+.chezmoidata.yaml          # tiered package lists (apt/brew/pipx/npm/cargo/go/bun/gh-ext)
 .chezmoiignore.tmpl        # OS-gated ignores
 .chezmoiexternal.toml.tmpl # TPM + other externals
 .chezmoiscripts/           # run_once_* and run_onchange_* automation
+.chezmoitemplates/         # shared template fragments (brew-path-bootstrap, resolve-tier)
 CLAUDE.md                  # this file (ignored from apply)
 README.md                  # user-facing docs (ignored from apply)
 dot_*                      # standard chezmoi source
