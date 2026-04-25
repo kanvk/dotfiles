@@ -5,7 +5,6 @@ alias vscw='win32yank.exe -o --lf'
 alias ollama='ollama.exe'
 alias ollamaw='\ollama'
 alias llmw='ollamaw'
-alias ts='tailscale.exe'
 
 openw() {
   cmd.exe /C start "$*"
