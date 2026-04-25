@@ -27,4 +27,12 @@ trap 'tmux -S "$TPM_SOCK_DIR/sock" kill-server >/dev/null 2>&1 || true; rm -rf "
 tmux -S "$TPM_SOCK_DIR/sock" new-session -d -s _tpm_install 2>/dev/null
 
 echo "==> Installing tmux plugins via TPM"
-TMUX_PLUGIN_MANAGER_PATH="$HOME/.tmux/plugins/" "$INSTALL" 2>&1 | tail -10
+# install_plugins returns non-zero if any single plugin fails (e.g., tmux-thumbs
+# needs cargo for its Rust binary; if the brew rust install hasn't completed
+# before this script runs, the build fails). Don't abort the apply on that —
+# warn and let the user retry once their toolchain is fully in place.
+if ! TMUX_PLUGIN_MANAGER_PATH="$HOME/.tmux/plugins/" "$INSTALL" 2>&1 | tail -15; then
+  echo "  (one or more tmux plugins did not install cleanly — re-run"
+  echo "   'chezmoi apply --force' after the brew install completes,"
+  echo "   or open tmux and press 'prefix + I' to retry interactively.)"
+fi
