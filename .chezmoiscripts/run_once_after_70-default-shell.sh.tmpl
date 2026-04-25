@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+#
+# Set the user's login shell to zsh on first apply. Without this, a fresh
+# bootstrap on Ubuntu/Kali installs zsh + every shell config in this repo
+# but leaves the user on bash — they'd source `.profile`, not `.zshrc`, and
+# silently lose every dotfile in the repo until they ran `chsh` themselves.
+#
+# Idempotent: skips if the user is already on a zsh entry from /etc/shells.
+# `run_once` semantics (vs onchange) so a later manual chsh away from zsh
+# is respected — the script doesn't re-fight the user.
+
+set -euo pipefail
+
+# Find a zsh that's a valid login shell. /etc/shells gates what login(1) and
+# chsh accept; brew's zsh is intentionally NOT in /etc/shells (varies across
+# brew prefixes), so we use the system zsh installed via apt instead.
+target=""
+for cand in /usr/bin/zsh /bin/zsh; do
+  if [ -x "$cand" ] && grep -qxF "$cand" /etc/shells 2>/dev/null; then
+    target="$cand"
+    break
+  fi
+done
+
+if [ -z "$target" ]; then
+  echo "==> default-shell: no /etc/shells-listed zsh found — skipping"
+  echo "    (apt install zsh first, or add a zsh path to /etc/shells)"
+  exit 0
+fi
+
+current="$(getent passwd "$USER" 2>/dev/null | cut -d: -f7 || true)"
+if [ "$current" = "$target" ]; then
+  exit 0
+fi
+
+echo "==> default-shell: switching login shell to $target (was: ${current:-unknown})"
+
+if ! command -v sudo >/dev/null 2>&1; then
+  echo "    (sudo unavailable — run as root: usermod -s $target $USER)"
+  exit 0
+fi
+
+# Prefer usermod over chsh: chsh routes through PAM (absent / restricted in
+# containers and on some hardened systems); usermod is a direct passwd-file
+# edit. Both need root, so we sudo either way.
+if sudo -n usermod -s "$target" "$USER" 2>/dev/null \
+   || sudo usermod -s "$target" "$USER"; then
+  echo "    (open a new login shell — current sessions stay on the old shell)"
+else
+  echo "    (usermod failed — run manually: sudo usermod -s $target $USER)"
+fi

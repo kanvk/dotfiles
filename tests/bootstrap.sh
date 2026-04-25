@@ -205,6 +205,14 @@ if [ "$MODE" = "full" ]; then
     [ -f "$HOME/.zfunc/_chezmoi" ] || { echo "  FAIL: ~/.zfunc/_chezmoi not regenerated"; fail=1; }
     [ -f "$HOME/.zfunc/_just"    ] || { echo "  FAIL: ~/.zfunc/_just not regenerated"; fail=1; }
     [ -f "$HOME/.zfunc/_poetry"  ] || { echo "  FAIL: ~/.zfunc/_poetry not regenerated"; fail=1; }
+
+    # Login shell got switched to zsh by run_once_after_70-default-shell.
+    # Without this, a fresh bootstrap silently leaves the user on bash.
+    login_shell="$(getent passwd "$USER" | cut -d: -f7)"
+    case "$login_shell" in
+        */zsh) ;;
+        *) echo "  FAIL: login shell is $login_shell, expected a zsh path"; fail=1 ;;
+    esac
 fi
 
 # --- idempotence ---
