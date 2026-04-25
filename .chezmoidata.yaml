@@ -148,6 +148,7 @@ packages:
     - scc
 
     # secrets / security
+    - betterleaks
     - ggshield
     - gitleaks
     - rustscan
