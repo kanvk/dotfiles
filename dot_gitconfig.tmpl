@@ -4,6 +4,17 @@
 [credential "https://gist.github.com"]
 	helper =
 	helper = !gh auth git-credential
+# Personal-but-not-secret overrides (insteadOf rules etc.) — encrypted-tracked
+# under chezmoi as encrypted_private_dot_gitconfig.local.age, gated on
+# encrypt_locals=true. Per-machine non-portable overrides go in
+# ~/.gitconfig.machine, which is intentionally outside the chezmoi source.
+# Both includes silently no-op when the target file is missing; later wins,
+# so they're placed *before* the signing/identity blocks below — those static
+# settings should beat anything an included file might set.
+[include]
+	path = ~/.gitconfig.local
+[include]
+	path = ~/.gitconfig.machine
 [user]
 	email = {{ .email }}
 	name = {{ .name }}
@@ -66,12 +77,3 @@
 	cmd = git-nbdifftool diff \"$LOCAL\" \"$REMOTE\" \"$BASE\"
 [mergetool "nbdime"]
 	cmd = git-nbmergetool merge \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
-# Personal-but-not-secret overrides (insteadOf rules etc.) — encrypted-tracked
-# under chezmoi as encrypted_private_dot_gitconfig.local.age, gated on
-# encrypt_locals=true. Per-machine non-portable overrides go in
-# ~/.gitconfig.machine, which is intentionally outside the chezmoi source.
-# Both includes silently no-op when the target file is missing; later wins.
-[include]
-	path = ~/.gitconfig.local
-[include]
-	path = ~/.gitconfig.machine
