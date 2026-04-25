@@ -3,20 +3,20 @@
 #
 # Do NOT commit this file to a public repo.
 
-# Example: home Raspberry Pi
+# Example: home box on the LAN
 # Host rpi
-#     HostName 10.0.0.1
-#     User kanvk
+#     HostName <ip-or-hostname>
+#     User <user>
 #     Port 22
-#     IdentityFile ~/.ssh/personal
+#     IdentityFile ~/.ssh/<key>
 #     IdentitiesOnly yes
 #     AddKeysToAgent yes
 
-# Example: NCSU public login servers
+# Example: university / institution login server
 # Host arc
-#     HostName uni.example.edu
-#     User kkhare
-#     IdentityFile ~/.ssh/ncsu
+#     HostName <host.example.edu>
+#     User <user>
+#     IdentityFile ~/.ssh/<key>
 #     IdentitiesOnly yes
 #     AddKeysToAgent yes
 
@@ -26,13 +26,13 @@
 #     Port <port>
 #     ForwardAgent yes
 #     User <user>
-#     IdentityFile ~/.ssh/las
+#     IdentityFile ~/.ssh/<key>
 #     IdentitiesOnly yes
 #     AddKeysToAgent yes
 #
-# Host *.internal-lab.priv
+# Host *.internal.example
 #     ProxyJump las-proxy
 #     User <user>
-#     IdentityFile ~/.ssh/las
+#     IdentityFile ~/.ssh/<key>
 #     IdentitiesOnly yes
 #     AddKeysToAgent yes
