@@ -109,9 +109,18 @@ zstyle :omz:plugins:ssh-agent quiet yes
 
 export ZSH="$HOME/.local/share/sheldon/repos/github.com/ohmyzsh/ohmyzsh"
 export ZSH_CUSTOM="$HOME/.config/zsh/omz-custom"
-plugins=(git git-lfs gh pip web-search docker docker-compose poetry copypath copyfile dirhistory
-    history fzf colorize colored-man-pages copybuffer jsontools rust
-    ssh-agent conda brew uv rsync extract)
+# OMZ plugins loaded synchronously here are the ones that need to be in scope
+# the instant the prompt appears: git's aliases, fzf and dirhistory key
+# bindings, colored-man-pages env vars, ssh-agent, copybuffer keybind, and
+# conda's prompt hooks. Several previous entries graduated:
+#  • completions-only and backed by ~/.zfunc/_<tool>: git-lfs, gh, pip,
+#    poetry, rust, uv, brew → REMOVED (dropped entirely).
+#  • simple function/alias bundles that can wait until after the prompt is
+#    drawn: extract, copypath, copyfile, history, jsontools, rsync, colorize
+#    → MOVED to sheldon as omz-* entries with apply = ["defer"].
+plugins=(git web-search docker docker-compose dirhistory
+    fzf colored-man-pages copybuffer
+    ssh-agent conda)
 # OMZ is pulled in by sheldon; skip quietly on first apply before sheldon has run.
 [ -f "$ZSH/oh-my-zsh.sh" ] && source "$ZSH/oh-my-zsh.sh"
 

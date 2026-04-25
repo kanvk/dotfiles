@@ -24,6 +24,54 @@ github = "romkatv/zsh-defer"
 [plugins.oh-my-zsh]
 github = "ohmyzsh/ohmyzsh"
 
+# OMZ plugins loaded via sheldon with deferred sourcing instead of through
+# OMZ's `plugins=(...)` array. Each one is a simple function/alias bundle
+# that does not need to be available the instant the prompt appears, so
+# pushing them off the critical-path keeps shell startup snappy. The dir
+# directives reference the same OMZ clone sheldon already maintains for the
+# oh-my-zsh entry above (sheldon de-dupes by github URL).
+[plugins.omz-extract]
+github = "ohmyzsh/ohmyzsh"
+dir = "plugins/extract"
+use = ["extract.plugin.zsh"]
+apply = ["defer"]
+
+[plugins.omz-copypath]
+github = "ohmyzsh/ohmyzsh"
+dir = "plugins/copypath"
+use = ["copypath.plugin.zsh"]
+apply = ["defer"]
+
+[plugins.omz-copyfile]
+github = "ohmyzsh/ohmyzsh"
+dir = "plugins/copyfile"
+use = ["copyfile.plugin.zsh"]
+apply = ["defer"]
+
+[plugins.omz-history]
+github = "ohmyzsh/ohmyzsh"
+dir = "plugins/history"
+use = ["history.plugin.zsh"]
+apply = ["defer"]
+
+[plugins.omz-jsontools]
+github = "ohmyzsh/ohmyzsh"
+dir = "plugins/jsontools"
+use = ["jsontools.plugin.zsh"]
+apply = ["defer"]
+
+[plugins.omz-rsync]
+github = "ohmyzsh/ohmyzsh"
+dir = "plugins/rsync"
+use = ["rsync.plugin.zsh"]
+apply = ["defer"]
+
+[plugins.omz-colorize]
+github = "ohmyzsh/ohmyzsh"
+dir = "plugins/colorize"
+use = ["colorize.plugin.zsh"]
+apply = ["defer"]
+
 [plugins.alias-tips]
 github = "djui/alias-tips"
 apply = ["defer"]
