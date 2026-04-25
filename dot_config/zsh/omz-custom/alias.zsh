@@ -20,7 +20,7 @@ alias pipup='pipx upgrade-all'
 alias goup='go-global-update'
 alias npmup='sudo npm -g update'
 alias vimup='timeout --kill-after=30s 10m nvim --headless +AstroUpdate +qa 2>/dev/null'
-alias brewup='brew update && brew upgrade && brew autoremove && brew cleanup && brew unlink python && brew unlink ruby'
+alias brewup='brew update && brew upgrade && brew autoremove && brew cleanup; brew unlink python 2>/dev/null; brew unlink ruby 2>/dev/null'
 alias poetryup='poetry self update'
 alias tldrup='tldr -u'
 alias rubyup='sudo gem update' # add gem update --system for non-apt installs
