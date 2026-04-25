@@ -98,8 +98,11 @@ zstyle ':omz:lib:compinit' cache yes
 
 # fpath must be set before oh-my-zsh calls compinit
 fpath+=~/.zfunc
-FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-fpath+="$ASDF_DIR/completions"
+# Homebrew site-functions — only if brew is available (avoids slow shell startup otherwise)
+if command -v brew >/dev/null 2>&1; then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+fi
+[ -n "$ASDF_DIR" ] && fpath+="$ASDF_DIR/completions"
 
 zstyle :omz:plugins:ssh-agent lazy yes
 zstyle :omz:plugins:ssh-agent quiet yes
@@ -109,40 +112,38 @@ export ZSH_CUSTOM="$HOME/.config/zsh/omz-custom"
 plugins=(git git-lfs gh pip web-search docker docker-compose poetry copypath copyfile dirhistory
     history fzf colorize colored-man-pages copybuffer jsontools rust
     ssh-agent conda brew uv rsync extract)
-source $ZSH/oh-my-zsh.sh
+# OMZ is pulled in by sheldon; skip quietly on first apply before sheldon has run.
+[ -f "$ZSH/oh-my-zsh.sh" ] && source "$ZSH/oh-my-zsh.sh"
 
-eval "$(sheldon source)"
+command -v sheldon >/dev/null 2>&1 && eval "$(sheldon source)"
 
 # =============================================================================
 # Deferred loading (requires zsh-defer from sheldon)
 # =============================================================================
 
-zsh-defer -c 'eval "$(fnm env --use-on-cd --shell zsh)"'
-zsh-defer source /home/kanvk/.spack/share/spack/setup-env.sh
-zsh-defer -c 'eval "$(pyenv init -)"'
-zsh-defer -c 'eval "$(rbenv init - zsh)"'
-zsh-defer -c 'eval "$(mise activate zsh)"'
+# Tool hooks — each is soft-detected so the shell starts cleanly on fresh machines.
+command -v fnm >/dev/null 2>&1 && zsh-defer -c 'eval "$(fnm env --use-on-cd --shell zsh)"'
+[ -f "$HOME/.spack/share/spack/setup-env.sh" ] && zsh-defer source "$HOME/.spack/share/spack/setup-env.sh"
+command -v pyenv >/dev/null 2>&1 && zsh-defer -c 'eval "$(pyenv init -)"'
+command -v rbenv >/dev/null 2>&1 && zsh-defer -c 'eval "$(rbenv init - zsh)"'
+command -v mise  >/dev/null 2>&1 && zsh-defer -c 'eval "$(mise activate zsh)"'
 
-# >>> conda initialize (deferred) >>>
-zsh-defer -c '
-__conda_setup="$(/home/kanvk/miniforge3/bin/conda shell.zsh hook 2>/dev/null)"
+# >>> conda / miniforge initialize (deferred, soft-detected) >>>
+if [ -d "$HOME/miniforge3" ]; then
+  zsh-defer -c '
+__conda_setup="$("$HOME/miniforge3/bin/conda" shell.zsh hook 2>/dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
+elif [ -f "$HOME/miniforge3/etc/profile.d/conda.sh" ]; then
+    . "$HOME/miniforge3/etc/profile.d/conda.sh"
 else
-    if [ -f "/home/kanvk/miniforge3/etc/profile.d/conda.sh" ]; then
-        . "/home/kanvk/miniforge3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/kanvk/miniforge3/bin:$PATH"
-    fi
+    export PATH="$HOME/miniforge3/bin:$PATH"
 fi
 unset __conda_setup
 '
-# <<< conda initialize <<<
-
-# >>> mamba initialize (deferred) >>>
-export MAMBA_EXE='/home/kanvk/miniforge3/bin/mamba';
-export MAMBA_ROOT_PREFIX='/home/kanvk/miniforge3';
-zsh-defer -c '
+  export MAMBA_EXE="$HOME/miniforge3/bin/mamba"
+  export MAMBA_ROOT_PREFIX="$HOME/miniforge3"
+  zsh-defer -c '
 __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2>/dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__mamba_setup"
@@ -151,7 +152,8 @@ else
 fi
 unset __mamba_setup
 '
-# <<< mamba initialize <<<
+fi
+# <<< conda / miniforge initialize <<<
 
 # =============================================================================
 # Completions
@@ -227,9 +229,9 @@ alias la='eza -lAh --icons=auto'
 # =============================================================================
 
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-zsh-defer -c 'eval "$(direnv hook zsh)"'
-zsh-defer -c 'eval "$(zoxide init zsh)"'
-zsh-defer -c 'eval "$(atuin init zsh --disable-up-arrow)"'
+command -v direnv >/dev/null 2>&1 && zsh-defer -c 'eval "$(direnv hook zsh)"'
+command -v zoxide >/dev/null 2>&1 && zsh-defer -c 'eval "$(zoxide init zsh)"'
+command -v atuin  >/dev/null 2>&1 && zsh-defer -c 'eval "$(atuin init zsh --disable-up-arrow)"'
 # zsh-defer -c 'eval "$(tv init zsh)"'
 
 # =============================================================================

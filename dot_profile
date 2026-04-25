@@ -21,7 +21,8 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
-. "$HOME/.cargo/env"
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
-if [ -e /home/kanvk/.nix-profile/etc/profile.d/nix.sh ]; then . /home/kanvk/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
-. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+# Nix + Home Manager — soft-detected (no-op if Nix isn't installed)
+[ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ] && . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+[ -e "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ] && . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"

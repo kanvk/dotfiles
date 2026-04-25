@@ -1,3 +1,4 @@
-. "$HOME/.cargo/env"
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
-# if [ -e /home/kanvk/.nix-profile/etc/profile.d/nix.sh ]; then . /home/kanvk/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+# Optional: Nix — enable by installing Nix with the determinate-systems installer
+# [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ] && . "$HOME/.nix-profile/etc/profile.d/nix.sh"
