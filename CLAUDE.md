@@ -56,4 +56,12 @@ private_dot_claude/        # Claude Code user config (SAFE files only — no cre
 
 ## Running changelog
 
-- **2026-04-24** — Refactor started on branch `refactor/chezmoi-portable`. Plan at `/home/kanvk/.claude/plans/review-my-chezmoi-config-ticklish-crystal.md`. Backup of pre-refactor `~/.config`, `~/.claude`, `~/.z*rc`, `~/.p10k.zsh`, `~/.tmux*`, `~/.zfunc`, `~/.virtualenvs` in `/home/kanvk/chezmoi-refactor-backups/pre-refactor-20260424-221349.tar.gz`.
+- **2026-04-24** — Refactor on branch `refactor/chezmoi-portable`. Plan at `/home/kanvk/.claude/plans/review-my-chezmoi-config-ticklish-crystal.md`. Pre-refactor backup at `/home/kanvk/chezmoi-refactor-backups/pre-refactor-20260424-221349.tar.gz`.
+  - Moved OMZ custom out of sheldon's cache to `dot_config/zsh/omz-custom/`; `.zshrc` sets `ZSH_CUSTOM` there.
+  - Deleted `dot_zfunc/_x` and auto-generated completions (`_poetry`, `_rustup`, `_atuin`, `_mise`, `_uv`, `_sesh`, `_git-forgit`); regenerated now by `.chezmoiscripts/run_onchange_after_50-regen-completions.sh.tmpl`.
+  - Removed vendored `dot_local/share/sheldon/repos/**`.
+  - Imported user configs from `~/.config`: git (templated), btop (brew theme path fixed), cheat (templated cheatpaths), lazygit, gh-dash, bottom, pgcli, hatch (templated identity + paths). Skipped `apprise` (live webhook URLs), `opencode` (bun project), cheat community cheatsheets (auto-synced).
+  - Added chezmoi infrastructure: `.chezmoi.toml.tmpl` (prompts name/email/github_user/gpg_signing_key; computes `is_wsl`, `is_debian_like`), `.chezmoidata.yaml` (package lists), `.chezmoiignore.tmpl` (OS-gated), `.chezmoiexternal.toml.tmpl` (TPM).
+  - Templatization sweep: all `/home/kanvk` → `$HOME` (shell) or `{{ .chezmoi.homeDir }}` (non-shell); spack/conda/mamba/NV HPC/pyenv all soft-detected; brew paths soft-detected with macOS fallback; WSL CUDA lib paths gated on `[ -d /usr/lib/wsl/lib ]`.
+  - Added `.chezmoiscripts/` for install automation (apt/brew/pipx/npm/cargo/go/bun), sheldon lock, nvim Lazy sync, broot launcher install, completion regen. All triggered by content-hash changes.
+  - Rewrote README with bootstrap instructions.
