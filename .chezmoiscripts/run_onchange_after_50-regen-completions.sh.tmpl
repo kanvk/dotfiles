@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+#
+# Regenerates zsh completion files in $HOME/.zfunc from each tool's native
+# completion generator. These used to be vendored in the repo but bake in
+# machine-specific absolute paths, so now they're regenerated on apply.
+#
+# Re-fires when the package-install script changes (proxy for "tools may
+# have updated"). Force a rerun after `brew upgrade` with `chezmoi apply --force`.
+#
+# install-trigger: {{ include ".chezmoiscripts/run_onchange_before_00-install-packages.sh.tmpl" | sha256sum }}
+
+set -euo pipefail
+
+mkdir -p "$HOME/.zfunc"
+
+_regen() {
+  local tool="$1" outfile="$2" gen_cmd="$3"
+  if command -v "$tool" >/dev/null 2>&1; then
+    # shellcheck disable=SC2086
+    eval $gen_cmd > "$HOME/.zfunc/$outfile" 2>/dev/null || true
+  fi
+}
+
+_regen poetry _poetry "poetry completions zsh"
+_regen rustup _rustup "rustup completions zsh"
+_regen atuin  _atuin  "atuin gen-completions --shell zsh"
+_regen mise   _mise   "mise completion zsh"
+_regen uv     _uv     "uv generate-shell-completion zsh"
+_regen sesh   _sesh   "sesh completion zsh"

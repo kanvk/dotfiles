@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#
+# Creates broot's launcher file ($HOME/.local/share/broot/launcher/bash/1),
+# which is the target of dot_config/broot/launcher/bash/symlink_br.tmpl.
+# Re-fires when broot goes from absent to present (on first install).
+#
+# broot-present: {{ if lookPath "broot" }}yes{{ else }}no{{ end }}
+
+set -euo pipefail
+
+if ! command -v broot >/dev/null 2>&1; then
+  echo "broot not installed yet — skipping launcher install"
+  exit 0
+fi
+
+if [ ! -f "$HOME/.local/share/broot/launcher/bash/1" ]; then
+  echo "==> broot --install (creating shell launcher)"
+  broot --install >/dev/null 2>&1 || true
+fi

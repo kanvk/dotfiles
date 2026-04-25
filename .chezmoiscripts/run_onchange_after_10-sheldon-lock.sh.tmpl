@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# Runs `sheldon lock --update` whenever plugins.toml changes.
+#
+# plugins-hash: {{ include "dot_config/sheldon/plugins.toml" | sha256sum }}
+
+set -euo pipefail
+
+if ! command -v sheldon >/dev/null 2>&1; then
+  echo "sheldon not installed yet — skipping lock update"
+  exit 0
+fi
+
+echo "==> sheldon lock --update"
+sheldon lock --update

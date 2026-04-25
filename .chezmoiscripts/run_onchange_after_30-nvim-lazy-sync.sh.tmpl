@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#
+# Syncs Neovim plugins to the versions pinned in lazy-lock.json.
+#
+# lock-hash: {{ include "dot_config/nvim/lazy-lock.json" | sha256sum }}
+
+set -euo pipefail
+
+if ! command -v nvim >/dev/null 2>&1; then
+  echo "nvim not installed yet — skipping Lazy sync"
+  exit 0
+fi
+
+echo "==> nvim +Lazy! restore +qa"
+# Lazy.nvim bootstraps itself on first nvim launch from init.lua, so this call
+# both installs and restores to the locked versions. Errors ignored to keep
+# apply flowing even if a single plugin temporarily fails to fetch.
+nvim --headless "+Lazy! restore" +qa 2>/dev/null || true
