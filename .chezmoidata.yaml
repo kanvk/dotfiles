@@ -175,7 +175,6 @@ packages:
     - direnv
     - f2
     - jq
-    - mcfly        # zshrc has it disabled; keep installable for parity
     - pastel
     - pixi
     - pkl
