@@ -49,9 +49,6 @@ tiers:
         - xclip
       brew:
         # editors / multiplexer / prompt
-        # NB: tmux and zsh are intentionally apt-only — apt versions are fine,
-        # and the login-shell switch (run_once_after_70-default-shell) targets
-        # system /usr/bin/zsh, never brew's. Don't re-add here.
         - neovim
         - sheldon
         - powerlevel10k
@@ -59,9 +56,6 @@ tiers:
         - just
         - chezmoi
         # the few CLI tools that earn "minimal" — used in nearly every shell session
-        # NB: direnv, jq, zoxide are intentionally apt-only — stable, slow-
-        # moving tools where the apt version on every supported distro is
-        # current enough. Don't re-add here.
         - bat
         - eza
         - fd
@@ -119,8 +113,6 @@ tiers:
         - ugrep
         - yazi
         # rest of git / VCS
-        # NB: git-lfs is intentionally apt-only — stable, mature, apt's
-        # version is current enough across supported distros.
         - difftastic
         - git-cliff
         - git-extras
@@ -137,7 +129,6 @@ tiers:
         - mise
         - pyenv
         # python (apps + tooling)
-        # NB: pipx is intentionally apt-only — stable, slow-moving.
         - uv
         # observability / system
         - atuin
@@ -236,12 +227,11 @@ tiers:
         - rbenv
         - ruby
         # `uu`/`uuu` update-sweep prerequisites — invoked directly as binaries,
-        # never sourced into the shell. cpanminus provides `cpanm` (perlup);
-        # `stack` (haskellup) comes from apt's haskell-stack (intentionally
-        # not in this brew list — apt's version is current enough).
+        # never sourced into the shell. cpanminus provides `cpanm` (perlup).
         # `cpan-outdated` is a CPAN module not a brew formula; install with
         # `cpanm App::cpanoutdated` if you want perlup's outdated-list step
-        # to work end-to-end.
+        # to work end-to-end. `stack` (haskellup) is provided by ghcup or
+        # apt's haskell-stack, whichever's first on PATH.
         - cpanminus
         # specialty / niche
         - pixi
