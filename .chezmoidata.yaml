@@ -59,16 +59,16 @@ tiers:
         - just
         - chezmoi
         # the few CLI tools that earn "minimal" — used in nearly every shell session
+        # NB: direnv, jq, zoxide are intentionally apt-only — stable, slow-
+        # moving tools where the apt version on every supported distro is
+        # current enough. Don't re-add here.
         - bat
         - eza
         - fd
         - fzf
         - ripgrep
-        - zoxide
-        - direnv
         - gh
         - git-delta
-        - jq
         - lazygit
 
   # ---- base -------------------------------------------------------------------
@@ -119,10 +119,11 @@ tiers:
         - ugrep
         - yazi
         # rest of git / VCS
+        # NB: git-lfs is intentionally apt-only — stable, mature, apt's
+        # version is current enough across supported distros.
         - difftastic
         - git-cliff
         - git-extras
-        - git-lfs
         # language toolchains needed BEFORE the per-language install steps
         # (rustup → cargo, go → go install, node → npm -g, npm → bun).
         # bun is NOT here: not in homebrew/core on Linux. Installed via npm
@@ -136,7 +137,7 @@ tiers:
         - mise
         - pyenv
         # python (apps + tooling)
-        - pipx
+        # NB: pipx is intentionally apt-only — stable, slow-moving.
         - uv
         # observability / system
         - atuin
@@ -236,11 +237,12 @@ tiers:
         - ruby
         # `uu`/`uuu` update-sweep prerequisites — invoked directly as binaries,
         # never sourced into the shell. cpanminus provides `cpanm` (perlup);
-        # haskell-stack provides `stack` (haskellup). `cpan-outdated` is a
-        # CPAN module not a brew formula; install with `cpanm App::cpanoutdated`
-        # if you want perlup's outdated-list step to work end-to-end.
+        # `stack` (haskellup) comes from apt's haskell-stack (intentionally
+        # not in this brew list — apt's version is current enough).
+        # `cpan-outdated` is a CPAN module not a brew formula; install with
+        # `cpanm App::cpanoutdated` if you want perlup's outdated-list step
+        # to work end-to-end.
         - cpanminus
-        - haskell-stack
         # specialty / niche
         - pixi
         - pkl
