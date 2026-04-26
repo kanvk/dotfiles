@@ -66,7 +66,7 @@ If you don't need the encrypted locals (e.g. you're cloning this repo as someone
 
 ## After-apply checklist
 
-Things `chezmoi apply` cannot do automatically — do these once on a new machine. The `run_once_after_99-summary.sh` script also prints this list to your terminal on the first apply so you don't need to re-read this file.
+Things `chezmoi apply` cannot do automatically — do these once on a new machine. The `run_once_after_98-summary.sh` script also prints this list to your terminal on the first apply so you don't need to re-read this file. Run `just checklist` any time to re-display it.
 
 1. **Drop in machine-local secrets**, if needed:
    ```sh

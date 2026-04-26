@@ -66,10 +66,10 @@ show-tier name="full":
     @./tests/show-tier.sh {{name}}
 
 # Re-display the post-apply manual-steps checklist (the same one printed by
-# run_once_after_99-summary on first apply per machine). Useful for returning
+# run_once_after_98-summary on first apply per machine). Useful for returning
 # users who want to revisit what's still to do.
 checklist:
-    @chezmoi execute-template < .chezmoiscripts/run_once_after_99-summary.sh.tmpl | bash
+    @chezmoi execute-template < .chezmoiscripts/run_once_after_98-summary.sh.tmpl | bash
 
 # Open a shell in the source directory.
 cd:

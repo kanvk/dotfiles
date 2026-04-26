@@ -6,13 +6,14 @@
 #      surfaces them at the bottom of the run instead of mid-pipeline where
 #      the after-* scripts' output buries them.
 #   2. Prints a one-line pointer to the post-apply checklist (the actual
-#      first-time checklist lives in run_once_after_99-summary, which fires
+#      first-time checklist lives in run_once_after_98-summary, which fires
 #      only once per machine; users running `chezmoi apply` later still want
 #      a discoverable way to re-see it).
 #
-# `run_after_*` (no `once_`, no `onchange_`) fires on every apply. The 98
-# numbering places it just before run_once_after_99-summary so on a fresh
-# bootstrap a user sees: install summary → first-time checklist → done.
+# `run_after_*` (no `once_`, no `onchange_`) fires on every apply. The 99
+# numbering places this AFTER run_once_after_98-summary so on a fresh
+# bootstrap the order is: first-time checklist → apply summary → done.
+# The apply summary always has the last word, even on the first apply.
 
 set -euo pipefail
 
@@ -42,7 +43,7 @@ echo "================================================================"
 rm -f "$ERR_LOG"
 
 # Discoverable pointer to the first-time checklist. The full checklist
-# (run_once_after_99-summary) fires once on first apply per machine; surface
+# (run_once_after_98-summary) fires once on first apply per machine; surface
 # how to re-see it for returning users without forcing them to re-read README.
 echo
 printf "${bold}First-time setup checklist:${reset} README.md → \"After-apply checklist\".\n"
