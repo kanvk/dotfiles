@@ -135,6 +135,7 @@ tiers:
         - bottom
         - btop
         - lazydocker
+        - procs
         - fastfetch
         # build / quality
         - ast-grep
