@@ -24,9 +24,10 @@ ${bold}1. Machine-local secrets${reset}
 
 ${bold}2. Personal SSH hosts${reset}
    ${dim}# The tracked ~/.ssh/config has only universal entries (Host *,
-   # github.com, github.com-ghe). It does \`Include ~/.ssh/config.local\`
-   # for everything else. See:${reset}
-   ~/.ssh/config.local.example  # template for your machine-specific hosts
+   # github.com). Includes \`~/.ssh/config.local\` (encrypted-tracked when
+   # encrypt_locals=true; personal-but-portable hosts) and \`~/.ssh/config.machine\`
+   # (untracked; per-host non-portable hosts). See:${reset}
+   ~/.ssh/config.machine.example  # template for THIS machine's specific hosts
 
 ${bold}3. GitHub CLI auth${reset}
    gh auth login
