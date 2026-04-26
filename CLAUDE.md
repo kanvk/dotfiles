@@ -14,11 +14,11 @@ See `README.md` for the user-facing version of the same story.
 
 ## Hard invariants
 
-- **Repo is public** (temporarily private during the 2026-04 refactor). Never commit plaintext secrets, OAuth tokens, API keys, signed JWTs, or private SSH keys. Machine-local secrets belong at `~/.config/zsh/omz-custom/hidden.zsh`, which is gitignored and sourced by OMZ at shell start. This file must never move into the chezmoi source tree.
+- **Repo is public.** Never commit plaintext secrets, OAuth tokens, API keys, signed JWTs, or private SSH keys. Machine-local secrets belong at `~/.config/zsh/omz-custom/hidden.zsh`, which is gitignored and sourced by OMZ at shell start. This file must never move into the chezmoi source tree.
 - **OS scope:** Officially supports Kali (WSL2) and Ubuntu (native or WSL2). macOS is not targeted; don't add macOS-specific branches unless they're free (no added complexity). Windows-native configs (`dot_config/windows/**`, including Windows Terminal `settings.json`) are kept in the source tree but excluded from apply on non-Windows machines — the user moves them manually on a Windows box (see `dot_config/windows/terminal/README.md`).
 - **Routine testing uses Ubuntu only.** Kali and Ubuntu are functionally equivalent for this repo's purposes (both are `is_debian_like`, both go through the same nala+brew install pipeline). If `just test-full ubuntu` passes, kali is assumed to also pass — don't burn the cycles on both unless you've changed something distro-specific (e.g. apt package names that drift on kali, kali-specific gates). `just test-full kali` and `just test-full all` remain available for the rare distro-specific fix.
 - **`is_debian_like` covers all three:** Debian's `ID=debian`, Ubuntu's `ID=ubuntu`, Kali's `ID=kali` + `ID_LIKE=debian`. Branch on this, not on a single distro id.
-- **`hidden.zsh` invariant:** never put secrets inside the chezmoi source tree, even if excluded. The whole idea of this refactor is that the source tree is safe to publish.
+- **`hidden.zsh` invariant:** never put secrets inside the chezmoi source tree, even if excluded. The whole point of the layout is that the source tree is safe to publish.
 
 ## Conventions
 
@@ -42,7 +42,7 @@ See `README.md` for the user-facing version of the same story.
 - **Login shell switch is `run_once`, not `run_onchange`.** `run_once_after_70-default-shell.sh.tmpl` flips the user's login shell to a `/etc/shells`-listed zsh path (system `/usr/bin/zsh`, never brew's) once per machine. If the user later chshes back to bash, the script stays out of the way — re-run only by editing the script body or `chezmoi state delete-bucket --bucket=scriptState`. Uses `usermod -s` over `chsh` so it works in containers/PAM-restricted setups.
 - **The install script holds a sudo keepalive** for the duration of the apply pipeline. A single `sudo -v` at the top, plus a backgrounded `( while kill -0 $$; do sudo -n true; sleep 60; done ) &` collapses 2–3 potential prompts (apt batch + brew installer's internal sudo + post-install `usermod`) into one. The `kill -0 $$` guard inside the subshell self-terminates the loop if the script is killed without firing its EXIT trap.
 
-## Layout after refactor
+## Layout
 
 ```
 .chezmoi.toml.tmpl         # init-time prompts + computed vars
