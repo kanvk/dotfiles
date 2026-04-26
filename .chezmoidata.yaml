@@ -143,7 +143,7 @@ tiers:
         - bottom
         - btop
         - lazydocker
-        - neofetch
+        - fastfetch
         # build / quality
         - ast-grep
         - cloc
