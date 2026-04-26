@@ -212,9 +212,18 @@ if command -v cargo >/dev/null 2>&1; then
   # `coreutils --features unix`. We word-split the entry into positional params
   # so those args reach cargo intact. shellcheck-disable on the unquoted
   # expansion is intentional: input comes from .chezmoidata.yaml (trusted).
+  #
+  # Skip if the crate is already installed. cargo install's built-in idempotency
+  # is unreliable when --features is passed: it rebuilds even when name+version+
+  # features+rustc all match (most visibly for uutils coreutils, whose `unix`
+  # feature resolves through ~100 sub-features). Refresh is a separate, manual
+  # step via `cargo install-update -a`.
   for _crate in{{ range (index $resolved "cargo") }} {{ . | quote }}{{ end }}; do
     # shellcheck disable=SC2086
     set -- $_crate
+    if cargo install --list 2>/dev/null | grep -q "^$1 v"; then
+      continue
+    fi
     cargo install "$@" || {
       echo "warning: cargo install $_crate failed (missing system dep? check apt list)" >&2
       _record_install_failure "cargo: $1"
