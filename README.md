@@ -60,7 +60,7 @@ The apt-pass uses `nala` once it's installed (better progress UI + parallel down
 
 ## Before the first apply (encrypted-locals only)
 
-If you said "yes" to the `encrypt_locals` prompt at init time, the matching age identity must be on disk at the path you gave (e.g. `~/.ssh/personal`) **before** the first `chezmoi apply`. Otherwise chezmoi can't decrypt the encrypted source files (`encrypted_private_dot_gitconfig.local.age`, `private_dot_ssh/encrypted_private_config.local.age`) and apply will fail. On a fresh machine the order is: copy your SSH key in → `chezmoi init --apply kanvk`.
+If you said "yes" to the `encrypt_locals` prompt at init time, the matching age identity must be on disk at the path you gave (e.g. `~/.ssh/chezmoi`) **before** the first `chezmoi apply`. Otherwise chezmoi can't decrypt the encrypted source files (`encrypted_private_dot_gitconfig.local.age`, `private_dot_ssh/encrypted_private_config.local.age`) and apply will fail. On a fresh machine the order is: copy your SSH key in → `chezmoi init --apply kanvk`.
 
 If you don't need the encrypted locals (e.g. you're cloning this repo as someone other than the owner), just leave `encrypt_locals` at its default (false) at init time and apply will skip them.
 
@@ -113,7 +113,7 @@ Things `chezmoi apply` cannot do automatically — do these once on a new machin
    ```sh
    chezmoi add --encrypt ~/.netrc       # or any file you want versioned + encrypted
    chezmoi edit ~/.netrc                # round-trips through age + $EDITOR
-   ssh-add ~/.ssh/personal              # so apply doesn't ask for the SSH passphrase each time
+   ssh-add ~/.ssh/chezmoi               # so apply doesn't ask for the SSH passphrase each time
    ```
    No secrets are committed by default; encryption is per-file and opt-in.
 
