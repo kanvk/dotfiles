@@ -56,8 +56,10 @@ ${bold}7. Optional research / HPC tools${reset}
 ${bold}8. age encryption (optional)${reset}
    ${dim}# Already wired to your SSH key. Encrypt a file:${reset}
    chezmoi add --encrypt ~/.netrc
-   ${dim}# To decrypt without typing the SSH passphrase each time:${reset}
-   ssh-add ~/.ssh/chezmoi
+   ${dim}# Apply prompts for the SSH-key passphrase on every decrypt. ssh-agent
+   # does not help (age reads the key directly from disk). To stop the prompt,
+   # drop the passphrase on the chezmoi key — perms 0600 still protect it:${reset}
+   ssh-keygen -p -f ~/.ssh/chezmoi  # set the new passphrase to empty
 
 ${dim}This message will not show again on this machine. To see it: re-run
 \`chezmoi apply --force\` after editing the summary script, or read

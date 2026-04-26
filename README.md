@@ -113,9 +113,10 @@ Things `chezmoi apply` cannot do automatically — do these once on a new machin
    ```sh
    chezmoi add --encrypt ~/.netrc       # or any file you want versioned + encrypted
    chezmoi edit ~/.netrc                # round-trips through age + $EDITOR
-   ssh-add ~/.ssh/chezmoi               # so apply doesn't ask for the SSH passphrase each time
    ```
    No secrets are committed by default; encryption is per-file and opt-in.
+
+   If your SSH key is passphrase-protected, every `chezmoi apply` that touches an `.age` file will prompt for it. `ssh-add` does **not** help — `age` reads the SSH key directly from disk and bypasses ssh-agent. Either drop the passphrase on the chezmoi-only key (`ssh-keygen -p -f ~/.ssh/chezmoi`; perms 0600 still protect it) or switch to a native age identity (`age-keygen -o ~/.config/chezmoi/key.txt`, then point the `[age]` block in `~/.config/chezmoi/chezmoi.toml` at it and re-encrypt the existing files).
 
 Tmux plugins are installed automatically by `run_onchange_after_60-tmux-plugins.sh` — no need to press `prefix + I` unless you add new plugins.
 
