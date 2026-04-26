@@ -199,9 +199,6 @@ tiers:
   full:
     inherits: [base]
     include:
-      apt:
-        # smartcard / yubikey: needed by `age-plugin-yubikey` (pcsc-sys)
-        - libpcsclite-dev
       brew:
         # heavier daily-driver / specialty
         - act
@@ -260,6 +257,5 @@ tiers:
         - vllm
         - wandb
       cargo:
-        - age-plugin-yubikey   # age plugin for YubiKey-backed identities
         - numbat-cli
       bun: []
