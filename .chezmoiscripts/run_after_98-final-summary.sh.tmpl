@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+#
+# Final-line summary at the end of EVERY chezmoi apply.
+#
+#   1. Re-displays any install errors recorded by run_onchange_before_00 —
+#      surfaces them at the bottom of the run instead of mid-pipeline where
+#      the after-* scripts' output buries them.
+#   2. Prints a one-line pointer to the post-apply checklist (the actual
+#      first-time checklist lives in run_once_after_99-summary, which fires
+#      only once per machine; users running `chezmoi apply` later still want
+#      a discoverable way to re-see it).
+#
+# `run_after_*` (no `once_`, no `onchange_`) fires on every apply. The 98
+# numbering places it just before run_once_after_99-summary so on a fresh
+# bootstrap a user sees: install summary → first-time checklist → done.
+
+set -euo pipefail
+
+ERR_LOG="${TMPDIR:-/tmp}/chezmoi-apply-errors-${USER:-$(id -un)}.log"
+
+bold='\033[1m'; dim='\033[2m'; green='\033[32m'; red='\033[31m'; reset='\033[0m'
+
+echo
+echo "================================================================"
+if [ -s "$ERR_LOG" ]; then
+  errcount=$(wc -l < "$ERR_LOG" | tr -d ' ')
+  printf "${bold}${red}==> Apply summary: %s issue(s) recorded${reset}\n" "$errcount"
+  while IFS= read -r line; do
+    printf "    - %s\n" "$line"
+  done < "$ERR_LOG"
+  echo
+  printf "    ${dim}Each entry is one item that failed to install or set up.${reset}\n"
+  printf "    ${dim}Re-run \`chezmoi apply --force\` after fixing the underlying issue.${reset}\n"
+else
+  printf "${bold}${green}==> Apply summary: clean${reset}\n"
+fi
+echo "================================================================"
+
+# Consume the error log so the next apply starts from a known-empty state.
+# (run_onchange_before_00 also truncates it on its next run, but this handles
+# the case where 00 doesn't fire because the install hash hasn't changed.)
+rm -f "$ERR_LOG"
+
+# Discoverable pointer to the first-time checklist. The full checklist
+# (run_once_after_99-summary) fires once on first apply per machine; surface
+# how to re-see it for returning users without forcing them to re-read README.
+echo
+printf "${bold}First-time setup checklist:${reset} README.md → \"After-apply checklist\".\n"
+printf "${dim}To re-display the on-screen checklist any time:${reset}  ${bold}just checklist${reset}\n"
+echo
