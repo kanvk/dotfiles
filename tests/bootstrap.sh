@@ -208,7 +208,7 @@ if [ "$MODE" = "full" ]; then
 
     # Login shell got switched to zsh by run_once_after_70-default-shell.
     # Without this, a fresh bootstrap silently leaves the user on bash.
-    login_shell="$(getent passwd "$USER" | cut -d: -f7)"
+    login_shell="$(getent passwd "${USER:-$(id -un)}" | cut -d: -f7)"
     case "$login_shell" in
         */zsh) ;;
         *) echo "  FAIL: login shell is $login_shell, expected a zsh path"; fail=1 ;;

@@ -11,6 +11,11 @@
 
 set -euo pipefail
 
+# `$USER` isn't always exported in chezmoi's script subshell (notably absent
+# in stock Docker containers and some non-login contexts). Fall back to id(1)
+# before referencing it under `set -u`.
+USER="${USER:-$(id -un)}"
+
 # Find a zsh that's a valid login shell. /etc/shells gates what login(1) and
 # chsh accept; brew's zsh is intentionally NOT in /etc/shells (varies across
 # brew prefixes), so we use the system zsh installed via apt instead.
