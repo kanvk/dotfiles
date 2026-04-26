@@ -202,14 +202,22 @@ fi
 # --- cargo ---
 if command -v cargo >/dev/null 2>&1; then
   echo "==> Installing cargo packages"
-  # `cargo install` is idempotent (no-ops if already at requested version).
-  # Install one-at-a-time + `|| true` so a single bad crate (e.g. missing
-  # system lib at build time) doesn't abort the whole apply pipeline. Use
-  # `cargo install-update -a` (from cargo-update) afterward to refresh.
+  # `cargo install` is idempotent (no-ops if already at requested version;
+  # feature/source changes do trigger a reinstall). Install one-at-a-time +
+  # `|| true` so a single bad crate (e.g. missing system lib at build time)
+  # doesn't abort the whole apply pipeline. Use `cargo install-update -a`
+  # (from cargo-update) afterward to refresh.
+  #
+  # Each entry can carry extra `cargo install` args after the crate name, e.g.
+  # `coreutils --features unix`. We word-split the entry into positional params
+  # so those args reach cargo intact. shellcheck-disable on the unquoted
+  # expansion is intentional: input comes from .chezmoidata.yaml (trusted).
   for _crate in{{ range (index $resolved "cargo") }} {{ . | quote }}{{ end }}; do
-    cargo install "$_crate" || {
+    # shellcheck disable=SC2086
+    set -- $_crate
+    cargo install "$@" || {
       echo "warning: cargo install $_crate failed (missing system dep? check apt list)" >&2
-      _record_install_failure "cargo: $_crate"
+      _record_install_failure "cargo: $1"
     }
   done
   unset _crate

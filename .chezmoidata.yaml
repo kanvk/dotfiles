@@ -188,7 +188,7 @@ tiers:
         - cargo-update
         - choose
         - code-minimap
-        - coreutils            # rust uutils — used by alias.zsh `command coreutils <cmd>`
+        - coreutils --features unix  # rust uutils — used by alias.zsh `command coreutils <cmd>`; `unix` feature builds the full unix util set
         - du-dust
         - gitoxide
       npm:
