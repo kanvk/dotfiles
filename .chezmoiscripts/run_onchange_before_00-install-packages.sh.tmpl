@@ -100,11 +100,18 @@ if command -v sudo >/dev/null 2>&1 && command -v apt-get >/dev/null 2>&1; then
   if command -v nala >/dev/null 2>&1; then
     echo "==> Installing apt packages via nala"
     sudo nala update
+    # Upgrade already-installed packages before adding new ones, so the system
+    # is current on every apply (incl. the very first). Non-fatal: a held-back
+    # package shouldn't abort the install pipeline.
+    sudo nala upgrade -y \
+      || _record_install_failure "apt: nala upgrade reported errors (see log above)"
     sudo nala install -y{{ range (index $resolved "apt") }} {{ . | quote }}{{ end }} \
       || _record_install_failure "apt: nala batch reported errors (see log above)"
   else
     echo "==> Installing apt packages via apt-get (nala unavailable)"
     sudo apt-get update -y
+    sudo apt-get upgrade -y \
+      || _record_install_failure "apt: apt-get upgrade reported errors (see log above)"
     sudo apt-get install -y --no-install-recommends{{ range (index $resolved "apt") }} {{ . | quote }}{{ end }} \
       || _record_install_failure "apt: apt-get batch reported errors (see log above)"
   fi
