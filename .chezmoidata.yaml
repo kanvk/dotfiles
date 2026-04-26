@@ -48,10 +48,11 @@ tiers:
         - zsh
         - xclip
       brew:
-        # editors / shell / multiplexer / prompt
+        # editors / multiplexer / prompt
+        # NB: tmux and zsh are intentionally apt-only — apt versions are fine,
+        # and the login-shell switch (run_once_after_70-default-shell) targets
+        # system /usr/bin/zsh, never brew's. Don't re-add here.
         - neovim
-        - tmux
-        - zsh
         - sheldon
         - powerlevel10k
         # the test runner + chezmoi itself
