@@ -33,6 +33,7 @@ tiers:
     include:
       apt:
         # bootstrap (also satisfies Homebrew install prereqs)
+        - age
         - build-essential
         - ca-certificates
         - curl
