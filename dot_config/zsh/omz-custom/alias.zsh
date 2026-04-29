@@ -194,7 +194,27 @@ alias sa='source .venv/bin/activate'
 alias t='tmux'
 alias tp='tmux new-session -A -s $(basename $PWD)'
 alias tf='sesh connect "$(sesh list | fzf)"'
-alias ts='tv sesh'
+# `tv sesh` action mode can't hand the terminal off to `tmux attach` cleanly
+# (stdin becomes /dev/tty, and tmux's display renders to nowhere on some
+# stacks). Run `sesh connect` from the shell so it inherits a real pts.
+ts() {
+  emulate -L zsh
+  local target
+  target=$(tv sesh) || return
+  [[ -z $target ]] && return
+
+  # Sesh's dirStrategy unconditionally tries `tmux new-session`; if a session
+  # already exists with the path's basename, that fails ("duplicate session").
+  # Resolve to the existing session name first.
+  if [[ $target == */* ]]; then
+    local bname=${target:t}
+    if tmux has-session -t "=$bname" 2>/dev/null; then
+      target=$bname
+    fi
+  fi
+
+  sesh connect -- "$target"
+}
 alias pyinstall='TCLTK_PATH=$(brew --prefix tcl-tk) PYTHON_CONFIGURE_OPTS="--with-tcltk-includes=${TCLTK_PATH}/include --with-tcltk-libs=${TCLTK_PATH}/lib" pyenv install'
 alias rcp='rsync -avzPh'
 alias gsww='git switch'

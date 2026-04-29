@@ -22,14 +22,14 @@ output = "{strip_ansi|split: :1..|join: }"
 [preview]
 command = "sesh preview '{strip_ansi|split: :1..|join: }'"
 
+# Enter is intentionally unbound: tv prints the selection to stdout on
+# `confirm_selection` and the `ts` shell function (in
+# dot_config/zsh/omz-custom/alias.zsh) pipes it into `sesh connect`. tv 0.15's
+# `mode = "execute"` exec-replaces tv with the action command but leaves the
+# terminal in a state where tmux's attach renders to nowhere; a shell-level
+# wrapper sidesteps that entirely.
 [keybindings]
-enter = "actions:connect"
 ctrl-d = [ "actions:kill_session", "reload_source" ]
-
-[actions.connect]
-description = "Connect to selected session"
-command = "sesh connect '{strip_ansi|split: :1..|join: }'"
-mode = "execute"
 
 [actions.kill_session]
 description = "Kill selected tmux session (press Ctrl+r to reload)"
