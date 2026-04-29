@@ -72,6 +72,36 @@ QSlider::handle {
     padding: 1px 8px;
 }
 
+/* Replaces the per-widget label_shadow / btn_shadow blocks that were removed in yasb 2.0.0.
+   Original: color "black", radius 3, offset [1, 1]. */
+.whkd-widget .label,
+.komorebi-active-layout .label,
+.media-widget .label,
+.microphone-widget .label,
+.bluetooth-widget .label,
+.battery-widget .label,
+.cpu-widget .label,
+.gpu-widget .label,
+.memory-widget .label,
+.disk-widget .label,
+.traffic-widget .label,
+.komorebi-control-widget .label {
+    text-shadow: 1px 1px 3px black;
+}
+
+.windows-workspaces .ws-btn,
+.komorebi-workspaces .ws-btn {
+    box-shadow: 1px 1px 3px black;
+}
+
+.tooltip {
+    background-color: var(--surface0);
+    color: var(--text);
+    border: 1px solid var(--surface1);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
 /* -------------------------------------------------------------------------------------------------- */
 /* 2. Widgets                                                                                         */
 /* -------------------------------------------------------------------------------------------------- */
