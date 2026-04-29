@@ -64,12 +64,6 @@ dir = "plugins/rsync"
 use = ["rsync.plugin.zsh"]
 apply = ["defer"]
 
-[plugins.omz-colorize]
-github = "ohmyzsh/ohmyzsh"
-dir = "plugins/colorize"
-use = ["colorize.plugin.zsh"]
-apply = ["defer"]
-
 [plugins.alias-tips]
 github = "djui/alias-tips"
 apply = ["defer"]
