@@ -27,18 +27,6 @@ justfile
 .ssh/config.local
 {{- end }}
 
-{{- if ne .chezmoi.os "windows" }}
-# Windows-native GUI configs — kept in the source repo as a reference, but the user
-# moves them manually on a Windows box since this chezmoi config targets Linux+WSL.
-.config/windows/**
-{{- end }}
-
-{{- if not .is_wsl }}
-# WSL-only shell aliases (win32yank, cmd.exe, pwsh.exe, tailscale.exe, ollama.exe)
-# are useless off WSL; OMZ would source them for no effect. Skip entirely.
-.config/zsh/omz-custom/wsl.zsh
-{{- end }}
-
 # Defensive: never vendor sheldon's plugin cache, even if accidentally re-added.
 .local/share/sheldon/repos/**
 
