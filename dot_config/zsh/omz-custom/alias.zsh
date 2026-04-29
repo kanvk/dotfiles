@@ -200,8 +200,12 @@ alias tf='sesh connect "$(sesh list | fzf)"'
 ts() {
   emulate -L zsh
   local target
-  target=$(tv sesh) || return
-  [[ -z $target ]] && return
+  if (( $# > 0 )); then
+    target="$*"
+  else
+    target=$(tv sesh) || return
+    [[ -z $target ]] && return
+  fi
 
   # Sesh's dirStrategy unconditionally tries `tmux new-session`; if a session
   # already exists with the path's basename, that fails ("duplicate session").
