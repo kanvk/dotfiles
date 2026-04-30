@@ -240,9 +240,20 @@ alias la='eza -lAh --icons=auto'
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 command -v direnv >/dev/null 2>&1 && zsh-defer -c 'eval "$(direnv hook zsh)"'
 command -v zoxide >/dev/null 2>&1 && zsh-defer -c 'eval "$(zoxide init zsh)"'
-# atuin runs synchronously so Ctrl-R is bound on the very first prompt — its
-# init eval is ~10ms total (mostly the subprocess), not worth deferring.
-command -v atuin  >/dev/null 2>&1 && eval "$(atuin init zsh --disable-up-arrow)"
+# atuin runs synchronously so widgets/history sync are ready on the first
+# prompt — its init eval is ~10ms total, not worth deferring. zsh-vi-mode
+# (deferred) rebuilds the viins/vicmd keymaps after this runs, so its
+# zvm_after_init hook re-applies the keybindings; the widgets themselves
+# survive and don't need redefining.
+if command -v atuin >/dev/null 2>&1; then
+    eval "$(atuin init zsh --disable-up-arrow)"
+    _atuin_rebind() {
+        bindkey -M emacs '^r' atuin-search
+        bindkey -M viins '^r' atuin-search-viins
+        bindkey -M vicmd '^r' atuin-search-vicmd
+    }
+    zvm_after_init_commands+=(_atuin_rebind)
+fi
 
 # =============================================================================
 # p10k config (must stay at bottom)
