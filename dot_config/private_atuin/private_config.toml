@@ -352,6 +352,9 @@ columns = [
     "command",
     { type = "directory", width = 30 },
 ]
+
+[ai]
+enabled = false
 ##
 ## Examples:
 ##

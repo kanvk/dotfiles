@@ -246,7 +246,7 @@ command -v zoxide >/dev/null 2>&1 && zsh-defer -c 'eval "$(zoxide init zsh)"'
 # zvm_after_init hook re-applies the keybindings; the widgets themselves
 # survive and don't need redefining.
 if command -v atuin >/dev/null 2>&1; then
-    eval "$(atuin init zsh --disable-up-arrow)"
+    eval "$(atuin init zsh --disable-up-arrow --disable-ai)"
     _atuin_rebind() {
         bindkey -M emacs '^r' atuin-search
         bindkey -M viins '^r' atuin-search-viins
