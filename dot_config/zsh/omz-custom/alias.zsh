@@ -226,5 +226,5 @@ alias rcp='rsync -avzPh'
 alias gsww='git switch'
 
 # chezmoi
-alias chez='chezmoi'
+alias cz='chezmoi'
 alias cvim='chezmoi edit --apply'
