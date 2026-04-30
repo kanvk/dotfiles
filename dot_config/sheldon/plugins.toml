@@ -28,6 +28,19 @@ github = "ohmyzsh/ohmyzsh"
 # alias bundle that doesn't need to be in scope before the first prompt.
 # The `dir` directives reference the OMZ clone shared with the oh-my-zsh
 # entry above (sheldon de-dupes by github URL).
+
+# extract: provides the `extract` function for long-tail formats (.deb, .rpm,
+# .jar, .whl, .xpi, .ipa, .zpaq, .lrz, .sublime-package, …) that ouch doesn't
+# handle. The plugin's last line is `alias x=extract`, which would clobber the
+# `alias x='ouch d'` we set in alias.zsh — re-assert it via a deferred post-hook
+# so it queues *after* the plugin's own source runs.
+[plugins.omz-extract]
+github = "ohmyzsh/ohmyzsh"
+dir = "plugins/extract"
+use = ["extract.plugin.zsh"]
+apply = ["defer"]
+hooks = { post = "zsh-defer -c \"alias x='ouch d'\"" }
+
 [plugins.omz-copypath]
 github = "ohmyzsh/ohmyzsh"
 dir = "plugins/copypath"
