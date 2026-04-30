@@ -100,7 +100,7 @@ apply = ["defer"]
 [plugins.forgit]
 github = "wfxr/forgit"
 use = ["forgit.plugin.zsh"]
-apply = ["source"]
+apply = ["defer"]
 
 [plugins.powerlevel10k]
 github = "romkatv/powerlevel10k"
