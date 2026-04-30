@@ -179,6 +179,7 @@ alias ccat='bat -pp'
 alias less='moor'
 alias yz='yazi'
 alias nf='apprise'
+alias x='ouch d'
 
 # xclip
 alias c='xclip'

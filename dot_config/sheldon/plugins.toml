@@ -28,12 +28,6 @@ github = "ohmyzsh/ohmyzsh"
 # alias bundle that doesn't need to be in scope before the first prompt.
 # The `dir` directives reference the OMZ clone shared with the oh-my-zsh
 # entry above (sheldon de-dupes by github URL).
-[plugins.omz-extract]
-github = "ohmyzsh/ohmyzsh"
-dir = "plugins/extract"
-use = ["extract.plugin.zsh"]
-apply = ["defer"]
-
 [plugins.omz-copypath]
 github = "ohmyzsh/ohmyzsh"
 dir = "plugins/copypath"
