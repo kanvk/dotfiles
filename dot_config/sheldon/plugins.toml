@@ -15,11 +15,29 @@ shell = "zsh"
 [templates]
 
 defer = "{{ hooks?.pre | nl }}{% for file in files %}zsh-defer source \"{{ file }}\"\n{% endfor %}{{ hooks?.post | nl }}"
+# Adds a plugin's `completions/` subdir (rather than its root) to fpath. Used
+# by plugins like forgit that source a `*.plugin.zsh` from the root but ship
+# `_<tool>` completions one level down.
+fpath-completions = "fpath=(\"{{ dir }}/completions\" $fpath)"
 
 [plugins]
 
 [plugins.zsh-defer]
 github = "romkatv/zsh-defer"
+
+# Fpath-only plugins MUST come before oh-my-zsh: OMZ runs compinit during its
+# source, so anything that prepends to fpath after that point is invisible to
+# the completion system. zsh-defer (above) is fpath-neutral and stays first
+# because forgit's deferred source needs `zsh-defer` already defined.
+[plugins.zsh-completions]
+github = "zsh-users/zsh-completions"
+dir = "src"
+apply = ["fpath"]
+
+[plugins.forgit]
+github = "wfxr/forgit"
+use = ["forgit.plugin.zsh"]
+apply = ["defer", "fpath-completions"]
 
 [plugins.oh-my-zsh]
 github = "ohmyzsh/ohmyzsh"
@@ -75,10 +93,6 @@ apply = ["defer"]
 github = "djui/alias-tips"
 apply = ["defer"]
 
-[plugins.zsh-completions]
-github = "zsh-users/zsh-completions"
-apply = ["defer"]
-
 [plugins.zsh-autosuggestions]
 github = "zsh-users/zsh-autosuggestions"
 use = ["{{ name }}.zsh"]
@@ -102,11 +116,6 @@ apply = ["defer"]
 
 [plugins.zsh-vi-mode]
 github = "jeffreytse/zsh-vi-mode"
-apply = ["defer"]
-
-[plugins.forgit]
-github = "wfxr/forgit"
-use = ["forgit.plugin.zsh"]
 apply = ["defer"]
 
 [plugins.powerlevel10k]

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #
 # Regenerates zsh completion files in $HOME/.zfunc for tools NOT covered by
-# another fpath source. Brew formulae that install
-# `share/zsh/site-functions/_<tool>` are already picked up via dot_zshrc
-# (which prepends `$(brew --prefix)/share/zsh/site-functions` to fpath), so
-# brew-installed tools that ship completions don't need an entry here —
-# regenerating them would just duplicate brew's identical output. Audit with:
-#     ls "$(brew --prefix)/share/zsh/site-functions/"
+# another fpath source. Already on fpath via dot_zshrc / sheldon, so skip:
+#   - brew formulae that install `share/zsh/site-functions/_<tool>` (audit:
+#     `ls "$(brew --prefix)/share/zsh/site-functions/"`)
+#   - sheldon plugins like zsh-completions (src/) and forgit (completions/),
+#     wired via `apply = ["fpath"]` / `apply = ["fpath-completions"]` in
+#     dot_config/sheldon/plugins.toml.
 #
 # Re-fires when the package-install script changes (proxy for "tools may
 # have updated"). Force a rerun after `brew upgrade` with `chezmoi apply --force`.
@@ -65,11 +65,3 @@ _regen_click apprise         _apprise
 _regen_click pip-audit       _pip-audit
 _regen_click dynaconf        _dynaconf
 _regen_click vllm            _vllm
-
-# forgit ships its own _git-forgit; sheldon clones it, but doesn't add the
-# completions dir to fpath. Copy it into ~/.zfunc so it's reachable.
-_forgit_completion="$HOME/.local/share/sheldon/repos/github.com/wfxr/forgit/completions/_git-forgit"
-if [ -f "$_forgit_completion" ]; then
-  cp "$_forgit_completion" "$HOME/.zfunc/_git-forgit"
-fi
-unset _forgit_completion
