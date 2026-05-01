@@ -34,10 +34,17 @@ github = "zsh-users/zsh-completions"
 dir = "src"
 apply = ["fpath"]
 
+# Override forgit's `gsw` alias: with args, delegate to real `git switch` so
+# DWIM tracking kicks in when only `origin/<branch>` exists. Forgit's wrapper
+# falls through to `git switch -c "$@"` when `git show-branch <name>` fails
+# (it doesn't check remotes), which skips DWIM and creates a no-tracking
+# branch from HEAD. The no-arg fzf picker is preserved. Wrapped in zsh-defer
+# so the post-hook queues *after* forgit's deferred source defines the alias.
 [plugins.forgit]
 github = "wfxr/forgit"
 use = ["forgit.plugin.zsh"]
 apply = ["defer", "fpath-completions"]
+hooks = { post = "zsh-defer -c 'unalias gsw 2>/dev/null; gsw() { if (( $# == 0 )); then forgit::switch::branch; else command git switch \"$@\"; fi; }; compdef _git gsw=git-switch'" }
 
 [plugins.oh-my-zsh]
 github = "ohmyzsh/ohmyzsh"
