@@ -209,17 +209,33 @@ ts() {
     [[ -z $target ]] && return
   fi
 
+  _ts_attach() {
+    if [[ -n $TMUX ]]; then
+      tmux switch-client -t "=$1"
+    else
+      tmux attach -t "=$1"
+    fi
+  }
+
   # Sesh's dirStrategy unconditionally tries `tmux new-session`; if a session
   # already exists with the resolved basename, that fails ("duplicate session").
   # This bites bare names too, since sesh may resolve `foo` → a zoxide path and
   # then `new-session -s foo`. Short-circuit by attaching directly.
   local bname=${target:t}
   if tmux has-session -t "=$bname" 2>/dev/null; then
-    if [[ -n $TMUX ]]; then
-      tmux switch-client -t "=$bname"
-    else
-      tmux attach -t "=$bname"
-    fi
+    _ts_attach "$bname"
+    return
+  fi
+
+  # Substring fallback: `ts prime` should attach to `prime_bench` when that's
+  # the only live session matching. Sesh itself requires an exact match and
+  # would otherwise just exit 1 (or fall into zoxide resolution). If multiple
+  # sessions match, defer to sesh — it'll surface the ambiguity.
+  local -a sessions matches
+  sessions=(${(f)"$(tmux list-sessions -F '#S' 2>/dev/null)"})
+  matches=(${(M)sessions:#*${target}*})
+  if (( ${#matches} == 1 )); then
+    _ts_attach "${matches[1]}"
     return
   fi
 
