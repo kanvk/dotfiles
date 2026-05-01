@@ -210,13 +210,17 @@ ts() {
   fi
 
   # Sesh's dirStrategy unconditionally tries `tmux new-session`; if a session
-  # already exists with the path's basename, that fails ("duplicate session").
-  # Resolve to the existing session name first.
-  if [[ $target == */* ]]; then
-    local bname=${target:t}
-    if tmux has-session -t "=$bname" 2>/dev/null; then
-      target=$bname
+  # already exists with the resolved basename, that fails ("duplicate session").
+  # This bites bare names too, since sesh may resolve `foo` → a zoxide path and
+  # then `new-session -s foo`. Short-circuit by attaching directly.
+  local bname=${target:t}
+  if tmux has-session -t "=$bname" 2>/dev/null; then
+    if [[ -n $TMUX ]]; then
+      tmux switch-client -t "=$bname"
+    else
+      tmux attach -t "=$bname"
     fi
+    return
   fi
 
   sesh connect -- "$target"
