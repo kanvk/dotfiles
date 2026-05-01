@@ -20,8 +20,8 @@ echo "==> nvim +Lazy! restore +qa"
 # apply flowing even if a single plugin temporarily fails to fetch.
 #
 # `timeout` guards against a known lazy.nvim race where `+qa` deadlocks with an
-# in-flight async restore task and nvim hangs indefinitely. 10 min is well
-# above a real first-time restore (~1–3 min) but bounded — if it actually does
-# hang, the rest of apply still proceeds (errors are tolerated below).
-timeout --kill-after=30s 10m \
+# in-flight async restore task and nvim hangs indefinitely. A real first-time
+# restore lands around 1–2 min — 3 min leaves headroom but bails fast if a
+# deadlock actually hits. Errors are tolerated so apply keeps flowing.
+timeout --kill-after=30s 3m \
   nvim --headless "+Lazy! restore" +qa 2>/dev/null || true
