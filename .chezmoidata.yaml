@@ -155,6 +155,7 @@ tiers:
         - pastel
         - sesh
         - tlrc
+        - tmuxinator
         - vivid
         - yq
       pipx:
