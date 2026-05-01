@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 #
-# Regenerates zsh completion files in $HOME/.zfunc from each tool's native
-# completion generator. Vendoring these would bake machine-specific absolute
-# paths into the repo, so they're regenerated on every apply instead.
+# Regenerates zsh completion files in $HOME/.zfunc for tools NOT covered by
+# another fpath source. Brew formulae that install
+# `share/zsh/site-functions/_<tool>` are already picked up via dot_zshrc
+# (which prepends `$(brew --prefix)/share/zsh/site-functions` to fpath), so
+# brew-installed tools that ship completions don't need an entry here —
+# regenerating them would just duplicate brew's identical output. Audit with:
+#     ls "$(brew --prefix)/share/zsh/site-functions/"
 #
 # Re-fires when the package-install script changes (proxy for "tools may
 # have updated"). Force a rerun after `brew upgrade` with `chezmoi apply --force`.
@@ -21,39 +25,24 @@ _regen() {
   fi
 }
 
-# Tools that expose a "generate me a zsh completion script" subcommand.
-# Each one is gated on `command -v <tool>` so missing tools are silent no-ops.
-# To add another: confirm `<cmd> > /tmp/x` produces a non-empty file, then list it here.
-_regen poetry   _poetry   "poetry completions zsh"
-_regen rustup   _rustup   "rustup completions zsh"
-_regen atuin    _atuin    "atuin gen-completions --shell zsh"
-_regen mise     _mise     "mise completion zsh"
-_regen uv       _uv       "uv generate-shell-completion zsh"
-_regen uvx      _uvx      "uvx --generate-shell-completion zsh"
-_regen sesh     _sesh     "sesh completion zsh"
-_regen chezmoi  _chezmoi  "chezmoi completion zsh"
-_regen just     _just     "just --completions zsh"
-_regen gh       _gh       "gh completion -s zsh"
-_regen bat      _bat      "bat --completion zsh"
-_regen fd       _fd       "fd --gen-completions zsh"
-_regen rg       _rg       "rg --generate complete-zsh"
-_regen sheldon  _sheldon  "sheldon completions --shell zsh"
-_regen starship _starship "starship completions zsh"
-_regen zellij   _zellij   "zellij setup --generate-completion zsh"
-_regen caddy    _caddy    "caddy completion zsh"
-_regen bun      _bun      "bun completions zsh"
-_regen typst    _typst    "typst completions zsh"
-_regen betterleaks _betterleaks "betterleaks completion zsh"
+# Tools that expose a "generate me a zsh completion script" subcommand AND
+# aren't already shipped via brew's site-functions. Each is gated on
+# `command -v <tool>` so missing tools are silent no-ops. Before adding a new
+# entry, check whether brew already ships `_<tool>` — if so, skip.
+_regen poetry _poetry "poetry completions zsh"   # pipx-installed
+_regen rustup _rustup "rustup completions zsh"   # brew-installed but formula doesn't ship _rustup
 
-# --- npm-installed CLIs ---
-_regen codex    _codex    "codex completion zsh"
+# --- npm-installed CLIs (no brew formula → not on brew's fpath) ---
+_regen bun   _bun   "bun completions zsh"
+_regen codex _codex "codex completion zsh"
 
 # --- nala via argcomplete (apt-installed, Python with argcomplete) ---
 if command -v nala >/dev/null 2>&1 && command -v register-python-argcomplete >/dev/null 2>&1; then
   register-python-argcomplete nala > "$HOME/.zfunc/_nala" 2>/dev/null || true
 fi
 
-# --- Click-based CLIs (pipx-installed) ---
+# --- Click-based CLIs (pipx-installed; brew-installed Click tools like
+# ggshield are already covered by brew's site-functions and skipped here) ---
 # Click's standard "_<TOOL>_COMPLETE=zsh_source <tool>" dance produces a
 # loadable zsh completion script. Tool name → env-var name conversion replaces
 # '-' with '_' and uppercases.
@@ -65,7 +54,6 @@ _regen_click() {
     env "_${upper}_COMPLETE=zsh_source" "$tool" > "$HOME/.zfunc/$outfile" 2>/dev/null || true
   fi
 }
-_regen_click ggshield        _ggshield
 _regen_click pgcli           _pgcli
 _regen_click hatch           _hatch
 _regen_click bump-my-version _bump-my-version
@@ -85,14 +73,3 @@ if [ -f "$_forgit_completion" ]; then
   cp "$_forgit_completion" "$HOME/.zfunc/_git-forgit"
 fi
 unset _forgit_completion
-
-# tmuxinator ships a static zsh completion (no `tmuxinator completions zsh`
-# generator). The brew formula installs it to share/zsh/site-functions; mirror
-# it into ~/.zfunc so it sits alongside the rest of our completions.
-if command -v brew >/dev/null 2>&1; then
-  _tmuxinator_completion="$(brew --prefix)/share/zsh/site-functions/_tmuxinator"
-  if [ -f "$_tmuxinator_completion" ]; then
-    cp "$_tmuxinator_completion" "$HOME/.zfunc/_tmuxinator"
-  fi
-  unset _tmuxinator_completion
-fi
