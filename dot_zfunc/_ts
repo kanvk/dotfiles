@@ -1,0 +1,9 @@
+#compdef ts
+# Hand-written completion for the `ts` function in alias.zsh.
+# `sesh list` already merges live tmux sessions, sesh config entries, and
+# zoxide directories into one newline-separated list — exactly the candidate
+# set `ts` accepts. fzf-tab (configured in dot_zshrc) renders the picker.
+
+local -a targets
+targets=(${(f)"$(sesh list 2>/dev/null)"})
+_describe 'session/dir' targets
