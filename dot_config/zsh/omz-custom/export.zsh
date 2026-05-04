@@ -59,6 +59,10 @@ export LESS_TERMCAP_so=$'\E[01;33m' # begin reverse video
 export LESS_TERMCAP_se=$'\E[0m'     # reset reverse video
 export LESS_TERMCAP_us=$'\E[1;32m'  # begin underline
 export LESS_TERMCAP_ue=$'\E[0m'     # reset underline
+# Disable less's history file (~/.lesshst) — it stores in-pager search patterns
+# and `!cmd` invocations, which can occasionally surface tokens from logs we've
+# searched through. Not file-viewing history; nothing useful is lost.
+export LESSHISTFILE=-
 
 # pipx — only point PIPX_DEFAULT_PYTHON when pyenv has a python3 available.
 if command -v pyenv >/dev/null 2>&1; then
