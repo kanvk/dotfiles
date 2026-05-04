@@ -9,6 +9,7 @@ elif command -v nvim >/dev/null 2>&1; then            export SUDO_EDITOR="$(comm
 fi
 export GPG_TTY=$TTY
 export COLORTERM=truecolor
+export TZ=America/New_York
 export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_NO_ANALYTICS=1
 
