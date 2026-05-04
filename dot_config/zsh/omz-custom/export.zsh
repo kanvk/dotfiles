@@ -8,6 +8,11 @@ elif [ -x /opt/homebrew/bin/nvim ]; then             export SUDO_EDITOR=/opt/hom
 elif command -v nvim >/dev/null 2>&1; then            export SUDO_EDITOR="$(command -v nvim)"
 fi
 export GPG_TTY=$TTY
+# Re-point gpg-agent at the current tty for pinentry. Without this, opening a
+# fresh terminal or attaching a tmux pane leaves the agent prompting on the
+# tty it first saw — looks like a hang. The OMZ gpg-agent plugin would do
+# this automatically; we run it manually since we use the ssh-agent plugin.
+gpg-connect-agent updatestartuptty /bye &>/dev/null
 export COLORTERM=truecolor
 export TZ=America/New_York
 export HOMEBREW_NO_ENV_HINTS=1
