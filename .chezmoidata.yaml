@@ -106,7 +106,6 @@ tiers:
         - zellij
         # rest of file nav / listing / preview
         - broot
-        - lsd
         - moor
         - ripgrep-all
         - television
