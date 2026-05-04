@@ -110,16 +110,17 @@ zstyle :omz:plugins:ssh-agent quiet yes
 export ZSH="$HOME/.local/share/sheldon/repos/github.com/ohmyzsh/ohmyzsh"
 export ZSH_CUSTOM="$HOME/.config/zsh/omz-custom"
 # OMZ plugins loaded synchronously: git aliases, web-search functions,
-# docker/docker-compose completions, dirhistory keybindings, colored-man-pages
-# env, copybuffer keybind, ssh-agent (lazy via zstyle). Simple function/alias
-# bundles are sourced via sheldon entries with apply = ["defer"] instead.
-# Completions for tools whose native generators populate ~/.zfunc/_<tool>
-# aren't listed here. Conda's own activation hooks are sourced separately in
-# the deferred miniforge block below — the OMZ `conda` plugin only adds shell
-# aliases that the user doesn't rely on. fzf's keybindings/completion are
-# sourced via `fzf --zsh` after sheldon below, not via the OMZ fzf plugin.
+# docker/docker-compose completions, dirhistory keybindings, copybuffer keybind,
+# ssh-agent (lazy via zstyle). Simple function/alias bundles are sourced via
+# sheldon entries with apply = ["defer"] instead. Completions for tools whose
+# native generators populate ~/.zfunc/_<tool> aren't listed here. Conda's own
+# activation hooks are sourced separately in the deferred miniforge block
+# below — the OMZ `conda` plugin only adds shell aliases that the user doesn't
+# rely on. fzf's keybindings/completion are sourced via `fzf --zsh` after
+# sheldon below, not via the OMZ fzf plugin. man-page colorization is handled
+# by `bat` via the MANPAGER env var, not by the OMZ colored-man-pages plugin.
 plugins=(git web-search docker docker-compose dirhistory
-    colored-man-pages copybuffer
+    copybuffer
     ssh-agent)
 
 # sheldon's eval sources oh-my-zsh.sh (via the [plugins.oh-my-zsh] entry) and

@@ -224,9 +224,9 @@ ts() {
     return
   fi
 
-  # Substring fallback: `ts prime` should attach to `prime_bench` when that's
-  # the only live session matching. Sesh itself requires an exact match and
-  # would otherwise just exit 1 (or fall into zoxide resolution). If multiple
+  # Substring fallback: `ts foo` should attach to `foo_bar` when that's the
+  # only live session matching. Sesh itself requires an exact match and would
+  # otherwise just exit 1 (or fall into zoxide resolution). If multiple
   # sessions match, defer to sesh — it'll surface the ambiguity.
   local -a sessions matches
   sessions=(${(f)"$(tmux list-sessions -F '#S' 2>/dev/null)"})

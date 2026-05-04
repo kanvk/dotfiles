@@ -52,17 +52,27 @@ elif command -v moor >/dev/null 2>&1; then export PAGER="$(command -v moor)"
 else export PAGER=less
 fi
 export LESS="-R --mouse --wheel-lines=3"
-export LESS_TERMCAP_mb=$'\E[1;31m'  # begin blink
-export LESS_TERMCAP_md=$'\E[1;36m'  # begin bold
-export LESS_TERMCAP_me=$'\E[0m'     # reset bold/blink
-export LESS_TERMCAP_so=$'\E[01;33m' # begin reverse video
-export LESS_TERMCAP_se=$'\E[0m'     # reset reverse video
-export LESS_TERMCAP_us=$'\E[1;32m'  # begin underline
-export LESS_TERMCAP_ue=$'\E[0m'     # reset underline
 # Disable less's history file (~/.lesshst) — it stores in-pager search patterns
 # and `!cmd` invocations, which can occasionally surface tokens from logs we've
 # searched through. Not file-viewing history; nothing useful is lost.
 export LESSHISTFILE=-
+
+# `man` → bat with the `man` syntax for real syntax-aware highlighting. col -bx
+# strips groff's backspace-overstrike (less handles it natively, bat does not);
+# MANROFFOPT=-c tells groff to also emit ANSI codes for color, covering edge cases.
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANROFFOPT="-c"
+
+# bat's own pager — route to moor with moor's line numbers suppressed, since bat
+# already adds them. Without -no-linenumbers we get nested line-number columns.
+export BAT_PAGER="moor -no-linenumbers"
+
+# Syntax-highlighting themes. Same conceptual theme across bat/delta/moor: bat
+# and delta share a name string (delta links bat as a library), moor uses
+# chroma's theme list with a lowercase-hyphenated spelling. Switching theme
+# means editing both lines below AND `[delta] syntax-theme` in dot_gitconfig.tmpl.
+export BAT_THEME="Catppuccin Macchiato"
+export MOOR="-style=catppuccin-macchiato"
 
 # pipx — only point PIPX_DEFAULT_PYTHON when pyenv has a python3 available.
 if command -v pyenv >/dev/null 2>&1; then
