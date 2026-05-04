@@ -223,7 +223,6 @@ tiers:
         # additional language managers
         - ghcup
         - juliaup
-        - nvm
         - rbenv
         - ruby
         # `uu`/`uuu` update-sweep prerequisites — invoked directly as binaries,
