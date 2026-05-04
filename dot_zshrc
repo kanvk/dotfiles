@@ -94,6 +94,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
 
 # Pre-omz zstyles
 zstyle ':omz:lib:compinit' cache yes
+zstyle ':omz:update' mode disabled
 
 # fpath must be set before oh-my-zsh calls compinit
 fpath+=~/.zfunc
