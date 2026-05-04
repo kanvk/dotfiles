@@ -51,7 +51,7 @@ if   [ -x /usr/bin/moor ]; then export PAGER=/usr/bin/moor
 elif command -v moor >/dev/null 2>&1; then export PAGER="$(command -v moor)"
 else export PAGER=less
 fi
-export LESS="-R --mouse --wheel-lines=3"
+export LESS="-R -i -S -N --mouse --wheel-lines=3 --incsearch --use-color"
 # Disable less's history file (~/.lesshst) — it stores in-pager search patterns
 # and `!cmd` invocations, which can occasionally surface tokens from logs we've
 # searched through. Not file-viewing history; nothing useful is lost.
