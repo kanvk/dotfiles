@@ -175,6 +175,7 @@ tiers:
         - poetry
         - pre-commit
         - prek
+        - py-spy
         - python-semantic-release
         - shell-functools
         - tox
