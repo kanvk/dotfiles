@@ -110,15 +110,16 @@ zstyle :omz:plugins:ssh-agent quiet yes
 export ZSH="$HOME/.local/share/sheldon/repos/github.com/ohmyzsh/ohmyzsh"
 export ZSH_CUSTOM="$HOME/.config/zsh/omz-custom"
 # OMZ plugins loaded synchronously: git aliases, web-search functions,
-# docker/docker-compose completions, fzf and dirhistory keybindings,
-# colored-man-pages env, copybuffer keybind, ssh-agent (lazy via zstyle).
-# Simple function/alias bundles are sourced via sheldon entries with
-# apply = ["defer"] instead. Completions for tools whose native generators
-# populate ~/.zfunc/_<tool> aren't listed here. Conda's own activation hooks
-# are sourced separately in the deferred miniforge block below — the OMZ
-# `conda` plugin only adds shell aliases that the user doesn't rely on.
+# docker/docker-compose completions, dirhistory keybindings, colored-man-pages
+# env, copybuffer keybind, ssh-agent (lazy via zstyle). Simple function/alias
+# bundles are sourced via sheldon entries with apply = ["defer"] instead.
+# Completions for tools whose native generators populate ~/.zfunc/_<tool>
+# aren't listed here. Conda's own activation hooks are sourced separately in
+# the deferred miniforge block below — the OMZ `conda` plugin only adds shell
+# aliases that the user doesn't rely on. fzf's keybindings/completion are
+# sourced via `fzf --zsh` after sheldon below, not via the OMZ fzf plugin.
 plugins=(git web-search docker docker-compose dirhistory
-    fzf colored-man-pages copybuffer
+    colored-man-pages copybuffer
     ssh-agent)
 
 # sheldon's eval sources oh-my-zsh.sh (via the [plugins.oh-my-zsh] entry) and
@@ -126,6 +127,12 @@ plugins=(git web-search docker docker-compose dirhistory
 # would call compinit twice. On a fresh machine before sheldon is installed
 # this no-ops, and OMZ comes online on the first shell after sheldon's bootstrap.
 command -v sheldon >/dev/null 2>&1 && eval "$(sheldon source)"
+
+# fzf's own zsh init (requires fzf 0.48+, ~Jan 2024). Equivalent to what the
+# OMZ fzf plugin used to source — same key-bindings (^R, ^T, alt-C) and
+# **<tab> completion — but sourced directly from the fzf binary on PATH, so
+# no risk of an OMZ path lookup pointing at a stale install.
+command -v fzf >/dev/null 2>&1 && eval "$(fzf --zsh)"
 
 # =============================================================================
 # Deferred loading (requires zsh-defer from sheldon)
