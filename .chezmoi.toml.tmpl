@@ -67,8 +67,12 @@
 {{- $osId := "" -}}
 {{- $osIdLike := "" -}}
 {{- if hasKey .chezmoi "osRelease" -}}
-  {{- $osId = (.chezmoi.osRelease.id | default "") -}}
-  {{- $osIdLike = (.chezmoi.osRelease.idLike | default "") -}}
+  {{- if hasKey .chezmoi.osRelease "id" -}}
+    {{- $osId = .chezmoi.osRelease.id -}}
+  {{- end -}}
+  {{- if hasKey .chezmoi.osRelease "idLike" -}}
+    {{- $osIdLike = .chezmoi.osRelease.idLike -}}
+  {{- end -}}
 {{- end -}}
 {{- /* Kali sets ID_LIKE=debian, so the contains check covers it without an
        explicit eq. Debian itself sets ID=debian (no ID_LIKE), so it needs the
