@@ -99,7 +99,7 @@ if [ -x "$(command -v coreutils)" ]; then
   alias printenv="command coreutils printenv"
   # Skipped: printf, echo, kill, pwd, test, true, false. zsh has these as builtins; aliasing
   # routes microsecond builtins through fork+exec (~1000x slower). printf specifically also
-  # breaks `printf -v` (used by atuin).
+  # breaks `printf -v`.
   alias ptx="command coreutils ptx"
   alias readlink="command coreutils readlink"
   alias realpath="command coreutils realpath"
@@ -192,9 +192,10 @@ alias sa='source .venv/bin/activate'
 alias t='tmux'
 alias tp='tmux new-session -A -s $(basename $PWD)'
 alias tf='sesh connect "$(sesh list | fzf)"'
-# `tv sesh` action mode can't hand the terminal off to `tmux attach` cleanly
-# (stdin becomes /dev/tty, and tmux's display renders to nowhere on some
-# stacks). Run `sesh connect` from the shell so it inherits a real pts.
+# `tv sesh` (television's sesh action mode) can't hand the terminal off to
+# `tmux attach` cleanly: stdin becomes /dev/tty, and tmux's display renders
+# to nowhere on some stacks. Run `sesh connect` from the shell so it inherits
+# a real pseudoterminal.
 ts() {
   emulate -L zsh
   local target
