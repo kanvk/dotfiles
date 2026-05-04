@@ -199,16 +199,25 @@ zstyle ':fzf-tab:*' switch-group 'left' 'right'
 bindkey '\t' menu-select "$terminfo[kcbt]" menu-select                           # tab/shift-tab open menu
 bindkey -M menuselect '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete # tab/shift-tab cycle in menu
 bindkey -v                                        # Vi key bindings
-bindkey ' ' magic-space                           # do history expansion on space
-bindkey '^[[3;5~' kill-word                       # ctrl + Supr
-bindkey '^[[3~' delete-char                       # delete
-bindkey '^[[1;5C' forward-word                    # ctrl + ->
-bindkey '^[[1;5D' backward-word                   # ctrl + <-
-bindkey '^[[5~' beginning-of-buffer-or-history    # page up
-bindkey '^[[6~' end-of-buffer-or-history          # page down
-bindkey '^[[H' beginning-of-line                  # home
-bindkey '^[[F' end-of-line                        # end
-bindkey '^[[Z' undo                               # shift + tab undo last action
+
+# zsh-vi-mode (deferred plugin) rebuilds the viins keymap on init, wiping any
+# binding we make to the current keymap after `bindkey -v`. Wrap the affected
+# bindings in a function, run it now, and register it with zvm_after_init_commands
+# so it re-applies after each zvm reset. Same pattern as _atuin_rebind below.
+_user_keybindings() {
+    bindkey ' ' magic-space                           # do history expansion on space
+    bindkey '^[[3;5~' kill-word                       # ctrl + Supr
+    bindkey '^[[3~' delete-char                       # delete
+    bindkey '^[[1;5C' forward-word                    # ctrl + ->
+    bindkey '^[[1;5D' backward-word                   # ctrl + <-
+    bindkey '^[[5~' beginning-of-buffer-or-history    # page up
+    bindkey '^[[6~' end-of-buffer-or-history          # page down
+    bindkey '^[[H' beginning-of-line                  # home
+    bindkey '^[[F' end-of-line                        # end
+    bindkey '^[[Z' undo                               # shift + tab undo last action
+}
+_user_keybindings
+zvm_after_init_commands+=(_user_keybindings)
 
 # =============================================================================
 # History
