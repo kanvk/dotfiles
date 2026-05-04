@@ -28,3 +28,6 @@ ZVM_OPEN_FILE_CMD='code'
 # Program aliases
 alias qdrant='pwshw qdrant'
 alias bw='pwshw bw'
+
+# Lock the Windows host from WSL.
+alias lock='pwshw "rundll32 user32.dll,LockWorkStation"'

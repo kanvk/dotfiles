@@ -8,3 +8,19 @@
 {{- $pinentry = "/usr/bin/pinentry-curses" -}}
 {{- end -}}
 pinentry-program {{ $pinentry }}
+
+# Open gpg-agent's ssh socket so a YubiKey (or any gpg auth subkey) can serve
+# ssh identities when desired. Inert until a keygrip is added to ~/.gnupg/
+# sshcontrol — daily ssh still flows through the OMZ ssh-agent plugin and
+# ~/.ssh/id_*. Opt in per-host with `IdentityAgent` in ~/.ssh/config when a
+# specific host should require the hardware key.
+enable-ssh-support
+default-cache-ttl-ssh 28800
+max-cache-ttl-ssh 86400
+
+# Cache the passphrase aggressively. default-cache-ttl is a sliding window
+# (resets on each use): 8h covers a workday of idle gaps. max-cache-ttl is
+# the hard ceiling from first unlock: 24h forces a daily re-prompt regardless
+# of activity, so a forgotten unlocked session doesn't sign forever.
+default-cache-ttl 28800
+max-cache-ttl 86400
