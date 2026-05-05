@@ -53,7 +53,12 @@ return {
         -- configure global vim variables (vim.g)
         -- NOTE: `mapleader` and `maplocalleader` must be set in the AstroNvim opts or before `lazy.setup`
         -- This can be found in the `lua/lazy_setup.lua` file
-        python3_host_prog = vim.fn.exepath("python3"),
+        -- Prefer the pipx-managed pynvim venv (per pipx pynvim install in
+        -- .chezmoidata.yaml). Fallback to the system python3 if absent.
+        python3_host_prog = (function()
+          local pipx_py = vim.fn.expand "~/.local/pipx/venvs/pynvim/bin/python"
+          return vim.fn.executable(pipx_py) == 1 and pipx_py or vim.fn.exepath "python3"
+        end)(),
       },
     },
     -- Mappings can be configured through AstroCore as well.
