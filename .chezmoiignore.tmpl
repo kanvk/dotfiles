@@ -18,13 +18,16 @@ justfile
 .ssh/config.machine.example
 
 {{- if not (and (hasKey . "encrypt_locals") .encrypt_locals) }}
-# Encrypted personal-but-not-secret locals (insteadOf rules, GHE SSH alias).
+# Encrypted personal-but-not-secret locals (insteadOf rules, GHE SSH alias,
+# Claude Code config).
 # Excluded unless the user opted in at init time AND has the age identity in
 # place. Without the identity, decryption would fail and apply would error.
 # The `hasKey` guard makes a chezmoi.toml without `encrypt_locals` set
 # default to "ignore" rather than erroring on a missing-key template lookup.
 .gitconfig.local
 .ssh/config.local
+.claude/settings.json
+.claude/statusline.sh
 {{- end }}
 
 # Defensive: never vendor sheldon's plugin cache, even if accidentally re-added.
