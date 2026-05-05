@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+#
+# After install-packages installs pynvim via `uv tool`, ensure the extra
+# libraries molten-nvim needs (jupyter_client, ipykernel) are present in the
+# same tool environment. `uv tool install --reinstall pynvim --with ...` is
+# the uv equivalent of `pipx inject` — it reinstalls pynvim into its tool venv
+# with the requested extras attached. Idempotent across re-runs and no-ops on
+# machines without uv-tool pynvim.
+#
+# pynvim-in-uv-tool: {{ if stat (joinPath .chezmoi.homeDir ".local/share/uv/tools/pynvim") }}yes{{ else }}no{{ end }}
+
+set -euo pipefail
+{{ template "brew-path-bootstrap" . }}
+
+if ! command -v uv >/dev/null 2>&1; then
+  echo "uv not installed — skipping pynvim extras"
+  exit 0
+fi
+
+if ! uv tool list 2>/dev/null | grep -q '^pynvim '; then
+  echo "uv tool pynvim not present — skipping extras"
+  exit 0
+fi
+
+echo "==> uv tool install --reinstall pynvim (with jupyter_client, ipykernel)"
+uv tool install --reinstall pynvim --with jupyter_client --with ipykernel >/dev/null 2>&1 \
+  || echo "warning: uv tool install pynvim --with extras failed (network or transient)"
