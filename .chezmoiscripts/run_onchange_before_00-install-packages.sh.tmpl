@@ -2,7 +2,9 @@
   Resolve the chosen tier (default "full" if the cached chezmoi.toml predates
   the tier prompt) into a flat per-manager package set. After this block,
   $resolved is a dict like {apt: [...], brew: [...], pipx: [...], ...} that
-  the rest of the script consumes via $resolved.<manager>.
+  the rest of the script consumes via $resolved.<manager>. The `pipx` key
+  name is preserved for stability; the underlying installer is `uv tool`
+  (see the python-tools block below).
 */ -}}
 {{- $tierName := "full" -}}
 {{- if hasKey . "tier" -}}{{- $tierName = .tier -}}{{- end -}}
@@ -56,7 +58,7 @@ fi
 # Each install step appends to _install_errors on failure instead of aborting
 # the pipeline. The "==> Install summary" block at the end of this script
 # surfaces every recorded failure in one place — a single visual target instead
-# of having to scroll the install log. Per-item loops (pipx, cargo, npm, go,
+# of having to scroll the install log. Per-item loops (uv tool, cargo, npm, go,
 # bun, gh-extensions) record one entry per failed item; the apt batch and
 # brew-bundle batch record one entry per failed batch (scroll up for the
 # specific formula). The script always exits 0 so chezmoi proceeds to
@@ -161,13 +163,16 @@ unset _brewfile
 {{- end }}
 
 {{ if index $resolved "pipx" -}}
-# --- pipx ---
-if command -v pipx >/dev/null 2>&1; then
-  echo "==> Installing pipx packages"
+# --- python tools (YAML key `pipx:`, installer is `uv tool`) ---
+# The `pipx` key in .chezmoidata.yaml is kept for stability; the underlying
+# installer is uv tool. uv autoselects (or auto-downloads) a managed Python
+# the first time a tool is installed — no UV_PYTHON pin and no pyenv coupling.
+if command -v uv >/dev/null 2>&1; then
+  echo "==> Installing python tools via uv tool"
   for _pkg in{{ range (index $resolved "pipx") }} {{ . | quote }}{{ end }}; do
-    pipx install --include-deps "$_pkg" 2>/dev/null \
-      || pipx upgrade "$_pkg" \
-      || _record_install_failure "pipx: $_pkg"
+    uv tool install "$_pkg" 2>/dev/null \
+      || uv tool upgrade "$_pkg" \
+      || _record_install_failure "uv tool: $_pkg"
   done
   unset _pkg
 fi
