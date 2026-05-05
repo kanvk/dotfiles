@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+#
+# After install-packages installs pynvim into a pipx venv, inject the
+# extra libraries molten-nvim needs (jupyter_client, ipykernel). pipx
+# install handles the package itself; pipx inject adds libraries that
+# don't have CLI entry points. Idempotent — pipx inject is safe to
+# re-run; the script no-ops on machines without pipx pynvim.
+#
+# pynvim-in-pipx: {{ if stat (joinPath .chezmoi.homeDir ".local/pipx/venvs/pynvim/bin/python") }}yes{{ else }}no{{ end }}
+
+set -euo pipefail
+{{ template "brew-path-bootstrap" . }}
+
+if ! command -v pipx >/dev/null 2>&1; then
+  echo "pipx not installed — skipping pynvim inject"
+  exit 0
+fi
+
+if ! pipx list --short 2>/dev/null | grep -q '^pynvim '; then
+  echo "pipx pynvim not present — skipping inject"
+  exit 0
+fi
+
+echo "==> pipx inject pynvim (jupyter_client, ipykernel)"
+pipx inject pynvim jupyter_client ipykernel >/dev/null 2>&1 \
+  || echo "warning: pipx inject pynvim failed (network or transient)"
