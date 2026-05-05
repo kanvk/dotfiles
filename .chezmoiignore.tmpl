@@ -19,7 +19,7 @@ justfile
 
 {{- if not (and (hasKey . "encrypt_locals") .encrypt_locals) }}
 # Encrypted personal-but-not-secret locals (insteadOf rules, GHE SSH alias,
-# Claude Code config).
+# Claude Code config, Codex CLI config + context7 API key).
 # Excluded unless the user opted in at init time AND has the age identity in
 # place. Without the identity, decryption would fail and apply would error.
 # The `hasKey` guard makes a chezmoi.toml without `encrypt_locals` set
@@ -28,6 +28,8 @@ justfile
 .ssh/config.local
 .claude/settings.json
 .claude/statusline.sh
+.codex/config.toml
+.codex/AGENTS.md
 {{- end }}
 
 # Defensive: never vendor sheldon's plugin cache, even if accidentally re-added.
@@ -44,3 +46,21 @@ justfile
 .claude/backups/**
 .claude/logs/**
 .claude/settings.local.json
+
+# Runtime/ephemeral Codex CLI state — auth, sessions, caches, logs.
+.codex/auth.json
+.codex/history.jsonl
+.codex/installation_id
+.codex/version.json
+.codex/.personality_migration
+.codex/cache/**
+.codex/log/**
+.codex/logs_*.sqlite*
+.codex/state_*.sqlite*
+.codex/memories/**
+.codex/sessions/**
+.codex/shell_snapshots/**
+.codex/skills/**
+.codex/tmp/**
+.codex/.tmp/**
+.codex/models_cache.json
