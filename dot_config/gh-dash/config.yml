@@ -60,6 +60,23 @@ theme:
     table:
       showSeparator: true
       compact: false
+  # catppuccin-macchiato (blue accent)
+  # Source: https://github.com/catppuccin/gh-dash/blob/main/themes/macchiato/catppuccin-macchiato-blue.yml
+  colors:
+    text:
+      primary: "#cad3f5"
+      secondary: "#8aadf4"
+      inverted: "#181926"
+      faint: "#b8c0e0"
+      warning: "#eed49f"
+      success: "#a6da95"
+      error: "#ed8796"
+    background:
+      selected: "#363a4f"
+    border:
+      primary: "#8aadf4"
+      secondary: "#494d64"
+      faint: "#363a4f"
 pager:
   diff: ""
 confirmQuit: false
