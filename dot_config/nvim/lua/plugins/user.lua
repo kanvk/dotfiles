@@ -29,20 +29,46 @@ return {
   -- Modified plugins
   {
     "folke/snacks.nvim",
-    opts = {
-      dashboard = {
-        preset = {
-          header = table.concat({
-            "     ██╗  ██╗ █████╗ ███╗   ██╗██╗   ██╗██╗  ██╗",
-            "     ██║ ██╔╝██╔══██╗████╗  ██║██║   ██║██║ ██╔╝",
-            "     █████╔╝ ███████║██╔██╗ ██║██║   ██║█████╔╝",
-            "     ██╔═██╗ ██╔══██║██║╚██╗██║╚██╗ ██╔╝██╔═██╗",
-            "     ██║  ██╗██║  ██║██║ ╚████║ ╚████╔╝ ██║  ██╗",
-            "     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝  ╚═══╝  ╚═╝  ╚═╝",
-          }, "\n"),
-        },
-      },
-    },
+    -- Full dashboard ordering owned by us. Replaces AstroNvim's preset.keys
+    -- entirely so the resume-context items rise to the top. Icons are literal
+    -- nerd-font Material Design glyphs (U+F02xx–U+F05xx range) chosen for
+    -- consistent rendering — the AstroNvim defaults were a mix of narrow
+    -- private-use glyphs (FileNew, Search, Bookmarks, Refresh) that didn't
+    -- render visibly in CaskaydiaCove alongside the wider DefaultFile/WordFile.
+    opts = function(_, opts)
+      opts.dashboard = opts.dashboard or {}
+      opts.dashboard.preset = opts.dashboard.preset or {}
+
+      opts.dashboard.preset.header = table.concat({
+        "     ██╗  ██╗ █████╗ ███╗   ██╗██╗   ██╗██╗  ██╗",
+        "     ██║ ██╔╝██╔══██╗████╗  ██║██║   ██║██║ ██╔╝",
+        "     █████╔╝ ███████║██╔██╗ ██║██║   ██║█████╔╝",
+        "     ██╔═██╗ ██╔══██║██║╚██╗██║╚██╗ ██╔╝██╔═██╗",
+        "     ██║  ██╗██║  ██║██║ ╚████║ ╚████╔╝ ██║  ██╗",
+        "     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝  ╚═══╝  ╚═╝  ╚═╝",
+      }, "\n")
+
+      opts.dashboard.preset.keys = {
+        -- Resume / context-switch
+        { key = "s", icon = "󰋚", desc = "Last Session  ", action = "<Leader>Sl" },
+        { key = "p", icon = "󰉋", desc = "Projects  ",     action = ":lua Snacks.picker.projects()" },
+        { key = "o", icon = "󰈚", desc = "Recents  ",      action = "<Leader>fo" },
+        { key = "'", icon = "󰃃", desc = "Bookmarks  ",    action = "<Leader>f'" },
+        -- Open / navigate
+        { key = "f", icon = "󰈞", desc = "Find File  ",    action = "<Leader>ff" },
+        { key = "z", icon = "󰓅", desc = "Zoxide  ",       action = ":lua Snacks.picker.zoxide()" },
+        -- Inspect
+        { key = "g", icon = "󰊢", desc = "Git Status  ",   action = ":lua Snacks.picker.git_status()" },
+        { key = "w", icon = "󰈭", desc = "Find Word  ",    action = "<Leader>fw" },
+        -- Create / execute
+        { key = "n", icon = "󰈔", desc = "New File  ",     action = "<Leader>n" },
+        { key = ",", icon = "󰎚", desc = "Scratch  ",      action = ":lua Snacks.scratch()" },
+        { key = "r", icon = "󰐊", desc = "Run Task  ",     action = ":OverseerRun" },
+        { key = "T", icon = "󰗇", desc = "Test Summary  ", action = function() require("neotest").summary.toggle() end },
+        -- Meta
+        { key = "k", icon = "󰌌", desc = "Keymaps  ",      action = ":lua Snacks.picker.keymaps()" },
+      }
+    end,
   },
 
   -- -- == Examples of Adding Plugins ==
