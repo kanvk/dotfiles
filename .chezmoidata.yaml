@@ -175,6 +175,7 @@ tiers:
         - pre-commit
         - prek
         - py-spy
+        - pynvim # nvim python host (jupyter_client/ipykernel injected separately for molten)
         - python-semantic-release
         - shell-functools
         - tox
