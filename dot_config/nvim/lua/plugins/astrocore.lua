@@ -39,8 +39,10 @@ return {
         relativenumber = true, -- sets vim.opt.relativenumber
         hidden = true, -- allow hidden buffers
         smartindent = true, -- enable smart indent
+        expandtab = true, -- spaces, not tabs
         shiftwidth = 4, -- Set space indent width
         tabstop = 4, -- Set tab indent width
+        softtabstop = 4, -- <Tab> inserts shiftwidth spaces
         colorcolumn = "120", -- Set colorcolumn
         number = true, -- sets vim.opt.number
         spell = false, -- sets vim.opt.spell
