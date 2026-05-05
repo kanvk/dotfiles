@@ -1,0 +1,22 @@
+# style name or JSON path; "auto" picks light/dark based on terminal background
+style: auto
+
+# Use a pager to display rendered markdown instead of dumping to stdout.
+# glow honors $PAGER, which dot_config/zsh/omz-custom/export.zsh sets to moor
+# (catppuccin-macchiato). Falls back to `less -r` if $PAGER is unset.
+pager: true
+
+# Word-wrap column. 0 = use terminal width.
+width: 0
+
+# Show hidden / gitignored files in TUI mode.
+all: false
+
+# TUI-mode mouse-wheel support.
+mouse: true
+
+# Show line numbers in TUI mode.
+showLineNumbers: false
+
+# Preserve source newlines (don't reflow paragraphs).
+preserveNewLines: false
