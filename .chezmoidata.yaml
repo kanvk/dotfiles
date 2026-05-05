@@ -106,6 +106,7 @@ tiers:
         - zellij
         # rest of file nav / listing / preview
         - broot
+        - glow
         - moor
         - ripgrep-all
         - television
@@ -207,8 +208,9 @@ tiers:
         # heavier daily-driver / specialty
         - act
         - betterleaks
-        - rustscan
         - jj
+        - k9s
+        - rustscan
         # data / storage
         - duckdb
         - keydb
