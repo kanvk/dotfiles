@@ -9,6 +9,23 @@ return {
     cmd = "Codi",
   },
 
+  -- Register neotest-python adapter (pytest by default).
+  -- Add neotest-go / neotest-rust / etc. dependencies and adapters here as needed.
+  {
+    "nvim-neotest/neotest",
+    dependencies = { "nvim-neotest/neotest-python" },
+    opts = function(_, opts)
+      opts.adapters = opts.adapters or {}
+      table.insert(
+        opts.adapters,
+        require("neotest-python")({
+          runner = "pytest",
+          dap = { justMyCode = false },
+        })
+      )
+    end,
+  },
+
   -- Modified plugins
   {
     "folke/snacks.nvim",

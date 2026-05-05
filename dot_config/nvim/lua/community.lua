@@ -52,5 +52,6 @@ return {
   { import = "astrocommunity.pack.zig" },
   { import = "astrocommunity.remote-development.remote-sshfs-nvim" },
   { import = "astrocommunity.search.nvim-spectre" },
+  { import = "astrocommunity.test.neotest" },
   -- import/override with your plugins folder
 }
