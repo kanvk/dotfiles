@@ -94,9 +94,11 @@ Things `chezmoi apply` cannot do automatically — do these once on a new machin
 
 6. **(Windows host only) Apply Windows-side configs**: chezmoi extracts `dot_config/windows/**` to `%USERPROFILE%\.config\windows\` but doesn't move things to their canonical Windows locations. See `dot_config/windows/terminal/README.md` for Windows Terminal; do similar for komorebi (`%USERPROFILE%\.config\komorebi`), yasb (`%USERPROFILE%\.config\yasb`), and whkdrc.
 
-7. **(Optional research/HPC tools)** — Spack, Miniforge/conda/mamba, NVIDIA HPC SDK are soft-detected. Install at canonical locations (`~/.spack`, `~/miniforge3`, `/opt/nvidia/hpc_sdk`) and open a new shell.
+7. **(WSL host only) Install `win32yank` on the Windows host** for the WSL clipboard bridge — Neovim's `plugins/wsl_clipboard.lua` and the `cscw`/`vscw` zsh aliases shell out to `win32yank.exe`. Install with `scoop install win32yank` or `winget install equalsraf.win32yank`. Without it, clipboard copy/paste between WSL and Windows silently no-ops.
 
-8. **(Optional) Encrypt a file with age** — if you set an SSH identity at init:
+8. **(Optional research/HPC tools)** — Spack, Miniforge/conda/mamba, NVIDIA HPC SDK are soft-detected. Install at canonical locations (`~/.spack`, `~/miniforge3`, `/opt/nvidia/hpc_sdk`) and open a new shell.
+
+9. **(Optional) Encrypt a file with age** — if you set an SSH identity at init:
    ```sh
    chezmoi add --encrypt ~/.netrc       # versioned + encrypted
    chezmoi edit ~/.netrc                # round-trips through age + $EDITOR

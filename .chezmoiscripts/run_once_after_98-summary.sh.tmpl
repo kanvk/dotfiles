@@ -47,13 +47,21 @@ ${bold}6. Windows-side configs (Windows hosts only)${reset}
    # canonical Windows install paths. See:${reset}
    ${HOME}/.config/windows/terminal/README.md  # Terminal copy/symlink procedure
 
-${bold}7. Optional research / HPC tools${reset}
+${bold}7. WSL clipboard bridge (WSL hosts only)${reset}
+   ${dim}# Install win32yank on the Windows host so Neovim's wsl_clipboard
+   # plugin and the cscw/vscw zsh aliases can shuttle the system clipboard
+   # across the WSL ↔ Windows boundary. Without it, copy/paste silently
+   # no-ops in WSL nvim:${reset}
+   scoop install win32yank          # via scoop, OR
+   winget install equalsraf.win32yank
+
+${bold}8. Optional research / HPC tools${reset}
    ${dim}# Soft-detected. Just install at the canonical paths and reopen a shell:${reset}
    ~/miniforge3            # conda + mamba
    ~/.spack                # Spack
    /opt/nvidia/hpc_sdk     # NVIDIA HPC SDK
 
-${bold}8. age encryption (optional)${reset}
+${bold}9. age encryption (optional)${reset}
    ${dim}# Already wired to your SSH key. Encrypt a file:${reset}
    chezmoi add --encrypt ~/.netrc
    ${dim}# Apply prompts for the SSH-key passphrase on every decrypt. ssh-agent
