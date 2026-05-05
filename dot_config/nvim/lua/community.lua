@@ -48,7 +48,6 @@ return {
   { import = "astrocommunity.pack.xml" },
   { import = "astrocommunity.pack.yaml" },
   { import = "astrocommunity.pack.zig" },
-  { import = "astrocommunity.recipes.vscode" },
   { import = "astrocommunity.remote-development.remote-sshfs-nvim" },
   { import = "astrocommunity.search.nvim-spectre" },
   -- import/override with your plugins folder
