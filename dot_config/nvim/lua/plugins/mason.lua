@@ -14,6 +14,14 @@ return {
 
         -- install formatters
         "stylua",
+        "shfmt", -- bash/zsh formatter
+        "prettierd", -- json/yaml/md/etc on demand
+        "cmakelang", -- provides cmake-format and cmake-lint
+
+        -- install linters
+        "markdownlint-cli2", -- markdown linting
+        "actionlint", -- GitHub Actions YAML
+        "yamllint", -- general YAML linting
 
         -- install debuggers
         "debugpy",
