@@ -1,0 +1,13 @@
+# Catppuccin Macchiato palette mapping for atuin's 7 theme keys.
+# Palette reference: https://github.com/catppuccin/catppuccin#-palette
+[theme]
+name = "catppuccin-macchiato"
+
+[colors]
+Base = "#cad3f5"        # text
+AlertInfo = "#a6da95"   # green
+AlertWarn = "#eed49f"   # yellow
+AlertError = "#ed8796"  # red
+Annotation = "#a5adcb"  # subtext0 — subdued metadata
+Guidance = "#8aadf4"    # blue — keymap hints
+Important = "#c6a0f6"   # mauve — emphasis
