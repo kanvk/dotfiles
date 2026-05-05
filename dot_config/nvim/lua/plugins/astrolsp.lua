@@ -18,7 +18,7 @@ return {
     formatting = {
       -- control auto formatting on save
       format_on_save = {
-        enabled = true, -- enable or disable format on save globally
+        enabled = false, -- formatting is manual (`<Leader>lf` / `vim.lsp.buf.format()`)
         allow_filetypes = { -- enable format on save for specified filetypes only
           -- "go",
         },
