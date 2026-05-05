@@ -61,7 +61,22 @@ return {
         end)(),
       },
     },
-    -- Mappings can be configured through AstroCore as well.
+    -- Custom mappings on top of AstroNvim defaults. AstroNvim already binds
+    -- ]b/[b, <Leader>bd, <Leader>fp, <Leader>fk, <Leader>gt, <Leader>s* (spectre)
+    -- etc. — only put net-new bindings here.
+    mappings = {
+      n = {
+        -- Snacks scratch — quick scratch buffer + picker over saved scratchpads
+        ["<Leader>."] = { function() require("snacks").scratch() end, desc = "Open scratchpad" },
+        ["<Leader>fS"] = { function() require("snacks").scratch.select() end, desc = "Find scratchpads" },
+        -- Snacks zoxide picker — jump to a frequent dir (mirrors dashboard `z`)
+        ["<Leader>fz"] = { function() require("snacks").picker.zoxide() end, desc = "Find via zoxide" },
+        -- Zen mode toggle (zen-mode-nvim community pack only registers :ZenMode)
+        ["<Leader>uz"] = { "<Cmd>ZenMode<CR>", desc = "Toggle Zen Mode" },
+      },
+    },
+
+    -- AstroNvim v6 template mapping examples (kept for reference).
     -- NOTE: keycodes follow the casing in the vimdocs. For example, `<Leader>` must be capitalized
     -- mappings = {
     --   -- first key is the mode
