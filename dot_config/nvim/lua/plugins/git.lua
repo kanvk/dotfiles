@@ -1,6 +1,6 @@
 -- Git config
--- gitsigns and git-conflict are already lazy-loaded by AstroNvim core
--- (User AstroFile event); only fugitive is a user addition.
+-- gitsigns ships with AstroNvim core; fugitive and git-conflict are
+-- user additions (no AstroCommunity pack provides git-conflict).
 
 ---@type LazySpec
 return {
@@ -26,5 +26,9 @@ return {
       { "<leader>gi", "<cmd>Gdiffsplit<cr>", desc = "Git diff split" },
       { "<leader>go", "<cmd>Git log<cr>", desc = "Git log" },
     },
+  },
+  {
+    "akinsho/git-conflict.nvim",
+    event = "User AstroFile",
   },
 }
