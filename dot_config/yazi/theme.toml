@@ -1,0 +1,4 @@
+# Source: https://github.com/yazi-rs/flavors (catppuccin-macchiato.yazi)
+# The flavor itself is vendored under flavors/catppuccin-macchiato.yazi/.
+[flavor]
+dark = "catppuccin-macchiato"
