@@ -73,6 +73,23 @@ return {
         ["<Leader>fz"] = { function() require("snacks").picker.zoxide() end, desc = "Find via zoxide" },
         -- Zen mode toggle (zen-mode-nvim community pack only registers :ZenMode)
         ["<Leader>uz"] = { "<Cmd>ZenMode<CR>", desc = "Toggle Zen Mode" },
+        -- Diffview — full 4-pane git diff (file diff + base + ours + theirs).
+        ["<Leader>gd"] = { "<Cmd>DiffviewOpen<CR>", desc = "Open Diffview" },
+        ["<Leader>gh"] = { "<Cmd>DiffviewFileHistory %<CR>", desc = "File history (current)" },
+        -- f-person/git-blame.nvim — toggle the per-line virtual-text blame.
+        ["<Leader>gB"] = { "<Cmd>GitBlameToggle<CR>", desc = "Toggle line blame" },
+        -- markview.nvim — toggle the in-buffer markdown rendering.
+        ["<Leader>um"] = { "<Cmd>Markview Toggle<CR>", desc = "Toggle markview render" },
+        -- Disambiguate the ]T/[T collision: AstroNvim core wires them to TODO
+        -- comments; the neotest community pack also takes them for tests, and
+        -- whichever loads later silently wins. Pin TODOs to ]T/[T explicitly
+        -- and move test-jump to ]n/[n (vimtex would shadow these but isn't
+        -- imported in this config, and git-conflict provides ]x/[x for SCM
+        -- conflict navigation so vim's built-in ]n/[n isn't load-bearing).
+        ["]T"] = { function() require("todo-comments").jump_next() end, desc = "Next TODO comment" },
+        ["[T"] = { function() require("todo-comments").jump_prev() end, desc = "Previous TODO comment" },
+        ["]n"] = { function() require("neotest").jump.next() end, desc = "Next test" },
+        ["[n"] = { function() require("neotest").jump.prev() end, desc = "Previous test" },
       },
     },
 
