@@ -30,5 +30,13 @@ return {
   {
     "akinsho/git-conflict.nvim",
     event = "User AstroFile",
+    opts = {
+      -- Mappings are buffer-local to conflicted files (per upstream README),
+      -- so they don't shadow vim's built-in c0 / cb / ct{char} motions
+      -- elsewhere. In a conflict: co (ours), ct (theirs), cb (both), c0 (none).
+      default_mappings = true,
+      default_commands = true, -- :GitConflictListQf, :GitConflictRefresh, :GitConflictNextConflict, :GitConflictPrevConflict
+      list_opener = "copen",
+    },
   },
 }
