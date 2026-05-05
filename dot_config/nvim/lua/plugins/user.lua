@@ -9,6 +9,19 @@ return {
     cmd = "Codi",
   },
 
+  -- Transparent .ipynb <-> .py(percent) conversion on read/write so molten
+  -- can drive Jupyter notebooks via cell markers (`# %%`). Requires the
+  -- jupytext CLI (installed via pipx — see .chezmoidata.yaml).
+  {
+    "GCBallesteros/jupytext.nvim",
+    lazy = false,
+    opts = {
+      style = "percent",
+      output_extension = "auto",
+      force_ft = nil,
+    },
+  },
+
   -- Register neotest-python adapter (pytest by default).
   -- Add neotest-go / neotest-rust / etc. dependencies and adapters here as needed.
   {

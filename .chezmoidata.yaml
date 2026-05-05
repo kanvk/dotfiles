@@ -165,6 +165,7 @@ tiers:
         - dynaconf
         - glances
         - hatch
+        - jupytext # .ipynb <-> .py(percent) for molten / jupytext.nvim
         - mkdocs
         - nbdime
         - nox
