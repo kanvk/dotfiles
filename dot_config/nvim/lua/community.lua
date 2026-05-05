@@ -5,6 +5,7 @@
 ---@type LazySpec
 return {
   "AstroNvim/astrocommunity",
+  { import = "astrocommunity.code-runner.molten-nvim" },
   { import = "astrocommunity.code-runner.overseer-nvim" },
   { import = "astrocommunity.colorscheme.catppuccin" },
   { import = "astrocommunity.colorscheme.dracula-nvim" },
