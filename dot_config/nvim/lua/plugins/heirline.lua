@@ -31,7 +31,7 @@ return {
       status.component.builder {
         provider = function()
           local user = os.getenv "USER" or "user"
-          local host = vim.loop.os_gethostname() or "host"
+          local host = vim.uv.os_gethostname() or "host"
           return string.format(" %s@%s", user, host)
         end,
         hl = { fg = "fg", bg = "bg" },
