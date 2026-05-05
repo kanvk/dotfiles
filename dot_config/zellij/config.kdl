@@ -281,8 +281,8 @@ web_client {
  
 // Choose the theme that is specified in the themes section.
 // Default: default
-// 
-// theme "dracula"
+// catppuccin-{latte,frappe,macchiato,mocha} are built-in (zellij ≥0.41).
+theme "catppuccin-macchiato"
  
 // Choose the base input mode of zellij.
 // Default: normal
