@@ -13,21 +13,21 @@ alias gpt='chatgpt'
 
 # Updates
 alias aptup='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove -y'
-alias nalaup='sudo nala full-upgrade --purge -y'
-alias zshup='sheldon lock --update'
-alias rustupg='rustup update && cargo install-update -a'
-alias pipup='uv tool upgrade --all'
-alias goup='go-global-update'
-alias npmup='sudo npm -g update'
-alias vimup='timeout --kill-after=30s 3m nvim --headless +AstroUpdate +qa 2>/dev/null'
-alias brewup='brew update && brew upgrade && brew autoremove && brew cleanup; brew unlink python 2>/dev/null; brew unlink ruby 2>/dev/null'
-alias poetryup='poetry self update'
-alias tldrup='tldr -u'
-alias rubyup='sudo gem update' # add gem update --system for non-apt installs
-alias haskellup='stack upgrade && stack update'
-alias perlup='sudo sh -c "cpanm --self-upgrade && cpan-outdated | cpanm"'
 alias asdfup='asdf plugin update --all'
+alias brewup='brew update && brew upgrade && brew autoremove && brew cleanup; brew unlink python 2>/dev/null; brew unlink ruby 2>/dev/null'
+alias goup='go-global-update'
+alias haskellup='stack upgrade && stack update'
+alias nalaup='sudo nala full-upgrade --purge -y'
 alias nixup='nix upgrade-nix && nix-channel --update'
+alias npmup='sudo npm -g update'
+alias perlup='sudo sh -c "cpanm --self-upgrade && cpan-outdated | cpanm"'
+alias pipup='uv tool upgrade --all'
+alias poetryup='poetry self update'
+alias rubyup='sudo gem update' # add gem update --system for non-apt installs
+alias rustupg='rustup update && cargo install-update -a'
+alias tldrup='tldr -u'
+alias vimup='timeout --kill-after=30s 3m nvim --headless +AstroUpdate +qa 2>/dev/null'
+alias zshup='sheldon lock --update'
 alias uu='nalaup && brewup && rustupg && pipup && goup && npmup && tldrup && zshup' # pipup is uv tool upgrade --all (poetry et al.)
 alias uuu='uu && asdfup && rubyup && haskellup && perlup'
 
@@ -159,25 +159,25 @@ alias diff='diff --color=auto'
 alias ip='ip --color=auto'
 
 # Other Programs
-alias py='python3'
-alias lg='lazygit'
-alias lzd='lazydocker'
-alias clr='clear'
-alias tree='eza --tree'
-alias h='history'
-alias db='distrobox'
-alias gkr='gitkraken'
 alias asg='ast-grep'
-alias ngr='ranger'
-alias llm='ollama'
 alias cat='bat'
 alias ccat='bat -pp'
-alias less='moor'
-alias ps='procs'
+alias clr='clear'
+alias db='distrobox'
 alias du='dust -b'
-alias yz='yazi'
+alias gkr='gitkraken'
+alias h='history'
+alias less='moor'
+alias lg='lazygit'
+alias llm='ollama'
+alias lzd='lazydocker'
 alias nf='apprise'
+alias ngr='ranger'
+alias ps='procs'
+alias py='python3'
+alias tree='eza --tree'
 alias x='ouch d'
+alias yz='yazi'
 
 # xclip
 alias c='xclip'
@@ -189,8 +189,7 @@ alias vsc='xclip -o -sel c'
 alias nfw='apprise --tag=wk'
 alias awsl='aws --profile local'
 
-# misc
-alias sa='source .venv/bin/activate'
+# tmux
 alias t='tmux'
 alias tp='tmux new-session -A -s $(basename $PWD)'
 alias tf='sesh connect "$(sesh list | fzf)"'
@@ -240,6 +239,10 @@ ts() {
 
   sesh connect -- "$target"
 }
+
+# misc
+alias sudop='sudo env "PATH=$PATH"'
+alias sa='source .venv/bin/activate'
 alias pyinstall='TCLTK_PATH=$(brew --prefix tcl-tk) PYTHON_CONFIGURE_OPTS="--with-tcltk-includes=${TCLTK_PATH}/include --with-tcltk-libs=${TCLTK_PATH}/lib" pyenv install'
 alias rcp='rsync -avzPh'
 
