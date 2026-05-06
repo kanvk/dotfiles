@@ -16,7 +16,7 @@ alias aptup='sudo apt update && sudo apt full-upgrade -y && sudo apt autoremove 
 alias nalaup='sudo nala full-upgrade --purge -y'
 alias zshup='sheldon lock --update'
 alias rustupg='rustup update && cargo install-update -a'
-alias pipup='pipx upgrade-all'
+alias pipup='uv tool upgrade --all'
 alias goup='go-global-update'
 alias npmup='sudo npm -g update'
 alias vimup='timeout --kill-after=30s 3m nvim --headless +AstroUpdate +qa 2>/dev/null'
@@ -28,7 +28,7 @@ alias haskellup='stack upgrade && stack update'
 alias perlup='sudo sh -c "cpanm --self-upgrade && cpan-outdated | cpanm"'
 alias asdfup='asdf plugin update --all'
 alias nixup='nix upgrade-nix && nix-channel --update'
-alias uu='nalaup && brewup && rustupg && pipup && goup && npmup && tldrup && zshup' # pipx updates poetry
+alias uu='nalaup && brewup && rustupg && pipup && goup && npmup && tldrup && zshup' # pipup is uv tool upgrade --all (poetry et al.)
 alias uuu='uu && asdfup && rubyup && haskellup && perlup'
 
 # vim
