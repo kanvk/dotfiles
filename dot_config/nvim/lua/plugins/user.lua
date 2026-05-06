@@ -66,6 +66,11 @@ return {
       -- mild (200ms total, linear); tweak in scroll.animate if needed.
       opts.scroll = { enabled = true }
 
+      -- Indent column at every level (`indent`) + animated highlight of the
+      -- current indent scope (`scope`). Same combo LazyVim enables by default.
+      opts.indent = { enabled = true }
+      opts.scope = { enabled = true }
+
       -- gitbrowse + rename are function-call modules (`Snacks.gitbrowse()`,
       -- `Snacks.rename.rename_file()`); they lazy-load on first invoke and
       -- don't need an opts entry — see the <Leader>gO and <Leader>cR maps
