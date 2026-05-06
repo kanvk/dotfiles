@@ -79,13 +79,6 @@ export BAT_PAGER="moor -no-linenumbers"
 export BAT_THEME="Catppuccin Macchiato"
 export MOOR="-style=catppuccin-macchiato"
 
-# pipx — only point PIPX_DEFAULT_PYTHON when pyenv has a python3 available.
-if command -v pyenv >/dev/null 2>&1; then
-  _pyenv_py3="$(pyenv which python3 2>/dev/null)"
-  [ -n "$_pyenv_py3" ] && export PIPX_DEFAULT_PYTHON="$_pyenv_py3"
-  unset _pyenv_py3
-fi
-
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
