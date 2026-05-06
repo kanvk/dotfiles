@@ -30,7 +30,7 @@ Answers are saved to `~/.config/chezmoi/chezmoi.toml` and reused on subsequent a
 The bootstrap installs one of three nested tiers (full ⊇ base ⊇ minimal):
 
 - **minimal** — shell, git, and a handful of CLI niceties (`bat`, `eza`, `fd`, `fzf`, `ripgrep`, `zoxide`, `gh`, `jq`, `lazygit`, `delta`). Suitable for disposable boxes, shared servers, or short-lived containers.
-- **base** — minimal **plus** daily-driver dev tooling: build deps, language toolchains (rustup, go, node, python via pyenv/uv/pipx), starship, TUIs (broot, lsd, yazi, btop, lazydocker), secret-scanners (ggshield, gitleaks). Default for personal dev machines.
+- **base** — minimal **plus** daily-driver dev tooling: build deps, language toolchains (rustup, go, node, python via pyenv + uv), starship, TUIs (broot, lsd, yazi, btop, lazydocker), secret-scanners (ggshield, gitleaks). Default for personal dev machines.
 - **full** — base **plus** ML/specialty/heavy tools (`llama.cpp`, `ollama`, `vllm`, `wandb`, `caddy`, `duckdb`, `keydb`, `rclone`, `pixi`, `typst`, `uuu` prereqs). Default at the prompt; the user's main box runs this.
 
 Inspect resolved sets with `just show-tier <name>`. Switch tiers by editing `tier = "..."` in `~/.config/chezmoi/chezmoi.toml` and re-applying. Downgrades don't uninstall — extras stay until you run the package manager's cleanup yourself.
@@ -40,7 +40,7 @@ Inspect resolved sets with `just show-tier <name>`. Switch tiers by editing `tie
 ## What chezmoi does on first apply
 
 1. Renders templates with your init answers and applies dotfiles to `$HOME`.
-2. Installs system packages (apt on Debian-likes, then Homebrew + pipx/npm/cargo/go/bun) per your tier.
+2. Installs system packages (apt on Debian-likes, then Homebrew + uv tool/npm/cargo/go/bun) per your tier.
 3. Syncs plugin managers (sheldon, lazy.nvim, tpm, broot) and regenerates shell completions.
 
 Subsequent applies are fast — only the dotfiles or scripts whose source has changed get re-run.
@@ -107,7 +107,7 @@ Things `chezmoi apply` cannot do automatically — do these once on a new machin
 
 ## Editing packages
 
-Edit `.chezmoidata.yaml`, keyed by manager (`apt`, `brew`, `pipx`, `npm`, `cargo`, `go`, `bun`). The next `chezmoi apply` detects the hash change and re-runs the install script.
+Edit `.chezmoidata.yaml`, keyed by manager (`apt`, `brew`, `pipx` [installed via `uv tool`], `npm`, `cargo`, `go`, `bun`). The next `chezmoi apply` detects the hash change and re-runs the install script.
 
 ```sh
 chezmoi edit .chezmoidata.yaml      # edits in the source

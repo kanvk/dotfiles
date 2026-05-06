@@ -16,14 +16,14 @@ See `README.md` for the user-facing version of the same story.
 
 - **Repo is public.** Never commit plaintext secrets, OAuth tokens, API keys, signed JWTs, or private SSH keys. Machine-local secrets belong at `~/.config/zsh/omz-custom/hidden.zsh`, which is gitignored and sourced by OMZ at shell start. This file must never move into the chezmoi source tree, even excluded — the whole point of the layout is that the source tree is safe to publish.
 - **OS scope:** Officially supports Kali (WSL2) and Ubuntu (native or WSL2). macOS is not targeted; don't add macOS-specific branches unless they're free. Windows-native configs (`dot_config/windows/**`) and `dot_config/zsh/omz-custom/wsl.zsh` apply on every host — OS gates in `.chezmoiignore.tmpl` were dropped so `chezmoi add` works from a WSL box. They just sit unused on the wrong OS (WSL `.exe` aliases resolve to nothing; Windows configs sit at `~/.config/windows/` until copied manually on a Windows host — see `dot_config/windows/terminal/README.md`).
-- **The install pipeline is additive only.** `chezmoi apply` installs listed packages but never uninstalls anything missing: brew bundle runs without `--cleanup`; nala/apt-get use `install`, never `purge`/`autoremove`; pipx/cargo/go/npm/bun/gh-extension steps only install or upgrade. To prune, run the manager's cleanup directly (`brew bundle cleanup --file=<bundle>`, `nala autoremove`, …). When adding a tool wanted on every machine, add it to `.chezmoidata.yaml` — don't expect re-snapshotting from the system.
+- **The install pipeline is additive only.** `chezmoi apply` installs listed packages but never uninstalls anything missing: brew bundle runs without `--cleanup`; nala/apt-get use `install`, never `purge`/`autoremove`; uv-tool/cargo/go/npm/bun/gh-extension steps only install or upgrade. To prune, run the manager's cleanup directly (`brew bundle cleanup --file=<bundle>`, `nala autoremove`, …). When adding a tool wanted on every machine, add it to `.chezmoidata.yaml` — don't expect re-snapshotting from the system.
 
 ## Commands
 
 The `justfile` is the canonical entry point — `just -l` for the menu.
 
 - **`just test`** / **`just test-smoke [distro]`** — apply dotfiles in a fresh container, no install scripts. Default: `ubuntu`.
-- **`just test-full [distro]`** — full bootstrap (apt + brew bundle + pipx + cargo + …). Strict superset of `test-smoke`. Slow.
+- **`just test-full [distro]`** — full bootstrap (apt + brew bundle + uv tool + cargo + …). Strict superset of `test-smoke`. Slow.
 - **`just lint`** — render every `.tmpl`, sweep for hardcoded refs, validate YAML, shellcheck. No Docker.
 - **`just diff`** / **`just apply`** / **`just apply-force`** — chezmoi day-to-day.
 - **`just show-tier <name>`** — print the resolved package set for a tier.
@@ -55,7 +55,7 @@ The `justfile` is the canonical entry point — `just -l` for the menu.
 
 ```
 .chezmoi.toml.tmpl         # init-time prompts + computed vars (.is_wsl, .is_debian_like, .tier)
-.chezmoidata.yaml          # tiered package lists (apt/brew/pipx/npm/cargo/go/bun/gh-ext)
+.chezmoidata.yaml          # tiered package lists (apt/brew/pipx [via uv tool]/npm/cargo/go/bun/gh-ext)
 .chezmoiignore.tmpl        # repo-docs/test exclusions + encrypted-locals gate
 .chezmoiexternal.toml.tmpl # TPM + other externals
 .chezmoiscripts/           # run_once_* and run_onchange_* automation

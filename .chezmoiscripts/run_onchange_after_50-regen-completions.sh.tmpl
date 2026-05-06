@@ -29,7 +29,7 @@ _regen() {
 # aren't already shipped via brew's site-functions. Each is gated on
 # `command -v <tool>` so missing tools are silent no-ops. Before adding a new
 # entry, check whether brew already ships `_<tool>` — if so, skip.
-_regen poetry _poetry "poetry completions zsh"   # pipx-installed
+_regen poetry _poetry "poetry completions zsh"   # uv-tool-installed
 _regen rustup _rustup "rustup completions zsh"   # brew-installed but formula doesn't ship _rustup
 
 # --- npm-installed CLIs (no brew formula → not on brew's fpath) ---
@@ -41,7 +41,7 @@ if command -v nala >/dev/null 2>&1 && command -v register-python-argcomplete >/d
   register-python-argcomplete nala > "$HOME/.zfunc/_nala" 2>/dev/null || true
 fi
 
-# --- Click-based CLIs (pipx-installed; brew-installed Click tools like
+# --- Click-based CLIs (uv-tool-installed; brew-installed Click tools like
 # ggshield are already covered by brew's site-functions and skipped here) ---
 # Click's standard "_<TOOL>_COMPLETE=zsh_source <tool>" dance produces a
 # loadable zsh completion script. Tool name → env-var name conversion replaces

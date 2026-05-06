@@ -13,7 +13,8 @@
 #   (shell, tmux, build deps for pyenv-built Python, media for nvim/yazi previews).
 # - brew: source of truth for version-current user tooling. Most things go here.
 #   Tap-prefixed entries (e.g. hashicorp/tap/vault) auto-tap on install.
-# - pipx: isolated Python applications.
+# - pipx: isolated Python applications. The YAML key is kept for stability;
+#   the install loop uses `uv tool install` under the hood (see install-packages).
 # - cargo: Rust-only tools that aren't in brew (or for which the cargo build
 #   is preferred). Things available via brew live in `brew`, not here.
 # - npm/go/bun: language-specific globals where there's no brew equivalent.
@@ -96,7 +97,7 @@ tiers:
         # CLI utilities referenced in dot_config/zsh/omz-custom/alias.zsh
         - ranger
         - trash-cli
-        # python provider for nvim (apt is the canonical install path; pipx is for apps)
+        # python provider for nvim (apt is the canonical install path; the pipx: list is for apps, installed via uv tool)
         - python3-pynvim
         # GPG: TUI passphrase prompt (avoids "no pinentry" hangs on WSL/headless)
         - pinentry-curses

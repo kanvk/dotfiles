@@ -11,7 +11,7 @@
 #        templates render, files end up at the right paths with the right
 #        modes, identity templating works, OS gates fire, idempotence holds.
 # full:  everything smoke does, PLUS runs the install-packages script chain
-#        (apt, Homebrew, brew bundle, pipx, npm, cargo via rustup-init, go,
+#        (apt, Homebrew, brew bundle, uv tool, npm, cargo via rustup-init, go,
 #        bun) and verifies the resulting toolchains + plugin clones.
 #
 # `just test-full` is a strict superset of `just test-smoke`. There is NO

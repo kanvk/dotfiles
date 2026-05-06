@@ -12,7 +12,7 @@
 #                  right modes, identity templating works, OS gates fire,
 #                  idempotence holds.
 # full:            strict superset of smoke. Also runs the install-packages
-#                  chain (Homebrew bootstrap, brew bundle, pipx, npm, cargo
+#                  chain (Homebrew bootstrap, brew bundle, uv tool, npm, cargo
 #                  via rustup-init, go, bun, plugin clones, completion regen)
 #                  and verifies the toolchain comes up. Slow.
 

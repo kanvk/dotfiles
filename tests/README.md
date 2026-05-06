@@ -49,7 +49,7 @@ just test-full all       # both distros (only when distro-specific changes warra
 - Idempotence: re-apply produces zero file changes.
 
 **`full`** — strict superset of `smoke`, plus:
-- Runs the entire pipeline: `apt install`, Homebrew bootstrap, `brew bundle install`, pipx, npm, cargo (after rustup-init), go, sheldon lock, nvim Lazy sync, broot install, TPM plugin install, completion regen, summary script.
+- Runs the entire pipeline: `apt install`, Homebrew bootstrap, `brew bundle install`, uv tool, npm, cargo (after rustup-init), go, sheldon lock, nvim Lazy sync, broot install, TPM plugin install, completion regen, summary script.
 - brew, sheldon, nvim, atuin, cargo, go, npm, bun all on PATH.
 - rust uutils `coreutils` binary on PATH (the `command coreutils <cmd>` aliases in alias.zsh require it).
 - TPM cloned at `~/.tmux/plugins/tpm`.

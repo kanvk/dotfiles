@@ -20,7 +20,7 @@ test: test-smoke
 test-smoke distro="ubuntu":
     ./tests/run.sh {{distro}} smoke
 
-# Full bootstrap (apt + brew bundle + pipx + cargo + ...). Strict superset of test-smoke. Slow.
+# Full bootstrap (apt + brew bundle + uv tool + cargo + ...). Strict superset of test-smoke. Slow.
 # Default: ubuntu, since CLAUDE.md's policy is that ubuntu-only is the routine green-light
 # bar (kali shares the same install pipeline). Pass `all` for both distros when distro-specific.
 test-full distro="ubuntu":
