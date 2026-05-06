@@ -1,0 +1,15 @@
+# Theme: catppuccin-macchiato (blue accent) — mirrors dot_config/lazygit/config.yml
+# so the two TUIs share a palette. Lazydocker exposes fewer themable keys than
+# lazygit (only the four below), so the rest falls back to lazydocker defaults.
+gui:
+  border: rounded
+  theme:
+    activeBorderColor:
+      - '#8aadf4'
+      - bold
+    inactiveBorderColor:
+      - '#a5adcb'
+    selectedLineBgColor:
+      - '#363a4f'
+    optionsTextColor:
+      - '#8aadf4'
