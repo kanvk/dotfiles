@@ -53,6 +53,15 @@ return {
       -- files routinely cross 1.5MB without being painful to edit.
       opts.bigfile = { enabled = true, size = 10 * 1024 * 1024 }
 
+      -- Render the file before plugins/treesitter/LSP attach on cold open
+      -- (`nvim somefile.txt`) — pure latency win, no behavior change.
+      opts.quickfile = { enabled = true }
+
+      -- GitHub issues + PRs in-buffer via the `gh` CLI. Adds the
+      -- `gh_issue` / `gh_pr` picker sources used by the <Leader>gH* maps
+      -- in astrocore.lua. Requires `gh auth login`.
+      opts.gh = { enabled = true }
+
       opts.dashboard = opts.dashboard or {}
       opts.dashboard.preset = opts.dashboard.preset or {}
 

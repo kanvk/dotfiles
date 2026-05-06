@@ -71,6 +71,14 @@ return {
         ["<Leader>fS"] = { function() require("snacks").scratch.select() end, desc = "Find scratchpads" },
         -- Snacks zoxide picker — jump to a frequent dir (mirrors dashboard `z`)
         ["<Leader>fz"] = { function() require("snacks").picker.zoxide() end, desc = "Find via zoxide" },
+        -- Snacks gh — GitHub issues/PRs via `gh` CLI. Nested under <Leader>gH*
+        -- because <Leader>gi (Gdiffsplit), <Leader>gp, etc. are already in
+        -- the git namespace (fugitive/diffview/git-blame).
+        ["<Leader>gH"] = { desc = "GitHub" },
+        ["<Leader>gHi"] = { function() require("snacks").picker.gh_issue() end, desc = "Issues (open)" },
+        ["<Leader>gHI"] = { function() require("snacks").picker.gh_issue { state = "all" } end, desc = "Issues (all)" },
+        ["<Leader>gHp"] = { function() require("snacks").picker.gh_pr() end, desc = "Pull requests (open)" },
+        ["<Leader>gHP"] = { function() require("snacks").picker.gh_pr { state = "all" } end, desc = "Pull requests (all)" },
         -- Zen mode toggle (zen-mode-nvim community pack only registers :ZenMode)
         ["<Leader>uz"] = { "<Cmd>ZenMode<CR>", desc = "Toggle Zen Mode" },
         -- Diffview — full 4-pane git diff (file diff + base + ours + theirs).
