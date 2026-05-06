@@ -49,6 +49,10 @@ return {
     -- private-use glyphs (FileNew, Search, Bookmarks, Refresh) that didn't
     -- render visibly in CaskaydiaCove alongside the wider DefaultFile/WordFile.
     opts = function(_, opts)
+      -- Bumped from snacks' 1.5MB default to 10MB — notebooks and generated
+      -- files routinely cross 1.5MB without being painful to edit.
+      opts.bigfile = { enabled = true, size = 10 * 1024 * 1024 }
+
       opts.dashboard = opts.dashboard or {}
       opts.dashboard.preset = opts.dashboard.preset or {}
 
