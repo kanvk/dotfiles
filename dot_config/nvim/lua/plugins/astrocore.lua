@@ -79,6 +79,14 @@ return {
         ["<Leader>gHI"] = { function() require("snacks").picker.gh_issue { state = "all" } end, desc = "Issues (all)" },
         ["<Leader>gHp"] = { function() require("snacks").picker.gh_pr() end, desc = "Pull requests (open)" },
         ["<Leader>gHP"] = { function() require("snacks").picker.gh_pr { state = "all" } end, desc = "Pull requests (all)" },
+        -- Snacks gitbrowse — open the current file/line(s) on the remote.
+        -- <Leader>gB is taken by git-blame, so this lives at <Leader>gO
+        -- ("open"). Visual mode passes the selection's line range.
+        ["<Leader>gO"] = { function() require("snacks").gitbrowse() end, desc = "Open on remote" },
+        -- Snacks rename.rename_file — like a regular file rename, but
+        -- propagates the change through any LSP that's attached
+        -- (workspace symbols, imports, etc.).
+        ["<Leader>cR"] = { function() require("snacks").rename.rename_file() end, desc = "Rename file (LSP-aware)" },
         -- Zen mode toggle (zen-mode-nvim community pack only registers :ZenMode)
         ["<Leader>uz"] = { "<Cmd>ZenMode<CR>", desc = "Toggle Zen Mode" },
         -- Diffview — full 4-pane git diff (file diff + base + ours + theirs).
@@ -98,6 +106,11 @@ return {
         ["[T"] = { function() require("todo-comments").jump_prev() end, desc = "Previous TODO comment" },
         ["]n"] = { function() require("neotest").jump.next() end, desc = "Next test" },
         ["[n"] = { function() require("neotest").jump.prev() end, desc = "Previous test" },
+      },
+      x = {
+        -- Visual-mode mirror of <Leader>gO: snacks.gitbrowse picks up the
+        -- selection's line range and includes it in the URL.
+        ["<Leader>gO"] = { function() require("snacks").gitbrowse() end, desc = "Open selection on remote" },
       },
     },
 

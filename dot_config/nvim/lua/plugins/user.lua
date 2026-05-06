@@ -62,6 +62,15 @@ return {
       -- in astrocore.lua. Requires `gh auth login`.
       opts.gh = { enabled = true }
 
+      -- Smooth-scroll animation on <C-d>/<C-u>/gg/G/etc. Defaults are
+      -- mild (200ms total, linear); tweak in scroll.animate if needed.
+      opts.scroll = { enabled = true }
+
+      -- gitbrowse + rename are function-call modules (`Snacks.gitbrowse()`,
+      -- `Snacks.rename.rename_file()`); they lazy-load on first invoke and
+      -- don't need an opts entry — see the <Leader>gO and <Leader>cR maps
+      -- in astrocore.lua.
+
       opts.dashboard = opts.dashboard or {}
       opts.dashboard.preset = opts.dashboard.preset or {}
 
