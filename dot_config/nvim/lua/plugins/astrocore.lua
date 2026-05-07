@@ -11,14 +11,18 @@ return {
       large_buf = { size = 1024 * 256, lines = 10000 }, -- set global limits for large files for disabling features like treesitter
       autopairs = true, -- enable autopairs at start
       cmp = true, -- enable completion at start
-      diagnostics = { virtual_text = true, virtual_lines = false }, -- diagnostic settings on startup
+      diagnostics = { virtual_text = false, virtual_lines = false }, -- diagnostic settings on startup
       highlighturl = true, -- highlight URLs at start
       notifications = true, -- enable notifications at start
     },
-    -- Diagnostics configuration (for vim.diagnostics.config({...})) when diagnostics are on
+    -- Diagnostics configuration (for vim.diagnostics.config({...})) when diagnostics are on.
+    -- Inline noise (virtual_text, signs, underline) is off by default; use the
+    -- on-demand keymaps instead — <Leader>ld floats the line's diagnostic,
+    -- ]d/[d, ]e/[e, ]w/[w navigate. Toggle inline back on with <Leader>uv.
     diagnostics = {
-      virtual_text = true,
-      underline = true,
+      virtual_text = false,
+      signs = false,
+      underline = false,
     },
     -- passed to `vim.filetype.add`
     -- filetypes = {
