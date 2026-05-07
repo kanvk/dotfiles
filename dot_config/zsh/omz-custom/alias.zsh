@@ -36,6 +36,10 @@ alias vim='nvim'
 alias vimdiff='vim -d'
 alias view='vim -R'
 
+# lvim
+alias lvim='NVIM_APPNAME=lvim nvim'
+alias lvimup='timeout --kill-after=30s 3m env NVIM_APPNAME=lvim nvim --headless +"Lazy! sync" +qa 2>/dev/null'
+
 # Use rust uutils if possible
 if [ -x "$(command -v coreutils)" ]; then
   alias arch="command coreutils arch"
