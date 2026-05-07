@@ -23,3 +23,12 @@ opt.signcolumn = "yes"
 opt.wrap = false
 opt.hidden = true
 opt.spell = false
+
+if vim.fn.has "wsl" == 1 and not (vim.env.SSH_TTY or vim.env.SSH_CONNECTION or vim.env.SSH_CLIENT) then
+  vim.g.clipboard = {
+    name = "WSL-Clipboard",
+    copy = { ["+"] = "win32yank.exe -i --crlf", ["*"] = "win32yank.exe -i --crlf" },
+    paste = { ["+"] = "win32yank.exe -o --lf", ["*"] = "win32yank.exe -o --lf" },
+    cache_enabled = true,
+  }
+end
