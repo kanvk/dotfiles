@@ -90,7 +90,7 @@ return {
 
       opts.dashboard.preset.keys = {
         -- Resume / context-switch
-        { key = "s", icon = "󰋚", desc = "Last Session  ", action = "<Leader>Sl" },
+        { key = "s", icon = "󰋚", desc = "Last Session  ", action = function() require("persistence").load { last = true } end },
         { key = "p", icon = "󰉋", desc = "Projects  ",     action = ":lua Snacks.picker.projects()" },
         { key = "o", icon = "󰈚", desc = "Recents  ",      action = "<Leader>fo" },
         { key = "'", icon = "󰃃", desc = "Bookmarks  ",    action = "<Leader>f'" },
