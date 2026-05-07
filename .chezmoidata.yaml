@@ -192,6 +192,7 @@ tiers:
         - du-dust
         - gitoxide
       npm:
+        - "@mermaid-js/mermaid-cli"
         - "@openai/codex"
         - bun                  # bun isn't in homebrew/core on Linux; npm-global is the simplest portable path
         - neovim               # node provider for nvim plugins
