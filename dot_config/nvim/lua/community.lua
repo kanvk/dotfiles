@@ -36,7 +36,6 @@ return {
   { import = "astrocommunity.pack.lua" },
   { import = "astrocommunity.pack.markdown" },
   { import = "astrocommunity.pack.php" },
-  { import = "astrocommunity.pack.ps1" },
   { import = "astrocommunity.pack.python" },
   { import = "astrocommunity.pack.python.basedpyright" },
   { import = "astrocommunity.pack.python.ruff" },
