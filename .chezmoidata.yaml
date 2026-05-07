@@ -178,7 +178,7 @@ tiers:
         - pre-commit
         - prek
         - py-spy
-        - pynvim # nvim python host (jupyter_client/ipykernel injected separately for molten)
+        - pynvim # nvim python host; molten extras (jupyter_client, ipykernel, cairosvg, pnglatex, plotly, kaleido, pyperclip, nbformat, pillow) injected by run_onchange_after_20-pynvim-extras
         - python-semantic-release
         - shell-functools
         - tox
