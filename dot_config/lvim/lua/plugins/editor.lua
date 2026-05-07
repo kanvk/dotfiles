@@ -33,6 +33,17 @@ return {
   },
   { "HiPhish/rainbow-delimiters.nvim", event = "BufReadPre" },
   { "andymass/vim-matchup", event = "BufReadPre" },
+  -- Lets `.` repeat plugin-defined operations (surround, etc.) in addition
+  -- to vim's built-in changes. No-op until a plugin that calls
+  -- `repeat#set()` is installed; tiny enough to keep loaded eagerly.
+  { "tpope/vim-repeat", lazy = false },
+  -- ys{motion}{char} adds, cs{old}{new} changes, ds{char} deletes surrounds.
+  -- Pairs with vim-repeat so `.` re-applies the last surround edit.
+  {
+    "kylechui/nvim-surround",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {},
+  },
   {
     "folke/zen-mode.nvim",
     cmd = "ZenMode",
