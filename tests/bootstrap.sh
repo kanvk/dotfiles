@@ -103,6 +103,8 @@ check -f "$HOME/.config/pgcli/config"
 check -f "$HOME/.config/git/attributes"
 check -f "$HOME/.config/nvim/init.lua"
 check -f "$HOME/.config/nvim/lazy-lock.json"
+check -f "$HOME/.config/lvim/init.lua"
+check -f "$HOME/.config/lvim/lazy-lock.json"
 check -f "$HOME/.config/zellij/config.kdl"
 check -f "$HOME/.config/act/actrc"
 check -f "$HOME/.config/broot/conf.hjson"
@@ -200,6 +202,7 @@ if [ "$MODE" = "full" ]; then
     # Plugin managers ran their post-install steps
     [ -d "$HOME/.tmux/plugins/tpm" ] || { echo "  FAIL: TPM not cloned"; fail=1; }
     [ -d "$HOME/.local/share/sheldon/repos" ] || { echo "  FAIL: sheldon never ran (no plugin clones)"; fail=1; }
+    [ -d "$HOME/.local/share/lvim/lazy" ] || { echo "  FAIL: lvim Lazy never ran (~/.local/share/lvim/lazy missing)"; fail=1; }
 
     # Completion regen produced files
     [ -f "$HOME/.zfunc/_chezmoi" ] || { echo "  FAIL: ~/.zfunc/_chezmoi not regenerated"; fail=1; }
