@@ -6,6 +6,11 @@ return {
     keys = { { "<Leader>um", "<cmd>Markview Toggle<cr>", desc = "Toggle markview render" } },
     opts = {},
   },
+  -- LazyVim's lang.markdown extra ships render-markdown.nvim. Both plugins
+  -- conceal/render the same markdown elements and fight over conceallevel
+  -- when active on the same buffer, so disable render-markdown here and
+  -- let markview own the previewing.
+  { "MeanderingProgrammer/render-markdown.nvim", enabled = false },
   {
     "mrjones2014/smart-splits.nvim",
     lazy = false,
