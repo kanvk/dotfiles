@@ -24,9 +24,14 @@ return {
     },
   },
   {
+    -- cmd entries make :Diffview* tab-complete (and lazy-load the plugin)
+    -- before any keybind has fired. <Leader>gl is bound in config/keymaps.lua
+    -- so it wins over LazyVim's default Snacks log picker; the cmd entry
+    -- still triggers plugin load when that mapping fires.
     "sindrets/diffview.nvim",
+    cmd = { "DiffviewOpen", "DiffviewFileHistory", "DiffviewToggleFiles", "DiffviewFocusFiles", "DiffviewRefresh" },
     keys = {
-      { "<Leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Open Diffview" },
+      { "<Leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Open Diffview (working tree)" },
       { "<Leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "File history (current)" },
     },
   },
