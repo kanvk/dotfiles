@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+#
+# Sync lvim plugins to versions pinned in dot_config/lvim/lazy-lock.json.
+# NVIM_APPNAME=lvim points lazy at ~/.local/share/lvim/.
+#
+# lock-hash: {{ include "dot_config/lvim/lazy-lock.json" | sha256sum }}
+
+set -euo pipefail
+{{ template "brew-path-bootstrap" . }}
+if ! command -v nvim >/dev/null 2>&1; then
+  echo "nvim not installed yet — skipping lvim Lazy sync"
+  exit 0
+fi
+
+echo "==> NVIM_APPNAME=lvim nvim +Lazy! restore +qa"
+timeout --kill-after=30s 3m \
+  env NVIM_APPNAME=lvim nvim --headless "+Lazy! restore" +qa 2>/dev/null || true
