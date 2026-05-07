@@ -113,8 +113,6 @@ check -f "$HOME/.config/broot/conf.hjson"
 check -f "$HOME/.ssh/config"
 check -d "$HOME/.gnupg"
 check -f "$HOME/.gnupg/gpg-agent.conf"
-check -f "$HOME/.claude/settings.json"
-check -f "$HOME/.claude/statusline.sh"
 
 # --- file modes (private_ prefix in source → 0700 dirs / 0600 files) ---
 mode_eq "$HOME/.ssh"                      700
@@ -145,19 +143,19 @@ contains "$HOME/.gnupg/gpg-agent.conf" '^pinentry-program /'
 contains "$HOME/.ssh/config" '^Host github\.com$'
 contains "$HOME/.ssh/config" '^Include ~/.ssh/config\.local'
 contains "$HOME/.ssh/config" '^Include ~/.ssh/config\.machine'
-# encrypt_locals=false in the test container, so the encrypted GHE alias is
-# ignored and ~/.ssh/config.local should NOT exist.
+# encrypt_locals=false in the test container, so every file behind the
+# encrypt_locals gate in .chezmoiignore.tmpl should NOT exist.
 absent "$HOME/.ssh/config.local"
 absent "$HOME/.gitconfig.local"
+absent "$HOME/.claude/settings.json"
+absent "$HOME/.claude/statusline.sh"
+absent "$HOME/.codex/config.toml"
+absent "$HOME/.codex/AGENTS.md"
 
-# --- Claude statusline command is templated to actual home dir, not /home/kanvk ---
-contains "$HOME/.claude/settings.json" "bash $HOME/\.claude/statusline\.sh"
-
-# --- OS-gated files: WSL-only file should NOT exist (is_wsl=false) ---
-absent "$HOME/.config/zsh/omz-custom/wsl.zsh"
-
-# --- OS-gated dirs: dot_config/windows/** should NOT be applied on Linux ---
-absent "$HOME/.config/windows"
+# --- WSL helper + Windows configs apply on every host (OS gates dropped so
+# `chezmoi add` works from a WSL box; the files just sit unused on the wrong OS) ---
+check -f "$HOME/.config/zsh/omz-custom/wsl.zsh"
+check -d "$HOME/.config/windows"
 
 # --- chezmoi-source-only files should NOT have been applied ---
 absent "$HOME/README.md"
