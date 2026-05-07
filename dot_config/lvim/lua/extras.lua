@@ -31,5 +31,10 @@ return {
   { import = "lazyvim.plugins.extras.editor.illuminate" },
   { import = "lazyvim.plugins.extras.editor.refactoring" },
   { import = "lazyvim.plugins.extras.editor.outline" },
+  { import = "lazyvim.plugins.extras.editor.inc-rename" }, -- LSP rename with command-preview
+  { import = "lazyvim.plugins.extras.editor.dial" }, -- <C-a>/<C-x> on dates, semver, booleans, hex, alphabet
   { import = "lazyvim.plugins.extras.coding.yanky" },
+  { import = "lazyvim.plugins.extras.ui.treesitter-context" }, -- adds a <leader>ut toggle and a 3-line cap (replaces the manual spec in editor.lua)
+  { import = "lazyvim.plugins.extras.util.dot" }, -- chezmoi/dotfiles language support — relevant: this repo IS chezmoi
+  { import = "lazyvim.plugins.extras.util.mini-hipatterns" }, -- inline color preview for hex/rgb/Tailwind
 }

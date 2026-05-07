@@ -31,7 +31,6 @@ return {
     event = "BufReadPre",
     opts = {},
   },
-  { "nvim-treesitter/nvim-treesitter-context", event = "BufReadPre", opts = {} },
   { "HiPhish/rainbow-delimiters.nvim", event = "BufReadPre" },
   { "andymass/vim-matchup", event = "BufReadPre" },
   {
