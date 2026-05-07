@@ -97,7 +97,7 @@ widgets:
             round_corners: true
             round_corners_type: "normal"
             border_color: ""
-    # --- Quick Launch (Ctrl+Space) ---
+    # --- Quick Launch (Ctrl+Shift+Space) ---
     # Providers: apps, calculator, currency, clipboard, bookmarks, web search, system commands,
     #            settings, kill process, port viewer, file search, unit converter, emoji, color,
     #            world clock, snippets, hacker news, dev tools, ip info, vscode
@@ -217,7 +217,7 @@ widgets:
             callbacks:
                 on_left: "toggle_quick_launch"
             keybindings:
-                - keys: "ctrl+space"
+                - keys: "ctrl+shift+space"
                   action: "toggle_quick_launch"
 
     # --- WHKD (Hotkey Daemon Indicator) ---
