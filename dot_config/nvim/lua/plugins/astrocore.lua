@@ -87,6 +87,11 @@ return {
         -- propagates the change through any LSP that's attached
         -- (workspace symbols, imports, etc.).
         ["<Leader>cR"] = { function() require("snacks").rename.rename_file() end, desc = "Rename file (LSP-aware)" },
+        -- Delegates to astrolsp.format_opts so the formatting.disabled filter applies.
+        ["<Leader>cf"] = {
+          function() vim.lsp.buf.format(require("astrolsp").format_opts) end,
+          desc = "Format buffer",
+        },
         -- Zen mode toggle (zen-mode-nvim community pack only registers :ZenMode)
         ["<Leader>uz"] = { "<Cmd>ZenMode<CR>", desc = "Toggle Zen Mode" },
         -- Diffview — full 4-pane git diff (file diff + base + ours + theirs).
@@ -108,6 +113,10 @@ return {
         ["[n"] = { function() require("neotest").jump.prev() end, desc = "Previous test" },
       },
       x = {
+        ["<Leader>cf"] = {
+          function() vim.lsp.buf.format(require("astrolsp").format_opts) end,
+          desc = "Format selection",
+        },
         -- Visual-mode mirror of <Leader>gO: snacks.gitbrowse picks up the
         -- selection's line range and includes it in the URL.
         ["<Leader>gO"] = { function() require("snacks").gitbrowse() end, desc = "Open selection on remote" },
