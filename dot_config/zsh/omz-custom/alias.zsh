@@ -195,13 +195,18 @@ _osc52_copy() {
   else
     data=$(base64 -w0 2>/dev/null || base64 | tr -d '\n')
   fi
-  # DCS-wrap inside tmux so the escape reaches the outer terminal even if
-  # `set -g set-clipboard on` isn't honored (older tmux, weird forwarders).
+  # Build the escape, then write to /dev/tty so it reaches the terminal
+  # even when stdout is redirected — ZVM wraps the eval'd copy cmd in
+  # `>/dev/null 2>&1`, which would otherwise swallow it. DCS-wrap inside
+  # tmux as belt-and-suspenders for forwarders without set-clipboard on.
+  # Fall back to stdout when there's no controlling tty (scripts, hooks).
+  local seq
   if [[ -n $TMUX ]]; then
-    printf '\ePtmux;\e\e]52;c;%s\a\e\\' "$data"
+    seq=$(printf '\ePtmux;\e\e]52;c;%s\a\e\\' "$data")
   else
-    printf '\e]52;c;%s\a' "$data"
+    seq=$(printf '\e]52;c;%s\a' "$data")
   fi
+  print -rn -- "$seq" >/dev/tty 2>/dev/null || print -rn -- "$seq"
 }
 c()   { if [[ -n $DISPLAY ]]; then xclip "$@";        else _osc52_copy "$@"; fi }
 csc() { if [[ -n $DISPLAY ]]; then xclip -sel c "$@"; else _osc52_copy "$@"; fi }
