@@ -253,6 +253,12 @@ alias rcp='rsync -avzPh'
 # chezmoi
 alias cz='chezmoi'
 alias cvim='chezmoi edit --apply'
+# chezmoi's built-in pager is disabled globally — apply -v streams per-file
+# diffs through an io.Pipe that deadlocks if the pager exits early (moor's
+# small-input passthrough does this). Pipe explicitly to moor here for the
+# one place a pager is actually wanted. --color=true forces ANSI through the
+# pipe (auto-detect strips it when stdout isn't a TTY).
+alias czdiff='chezmoi --color=true diff | moor'
 
 # uv
 alias uva='uv add'
