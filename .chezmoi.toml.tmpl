@@ -93,6 +93,14 @@
    the encrypted-locals files are gated on encrypt_locals=true.
 */}}
 encryption = "age"
+
+# Disable chezmoi's pager. `apply -v` / `update -v` wraps the destination in
+# GitDiffSystem and streams per-file diffs through $PAGER via an in-memory
+# io.Pipe; pagers that exit before chezmoi closes the pipe (moor's small-input
+# passthrough, less with -F, anything that auto-quits on short input) leave
+# the pipe with no reader and deadlock the Go runtime on the next write. An
+# empty pager streams straight to stdout regardless of $PAGER.
+pager = ""
 {{- if and $sshAgeIdentity $sshAgeRecipient }}
 
 [age]
