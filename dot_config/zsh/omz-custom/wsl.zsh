@@ -19,12 +19,6 @@ pwshw() {
 }
 alias pw='pwshw'
 
-# ZSH: jeffreytse/zsh-vi-mode
-ZVM_CLIPBOARD_COPY_CMD='win32yank.exe -i --crlf'
-ZVM_CLIPBOARD_PASTE_CMD='win32yank.exe -o --lf'
-ZVM_OPEN_CMD='open_command'
-ZVM_OPEN_FILE_CMD='code'
-
 # Program aliases
 alias qdrant='pwshw qdrant'
 alias bw='pwshw bw'
