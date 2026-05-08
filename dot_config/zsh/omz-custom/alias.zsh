@@ -1,5 +1,6 @@
 # zsh/omz
 alias op='open_command'
+alias xo='xdg-open'
 
 # web-search
 alias gle='google'
