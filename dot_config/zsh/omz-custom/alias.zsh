@@ -1,6 +1,6 @@
-# zsh/omz
-alias op='open_command'
-alias xo='xdg-open'
+# zsh/omz — open_command is OMZ's cross-platform opener (xdg-open on Linux,
+# cmd.exe-start on WSL, `open` on macOS) and honors $BROWSER for http(s) URLs.
+alias xo='open_command'
 
 # web-search
 alias gle='google'
