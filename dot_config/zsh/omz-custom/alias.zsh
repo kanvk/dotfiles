@@ -184,10 +184,28 @@ alias tree='eza --tree'
 alias x='ouch d'
 alias yz='yazi'
 
-# xclip
-alias c='xclip'
+# xclip — OSC 52 fallback when there's no X display (SSH, headless box).
+# OSC 52 carries CLIPBOARD selection in copy direction only; terminals
+# refuse PRIMARY copy and any paste-over-the-wire for security, so the
+# v/vsc paste helpers stay xclip-only.
+_osc52_copy() {
+  local data
+  if (( $# )); then
+    data=$(base64 -w0 < "$1" 2>/dev/null || base64 < "$1" | tr -d '\n')
+  else
+    data=$(base64 -w0 2>/dev/null || base64 | tr -d '\n')
+  fi
+  # DCS-wrap inside tmux so the escape reaches the outer terminal even if
+  # `set -g set-clipboard on` isn't honored (older tmux, weird forwarders).
+  if [[ -n $TMUX ]]; then
+    printf '\ePtmux;\e\e]52;c;%s\a\e\\' "$data"
+  else
+    printf '\e]52;c;%s\a' "$data"
+  fi
+}
+c()   { if [[ -n $DISPLAY ]]; then xclip "$@";        else _osc52_copy "$@"; fi }
+csc() { if [[ -n $DISPLAY ]]; then xclip -sel c "$@"; else _osc52_copy "$@"; fi }
 alias v='xclip -o'
-alias csc='xclip -sel c'
 alias vsc='xclip -o -sel c'
 
 # profiles
