@@ -1,27 +1,6 @@
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/go/bin:$HOME/.bun/bin:$PATH"
 export VISUAL='nvim'
 export EDITOR='nvim'
-
-# OMZ open_command (`op`) dispatches http(s) URLs to "$BROWSER" before its
-# OS-default opener. Also honored by `gh`, `git web--browse`, Python's
-# webbrowser, and a long tail of CLIs. Pick Chrome per host: Windows Chrome
-# via WSL interop on WSL, google-chrome on bare Linux.
-if grep -qi microsoft /proc/version 2>/dev/null; then
-  for _b in \
-    "/mnt/c/Program Files/Google/Chrome/Application/chrome.exe" \
-    "/mnt/c/Program Files (x86)/Google/Chrome/Application/chrome.exe"; do
-    if [[ -x "$_b" ]]; then
-      export BROWSER="$_b"
-      break
-    fi
-  done
-  unset _b
-elif (( $+commands[google-chrome] )); then
-  export BROWSER=google-chrome
-elif (( $+commands[google-chrome-stable] )); then
-  export BROWSER=google-chrome-stable
-fi
-
 # SUDO_EDITOR needs an absolute path — prefer brew's nvim (so root shares your config),
 # fall back to system nvim, else unset and let sudo pick.
 if   [ -x /home/linuxbrew/.linuxbrew/bin/nvim ]; then export SUDO_EDITOR=/home/linuxbrew/.linuxbrew/bin/nvim
