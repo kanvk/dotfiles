@@ -206,7 +206,7 @@ _osc52_copy() {
   else
     seq=$(printf '\e]52;c;%s\a' "$data")
   fi
-  print -rn -- "$seq" >/dev/tty 2>/dev/null || print -rn -- "$seq"
+  print -rn -- "$seq" 2>/dev/null >/dev/tty || print -rn -- "$seq"
 }
 c()   { if [[ -n $DISPLAY ]]; then xclip "$@";        else _osc52_copy "$@"; fi }
 csc() { if [[ -n $DISPLAY ]]; then xclip -sel c "$@"; else _osc52_copy "$@"; fi }
