@@ -34,6 +34,11 @@ function Pyenv-Update {
     &"${env:PYENV_HOME}\install-pyenv-win.ps1"
 }
 
+function Komorebi-Restart {
+    komorebic stop --whkd
+    komorebic start --whkd
+}
+
 function uu {
     Texlive-Update && UV-Update && Pip-Upgrade && Rust-Update && Go-Upgrade && TLDR-Update && MSYS2-Update
 }
@@ -53,6 +58,7 @@ Set-Alias clr clear
 Set-Alias llm ollama
 Set-Alias ouiup Open-WebUI-Update
 Set-Alias ts tailscale
+Set-Alias kr Komorebi-Restart
 
 fnm env --use-on-cd --shell powershell | Out-String | Invoke-Expression
 
