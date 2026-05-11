@@ -10,14 +10,25 @@ local function label(s)
   return ("%-8s %s  [%s]"):format(s.tool.name, vim.fn.fnamemodify(s.cwd, ":~"), s.backend)
 end
 
+-- session.id is sidekick's internal pane id ("tmux <pid>"). The actual mux
+-- session name is session.mux_session — that's what tmux/zellij addresses.
 local function kill_one(session)
+  local cmd
   if session.backend == "tmux" then
-    vim.fn.system({ "tmux", "kill-session", "-t", session.id })
+    cmd = { "tmux", "kill-session", "-t", session.mux_session }
   elseif session.backend == "zellij" then
-    vim.fn.system({ "zellij", "delete-session", "--force", session.id })
+    cmd = { "zellij", "delete-session", "--force", session.mux_session }
   else
     vim.notify("Sidekick: no killer for backend " .. tostring(session.backend), vim.log.levels.WARN)
+    return false
   end
+  local out = vim.fn.system(cmd)
+  if vim.v.shell_error ~= 0 then
+    vim.notify(("Sidekick: kill failed (%s exit %d): %s"):format(cmd[1], vim.v.shell_error, out),
+      vim.log.levels.ERROR)
+    return false
+  end
+  return true
 end
 
 local function kill_all()
@@ -26,8 +37,9 @@ local function kill_all()
   local prompt = ("Kill all %d sidekick session(s)?\n  %s"):format(#list,
     table.concat(vim.tbl_map(label, list), "\n  "))
   if vim.fn.confirm(prompt, "&Yes\n&No", 2, "Warning") ~= 1 then return end
-  for _, s in ipairs(list) do kill_one(s) end
-  vim.notify(("Killed %d sidekick session(s)"):format(#list))
+  local killed = 0
+  for _, s in ipairs(list) do if kill_one(s) then killed = killed + 1 end end
+  vim.notify(("Killed %d/%d sidekick session(s)"):format(killed, #list))
 end
 
 local function kill_pick()
@@ -35,8 +47,7 @@ local function kill_pick()
   if #list == 0 then vim.notify("No sidekick sessions running") return end
   vim.ui.select(list, { prompt = "Kill sidekick session:", format_item = label }, function(pick)
     if not pick then return end
-    kill_one(pick)
-    vim.notify("Killed " .. label(pick))
+    if kill_one(pick) then vim.notify("Killed " .. label(pick)) end
   end)
 end
 
