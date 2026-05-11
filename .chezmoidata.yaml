@@ -13,6 +13,8 @@
 #   (shell, tmux, build deps for pyenv-built Python, media for nvim/yazi previews).
 # - brew: source of truth for version-current user tooling. Most things go here.
 #   Tap-prefixed entries (e.g. hashicorp/tap/vault) auto-tap on install.
+#   Cask entries are prefixed with `cask:` (e.g. `cask:copilot-cli`); the
+#   install script rewrites them to `cask "..."` Brewfile lines.
 # - pipx: isolated Python applications. The YAML key is kept for stability;
 #   the install loop uses `uv tool install` under the hood (see install-packages).
 # - cargo: Rust-only tools that aren't in brew (or for which the cargo build
@@ -131,6 +133,11 @@ tiers:
         # copilot.lua's `copilot_node_command` at it.
         - node@22
         - rustup
+        # Casks: prefix with `cask:`. The install script (Brewfile template)
+        # rewrites `cask:foo` → `cask "foo"` and bare entries → `brew "foo"`.
+        # Use casks for binaries shipped outside homebrew-core (Copilot CLI,
+        # macOS GUI apps, etc.). `just lint` validates the prefix syntax.
+        - cask:copilot-cli
         # version / language managers (the daily ones)
         - asdf
         - fnm

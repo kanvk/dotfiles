@@ -54,7 +54,34 @@ if command -v python3 >/dev/null 2>&1; then
     fi
 fi
 
-echo "==> 4. .chezmoiscripts/ shellcheck (if installed)"
+echo "==> 4. cask: prefix syntax in .chezmoidata.yaml"
+# Casks live inline in `brew:` lists with a `cask:` prefix (e.g. `cask:copilot-cli`).
+# Catch typos (`Cask:foo`, `cask: foo`, `cask:` with empty name) at lint time
+# rather than mid-`brew bundle install`.
+if command -v python3 >/dev/null 2>&1; then
+    py_out=$(python3 - <<'PYEOF' 2>&1
+import re, sys, yaml
+strict = re.compile(r"^cask:[A-Za-z0-9._@/-]+$")
+suspicious = re.compile(r"^cask\b", re.IGNORECASE)
+data = yaml.safe_load(open(".chezmoidata.yaml"))
+bad = []
+for tier, body in (data.get("tiers") or {}).items():
+    for section in ("include", "exclude"):
+        for entry in ((body.get(section) or {}).get("brew") or []):
+            if suspicious.match(entry) and not strict.match(entry):
+                bad.append(f"tiers.{tier}.{section}.brew: {entry!r}")
+print("\n".join(bad), end="")
+sys.exit(1 if bad else 0)
+PYEOF
+)
+    if [ -n "${py_out:-}" ]; then
+        echo "  FAIL: malformed cask entries (expected 'cask:NAME', e.g. 'cask:copilot-cli'):"
+        echo "$py_out" | sed 's/^/    /'
+        fail=1
+    fi
+fi
+
+echo "==> 5. .chezmoiscripts/ shellcheck (if installed)"
 if command -v shellcheck >/dev/null 2>&1; then
     while IFS= read -r f; do
         out=$(chezmoi execute-template < "$f" 2>/dev/null)

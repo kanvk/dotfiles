@@ -142,7 +142,11 @@ echo "==> Installing brew packages via brew bundle"
 _brewfile="$(mktemp)"
 cat > "$_brewfile" <<'BREWFILE'
 {{- range (index $resolved "brew") }}
+{{- if hasPrefix "cask:" . }}
+cask "{{ trimPrefix "cask:" . }}"
+{{- else }}
 brew "{{ . }}"
+{{- end }}
 {{- end }}
 BREWFILE
 
