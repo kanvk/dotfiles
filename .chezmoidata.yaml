@@ -198,7 +198,7 @@ tiers:
         - twine
         - ydiff
       cargo:
-        - cargo-update
+        - cargo-update --features vendored-libgit2  # vendor libgit2 statically — brew libgit2 SONAME bumps (e.g. 1.9→1.10) break dynamically-linked binaries since brew's lib dir isn't on LD_LIBRARY_PATH
         - choose
         - code-minimap
         - coreutils --features unix  # rust uutils — used by alias.zsh `command coreutils <cmd>`; `unix` feature builds the full unix util set
