@@ -22,9 +22,11 @@ local function kill_one(session)
     vim.notify("Sidekick: no killer for backend " .. tostring(session.backend), vim.log.levels.WARN)
     return false
   end
-  local out = vim.fn.system(cmd)
-  if vim.v.shell_error ~= 0 then
-    vim.notify(("Sidekick: kill failed (%s exit %d): %s"):format(cmd[1], vim.v.shell_error, out),
+  local res = vim.system(cmd, { text = true }):wait()
+  if res.code ~= 0 then
+    local detail = (res.stderr ~= "" and res.stderr or res.stdout or ""):gsub("%s+$", "")
+    vim.notify(("Sidekick: `%s` exited %d%s"):format(
+      table.concat(cmd, " "), res.code, detail ~= "" and "\n" .. detail or ""),
       vim.log.levels.ERROR)
     return false
   end
