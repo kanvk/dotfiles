@@ -88,6 +88,15 @@ return {
       -- don't need an opts entry — see the <Leader>gO and <Leader>cR maps
       -- in astrocore.lua.
 
+      -- Projects picker (<Leader>fp, dashboard `p`): point at ~/p as the
+      -- canonical dev root. Defaults are ~/dev + ~/projects, neither of
+      -- which exist on this user's machines.
+      opts.picker = opts.picker or {}
+      opts.picker.sources = opts.picker.sources or {}
+      opts.picker.sources.projects = vim.tbl_deep_extend("force", opts.picker.sources.projects or {}, {
+        dev = { "~/p" },
+      })
+
       opts.dashboard = opts.dashboard or {}
       opts.dashboard.preset = opts.dashboard.preset or {}
 
