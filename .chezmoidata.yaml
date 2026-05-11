@@ -124,6 +124,12 @@ tiers:
         # globals instead (see npm below).
         - go
         - node
+        # node@22 is keg-only; copilot.lua's bundled LSP (`@github/copilot`)
+        # has a custom HTTP fetcher whose case-sensitive headers wrapper
+        # returns null for `content-type` on Node 26+, breaking signInInitiate
+        # and embedding fetches. Pin a parallel Node 22 install and point
+        # copilot.lua's `copilot_node_command` at it.
+        - node@22
         - rustup
         # version / language managers (the daily ones)
         - asdf
