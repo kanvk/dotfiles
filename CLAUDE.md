@@ -25,11 +25,12 @@ The `justfile` is the canonical entry point — `just -l` for the menu.
 - **`just test`** / **`just test-smoke [distro]`** — apply dotfiles in a fresh container, no install scripts. Default: `ubuntu`.
 - **`just test-full [distro]`** — full bootstrap (apt + brew bundle + uv tool + cargo + …). Strict superset of `test-smoke`. Slow.
 - **`just lint`** — render every `.tmpl`, sweep for hardcoded refs, validate YAML, shellcheck. No Docker.
-- **`just diff`** / **`just apply`** / **`just apply-force`** — chezmoi day-to-day.
+- **`just diff`** / **`just apply`** / **`just apply-dotfiles`** / **`just apply-force`** — chezmoi day-to-day. `apply-dotfiles` skips the slow/sudo install scripts (fast inner loop after editing sources); `apply-force` re-runs every `run_onchange_*` script (after brew/package-list edits).
+- **`just update`** — pull + re-apply (canonical "update everything" on a configured machine). **`just verify`** — drift check. **`just re-add <target>`** — pull live edits back into the source tree.
 - **`just show-tier <name>`** — print the resolved package set for a tier.
 - **`just checklist`** — replay the post-apply manual-steps summary.
 
-**Routine testing uses Ubuntu only.** Kali and Ubuntu are functionally equivalent here (both `is_debian_like`, same nala+brew pipeline). `just test-full ubuntu` passing implies kali passes — only run `just test-full kali` (or `all`) when you've changed something distro-specific (e.g. apt names that drift on kali, kali-specific gates).
+**Routine testing uses Ubuntu only.** Kali and Ubuntu are functionally equivalent here (both `is_debian_like`, same nala+brew pipeline). `just test-full ubuntu` passing implies kali passes — only run `just test-full kali` (or `just test-full all` for both) when you've changed something distro-specific (e.g. apt names that drift on kali, kali-specific gates).
 
 ## Conventions
 
@@ -66,7 +67,9 @@ justfile                   # canonical entry points (test, lint, apply, show-tie
 tests/                     # bootstrap + smoke harness driven by `just test*`
 dot_*                      # standard chezmoi source
 dot_zfunc/                 # hand-written zsh completions for shell-defined commands
-private_dot_claude/        # Claude Code user config (SAFE files only — no credentials)
+docs/                      # repo design notes (encrypted: implementation plan, user-facing); ignored from apply
+private_dot_claude/        # Claude Code user config — all entries age-encrypted (settings.json, statusline.sh)
+dot_codex/                 # Codex CLI config — age-encrypted (AGENTS.md, config.toml)
 private_dot_gnupg/         # gnupg config (no keys)
 private_dot_ssh/           # ssh client config (no private keys)
 encrypted_private_dot_gitconfig.local.age  # age-encrypted git includeIf (work email, etc.)
