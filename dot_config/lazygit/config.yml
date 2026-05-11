@@ -5,6 +5,50 @@ git:
       colorArg: never
     - externalDiffCommand: difft --color=always
 
+# Diff workflow. Key choice constraints: Windows Terminal eats <c-t>, <c-v>,
+# <c-w>, <c-f>; lazygit defaults claim <c-d>/<c-u> (scroll), <c-r>, <c-o>, <c-p>,
+# <c-s>, <c-e>, <c-b>, <c-l>, <c-z>, plus <c-t> for built-in difftool (unusable
+# here because WT swallows <c-t>). That leaves <c-x>, <c-y>, <c-g>, <c-a>, <c-n>.
+#   <c-x> → `git difftool` → `nvim -d $LOCAL $REMOTE` (via `diff.tool = nvimdiff`
+#           in ~/.gitconfig). Mnemonic: e(X)ternal diff. Lean two-pane view.
+#   <c-y> → `nvim -c DiffviewOpen ...`. Full diffview UI with file panel and
+#           multi-file navigation; better for whole-commit / range review.
+#           Free in files/commits/commitFiles (lazygit binds <c-y> only in
+#           localBranches, for "copy PR URL", which we don't touch).
+# Both give real buffers — yank with `y`, jump hunks ]c/[c (nvim -d) or
+# ]x/[x (diffview merge-tool), quit with :qa.
+customCommands:
+  - key: '<c-x>'
+    context: 'files'
+    description: 'difftool: file in nvim -d'
+    command: 'git difftool -y -- {{.SelectedFile.Name | quote}}'
+    subprocess: true
+  - key: '<c-x>'
+    context: 'commits'
+    description: 'difftool: whole commit in nvim -d'
+    command: 'git difftool -y {{.SelectedCommit.Hash}}^!'
+    subprocess: true
+  - key: '<c-x>'
+    context: 'commitFiles'
+    description: 'difftool: file in commit in nvim -d'
+    command: 'git difftool -y {{.SelectedCommit.Hash}}^! -- {{.SelectedCommitFile.Name | quote}}'
+    subprocess: true
+  - key: '<c-y>'
+    context: 'files'
+    description: 'diffview: working tree'
+    command: 'nvim -c "DiffviewOpen"'
+    subprocess: true
+  - key: '<c-y>'
+    context: 'commits'
+    description: 'diffview: whole commit'
+    command: 'nvim -c "DiffviewOpen {{.SelectedCommit.Hash}}^!"'
+    subprocess: true
+  - key: '<c-y>'
+    context: 'commitFiles'
+    description: 'diffview: file in commit'
+    command: 'nvim -c "DiffviewOpen {{.SelectedCommit.Hash}}^! -- {{.SelectedCommitFile.Name | quote}}"'
+    subprocess: true
+
 # Theme: catppuccin-macchiato (blue accent)
 # Source: https://github.com/catppuccin/lazygit/blob/main/themes-mergable/macchiato/blue.yml
 # Note: AstroNvim's lazygit integration overrides this when launched from inside
