@@ -4,7 +4,6 @@ git:
     - pager: ydiff -p cat -s --wrap --width={{columnWidth}}
       colorArg: never
     - externalDiffCommand: difft --color=always
-
 # Diff workflow. Key choice constraints: Windows Terminal eats <c-t>, <c-v>,
 # <c-w>, <c-f>; lazygit defaults claim <c-d>/<c-u> (scroll), <c-r>, <c-o>, <c-p>,
 # <c-s>, <c-e>, <c-b>, <c-l>, <c-z>, plus <c-t> for built-in difftool (unusable
@@ -22,32 +21,32 @@ customCommands:
     context: 'files'
     description: 'difftool: file in nvim -d'
     command: 'git difftool -y -- {{.SelectedFile.Name | quote}}'
-    subprocess: true
+    output: terminal
   - key: '<c-x>'
     context: 'commits'
     description: 'difftool: whole commit in nvim -d'
     command: 'git difftool -y {{.SelectedCommit.Hash}}^!'
-    subprocess: true
+    output: terminal
   - key: '<c-x>'
     context: 'commitFiles'
     description: 'difftool: file in commit in nvim -d'
     command: 'git difftool -y {{.SelectedCommit.Hash}}^! -- {{.SelectedCommitFile.Name | quote}}'
-    subprocess: true
+    output: terminal
   - key: '<c-y>'
     context: 'files'
     description: 'diffview: working tree'
     command: 'nvim -c "DiffviewOpen"'
-    subprocess: true
+    output: terminal
   - key: '<c-y>'
     context: 'commits'
     description: 'diffview: whole commit'
     command: 'nvim -c "DiffviewOpen {{.SelectedCommit.Hash}}^!"'
-    subprocess: true
+    output: terminal
   - key: '<c-y>'
     context: 'commitFiles'
     description: 'diffview: file in commit'
     command: 'nvim -c "DiffviewOpen {{.SelectedCommit.Hash}}^! -- {{.SelectedCommitFile.Name | quote}}"'
-    subprocess: true
+    output: terminal
 
 # Theme: catppuccin-macchiato (blue accent)
 # Source: https://github.com/catppuccin/lazygit/blob/main/themes-mergable/macchiato/blue.yml
