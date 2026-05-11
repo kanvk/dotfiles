@@ -2,6 +2,8 @@
 return {
   "saghen/blink.cmp",
   opts = function(_, opts)
+    -- Tab/S-Tab cycle the menu when visible, jump snippet placeholders
+    -- inside an active snippet, then fall through to a literal Tab.
     opts.keymap = {
       preset = "enter",
       ["<C-y>"] = { "select_and_accept" },
@@ -12,6 +14,11 @@ return {
       ["<C-U>"] = { "scroll_documentation_up", "fallback" },
       ["<C-D>"] = { "scroll_documentation_down", "fallback" },
     }
+
+    -- Auto-popup the menu on `:` Ex commands; stay quiet on `/` and `?` searches.
+    opts.completion = opts.completion or {}
+    opts.completion.menu = opts.completion.menu or {}
+    opts.completion.menu.auto_show = true
 
     -- Cmdline keymap: nothing is preselected when the menu opens (so an
     -- absent-minded Enter still runs the typed text rather than silently
@@ -36,6 +43,7 @@ return {
       },
     })
 
-    opts.appearance = vim.tbl_deep_extend("force", opts.appearance or {}, { nerd_font_variant = "mono" })
+    opts.appearance = opts.appearance or {}
+    opts.appearance.nerd_font_variant = "mono"
   end,
 }
