@@ -6,6 +6,10 @@
 -- tmux/zellij session keeps the CLI process alive. The x/X kill bindings below
 -- enumerate sessions through sidekick's own registry (never tmux ls), so they
 -- can't touch sessions sidekick didn't spawn.
+local function label(s)
+  return ("%-8s %s  [%s]"):format(s.tool.name, vim.fn.fnamemodify(s.cwd, ":~"), s.backend)
+end
+
 local function kill_one(session)
   if session.backend == "tmux" then
     vim.fn.system({ "tmux", "kill-session", "-t", session.id })
@@ -19,6 +23,9 @@ end
 local function kill_all()
   local list = require("sidekick.cli.session").sessions()
   if #list == 0 then vim.notify("No sidekick sessions running") return end
+  local prompt = ("Kill all %d sidekick session(s)?\n  %s"):format(#list,
+    table.concat(vim.tbl_map(label, list), "\n  "))
+  if vim.fn.confirm(prompt, "&Yes\n&No", 2, "Warning") ~= 1 then return end
   for _, s in ipairs(list) do kill_one(s) end
   vim.notify(("Killed %d sidekick session(s)"):format(#list))
 end
@@ -26,13 +33,10 @@ end
 local function kill_pick()
   local list = require("sidekick.cli.session").sessions()
   if #list == 0 then vim.notify("No sidekick sessions running") return end
-  vim.ui.select(list, {
-    prompt = "Kill sidekick session:",
-    format_item = function(s) return ("%s  [%s]"):format(s.id, s.backend) end,
-  }, function(pick)
+  vim.ui.select(list, { prompt = "Kill sidekick session:", format_item = label }, function(pick)
     if not pick then return end
     kill_one(pick)
-    vim.notify("Killed " .. pick.id)
+    vim.notify("Killed " .. label(pick))
   end)
 end
 
