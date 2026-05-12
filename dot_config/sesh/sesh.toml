@@ -1,0 +1,27 @@
+#:schema https://github.com/joshmedeski/sesh/raw/main/sesh.schema.json
+
+# Sesh — smart tmux session manager. https://github.com/joshmedeski/sesh
+# Schema autocomplete provided by taplo (brew, base tier).
+#
+# Public-repo note: every entry below is visible in git history. Keep
+# project-specific names out of this file — put them in `sesh.local.toml`
+# (gitignored, sourced via the `import` line) instead.
+
+strict_mode = true
+dir_length = 1
+
+# Project-specific entries live in ~/.config/sesh/sesh.local.toml — gitignored
+# (never enters the chezmoi source tree), imported below.
+import = ["~/.config/sesh/sesh.local.toml"]
+
+# Default preview for `sesh preview <target>` (used by the tv cable's preview
+# pane and any other native sesh picker). Replaces sesh's built-in fallback
+# of `ls {}` with a colored 2-level tree.
+[default_session]
+preview_command = "eza --tree --level=2 --color=always --icons {}"
+
+# Run `mkdir -p ~/p/scratch` once; tmux falls back to $HOME if the path is
+# missing, so the session works either way.
+[[session]]
+name = "scratch"
+path = "~/p/scratch"
