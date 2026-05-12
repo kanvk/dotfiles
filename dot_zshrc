@@ -193,6 +193,9 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 # fzf-tab config
 # zstyle ':fzf-tab:*' disabled-on files
 zstyle ':completion:*:git-checkout:*' sort false
+# fzf-tab re-sorts candidates regardless of compadd's `-V` group flag;
+# only this zstyle actually preserves `_ts`'s frecency-ordered list.
+zstyle ':completion:*:ts:*' sort false
 zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS_8BIT}
 zstyle ':completion:*' menu no
