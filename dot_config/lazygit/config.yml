@@ -4,6 +4,9 @@ git:
     - pager: ydiff -p cat -s --wrap --width={{columnWidth}}
       colorArg: never
     - externalDiffCommand: difft --color=always
+
+os:
+  editPreset: nvim
 # Diff workflow. Key choice constraints: Windows Terminal eats <c-t>, <c-v>,
 # <c-w>, <c-f>; lazygit defaults claim <c-d>/<c-u> (scroll), <c-r>, <c-o>, <c-p>,
 # <c-s>, <c-e>, <c-b>, <c-l>, <c-z>, plus <c-t> for built-in difftool (unusable
@@ -54,6 +57,13 @@ customCommands:
 # nvim (<Leader>gg), syncing to the active nvim colorscheme (tokyonight-night).
 # This config takes effect for shell-launched lazygit only.
 gui:
+  nerdFontsVersion: "3"
+  filterMode: fuzzy
+  statusPanelView: allBranchesLog
+  showDivergenceFromBaseBranch: arrowAndNumber
+  expandFocusedSidePanel: true
+  expandedSidePanelWeight: 2
+  skipRewordInEditorWarning: true
   theme:
     activeBorderColor:
       - '#8aadf4'
