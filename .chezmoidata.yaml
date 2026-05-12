@@ -118,8 +118,12 @@ tiers:
         - yazi
         # rest of git / VCS
         - difftastic
+        - git-absorb     # autofixup: build fixup! commits targeting whoever last touched each hunk
+        - git-branchless # smartlog + undo + snapshots; `git sl`, `git undo`, hide/unhide commits
         - git-cliff
         - git-extras
+        - git-machete    # stacked-branch / dependency-tree management; `git machete status/traverse`
+        - git-revise     # in-memory `rebase -i` replacement; reorder/edit/reword without checkout
         # language toolchains needed BEFORE the per-language install steps
         # (rustup → cargo, go → go install, node → npm -g, npm → bun).
         # bun is NOT here: not in homebrew/core on Linux. Installed via npm
