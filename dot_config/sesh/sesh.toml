@@ -3,16 +3,27 @@
 # Sesh — smart tmux session manager. https://github.com/joshmedeski/sesh
 # Schema autocomplete provided by taplo (brew, base tier).
 #
-# Public-repo note: every entry below is visible in git history. Keep
-# project-specific names out of this file — put them in `sesh.local.toml`
-# (gitignored, sourced via the `import` line) instead.
+# Public-repo note: every entry in THIS file is visible in git history. Keep
+# project-specific names out — push them down into one of the imports below.
 
 strict_mode = true
 dir_length = 1
 
-# Project-specific entries live in ~/.config/sesh/sesh.local.toml — gitignored
-# (never enters the chezmoi source tree), imported below.
-import = ["~/.config/sesh/sesh.local.toml"]
+# Two layers of out-of-band overrides, mirroring the gitconfig/ssh convention:
+#   - sesh.local.toml   — personal-but-portable sessions (encrypted-tracked
+#                         under chezmoi when encrypt_locals=true; synced across
+#                         the user's own machines).
+#   - sesh.machine.toml — machine-only sessions (lab IPs, LAN-only paths, …)
+#                         that must never leave the host. Outside the chezmoi
+#                         source entirely — create by hand and uncomment the
+#                         line below.
+# Sesh's TOML importer hard-errors on a missing path (unlike git's silently-
+# optional `[include]`), so the machine line stays commented until the file
+# exists.
+import = [
+    "~/.config/sesh/sesh.local.toml",
+    # "~/.config/sesh/sesh.machine.toml",
+]
 
 # Default preview for `sesh preview <target>` (used by the tv cable's preview
 # pane and any other native sesh picker). Replaces sesh's built-in fallback
