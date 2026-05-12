@@ -8,13 +8,16 @@ requirements = ["sesh", "fd"]
 
 [source]
 # Multiple source commands for cycling through different modes
-# Press Ctrl+S to cycle between sources
+# Press Ctrl+S to cycle between sources. The `|| echo ...` placeholders keep
+# tv from showing "produced no output on stdout, checking stderr..." when a
+# source is conditionally empty (no tmux server / no sesh.toml). The leading
+# `-` sits in the icon slot so the `output` transformer below strips it.
 command = [
-  "sesh list --icons",                          # all sessions (default)
-  "sesh list -t --icons",                       # tmux sessions only
-  "sesh list -c --icons",                       # config directories
-  "sesh list -z --icons",                       # zoxide directories
-  "fd -H -d 2 -t d -E .Trash . ~"               # find directories
+  "sesh list --icons",                                                                # all sessions (default)
+  "sesh list -t --icons | grep . || echo '- No tmux sessions running'",               # tmux sessions only
+  "sesh list -c --icons | grep . || echo '- No configured sessions (~/.config/sesh/sesh.toml)'",  # config directories
+  "sesh list -z --icons",                                                             # zoxide directories
+  "fd -H -d 2 -t d -E .Trash . ~"                                                     # find directories
 ]
 ansi = true
 output = "{strip_ansi|split: :1..|join: }"
