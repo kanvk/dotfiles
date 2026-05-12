@@ -50,6 +50,14 @@ customCommands:
     description: 'diffview: file in commit'
     command: 'nvim -c "DiffviewOpen {{.SelectedCommit.Hash}}^! -- {{.SelectedCommitFile.Name | quote}}"'
     output: terminal
+  # `git absorb --and-rebase`: take staged hunks, build fixup! commits targeting
+  # whichever earlier commit last touched each hunk, then `rebase --autosquash`
+  # to collapse. Skips hunks with no clear target. Mnemonic: (A)bsorb.
+  - key: '<c-a>'
+    context: 'files'
+    description: 'absorb: autofixup staged hunks into earlier commits'
+    command: 'git absorb --and-rebase'
+    output: terminal
 
 # Theme: catppuccin-macchiato (blue accent)
 # Source: https://github.com/catppuccin/lazygit/blob/main/themes-mergable/macchiato/blue.yml
