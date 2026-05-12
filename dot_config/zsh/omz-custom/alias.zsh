@@ -220,7 +220,7 @@ alias awsl='aws --profile local'
 # tmux
 alias t='tmux'
 alias tp='tmux new-session -A -s $(basename $PWD)'
-alias tf='sesh connect "$(sesh list | fzf)"'
+alias tsf='sesh connect "$(sesh list | fzf)"'
 # `tv sesh` (television's sesh action mode) can't hand the terminal off to
 # `tmux attach` cleanly: stdin becomes /dev/tty, and tmux's display renders
 # to nowhere on some stacks. Run `sesh connect` from the shell so it inherits
@@ -235,21 +235,21 @@ ts() {
     [[ -z $target ]] && return
   fi
 
-  _ts_attach() {
-    if [[ -n $TMUX ]]; then
-      tmux switch-client -t "=$1"
-    else
-      tmux attach -t "=$1"
-    fi
-  }
+  # `tmux attach` fails inside an existing client; `switch-client` is the
+  # in-tmux equivalent. Inline rather than defining a nested function (zsh
+  # inner functions leak into global scope).
+  local attach
+  if [[ -n $TMUX ]]; then attach=(tmux switch-client -t); else attach=(tmux attach -t); fi
 
-  # Sesh's dirStrategy unconditionally tries `tmux new-session`; if a session
-  # already exists with the resolved basename, that fails ("duplicate session").
-  # This bites bare names too, since sesh may resolve `foo` → a zoxide path and
-  # then `new-session -s foo`. Short-circuit by attaching directly.
+  # Path input (`ts ~/p/foo` from the tv picker) hits sesh's dirStrategy,
+  # which calls `tmux new-session -s <basename>` without checking whether a
+  # session with that name already exists — `new-session` then fails with
+  # "duplicate session." Short-circuit by attaching to the existing one.
+  # Assumes sesh's default namer (basename); a custom dirStrategy in
+  # ~/.config/sesh/sesh.toml would break this shortcut.
   local bname=${target:t}
   if tmux has-session -t "=$bname" 2>/dev/null; then
-    _ts_attach "$bname"
+    "$attach[@]" "=$bname"
     return
   fi
 
@@ -261,7 +261,7 @@ ts() {
   sessions=(${(f)"$(tmux list-sessions -F '#S' 2>/dev/null)"})
   matches=(${(M)sessions:#*${target}*})
   if (( ${#matches} == 1 )); then
-    _ts_attach "${matches[1]}"
+    "$attach[@]" "=${matches[1]}"
     return
   fi
 
