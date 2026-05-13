@@ -38,7 +38,11 @@ return {
       { "<Leader>gHp", function() Snacks.picker.gh_pr() end, desc = "Pull requests (open)" },
       { "<Leader>gHP", function() Snacks.picker.gh_pr { state = "all" } end, desc = "Pull requests (all)" },
       { "<Leader>gO",  function() Snacks.gitbrowse() end, desc = "Open on remote", mode = { "n", "x" } },
+      -- <Leader>cR is the LazyVim-native slot (Code → Rename); <Leader>fR
+      -- is aliased for AstroNvim parity so muscle memory carries between
+      -- configs.
       { "<Leader>cR",  function() Snacks.rename.rename_file() end, desc = "Rename file (LSP-aware)" },
+      { "<Leader>fR",  function() Snacks.rename.rename_file() end, desc = "Rename file (LSP-aware)" },
     },
   },
   {
