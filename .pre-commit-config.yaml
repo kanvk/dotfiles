@@ -1,0 +1,15 @@
+# Secret scanner for this public dotfiles repo. Run via `prek` (a pre-commit-
+# compatible Rust runner, installed by the chezmoi `base` tier). Activate on a
+# fresh clone with `prek install` — that writes a shim into .git/hooks/, which
+# is local-only state and not tracked by this repo.
+#
+# `language: system` uses the brew-installed betterleaks binary (`base` tier)
+# directly, rather than having prek build a private copy per clone. Trade-off:
+# a fresh clone has to run `chezmoi apply` (or `brew install betterleaks`)
+# before the hook works. Acceptable because this repo's only consumer IS the
+# tool installer.
+repos:
+  - repo: https://github.com/betterleaks/betterleaks
+    rev: v1.2.0
+    hooks:
+      - id: betterleaks-system
