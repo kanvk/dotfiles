@@ -16,7 +16,7 @@ On first run, chezmoi prompts for:
 | --- | --- |
 | Name | `~/.gitconfig` user.name |
 | Email | `~/.gitconfig` user.email |
-| Package tier (minimal \| base \| full) | which package set to install (see [Package tiers](#package-tiers) below); default `full` |
+| Package tier (minimal \| base \| full) | which package set to install (see [Package tiers](#package-tiers) below); default `base` |
 | Sign git commits with GPG? | yes/no gate; only prompts for the fingerprint below if yes |
 | GPG signing key fingerprint | `~/.gitconfig` user.signingKey; only prompted when GPG signing is enabled |
 | SSH key path for age encryption | `~/.config/chezmoi/chezmoi.toml` `[age]` block — leave blank to disable encryption |
@@ -30,8 +30,8 @@ Answers are saved to `~/.config/chezmoi/chezmoi.toml` and reused on subsequent a
 The bootstrap installs one of three nested tiers (full ⊇ base ⊇ minimal):
 
 - **minimal** — shell, git, and a handful of CLI niceties (`bat`, `eza`, `fd`, `fzf`, `ripgrep`, `zoxide`, `gh`, `jq`, `lazygit`, `delta`). Suitable for disposable boxes, shared servers, or short-lived containers.
-- **base** — minimal **plus** daily-driver dev tooling: build deps, language toolchains (rustup, go, node, python via pyenv + uv), starship, TUIs (broot, lsd, yazi, btop, lazydocker), secret-scanners (ggshield, gitleaks). Default for personal dev machines.
-- **full** — base **plus** ML/specialty/heavy tools (`llama.cpp`, `ollama`, `vllm`, `wandb`, `caddy`, `duckdb`, `keydb`, `rclone`, `pixi`, `typst`, `uuu` prereqs). Default at the prompt; the user's main box runs this.
+- **base** — minimal **plus** daily-driver dev tooling: build deps, language toolchains (rustup, go, node, python via pyenv + uv), starship, TUIs (broot, lsd, yazi, btop, lazydocker), secret-scanners (ggshield, gitleaks). Default at the prompt; suits most personal dev machines.
+- **full** — base **plus** ML/specialty/heavy tools (`llama.cpp`, `ollama`, `vllm`, `wandb`, `caddy`, `duckdb`, `keydb`, `rclone`, `pixi`, `typst`, `uuu` prereqs). The user's main box runs this.
 
 Inspect resolved sets with `just show-tier <name>`. Switch tiers by editing `tier = "..."` in `~/.config/chezmoi/chezmoi.toml` and re-applying. Downgrades don't uninstall — extras stay until you run the package manager's cleanup yourself.
 

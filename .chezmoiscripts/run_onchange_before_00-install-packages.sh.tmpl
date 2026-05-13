@@ -1,12 +1,12 @@
 {{- /*
-  Resolve the chosen tier (default "full" if the cached chezmoi.toml predates
+  Resolve the chosen tier (default "base" if the cached chezmoi.toml predates
   the tier prompt) into a flat per-manager package set. After this block,
   $resolved is a dict like {apt: [...], brew: [...], pipx: [...], ...} that
   the rest of the script consumes via $resolved.<manager>. The `pipx` key
   name is preserved for stability; the underlying installer is `uv tool`
   (see the python-tools block below).
 */ -}}
-{{- $tierName := "full" -}}
+{{- $tierName := "base" -}}
 {{- if hasKey . "tier" -}}{{- $tierName = .tier -}}{{- end -}}
 {{- $resolved := includeTemplate "resolve-tier" (dict "tier" $tierName "tiers" .tiers "acc" dict) | fromJson -}}
 #!/usr/bin/env bash

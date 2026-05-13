@@ -14,13 +14,13 @@
    Package tier — selects which tier from .chezmoidata.yaml's `tiers` map
    the install script resolves. Tiers nest: full ⊇ base ⊇ minimal.
      minimal — shell + git + a handful of CLI niceties (disposable / shared)
-     base    — minimal + daily-driver dev tooling (most personal machines)
-     full    — base + ML / specialty / heavy tools (main personal box, default)
+     base    — minimal + daily-driver dev tooling (most personal machines, default)
+     full    — base + ML / specialty / heavy tools (main personal box)
    To switch tiers later: edit `tier = "..."` in ~/.config/chezmoi/chezmoi.toml
    and run `chezmoi apply`. Per the additivity contract in CLAUDE.md, downgrades
    don't uninstall — they just stop adding new packages.
 */}}
-{{- $tier := promptStringOnce . "tier" "Package tier — minimal | base | full" "full" -}}
+{{- $tier := promptStringOnce . "tier" "Package tier — minimal | base | full" "base" -}}
 
 {{/*
    Optional GPG commit signing. Gated as a yes/no first so test / disposable

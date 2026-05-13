@@ -62,7 +62,7 @@ re-add target:
 
 # Print the resolved package set for a tier (walks inherits, applies include/exclude).
 # Usage: just show-tier minimal | just show-tier full
-show-tier name="full":
+show-tier name="base":
     @./tests/show-tier.sh {{name}}
 
 # Re-display the post-apply manual-steps checklist (the same one printed by
