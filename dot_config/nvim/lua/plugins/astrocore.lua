@@ -75,6 +75,11 @@ return {
         ["<Leader>fS"] = { function() require("snacks").scratch.select() end, desc = "Find scratchpads" },
         -- Snacks zoxide picker — jump to a frequent dir (mirrors dashboard `z`)
         ["<Leader>fz"] = { function() require("snacks").picker.zoxide() end, desc = "Find via zoxide" },
+        -- which-key group rename: AstroCommunity's nvim-spectre pack labels
+        -- <Leader>s as "Search / Replace"; the spider <Leader>sw/se/sb/sgE
+        -- motion bindings (defined in plugins/user.lua's nvim-spider spec)
+        -- also live under this prefix, so broaden the group title.
+        ["<Leader>s"] = { desc = "Search / Subword" },
         -- Snacks gh — GitHub issues/PRs via `gh` CLI. Nested under <Leader>gH*
         -- because <Leader>gi (Gdiffsplit), <Leader>gp, etc. are already in
         -- the git namespace (fugitive/diffview/git-blame).
@@ -88,14 +93,9 @@ return {
         -- ("open"). Visual mode passes the selection's line range.
         ["<Leader>gO"] = { function() require("snacks").gitbrowse() end, desc = "Open on remote" },
         -- Snacks rename.rename_file — like a regular file rename, but
-        -- propagates the change through any LSP that's attached
-        -- (workspace symbols, imports, etc.).
-        ["<Leader>cR"] = { function() require("snacks").rename.rename_file() end, desc = "Rename file (LSP-aware)" },
-        -- Delegates to astrolsp.format_opts so the formatting.disabled filter applies.
-        ["<Leader>cf"] = {
-          function() vim.lsp.buf.format(require("astrolsp").format_opts) end,
-          desc = "Format buffer",
-        },
+        -- propagates the change through any LSP that's attached. Lives under
+        -- <Leader>f* (file ops) — distinct from <Leader>lr (LSP symbol rename).
+        ["<Leader>fR"] = { function() require("snacks").rename.rename_file() end, desc = "Rename file (LSP-aware)" },
         -- Zen mode toggle (zen-mode-nvim community pack only registers :ZenMode)
         ["<Leader>uz"] = { "<Cmd>ZenMode<CR>", desc = "Toggle Zen Mode" },
         -- Diffview — full 4-pane git diff (file diff + base + ours + theirs).
@@ -117,9 +117,13 @@ return {
         ["[n"] = { function() require("neotest").jump.prev() end, desc = "Previous test" },
       },
       x = {
-        ["<Leader>cf"] = {
-          function() vim.lsp.buf.format(require("astrolsp").format_opts) end,
-          desc = "Format selection",
+        -- Reclaim x-mode <Leader>sw for spider's "next subword" (in n/x/o via
+        -- plugins/user.lua's nvim-spider spec). AstroCommunity's nvim-spectre
+        -- pack assigns x.<Leader>sw to "Spectre (current word from visual
+        -- selection)"; relocate it to <Leader>sW (cap W) so both are usable.
+        ["<Leader>sW"] = {
+          function() require("spectre").open_visual { select_word = true } end,
+          desc = "Spectre (current word)",
         },
         -- Visual-mode mirror of <Leader>gO: snacks.gitbrowse picks up the
         -- selection's line range and includes it in the URL.

@@ -28,7 +28,6 @@ return {
   { import = "astrocommunity.lsp.inc-rename-nvim" }, -- LSP rename with command-preview
   { import = "astrocommunity.markdown-and-latex.markview-nvim" },
   { import = "astrocommunity.motion.flash-nvim" },
-  { import = "astrocommunity.motion.nvim-spider" }, -- w/e/b/ge skip by subwords (camelCase, snake_case) instead of WORDs
   { import = "astrocommunity.motion.vim-matchup" },
   { import = "astrocommunity.pack.bash" },
   { import = "astrocommunity.pack.chezmoi" },

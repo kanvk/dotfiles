@@ -64,16 +64,16 @@ return {
       { "gR", "<cmd>lua require('various-textobjs').restOfIndentation()<cr>", mode = { "o", "x" }, desc = "rest of indentation" },
     },
   },
-  -- w/e/b/ge skip by subwords (camelCase, snake_case) instead of WORDs.
-  -- Remaps in n/o/x so operator-pending (e.g. `cw`) and visual selections
-  -- also use spider's subword boundaries.
+  -- w/e/b/ge stay vim-native (subword granularity gets in the way of moving
+  -- across whole identifiers/funcs). Spider's subword motions are exposed on
+  -- <Leader>s* for the occasional finer jump. Mirrors the nvim spec.
   {
     "chrisgrieser/nvim-spider",
     keys = {
-      { "w", "<cmd>lua require('spider').motion('w')<cr>", mode = { "n", "o", "x" }, desc = "Next subword" },
-      { "e", "<cmd>lua require('spider').motion('e')<cr>", mode = { "n", "o", "x" }, desc = "Next end of subword" },
-      { "b", "<cmd>lua require('spider').motion('b')<cr>", mode = { "n", "o", "x" }, desc = "Previous subword" },
-      { "ge", "<cmd>lua require('spider').motion('ge')<cr>", mode = { "n", "o", "x" }, desc = "Previous end of subword" },
+      { "<Leader>sw",  "<cmd>lua require('spider').motion('w')<cr>",  mode = { "n", "x", "o" }, desc = "Next subword" },
+      { "<Leader>se",  "<cmd>lua require('spider').motion('e')<cr>",  mode = { "n", "x", "o" }, desc = "Next end of subword" },
+      { "<Leader>sb",  "<cmd>lua require('spider').motion('b')<cr>",  mode = { "n", "x", "o" }, desc = "Previous subword" },
+      { "<Leader>sE",  "<cmd>lua require('spider').motion('ge')<cr>", mode = { "n", "x", "o" }, desc = "Previous end of subword" },
     },
     opts = {},
   },

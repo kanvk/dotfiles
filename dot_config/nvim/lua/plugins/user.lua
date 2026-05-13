@@ -9,6 +9,107 @@ return {
     cmd = "Codi",
   },
 
+  -- w/e/b/ge stay vim-native (subword granularity gets in the way of moving
+  -- across whole identifiers/funcs). Spider's subword motions are exposed on
+  -- <Leader>s* for the occasional finer jump. Group desc registered in
+  -- plugins/astrocore.lua.
+  --
+  -- luarocks.nvim dep mirrors what AstroCommunity's pack does: installs
+  -- luautf8 (spider uses it via pcall(require, "lua-utf8") for UTF-8 word
+  -- boundaries) and dkjson (which luarocks.nvim's own loader requires on
+  -- cold start — see the notes there). luajit on PATH at apply-time satisfies
+  -- the bootstrap (.chezmoidata.yaml base tier).
+  {
+    "chrisgrieser/nvim-spider",
+    dependencies = {
+      {
+        "vhyrro/luarocks.nvim",
+        priority = 1000,
+        opts = { rocks = { "luautf8", "dkjson" } },
+      },
+    },
+    keys = {
+      { "<Leader>sw",  "<cmd>lua require('spider').motion('w')<cr>",  mode = { "n", "x", "o" }, desc = "Next subword" },
+      { "<Leader>se",  "<cmd>lua require('spider').motion('e')<cr>",  mode = { "n", "x", "o" }, desc = "Next end of subword" },
+      { "<Leader>sb",  "<cmd>lua require('spider').motion('b')<cr>",  mode = { "n", "x", "o" }, desc = "Previous subword" },
+      { "<Leader>sE",  "<cmd>lua require('spider').motion('ge')<cr>", mode = { "n", "x", "o" }, desc = "Previous end of subword" },
+    },
+    opts = {},
+  },
+
+  -- Function-form astrocore spec that runs last (user plugins after
+  -- community packs), reclaiming LHS that earlier function-form opts have
+  -- set. Fixes <Leader>-prefix timeout collisions where a shorter LHS was a
+  -- complete mapping AND a prefix of longer ones (timeoutlen=500ms felt on
+  -- every press of the short form). Where possible, mirrors lvim conventions.
+  {
+    "AstroNvim/astrocore",
+    opts = function(_, opts)
+      opts.mappings = opts.mappings or {}
+      opts.mappings.n = opts.mappings.n or {}
+      opts.mappings.x = opts.mappings.x or {}
+      opts.mappings.v = opts.mappings.v or {}
+
+      -- Spectre + spider rewires (from prior session).
+      --   n.<Leader>ss disabled; spectre's main open at <Leader>sR (matches lvim).
+      --   x.<Leader>sw -> spider's "next subword"; spectre's visual current-word
+      --     moved to <Leader>sW in plugins/astrocore.lua.
+      opts.mappings.n["<Leader>ss"] = false
+      opts.mappings.n["<Leader>sR"] = {
+        function() require("spectre").open() end,
+        desc = "Spectre (project search-replace)",
+      }
+      opts.mappings.x["<Leader>sw"] = {
+        "<Cmd>lua require('spider').motion('w')<CR>",
+        desc = "Next subword",
+      }
+
+      -- <Leader>c/<Leader>C (Close / Force close buffer) move to
+      -- <Leader>bd/<Leader>bD (LazyVim style). The <Leader>c namespace is
+      -- now fully empty — code/LSP actions live under <Leader>l* (where
+      -- AstroNvim already has la/lA/lr/lR/lh/lf/ll/lL/lG/ls/lS/ld/lD/lw),
+      -- and file-rename moved to <Leader>fR.
+      opts.mappings.n["<Leader>c"] = false
+      opts.mappings.n["<Leader>C"] = false
+      opts.mappings.n["<Leader>bd"] = {
+        function() require("astrocore.buffer").close() end,
+        desc = "Close buffer",
+      }
+      opts.mappings.n["<Leader>bD"] = {
+        function() require("astrocore.buffer").close(0, true) end,
+        desc = "Force close buffer",
+      }
+      -- AstroNvim's heirline binds <Leader>bd to a tabline-picker close;
+      -- <Leader>bp is taken by "Previous buffer", so relocate the picker to
+      -- <Leader>bx (b-X-out via picker).
+      opts.mappings.n["<Leader>bx"] = {
+        function()
+          require("astroui.status.heirline").buffer_picker(function(bufnr) require("astrocore.buffer").close(bufnr) end)
+        end,
+        desc = "Close buffer (pick from tabline)",
+      }
+
+      -- <Leader>q (Quit Window) collides with persistence.lua's q* session
+      -- bindings. Move quit-window to <Leader>qq (LazyVim style);
+      -- <Leader>q becomes a "Quit / Session" group prefix. <Leader>Q
+      -- (Exit AstroNvim = qall) moves to <Leader>qQ for parallel treatment
+      -- with <Leader>C -> <Leader>bD.
+      opts.mappings.n["<Leader>q"] = { desc = "Quit / Session" }
+      opts.mappings.n["<Leader>qq"] = { "<Cmd>confirm q<CR>", desc = "Quit Window" }
+      opts.mappings.n["<Leader>Q"] = false
+      opts.mappings.n["<Leader>qQ"] = { "<Cmd>confirm qall<CR>", desc = "Exit AstroNvim" }
+
+      -- <Leader>rb (Extract Function) collides with <Leader>rbf (Extract
+      -- Function To File) — both from astrocommunity refactoring-nvim.
+      -- Move the longer to <Leader>rF (matches lvim's refactoring extra).
+      local extract_to_file = function() require("refactoring").refactor("Extract Function To File") end
+      opts.mappings.n["<Leader>rbf"] = false
+      opts.mappings.n["<Leader>rF"] = { extract_to_file, desc = "Extract Function To File" }
+      opts.mappings.v["<Leader>rbf"] = false
+      opts.mappings.v["<Leader>rF"] = { extract_to_file, desc = "Extract Function To File" }
+    end,
+  },
+
   -- Companion to nvim-spider from the same author: adds ~30 textobjects
   -- (iS/aS subword, iv/av value, ii/aI indentation, iU url, ...) on top of
   -- vim's built-ins.
@@ -85,24 +186,6 @@ return {
   },
 
   -- Modified plugins
-
-  -- luarocks.nvim's bootstrap installs the luarocks CLI but never deposits
-  -- `dkjson.lua` as a top-level module on Lua's package.path. On first start
-  -- `require("luarocks.loader")` -> `luarocks.core.persist` -> `require("dkjson")`
-  -- then fails, even though the CLI itself works (it sets LUA_PATH to find the
-  -- vendored copy). Add `dkjson` to the rocks list so the bootstrap installs
-  -- it the same way it installs luautf8. AstroCommunity's nvim-spider spec
-  -- requests `{"luautf8"}`; use the function form to append rather than
-  -- replace.
-  {
-    "vhyrro/luarocks.nvim",
-    opts = function(_, opts)
-      opts.rocks = opts.rocks or {}
-      if not vim.tbl_contains(opts.rocks, "dkjson") then table.insert(opts.rocks, "dkjson") end
-      return opts
-    end,
-  },
-
   {
     "folke/snacks.nvim",
     -- Full dashboard ordering owned by us. Replaces AstroNvim's preset.keys
