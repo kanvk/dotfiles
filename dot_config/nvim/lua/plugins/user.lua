@@ -83,8 +83,16 @@ return {
       opts.mappings.n["<Leader>sG"] = { snacks("grep", { hidden = true, ignored = true }), desc = "Grep (hidden+ignored)" }
       opts.mappings.n["<Leader>sw"] = { snacks "grep_word", desc = "Grep word under cursor" }
       opts.mappings.x["<Leader>sw"] = { snacks "grep_word", desc = "Grep selection" }
-      -- Buffer-scoped
+      opts.mappings.n["<Leader>sB"] = { snacks "grep_buffers", desc = "Grep open buffers" }
+      -- Buffer-scoped + history
       opts.mappings.n["<Leader>sb"] = { snacks "lines",     desc = "Buffer Lines" }
+      opts.mappings.n["<Leader>s/"] = { snacks "search_history", desc = "Search History" }
+      opts.mappings.n["<Leader>sj"] = { snacks "jumps",     desc = "Jumps" }
+      -- Diagnostics / lists
+      opts.mappings.n["<Leader>sd"] = { snacks "diagnostics",        desc = "Diagnostics" }
+      opts.mappings.n["<Leader>sD"] = { snacks "diagnostics_buffer", desc = "Buffer Diagnostics" }
+      opts.mappings.n["<Leader>sq"] = { snacks "qflist",    desc = "Quickfix List" }
+      opts.mappings.n["<Leader>sl"] = { snacks "loclist",   desc = "Location List" }
       -- Help / docs / system
       opts.mappings.n["<Leader>sh"] = { snacks "help",      desc = "Help Pages" }
       opts.mappings.n["<Leader>sk"] = { snacks "keymaps",   desc = "Keymaps" }
