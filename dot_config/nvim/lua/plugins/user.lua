@@ -52,6 +52,24 @@ return {
   },
 
   -- Modified plugins
+
+  -- luarocks.nvim's bootstrap installs the luarocks CLI but never deposits
+  -- `dkjson.lua` as a top-level module on Lua's package.path. On first start
+  -- `require("luarocks.loader")` -> `luarocks.core.persist` -> `require("dkjson")`
+  -- then fails, even though the CLI itself works (it sets LUA_PATH to find the
+  -- vendored copy). Add `dkjson` to the rocks list so the bootstrap installs
+  -- it the same way it installs luautf8. AstroCommunity's nvim-spider spec
+  -- requests `{"luautf8"}`; use the function form to append rather than
+  -- replace.
+  {
+    "vhyrro/luarocks.nvim",
+    opts = function(_, opts)
+      opts.rocks = opts.rocks or {}
+      if not vim.tbl_contains(opts.rocks, "dkjson") then table.insert(opts.rocks, "dkjson") end
+      return opts
+    end,
+  },
+
   {
     "folke/snacks.nvim",
     -- Full dashboard ordering owned by us. Replaces AstroNvim's preset.keys
