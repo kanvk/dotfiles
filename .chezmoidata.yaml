@@ -64,10 +64,15 @@ tiers:
         - eza
         - fd
         - fzf
+        - moor
         - ripgrep
+        - television
         - gh
         - git-delta
         - lazygit
+        # python (manager + installer)
+        - pyenv
+        - uv
 
   # ---- base -------------------------------------------------------------------
   # Daily-driver dev box. Most personal machines run this tier.
@@ -96,25 +101,17 @@ tiers:
         - chafa
         - ffmpeg
         - ffmpegthumbnailer
-        # CLI utilities referenced in dot_config/zsh/omz-custom/alias.zsh
         - ranger
-        - trash-cli
         # python provider for nvim (apt is the canonical install path; the pipx: list is for apps, installed via uv tool)
         - python3-pynvim
         # GPG: TUI passphrase prompt (avoids "no pinentry" hangs on WSL/headless)
         - pinentry-curses
       brew:
-        # extra prompts / multiplexers
-        - starship
-        - zellij
         # rest of file nav / listing / preview
         - broot
         - glow
-        - moor
         - ripgrep-all
-        - television
         - tree-sitter-cli
-        - ugrep
         - yazi
         # rest of git / VCS
         - difftastic
@@ -149,12 +146,8 @@ tiers:
         # macOS GUI apps, etc.). `just lint` validates the prefix syntax.
         - cask:copilot-cli
         # version / language managers (the daily ones)
-        - asdf
         - fnm
         - mise
-        - pyenv
-        # python (apps + tooling)
-        - uv
         # observability / system
         - atuin
         - bottom
@@ -171,6 +164,7 @@ tiers:
         - gitleaks
         # network / sharing
         - curlie
+        - magic-wormhole
         - xh
         # misc
         - f2
@@ -184,29 +178,26 @@ tiers:
         - vivid
         - yq
       pipx:
+        - apprise
         - bandit
         - build
         - bump-my-version
-        - dvc
-        - dynaconf
         - glances
         - hatch
+        - huggingface-hub
         - jupytext # .ipynb <-> .py(percent) for molten / jupytext.nvim
         - mkdocs
         - nbdime
         - nox
+        - nvitop
         - pgcli
         - pip-audit
         - pip-tools
-        - poetry
-        - pre-commit
         - prek
         - py-spy
         - pynvim # nvim python host; molten extras (jupyter_client, ipykernel, cairosvg, pnglatex, plotly, kaleido, pyperclip, nbformat, pillow) injected by run_onchange_after_20-pynvim-extras
-        - python-semantic-release
         - shell-functools
         - tox
-        - twine
         - ydiff
       cargo:
         - cargo-update --features vendored-libgit2  # vendor libgit2 statically — brew libgit2 SONAME bumps (e.g. 1.9→1.10) break dynamically-linked binaries since brew's lib dir isn't on LD_LIBRARY_PATH
@@ -231,7 +222,14 @@ tiers:
   full:
     inherits: [base]
     include:
+      apt:
+        - trash-cli
       brew:
+        # extra prompts / multiplexers
+        - starship
+        - zellij
+        # extra search / grep tools
+        - ugrep
         # heavier daily-driver / specialty
         - act
         - betterleaks
@@ -245,13 +243,13 @@ tiers:
         # network / sharing
         - caddy
         - dumbpipe
-        - magic-wormhole
         # AI / ML
         - llama.cpp
         - ollama
         # python (specialty libs)
         - python-tk@3.12
         # additional language managers
+        - asdf
         - ghcup
         - juliaup
         - rbenv
@@ -273,19 +271,22 @@ tiers:
         - localstack/tap/localstack-cli
         - mutagen-io/mutagen/mutagen
       pipx:
-        - apprise
         - conda-lock
+        - dvc
+        - dynaconf
         - gpustack
         - gpustat
-        - huggingface-hub
         - kaggle
         - markitdown
         - mlflow
-        - nvitop
         - open-webui
         - openai-whisper
+        - poetry
+        - pre-commit
         - pysentry-rs
+        - python-semantic-release
         - roboflow
+        - twine
         - vllm
         - wandb
       cargo:
