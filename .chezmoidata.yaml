@@ -160,8 +160,7 @@ tiers:
         - cloc
         - scc
         # secrets / security
-        - ggshield
-        - gitleaks
+        - betterleaks
         # network / sharing
         - curlie
         - magic-wormhole
@@ -232,7 +231,8 @@ tiers:
         - ugrep
         # heavier daily-driver / specialty
         - act
-        - betterleaks
+        - ggshield
+        - gitleaks
         - jj
         - k9s
         - rustscan
