@@ -21,7 +21,7 @@ docs/**
 
 {{- if not (and (hasKey . "encrypt_locals") .encrypt_locals) }}
 # Encrypted personal-but-not-secret locals (insteadOf rules, GHE SSH alias,
-# Claude Code config, Codex CLI config + context7 API key).
+# Codex CLI config + context7 API key).
 # Excluded unless the user opted in at init time AND has the age identity in
 # place. Without the identity, decryption would fail and apply would error.
 # The `hasKey` guard makes a chezmoi.toml without `encrypt_locals` set
@@ -29,7 +29,6 @@ docs/**
 .gitconfig.local
 .ssh/config.local
 .config/sesh/sesh.local.toml
-.claude/settings.json
 .codex/config.toml
 .codex/AGENTS.md
 {{- end }}
