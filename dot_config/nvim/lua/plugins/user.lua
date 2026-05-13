@@ -50,18 +50,29 @@ return {
       opts.mappings.x = opts.mappings.x or {}
       opts.mappings.v = opts.mappings.v or {}
 
-      -- Spectre + spider rewires (from prior session).
-      --   n.<Leader>ss disabled; spectre's main open at <Leader>sR (matches lvim).
-      --   x.<Leader>sw -> spider's "next subword"; spectre's visual current-word
-      --     moved to <Leader>sW in plugins/astrocore.lua.
+      -- Spectre relocates from <Leader>s* to <Leader>R*: <Leader>s* is now
+      -- purely Spider subword motion; <Leader>R* is "Replace" (group title
+      -- registered in plugins/whichkey-groups.lua). The astrocommunity spectre
+      -- pack still binds n.<Leader>ss/sR/sf and x.<Leader>sw; disable them
+      -- here and rebind under R*.
       opts.mappings.n["<Leader>ss"] = false
-      opts.mappings.n["<Leader>sR"] = {
-        function() require("spectre").open() end,
-        desc = "Spectre (project search-replace)",
-      }
+      opts.mappings.n["<Leader>sR"] = false
+      opts.mappings.n["<Leader>sf"] = false
       opts.mappings.x["<Leader>sw"] = {
         "<Cmd>lua require('spider').motion('w')<CR>",
         desc = "Next subword",
+      }
+      opts.mappings.n["<Leader>Rs"] = {
+        function() require("spectre").open() end,
+        desc = "Spectre (project)",
+      }
+      opts.mappings.n["<Leader>Rf"] = {
+        function() require("spectre").open_file_search() end,
+        desc = "Spectre (current file)",
+      }
+      opts.mappings.x["<Leader>Rw"] = {
+        function() require("spectre").open_visual { select_word = true } end,
+        desc = "Spectre (current word)",
       }
 
       -- <Leader>c/<Leader>C (Close / Force close buffer) move to
@@ -90,14 +101,52 @@ return {
       }
 
       -- <Leader>q (Quit Window) collides with persistence.lua's q* session
-      -- bindings. Move quit-window to <Leader>qq (LazyVim style);
-      -- <Leader>q becomes a "Quit / Session" group prefix. <Leader>Q
+      -- bindings. Move quit-window to <Leader>qq (LazyVim style); group
+      -- title "Quit" lives in plugins/whichkey-groups.lua. <Leader>Q
       -- (Exit AstroNvim = qall) moves to <Leader>qQ for parallel treatment
       -- with <Leader>C -> <Leader>bD.
-      opts.mappings.n["<Leader>q"] = { desc = "Quit / Session" }
       opts.mappings.n["<Leader>qq"] = { "<Cmd>confirm q<CR>", desc = "Quit Window" }
       opts.mappings.n["<Leader>Q"] = false
       opts.mappings.n["<Leader>qQ"] = { "<Cmd>confirm qall<CR>", desc = "Exit AstroNvim" }
+
+      -- Overseer relocates from <Leader>M* to <Leader>O*. The community pack
+      -- uses capital M, which sits awkwardly next to <Leader>m* (Molten) —
+      -- distinct domains, case-pair invites fat-finger errors. <Leader>O*
+      -- = "Overseer" is mnemonic and unambiguous; <Leader>M* becomes free.
+      -- The dashboard `r` action calls :OverseerRun directly, so it is
+      -- unaffected. Group title is set here (not in whichkey-groups.lua) so
+      -- the astroui icon resolves alongside the ex-command rebindings.
+      --
+      -- Adding the new keymaps via opts.mappings is reliable, but using
+      -- `opts.mappings.n["<Leader>M*"] = false` to disable the overseer
+      -- pack's old bindings isn't — lazy's opts-merge order leaves
+      -- overseer's dep-spec writing M* AFTER our false. Delete them after
+      -- VeryLazy (when astrocore.set_mappings has finished its sweep).
+      opts.mappings.n["<Leader>O"] = { desc = require("astroui").get_icon("Overseer", 1, true) .. "Overseer" }
+      opts.mappings.n["<Leader>Ot"] = { "<Cmd>OverseerToggle<CR>", desc = "Toggle Overseer" }
+      opts.mappings.n["<Leader>Oc"] = { "<Cmd>OverseerShell<CR>", desc = "Run Command" }
+      opts.mappings.n["<Leader>Or"] = { "<Cmd>OverseerRun<CR>", desc = "Run Task" }
+      opts.mappings.n["<Leader>Oa"] = { "<Cmd>OverseerTaskAction<CR>", desc = "Task Action" }
+      opts.mappings.n["<Leader>Oi"] = { "<Cmd>checkhealth overseer<CR>", desc = "Overseer Info" }
+      opts.autocmds = opts.autocmds or {}
+      opts.autocmds.cleanup_relocated_keymaps = {
+        {
+          event = "User",
+          pattern = "VeryLazy",
+          desc = "Drop pre-relocation <Leader>M* (Overseer) keymaps",
+          callback = function()
+            for _, lhs in ipairs { "<Leader>Mt", "<Leader>Mc", "<Leader>Mr", "<Leader>Ma", "<Leader>Mi" } do
+              pcall(vim.keymap.del, "n", lhs)
+            end
+            -- which-key already queued <Leader>M as a group title via the
+            -- overseer pack's astrocore opts function. Suppress it now that
+            -- the children are gone — otherwise pressing <Leader>M shows
+            -- an empty "Overseer" popup.
+            local ok, wk = pcall(require, "which-key")
+            if ok then wk.add { { "<Leader>M", hidden = true, mode = "n" } } end
+          end,
+        },
+      }
 
       -- <Leader>rb (Extract Function) collides with <Leader>rbf (Extract
       -- Function To File) — both from astrocommunity refactoring-nvim.
@@ -107,6 +156,49 @@ return {
       opts.mappings.n["<Leader>rF"] = { extract_to_file, desc = "Extract Function To File" }
       opts.mappings.v["<Leader>rbf"] = false
       opts.mappings.v["<Leader>rF"] = { extract_to_file, desc = "Extract Function To File" }
+    end,
+  },
+
+  -- Aerial's upstream AstroNvim spec binds buffer-local ]y/[y for symbol
+  -- nav on every code buffer (via on_attach), which silently shadows
+  -- yanky's global ]y/[y "cycle yank history" everywhere you spend most
+  -- of your time. Move symbol-nav to ]s/[s (s = symbol) so yanky owns
+  -- ]y/[y unambiguously and aerial is still ergonomic.
+  --
+  -- Two pieces:
+  --   1) opts.keymaps rewires the in-outline-popup nav (the buffer aerial
+  --      itself opens) so prev/next inside the symbol list also uses s.
+  --   2) on_attach removes the upstream ]y/[y/]Y/[Y buffer-local maps
+  --      and adds ]s/[s/]S/[S in their place. The upstream on_attach
+  --      runs first (chained via prev_attach), so this wins last.
+  {
+    "stevearc/aerial.nvim",
+    opts = function(_, opts)
+      opts.keymaps = vim.tbl_deep_extend("force", opts.keymaps or {}, {
+        ["[y"] = false,
+        ["]y"] = false,
+        ["[Y"] = false,
+        ["]Y"] = false,
+        ["[s"] = "actions.prev",
+        ["]s"] = "actions.next",
+        ["[S"] = "actions.prev_up",
+        ["]S"] = "actions.next_up",
+      })
+      local prev_attach = opts.on_attach
+      opts.on_attach = function(bufnr)
+        if prev_attach then prev_attach(bufnr) end
+        for _, lhs in ipairs { "]y", "[y", "]Y", "[Y" } do
+          pcall(vim.keymap.del, "n", lhs, { buffer = bufnr })
+        end
+        require("astrocore").set_mappings({
+          n = {
+            ["]s"] = { function() require("aerial").next(vim.v.count1) end, desc = "Next symbol" },
+            ["[s"] = { function() require("aerial").prev(vim.v.count1) end, desc = "Previous symbol" },
+            ["]S"] = { function() require("aerial").next_up(vim.v.count1) end, desc = "Next symbol upwards" },
+            ["[S"] = { function() require("aerial").prev_up(vim.v.count1) end, desc = "Previous symbol upwards" },
+          },
+        }, { buffer = bufnr })
+      end
     end,
   },
 

@@ -75,15 +75,10 @@ return {
         ["<Leader>fS"] = { function() require("snacks").scratch.select() end, desc = "Find scratchpads" },
         -- Snacks zoxide picker — jump to a frequent dir (mirrors dashboard `z`)
         ["<Leader>fz"] = { function() require("snacks").picker.zoxide() end, desc = "Find via zoxide" },
-        -- which-key group rename: AstroCommunity's nvim-spectre pack labels
-        -- <Leader>s as "Search / Replace"; the spider <Leader>sw/se/sb/sgE
-        -- motion bindings (defined in plugins/user.lua's nvim-spider spec)
-        -- also live under this prefix, so broaden the group title.
-        ["<Leader>s"] = { desc = "Search / Subword" },
         -- Snacks gh — GitHub issues/PRs via `gh` CLI. Nested under <Leader>gH*
-        -- because <Leader>gi (Gdiffsplit), <Leader>gp, etc. are already in
-        -- the git namespace (fugitive/diffview/git-blame).
-        ["<Leader>gH"] = { desc = "GitHub" },
+        -- (group title registered in plugins/whichkey-groups.lua) because
+        -- <Leader>gi (Gdiffsplit), <Leader>gp, etc. are already in the git
+        -- namespace (fugitive/diffview/git-blame).
         ["<Leader>gHi"] = { function() require("snacks").picker.gh_issue() end, desc = "Issues (open)" },
         ["<Leader>gHI"] = { function() require("snacks").picker.gh_issue { state = "all" } end, desc = "Issues (all)" },
         ["<Leader>gHp"] = { function() require("snacks").picker.gh_pr() end, desc = "Pull requests (open)" },
@@ -117,17 +112,10 @@ return {
         ["[n"] = { function() require("neotest").jump.prev() end, desc = "Previous test" },
       },
       x = {
-        -- Reclaim x-mode <Leader>sw for spider's "next subword" (in n/x/o via
-        -- plugins/user.lua's nvim-spider spec). AstroCommunity's nvim-spectre
-        -- pack assigns x.<Leader>sw to "Spectre (current word from visual
-        -- selection)"; relocate it to <Leader>sW (cap W) so both are usable.
-        ["<Leader>sW"] = {
-          function() require("spectre").open_visual { select_word = true } end,
-          desc = "Spectre (current word)",
-        },
         -- Visual-mode mirror of <Leader>gO: snacks.gitbrowse picks up the
         -- selection's line range and includes it in the URL.
         ["<Leader>gO"] = { function() require("snacks").gitbrowse() end, desc = "Open selection on remote" },
+        -- Spider <Leader>sw and Spectre visual <Leader>Rw live in plugins/user.lua.
       },
     },
 
