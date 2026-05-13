@@ -29,6 +29,15 @@ return {
     end
     opts.mappings.n["<C-w>"] = { desc = "Window" }
 
+    -- <Leader> as a SUB-prefix (after an operator like c/d/y, or after a
+    -- visual selection). In n-mode <Leader> is the root popup so it doesn't
+    -- need a sub-prefix label, but in o/x it appears nested and would
+    -- otherwise render as "N keys". x-mode has many leader-prefixed children
+    -- (Sidekick, Replace, Refactor, Git, Molten, ...); o-mode currently only
+    -- has Spider subword motions but more leader-mapped motions could appear.
+    opts.mappings.o["<Leader>"] = { desc = "Leader" }
+    opts.mappings.x["<Leader>"] = { desc = "Leader" }
+
     -- Leader group overrides / mode mirrors.
     --
     -- Some groups are titled by upstream packs but with descriptions that
