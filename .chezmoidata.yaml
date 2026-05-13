@@ -66,6 +66,7 @@ tiers:
         - fzf
         - moor
         - ripgrep
+        - sesh
         - television
         - gh
         - git-delta
@@ -170,7 +171,6 @@ tiers:
         - ouch
         - pastel
         - sd
-        - sesh
         - taplo
         - tlrc
         - tmuxinator
