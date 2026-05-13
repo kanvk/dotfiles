@@ -129,6 +129,12 @@ tiers:
         # bun is NOT here: not in homebrew/core on Linux. Installed via npm
         # globals instead (see npm below).
         - go
+        # luajit is the lua interpreter luarocks.nvim's bootstrap shells out
+        # to (clones the luarocks source, runs ./configure + make against it)
+        # the first time nvim opens on a clean machine. Neovim itself bundles
+        # LuaJIT statically, but the bootstrap script needs a `lua`/`luajit`
+        # binary on PATH at the time chezmoi-apply hands off to nvim.
+        - luajit
         - node
         # node@22 is keg-only; copilot.lua's bundled LSP (`@github/copilot`)
         # has a custom HTTP fetcher whose case-sensitive headers wrapper
