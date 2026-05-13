@@ -9,6 +9,39 @@ return {
     cmd = "Codi",
   },
 
+  -- Companion to nvim-spider from the same author: adds ~30 textobjects
+  -- (iS/aS subword, iv/av value, ii/aI indentation, iU url, ...) on top of
+  -- vim's built-ins.
+  --
+  -- Disable the 5 default LHS that collide with valuable preexisting maps and
+  -- rebind the displaced textobjs to free alternates:
+  --   ak/ik (block, treesitter)    -> aK/iK   for `key`
+  --   ao/io (loop,  treesitter)    -> aO/iO   for `anyBracket`
+  --   r     (flash treesitter)     -> gr      for `restOfParagraph`
+  --   R     (flash remote)         -> gR      for `restOfIndentation`
+  --   an/in (vim built-in argument)-> --      `number` left unbound; dial.nvim
+  --                                   (already loaded via astrocommunity)
+  --                                   covers the `<C-a>`/`<C-x>` increment use
+  --                                   case the README cites as the motivation.
+  {
+    "chrisgrieser/nvim-various-textobjs",
+    event = "VeryLazy",
+    opts = {
+      keymaps = {
+        useDefaults = true,
+        disabledDefaults = { "ak", "ik", "ao", "io", "an", "in", "r", "R" },
+      },
+    },
+    keys = {
+      { "aK", "<cmd>lua require('various-textobjs').key('outer')<cr>",        mode = { "o", "x" }, desc = "outer key textobj" },
+      { "iK", "<cmd>lua require('various-textobjs').key('inner')<cr>",        mode = { "o", "x" }, desc = "inner key textobj" },
+      { "aO", "<cmd>lua require('various-textobjs').anyBracket('outer')<cr>", mode = { "o", "x" }, desc = "outer any-bracket textobj" },
+      { "iO", "<cmd>lua require('various-textobjs').anyBracket('inner')<cr>", mode = { "o", "x" }, desc = "inner any-bracket textobj" },
+      { "gr", "<cmd>lua require('various-textobjs').restOfParagraph()<cr>",   mode = { "o", "x" }, desc = "rest of paragraph" },
+      { "gR", "<cmd>lua require('various-textobjs').restOfIndentation()<cr>", mode = { "o", "x" }, desc = "rest of indentation" },
+    },
+  },
+
   -- Lets `.` repeat plugin-defined operations (surround, etc.) in addition
   -- to vim's built-in changes. No-op until a plugin that calls
   -- `repeat#set()` is installed; tiny enough to keep loaded eagerly.

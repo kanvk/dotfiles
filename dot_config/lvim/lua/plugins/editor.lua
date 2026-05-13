@@ -33,6 +33,50 @@ return {
   },
   { "HiPhish/rainbow-delimiters.nvim", event = "BufReadPre" },
   { "andymass/vim-matchup", event = "BufReadPre" },
+  -- Companion to nvim-spider from the same author: adds ~30 textobjects
+  -- (iS/aS subword, iv/av value, ii/aI indentation, iU url, ...) on top of
+  -- vim's built-ins.
+  --
+  -- Same disabled set and rebinds as the nvim side so muscle memory carries
+  -- between distros. In lvim specifically:
+  --   an/in is mini.ai's "around/inner NEXT <textobj-id>" prefix (e.g. `anq`
+  --         = around-next-quote); keep it free of single-key takeover.
+  --   r/R   are flash.nvim treesitter/remote motions in o/x mode.
+  --   ak/ik, ao/io don't collide with anything load-bearing in lvim, but stay
+  --         disabled here for parity with the nvim spec.
+  -- `number` left unbound — LazyVim's dial extra (loaded via extras.lua)
+  --         covers the `<C-a>`/`<C-x>` increment use case.
+  {
+    "chrisgrieser/nvim-various-textobjs",
+    event = "VeryLazy",
+    opts = {
+      keymaps = {
+        useDefaults = true,
+        disabledDefaults = { "ak", "ik", "ao", "io", "an", "in", "r", "R" },
+      },
+    },
+    keys = {
+      { "aK", "<cmd>lua require('various-textobjs').key('outer')<cr>",        mode = { "o", "x" }, desc = "outer key textobj" },
+      { "iK", "<cmd>lua require('various-textobjs').key('inner')<cr>",        mode = { "o", "x" }, desc = "inner key textobj" },
+      { "aO", "<cmd>lua require('various-textobjs').anyBracket('outer')<cr>", mode = { "o", "x" }, desc = "outer any-bracket textobj" },
+      { "iO", "<cmd>lua require('various-textobjs').anyBracket('inner')<cr>", mode = { "o", "x" }, desc = "inner any-bracket textobj" },
+      { "gr", "<cmd>lua require('various-textobjs').restOfParagraph()<cr>",   mode = { "o", "x" }, desc = "rest of paragraph" },
+      { "gR", "<cmd>lua require('various-textobjs').restOfIndentation()<cr>", mode = { "o", "x" }, desc = "rest of indentation" },
+    },
+  },
+  -- w/e/b/ge skip by subwords (camelCase, snake_case) instead of WORDs.
+  -- Remaps in n/o/x so operator-pending (e.g. `cw`) and visual selections
+  -- also use spider's subword boundaries.
+  {
+    "chrisgrieser/nvim-spider",
+    keys = {
+      { "w", "<cmd>lua require('spider').motion('w')<cr>", mode = { "n", "o", "x" }, desc = "Next subword" },
+      { "e", "<cmd>lua require('spider').motion('e')<cr>", mode = { "n", "o", "x" }, desc = "Next end of subword" },
+      { "b", "<cmd>lua require('spider').motion('b')<cr>", mode = { "n", "o", "x" }, desc = "Previous subword" },
+      { "ge", "<cmd>lua require('spider').motion('ge')<cr>", mode = { "n", "o", "x" }, desc = "Previous end of subword" },
+    },
+    opts = {},
+  },
   -- Lets `.` repeat plugin-defined operations (surround, etc.) in addition
   -- to vim's built-in changes. No-op until a plugin that calls
   -- `repeat#set()` is installed; tiny enough to keep loaded eagerly.

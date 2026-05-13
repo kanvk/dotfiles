@@ -18,6 +18,7 @@ return {
   { import = "astrocommunity.editing-support.dial-nvim" }, -- <C-a>/<C-x> on dates, semver, booleans, hex, alphabet
   { import = "astrocommunity.editing-support.nvim-treesitter-context" },
   { import = "astrocommunity.editing-support.rainbow-delimiters-nvim" },
+  { import = "astrocommunity.editing-support.refactoring-nvim" }, -- extract/inline function/variable + debug-print helpers
   { import = "astrocommunity.editing-support.telescope-undo-nvim" },
   { import = "astrocommunity.editing-support.todo-comments-nvim" },
   { import = "astrocommunity.editing-support.yanky-nvim" },
@@ -27,6 +28,7 @@ return {
   { import = "astrocommunity.lsp.inc-rename-nvim" }, -- LSP rename with command-preview
   { import = "astrocommunity.markdown-and-latex.markview-nvim" },
   { import = "astrocommunity.motion.flash-nvim" },
+  { import = "astrocommunity.motion.nvim-spider" }, -- w/e/b/ge skip by subwords (camelCase, snake_case) instead of WORDs
   { import = "astrocommunity.motion.vim-matchup" },
   { import = "astrocommunity.pack.bash" },
   { import = "astrocommunity.pack.chezmoi" },
