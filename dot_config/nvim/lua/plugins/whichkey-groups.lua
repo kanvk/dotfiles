@@ -45,11 +45,19 @@ return {
     -- mirrors because their children are mapped in {n,x,o} (e.g., spider's
     -- motions) but the group desc was only registered in n-mode.
 
-    -- <Leader>s: spectre vacated to <Leader>R*; now purely Spider subword
-    -- motion. Mirror in x/o so `c<Leader>sw`-style operator+motion popups
-    -- label the group correctly.
+    -- <Leader>s: content-search namespace (LazyVim split parity). Mirrors
+    -- lvim/LazyVim layout: grep, buffer lines, help, keymaps, diagnostics,
+    -- registers, marks, undo, etc. — letter-for-letter where possible so
+    -- muscle memory carries between nvim and lvim. The actual bindings live
+    -- in plugins/user.lua. Mode mirror in x (visual selection grep).
+    opts.mappings.n["<Leader>s"] = { desc = "Search" }
+    opts.mappings.x["<Leader>s"] = { desc = "Search" }
+
+    -- <Leader>S: Spider subword motion (capital S to free <Leader>s* for
+    -- content search). Mapped in {n,x,o} since spider motions are valid
+    -- operator targets (c<Leader>Sw etc.).
     for _, mode in ipairs { "n", "x", "o" } do
-      opts.mappings[mode]["<Leader>s"] = { desc = "Subword" }
+      opts.mappings[mode]["<Leader>S"] = { desc = "Subword" }
     end
 
     -- <Leader>R: was Astro core's "Rename file" (single binding), then

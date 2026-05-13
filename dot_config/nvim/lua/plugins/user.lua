@@ -10,9 +10,10 @@ return {
   },
 
   -- w/e/b/ge stay vim-native (subword granularity gets in the way of moving
-  -- across whole identifiers/funcs). Spider's subword motions are exposed on
-  -- <Leader>s* for the occasional finer jump. Group desc registered in
-  -- plugins/astrocore.lua.
+  -- across whole identifiers/funcs). Spider's subword motions live on
+  -- <Leader>S* (capital, "Subword") — <Leader>s* is reserved for the
+  -- content-search namespace (LazyVim split parity). Group desc registered
+  -- in plugins/whichkey-groups.lua.
   --
   -- luarocks.nvim dep mirrors what AstroCommunity's pack does: installs
   -- luautf8 (spider uses it via pcall(require, "lua-utf8") for UTF-8 word
@@ -29,10 +30,10 @@ return {
       },
     },
     keys = {
-      { "<Leader>sw",  "<cmd>lua require('spider').motion('w')<cr>",  mode = { "n", "x", "o" }, desc = "Next subword" },
-      { "<Leader>se",  "<cmd>lua require('spider').motion('e')<cr>",  mode = { "n", "x", "o" }, desc = "Next end of subword" },
-      { "<Leader>sb",  "<cmd>lua require('spider').motion('b')<cr>",  mode = { "n", "x", "o" }, desc = "Previous subword" },
-      { "<Leader>sE",  "<cmd>lua require('spider').motion('ge')<cr>", mode = { "n", "x", "o" }, desc = "Previous end of subword" },
+      { "<Leader>Sw", "<cmd>lua require('spider').motion('w')<cr>",  mode = { "n", "x", "o" }, desc = "Next subword" },
+      { "<Leader>Se", "<cmd>lua require('spider').motion('e')<cr>",  mode = { "n", "x", "o" }, desc = "Next end of subword" },
+      { "<Leader>Sb", "<cmd>lua require('spider').motion('b')<cr>",  mode = { "n", "x", "o" }, desc = "Previous subword" },
+      { "<Leader>SE", "<cmd>lua require('spider').motion('ge')<cr>", mode = { "n", "x", "o" }, desc = "Previous end of subword" },
     },
     opts = {},
   },
@@ -50,18 +51,11 @@ return {
       opts.mappings.x = opts.mappings.x or {}
       opts.mappings.v = opts.mappings.v or {}
 
-      -- Spectre relocates from <Leader>s* to <Leader>R*: <Leader>s* is now
-      -- purely Spider subword motion; <Leader>R* is "Replace" (group title
-      -- registered in plugins/whichkey-groups.lua). The astrocommunity spectre
-      -- pack still binds n.<Leader>ss/sR/sf and x.<Leader>sw; disable them
-      -- here and rebind under R*.
-      opts.mappings.n["<Leader>ss"] = false
-      opts.mappings.n["<Leader>sR"] = false
-      opts.mappings.n["<Leader>sf"] = false
-      opts.mappings.x["<Leader>sw"] = {
-        "<Cmd>lua require('spider').motion('w')<CR>",
-        desc = "Next subword",
-      }
+      -- Spectre relocates from <Leader>s* to <Leader>R* = "Replace" (group
+      -- title in plugins/whichkey-groups.lua). The astrocommunity spectre
+      -- pack still binds n.<Leader>ss/sR/sf; their disable via false isn't
+      -- reliable across opts-merge order — handled by the VeryLazy autocmd
+      -- below alongside the picker-namespace cleanup.
       opts.mappings.n["<Leader>Rs"] = {
         function() require("spectre").open() end,
         desc = "Spectre (project)",
@@ -74,6 +68,41 @@ return {
         function() require("spectre").open_visual { select_word = true } end,
         desc = "Spectre (current word)",
       }
+
+      -- Picker-namespace split: <Leader>f* keeps files/buffers/projects,
+      -- <Leader>s* gets content/grep/help/keymaps/etc. — letter-for-letter
+      -- alignment with LazyVim (= lvim) for shared muscle memory. The
+      -- astrocommunity snacks pack writes the old <Leader>f* picker keys
+      -- via function-form opts; new <Leader>s* bindings are set here, old
+      -- <Leader>f* picker keys get deleted post-VeryLazy.
+      local snacks = function(call, opts2)
+        return function() require("snacks").picker[call](opts2) end
+      end
+      -- Grep family
+      opts.mappings.n["<Leader>sg"] = { snacks "grep",      desc = "Grep" }
+      opts.mappings.n["<Leader>sG"] = { snacks("grep", { hidden = true, ignored = true }), desc = "Grep (hidden+ignored)" }
+      opts.mappings.n["<Leader>sw"] = { snacks "grep_word", desc = "Grep word under cursor" }
+      opts.mappings.x["<Leader>sw"] = { snacks "grep_word", desc = "Grep selection" }
+      -- Buffer-scoped
+      opts.mappings.n["<Leader>sb"] = { snacks "lines",     desc = "Buffer Lines" }
+      -- Help / docs / system
+      opts.mappings.n["<Leader>sh"] = { snacks "help",      desc = "Help Pages" }
+      opts.mappings.n["<Leader>sk"] = { snacks "keymaps",   desc = "Keymaps" }
+      opts.mappings.n["<Leader>sM"] = { snacks "man",       desc = "Man Pages" }
+      opts.mappings.n["<Leader>sC"] = { snacks "commands",  desc = "Commands" }
+      -- Project state / history
+      opts.mappings.n["<Leader>s\""] = { snacks "registers", desc = "Registers" }
+      opts.mappings.n["<Leader>sm"] = { snacks "marks",     desc = "Marks" }
+      opts.mappings.n["<Leader>su"] = { snacks "undo",      desc = "Undo History" }
+      opts.mappings.n["<Leader>sn"] = { snacks "notifications", desc = "Notifications" }
+      opts.mappings.n["<Leader>sy"] = { snacks "yanky",     desc = "Yank History" }
+      opts.mappings.n["<Leader>sR"] = { snacks "resume",    desc = "Resume previous picker" }
+      -- Content-content
+      opts.mappings.n["<Leader>st"] = { function() require("todo-comments.search").open() end, desc = "Find TODO comments" }
+
+      -- UI category gains the colorscheme picker (moved off <Leader>ft so
+      -- ft stays a file-finding namespace).
+      opts.mappings.n["<Leader>uC"] = { snacks "colorschemes", desc = "Pick colorscheme" }
 
       -- <Leader>c/<Leader>C (Close / Force close buffer) move to
       -- <Leader>bd/<Leader>bD (LazyVim style). The <Leader>c namespace is
@@ -133,15 +162,32 @@ return {
         {
           event = "User",
           pattern = "VeryLazy",
-          desc = "Drop pre-relocation <Leader>M* (Overseer) keymaps",
+          desc = "Drop pre-relocation <Leader>M*, <Leader>s*, <Leader>f* keymaps",
           callback = function()
+            -- Overseer M* → O*
             for _, lhs in ipairs { "<Leader>Mt", "<Leader>Mc", "<Leader>Mr", "<Leader>Ma", "<Leader>Mi" } do
               pcall(vim.keymap.del, "n", lhs)
             end
-            -- which-key already queued <Leader>M as a group title via the
-            -- overseer pack's astrocore opts function. Suppress it now that
-            -- the children are gone — otherwise pressing <Leader>M shows
-            -- an empty "Overseer" popup.
+            -- Spectre's leftover ss/sf go away (sR is now our new Resume binding
+            -- under the picker namespace — leave it set).
+            for _, lhs in ipairs { "<Leader>ss", "<Leader>sf" } do
+              pcall(vim.keymap.del, "n", lhs)
+            end
+            -- Picker-namespace split: content-search keys move off <Leader>f*.
+            -- (file/buffer/project pickers stay on <Leader>f*.)
+            local removed_f = {
+              "<Leader>fw", "<Leader>fW", "<Leader>fc", "<Leader>fl",
+              "<Leader>fh", "<Leader>fk", "<Leader>fm", "<Leader>fr",
+              "<Leader>fu", "<Leader>fn", "<Leader>fC", "<Leader>fT",
+              "<Leader>f'", "<Leader>f<CR>", "<Leader>fy", "<Leader>ft",
+            }
+            for _, lhs in ipairs(removed_f) do
+              pcall(vim.keymap.del, "n", lhs)
+            end
+            pcall(vim.keymap.del, "x", "<Leader>fw")
+            -- which-key suppression: the upstream packs queued group titles
+            -- for <Leader>M (Overseer) and possibly bare <Leader>s before our
+            -- changes. Hide stale entries so empty popups don't appear.
             local ok, wk = pcall(require, "which-key")
             if ok then wk.add { { "<Leader>M", hidden = true, mode = "n" } } end
           end,
