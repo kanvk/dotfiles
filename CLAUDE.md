@@ -80,7 +80,7 @@ tests/                     # bootstrap + smoke harness driven by `just test*`
 dot_*                      # standard chezmoi source
 dot_zfunc/                 # hand-written zsh completions for shell-defined commands
 docs/                      # repo design notes (encrypted: implementation plan, user-facing); ignored from apply
-private_dot_claude/        # Claude Code user config — all entries age-encrypted (settings.json, statusline.sh)
+private_dot_claude/        # Claude Code user config — settings.json is age-encrypted; statusline.sh is plaintext
 dot_codex/                 # Codex CLI config — age-encrypted (AGENTS.md, config.toml)
 private_dot_gnupg/         # gnupg config (no keys)
 private_dot_ssh/           # ssh client config (no private keys)
