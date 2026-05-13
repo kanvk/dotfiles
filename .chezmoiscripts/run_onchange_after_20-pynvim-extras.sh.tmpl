@@ -10,6 +10,10 @@
 # Required by molten:    jupyter_client, ipykernel
 # Optional (from `:checkhealth molten`): cairosvg, pnglatex, plotly, kaleido,
 #                                        pyperclip, nbformat, pillow
+# Repo tooling:          pyyaml — used by `just lint` to validate
+#                        .chezmoidata.yaml (the pynvim venv is already on
+#                        every dev machine via .chezmoidata.yaml's pipx list,
+#                        so it doubles as the canonical "python with yaml")
 #
 # pynvim-in-uv-tool: {{ if stat (joinPath .chezmoi.homeDir ".local/share/uv/tools/pynvim") }}yes{{ else }}no{{ end }}
 
@@ -36,6 +40,7 @@ _extras=(
   pyperclip
   nbformat
   pillow
+  pyyaml
 )
 _with_args=()
 for _e in "${_extras[@]}"; do _with_args+=(--with "$_e"); done

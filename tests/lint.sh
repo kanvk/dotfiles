@@ -46,20 +46,35 @@ if [ -n "$unexpected" ]; then
     fail=1
 fi
 
+# Find a python that has PyYAML. The chezmoi-managed pynvim uv-tool venv is
+# the canonical host — it's installed on every dev box and has pyyaml injected
+# by .chezmoiscripts/run_onchange_after_20-pynvim-extras.sh.tmpl. Fall back to
+# whatever `python3` resolves to if the venv isn't there yet (fresh clone
+# before first apply) or doesn't have yaml.
+py_yaml=""
+for cand in "$HOME/.local/share/uv/tools/pynvim/bin/python" python3; do
+    if command -v "$cand" >/dev/null 2>&1 && "$cand" -c 'import yaml' 2>/dev/null; then
+        py_yaml="$cand"
+        break
+    fi
+done
+
 echo "==> 3. .chezmoidata.yaml YAML validity"
-if command -v python3 >/dev/null 2>&1; then
-    if ! python3 -c 'import yaml,sys; yaml.safe_load(open(".chezmoidata.yaml"))' 2>/dev/null; then
+if [ -n "$py_yaml" ]; then
+    if ! "$py_yaml" -c 'import yaml; yaml.safe_load(open(".chezmoidata.yaml"))' 2>/dev/null; then
         echo "  FAIL: .chezmoidata.yaml is invalid YAML"
         fail=1
     fi
+else
+    echo "  (no python with PyYAML — run 'chezmoi apply' to inject pyyaml into the pynvim uv-tool venv)"
 fi
 
 echo "==> 4. cask: prefix syntax in .chezmoidata.yaml"
 # Casks live inline in `brew:` lists with a `cask:` prefix (e.g. `cask:copilot-cli`).
 # Catch typos (`Cask:foo`, `cask: foo`, `cask:` with empty name) at lint time
 # rather than mid-`brew bundle install`.
-if command -v python3 >/dev/null 2>&1; then
-    py_out=$(python3 - <<'PYEOF' 2>&1
+if [ -n "$py_yaml" ]; then
+    py_out=$("$py_yaml" - <<'PYEOF' 2>&1
 import re, sys, yaml
 strict = re.compile(r"^cask:[A-Za-z0-9._@/-]+$")
 suspicious = re.compile(r"^cask\b", re.IGNORECASE)
