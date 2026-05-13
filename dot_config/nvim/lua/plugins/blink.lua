@@ -35,6 +35,17 @@ return {
         ["<S-Tab>"] = { "select_prev", "fallback" },
         ["<Down>"] = { "select_next", "fallback" },
         ["<Up>"] = { "select_prev", "fallback" },
+        -- blink.cmp's "cmdline" preset binds Left/Right to select_prev/_next,
+        -- which hijacks vim's cursor movement through the typed cmdline text.
+        -- Setting them to `{ "fallback" }` does NOT work: blink's
+        -- keymap/init.lua get_mappings() filters out user overrides that lack
+        -- a non-fallback insert command BEFORE merging the preset, so the
+        -- preset's Left/Right survives. Setting to `false` instead survives
+        -- the filter and is removed in a later step, so blink registers no
+        -- cmap at all and vim's native cmdline cursor movement takes over.
+        -- (Up/Down + Tab/S-Tab still drive the menu.)
+        ["<Left>"] = false,
+        ["<Right>"] = false,
       },
       completion = {
         menu = { auto_show = function() return vim.fn.getcmdtype() == ":" end },
