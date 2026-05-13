@@ -65,15 +65,17 @@ return {
     },
   },
   -- w/e/b/ge stay vim-native (subword granularity gets in the way of moving
-  -- across whole identifiers/funcs). Spider's subword motions are exposed on
-  -- <Leader>s* for the occasional finer jump. Mirrors the nvim spec.
+  -- across whole identifiers/funcs). Spider's subword motions live on
+  -- <Leader>S* (capital S, "Subword") instead of <Leader>s* — LazyVim's
+  -- <Leader>s* is the search/picker namespace (sw=grep word, sb=buffer lines,
+  -- etc.) and we want it intact. Diverges from nvim's <Leader>s* on purpose.
   {
     "chrisgrieser/nvim-spider",
     keys = {
-      { "<Leader>sw",  "<cmd>lua require('spider').motion('w')<cr>",  mode = { "n", "x", "o" }, desc = "Next subword" },
-      { "<Leader>se",  "<cmd>lua require('spider').motion('e')<cr>",  mode = { "n", "x", "o" }, desc = "Next end of subword" },
-      { "<Leader>sb",  "<cmd>lua require('spider').motion('b')<cr>",  mode = { "n", "x", "o" }, desc = "Previous subword" },
-      { "<Leader>sE",  "<cmd>lua require('spider').motion('ge')<cr>", mode = { "n", "x", "o" }, desc = "Previous end of subword" },
+      { "<Leader>Sw", "<cmd>lua require('spider').motion('w')<cr>",  mode = { "n", "x", "o" }, desc = "Next subword" },
+      { "<Leader>Se", "<cmd>lua require('spider').motion('e')<cr>",  mode = { "n", "x", "o" }, desc = "Next end of subword" },
+      { "<Leader>Sb", "<cmd>lua require('spider').motion('b')<cr>",  mode = { "n", "x", "o" }, desc = "Previous subword" },
+      { "<Leader>SE", "<cmd>lua require('spider').motion('ge')<cr>", mode = { "n", "x", "o" }, desc = "Previous end of subword" },
     },
     opts = {},
   },
@@ -94,11 +96,16 @@ return {
     keys = { { "<Leader>uz", "<cmd>ZenMode<cr>", desc = "Toggle Zen Mode" } },
     opts = {},
   },
+  -- Spectre under <Leader>R* = "Replace" group (parity with nvim). Group
+  -- title is registered in plugins/keymaps.lua. Three children mirror the
+  -- nvim layout: project search-replace, current file, visual word.
   {
     "nvim-pack/nvim-spectre",
     cmd = "Spectre",
     keys = {
-      { "<Leader>sR", function() require("spectre").open() end, desc = "Spectre (project search-replace)" },
+      { "<Leader>Rs", function() require("spectre").open() end, desc = "Spectre (project)" },
+      { "<Leader>Rf", function() require("spectre").open_file_search() end, desc = "Spectre (current file)" },
+      { "<Leader>Rw", function() require("spectre").open_visual { select_word = true } end, mode = "x", desc = "Spectre (current word)" },
     },
     opts = {},
   },

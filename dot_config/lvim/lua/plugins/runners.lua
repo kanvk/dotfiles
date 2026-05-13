@@ -13,9 +13,20 @@ return {
     cmd = { "MoltenInit", "MoltenEvaluateLine", "MoltenEvaluateVisual", "MoltenReevaluateCell" },
     init = function() vim.g.molten_image_provider = "image.nvim" end,
   },
+  -- Overseer under <Leader>O* = "Overseer" group (parity with nvim's
+  -- relocation off the m/M case-pair). LazyVim ships no overseer keymaps;
+  -- previously only the dashboard `r` action invoked :OverseerRun. Group
+  -- title is in plugins/keymaps.lua.
   {
     "stevearc/overseer.nvim",
-    cmd = { "OverseerRun", "OverseerToggle" },
+    cmd = { "OverseerOpen", "OverseerToggle", "OverseerRun", "OverseerShell", "OverseerTaskAction" },
+    keys = {
+      { "<Leader>Ot", "<cmd>OverseerToggle<cr>",      desc = "Toggle Overseer" },
+      { "<Leader>Oc", "<cmd>OverseerShell<cr>",       desc = "Run Command" },
+      { "<Leader>Or", "<cmd>OverseerRun<cr>",         desc = "Run Task" },
+      { "<Leader>Oa", "<cmd>OverseerTaskAction<cr>",  desc = "Task Action" },
+      { "<Leader>Oi", "<cmd>checkhealth overseer<cr>", desc = "Overseer Info" },
+    },
     opts = {},
   },
   {

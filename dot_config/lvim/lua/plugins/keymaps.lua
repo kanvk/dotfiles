@@ -4,7 +4,25 @@ return {
     "folke/which-key.nvim",
     opts = {
       spec = {
-        { "<Leader>gH", group = "GitHub" },
+        -- Net-new groups (after the lvim reorg). LazyVim's default spec already
+        -- labels <leader>{c,d,f,g,gh,q,s,u,x,b,w,<tab>} and non-leader {[,],g,gs,z}
+        -- in n+x modes; the entries below are additions and o-mode mirrors.
+        { "<Leader>gH", group = "GitHub", mode = { "n", "x" } },
+        { "<Leader>S",  group = "Subword", mode = { "n", "x", "o" } },
+        { "<Leader>R",  group = "Replace", mode = { "n", "x" } },
+        { "<Leader>O",  group = "Overseer", mode = "n" },
+
+        -- o-mode (operator-pending) mirrors so c<x>, d<x>, y<x> popups label
+        -- their sub-prefixes instead of falling back to "N keys".
+        { "g", group = "goto", mode = "o" },
+        { "[", group = "prev", mode = "o" },
+        { "]", group = "next", mode = "o" },
+        { "z", group = "fold", mode = "o" },
+        -- <Leader> as a SUB-prefix inside operator-pending and visual mode:
+        -- spider's <Leader>S* motions are mapped in {n,x,o} so c<Leader>Sw is
+        -- a valid combo. The leader is the root popup in n-mode (doesn't need
+        -- a sub-label) but in o/x it appears nested.
+        { "<Leader>", group = "leader", mode = { "o", "x" } },
       },
     },
   },
