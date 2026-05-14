@@ -107,6 +107,8 @@ tiers:
         - python3-pynvim
         # GPG: TUI passphrase prompt (avoids "no pinentry" hangs on WSL/headless)
         - pinentry-curses
+        # hex dump CLI; hex.nvim (binary view) shells out to it
+        - xxd
       brew:
         # rest of file nav / listing / preview
         - broot
