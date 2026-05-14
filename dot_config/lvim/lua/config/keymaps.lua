@@ -10,3 +10,5 @@ map("n", "[n", function() require("neotest").jump.prev() end, { desc = "Previous
 -- shadow a lazy `keys` entry. Re-bind here so DiffviewFileHistory wins.
 -- <leader>gL stays at LazyVim's default (cwd-rooted Snacks log picker).
 map("n", "<Leader>gl", "<cmd>DiffviewFileHistory<cr>", { desc = "File history (repo-wide)" })
+
+map("n", "<Leader>ul", function() vim.opt.list = not vim.opt.list:get() end, { desc = "Toggle listchars (show hidden)" })

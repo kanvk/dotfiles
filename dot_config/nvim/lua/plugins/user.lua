@@ -111,6 +111,10 @@ return {
       -- UI category gains the colorscheme picker (moved off <Leader>ft so
       -- ft stays a file-finding namespace).
       opts.mappings.n["<Leader>uC"] = { snacks "colorschemes", desc = "Pick colorscheme" }
+      opts.mappings.n["<Leader>ul"] = {
+        function() vim.opt.list = not vim.opt.list:get() end,
+        desc = "Toggle listchars (show hidden)",
+      }
 
       -- <Leader>c/<Leader>C (Close / Force close buffer) move to
       -- <Leader>bd/<Leader>bD (LazyVim style). The <Leader>c namespace is
