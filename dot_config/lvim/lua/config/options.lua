@@ -53,6 +53,7 @@ opt.wrap = false
 opt.hidden = true
 opt.spell = false
 opt.listchars = "tab:→ ,eol:¶,space:·,trail:▒,nbsp:␣,extends:»,precedes:«"
+opt.list = false
 
 if vim.fn.has "wsl" == 1 and not (vim.env.SSH_TTY or vim.env.SSH_CONNECTION or vim.env.SSH_CLIENT) then
   vim.g.clipboard = {
