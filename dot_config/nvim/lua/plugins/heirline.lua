@@ -67,8 +67,6 @@ return {
             end
           end),
         },
-        -- hl = status.hl.get_attributes "mode", -- highlight based on mode attributes
-        -- surround = { separator = "right", color = status.hl.mode_bg }, -- background highlight based on mode
       },
     }
 
@@ -86,5 +84,16 @@ return {
         )
       end)
     )
+
+    -- Close the libuv timer on Vim exit so its handle doesn't survive the editor.
+    vim.api.nvim_create_autocmd("VimLeavePre", {
+      group = vim.api.nvim_create_augroup("HeirlineClockTimerCleanup", { clear = true }),
+      callback = function()
+        if _G.__heirline_clock_timer then
+          _G.__heirline_clock_timer:close()
+          _G.__heirline_clock_timer = nil
+        end
+      end,
+    })
   end,
 }
