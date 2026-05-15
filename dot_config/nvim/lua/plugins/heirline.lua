@@ -55,6 +55,31 @@ return {
       return status.utils.width() >= width[name]
     end
 
+    local function truncate(text, max)
+      return #text > max and text:sub(1, max - 1) .. "~" or text
+    end
+
+    local function branch_provider(max)
+      return function(self)
+        local branch = max and truncate(self.branch, max) or self.branch
+        return status.utils.stylize(branch, {
+          icon = { kind = "GitBranch", padding = { right = 1 } },
+        })
+      end
+    end
+
+    local function option_flags()
+      local flags = {}
+      if vim.opt.paste:get() then table.insert(flags, "paste") end
+      if vim.wo.spell then table.insert(flags, "spell") end
+      if vim.wo.wrap then table.insert(flags, "wrap") end
+      return flags
+    end
+
+    local function has_option_flags()
+      return #option_flags() > 0
+    end
+
     local function short_host(host)
       host = host:gsub("%..*$", "")
       return #host > 10 and host:sub(1, 9) .. "~" or host
@@ -77,13 +102,52 @@ return {
     opts.statusline = { -- statusline
       hl = { fg = "fg", bg = "bg" },
       status.component.mode(),
-      status.component.git_branch(),
+      status.component.builder {
+        condition = status.condition.is_git_repo,
+        init = function(self)
+          status.init.update_events {
+            "BufEnter",
+            {
+              "User",
+              pattern = { "GitSignsUpdate", "GitSignsChanged" },
+              callback = function() vim.schedule(vim.cmd.redrawstatus) end,
+            },
+          }(self)
+          self.branch = vim.b[self.bufnr or 0].gitsigns_head or ""
+        end,
+        {
+          flexible = 1,
+          { provider = branch_provider() },
+          { provider = branch_provider(28) },
+          { provider = branch_provider(16) },
+          { provider = "" },
+        },
+        surround = {
+          separator = "left",
+          color = "git_branch_bg",
+          condition = status.condition.is_git_repo,
+        },
+        on_click = vim.tbl_get(require("astroui").config.status.components, "git_branch", "on_click"),
+        hl = function() return status.hl.get_attributes "git_branch" end,
+      },
       status.component.file_info(),
       status.component.git_diff(),
       status.component.diagnostics(),
       status.component.fill(),
       status.component.cmd_info(),
       status.component.fill(),
+      status.component.builder {
+        {
+          provider = function()
+            return status.utils.stylize(table.concat(option_flags(), " "), {
+              padding = { left = 1, right = 1 },
+            })
+          end,
+        },
+        condition = has_option_flags,
+        hl = function() return status.hl.get_attributes "cmd_info" end,
+        update = { "OptionSet", "BufEnter", "WinEnter" },
+      },
       status.component.virtual_env {
         surround = {
           separator = "right",
