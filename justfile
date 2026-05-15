@@ -75,6 +75,14 @@ checklist:
 cd:
     chezmoi cd
 
+# === Windows ===
+
+# Pass-through args: `-DryRun`, `-Yes`, `-User <name>`. Run from WSL or Windows.
+# Example: just install-windows -DryRun ; just install-windows -User alice -Yes
+# Mirror dot_config/windows/** to C:\Users\<user>\.config\windows\ via pwsh.
+install-windows *args:
+    pwsh ./dot_config/windows/install.ps1 {{args}}
+
 # === Cleanup ===
 
 # Remove built test Docker images (frees ~2 GB).
