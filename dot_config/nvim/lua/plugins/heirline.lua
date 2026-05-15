@@ -1,19 +1,19 @@
 return {
   "rebelot/heirline.nvim",
   dependencies = {
-    {
+    { -- configure AstroUI to include a new UI icon
       "AstroNvim/astroui",
       ---@type AstroUIOpts
       opts = {
         icons = {
-          Clock = "",
+          Clock = "\xee\x8e\x81", -- add icon for clock (nerd font U+E381)
         },
       },
     },
   },
   opts = function(_, opts)
     local status = require "astroui.status"
-    opts.statusline = {
+    opts.statusline = { -- statusline
       hl = { fg = "fg", bg = "bg" },
       status.component.mode(),
       status.component.git_branch(),
@@ -26,11 +26,8 @@ return {
       status.component.lsp(),
       status.component.virtual_env(),
       status.component.treesitter(),
-      -- Colored nav block (top % + position) with a `<`-shaped powerline
-      -- surround. Same visual treatment as lualine_y in lvim.
-      status.component.nav {
-        surround = { separator = "left", color = "git_branch_bg" },
-      },
+      status.component.nav(),
+      -- Add user@host component to display the current user and hostname
       status.component.builder {
         provider = function()
           local user = os.getenv "USER" or "user"
@@ -39,44 +36,47 @@ return {
         end,
         hl = { fg = "fg", bg = "bg" },
       },
-      -- 12h clock, mode-tied highlight, `<` powerline surround.
-      -- Same visual treatment as lualine_z in lvim.
+      -- Create a custom component to display the time
       status.component.builder {
         {
           provider = function()
-            local time = os.date "%-I:%M %p"
+            local time = os.date "%-I:%M %p" -- 12-hour clock, no leading zero
             ---@cast time string
             return status.utils.stylize(time, {
-              icon = { kind = "Clock", padding = { left = 1, right = 1 } },
-              padding = { right = 1 },
+              icon = { kind = "Clock", padding = { left = 1, right = 1 } }, -- use our new clock icon
+              padding = { right = 1 }, -- pad the right side so it's not cramped
             })
           end,
         },
-        update = {
-          "User",
+        update = { -- update should happen when the mode has changed as well as when the time has changed
+          "User", -- We can use the User autocmd event space to tell the component when to update
           "ModeChanged",
           callback = vim.schedule_wrap(function(_, args)
-            if
+            if -- update on user UpdateTime event and mode change
               (args.event == "User" and args.match == "UpdateTime")
               or (args.event == "ModeChanged" and args.match:match ".*:.*")
             then
-              vim.cmd.redrawstatus()
+              vim.cmd.redrawstatus() -- redraw on update
             end
           end),
         },
-        hl = status.hl.get_attributes "mode",
-        surround = { separator = "left", color = status.hl.mode_bg },
+        -- hl = status.hl.get_attributes "mode", -- highlight based on mode attributes
+        -- surround = { separator = "right", color = status.hl.mode_bg }, -- background highlight based on mode
       },
     }
 
-    -- Stash the timer handle on _G so a :Lazy reload doesn't leak the prior one.
+    -- Now that we have the component, we need a timer to emit the User UpdateTime event.
+    -- Stash on _G so a :Lazy reload doesn't leak the prior handle.
     if _G.__heirline_clock_timer then _G.__heirline_clock_timer:close() end
     _G.__heirline_clock_timer = vim.uv.new_timer()
-    _G.__heirline_clock_timer:start(
-      (60 - tonumber(os.date "%S")) * 1000,
-      60000,
+    _G.__heirline_clock_timer:start( -- timer for updating the time
+      (60 - tonumber(os.date "%S")) * 1000, -- offset timer based on current seconds past the minute
+      60000, -- update every 60 seconds
       vim.schedule_wrap(function()
-        vim.api.nvim_exec_autocmds("User", { pattern = "UpdateTime", modeline = false })
+        vim.api.nvim_exec_autocmds( -- emit our new User event
+          "User",
+          { pattern = "UpdateTime", modeline = false }
+        )
       end)
     )
   end,
