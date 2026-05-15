@@ -59,5 +59,6 @@ return {
   { import = "astrocommunity.pack.zig" },
   { import = "astrocommunity.search.nvim-spectre" },
   { import = "astrocommunity.test.neotest" },
+  { import = "astrocommunity.utility.noice-nvim" },
   -- import/override with your plugins folder
 }
