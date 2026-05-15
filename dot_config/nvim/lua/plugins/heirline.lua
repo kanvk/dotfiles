@@ -26,15 +26,22 @@ return {
       status.component.lsp(),
       status.component.virtual_env(),
       status.component.treesitter(),
-      status.component.nav(),
-      -- Add user@host component to display the current user and hostname
+      -- Right-side order: user@host, percentage (Top/Bot/N%), row:col, clock.
       status.component.builder {
         provider = function()
           local user = os.getenv "USER" or "user"
           local host = vim.uv.os_gethostname() or "host"
-          return string.format(" %s@%s", user, host)
+          return string.format(" %s@%s ", user, host)
         end,
         hl = { fg = "fg", bg = "bg" },
+      },
+      {
+        provider = status.provider.percentage(),
+        update = { "CursorMoved", "CursorMovedI", "BufEnter" },
+      },
+      {
+        provider = status.provider.ruler { padding = { left = 1 } },
+        update = { "CursorMoved", "CursorMovedI", "BufEnter" },
       },
       -- Create a custom component to display the time
       status.component.builder {
