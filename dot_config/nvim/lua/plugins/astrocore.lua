@@ -60,9 +60,18 @@ return {
         -- This can be found in the `lua/lazy_setup.lua` file
         -- Prefer the uv-tool-managed pynvim venv (per `uv tool install pynvim`
         -- in .chezmoidata.yaml). Fallback to the system python3 if absent.
+        -- On Windows uv stores tool venvs under %APPDATA%\uv\tools and the
+        -- venv layout is `Scripts\python.exe`, not `bin/python`.
         python3_host_prog = (function()
-          local uv_py = vim.fn.expand "~/.local/share/uv/tools/pynvim/bin/python"
-          return vim.fn.executable(uv_py) == 1 and uv_py or vim.fn.exepath "python3"
+          local candidates = { vim.fn.expand "~/.local/share/uv/tools/pynvim/bin/python" }
+          if vim.fn.has "win32" == 1 then
+            table.insert(candidates, vim.fn.expand "$APPDATA/uv/tools/pynvim/Scripts/python.exe")
+            table.insert(candidates, vim.fn.expand "~/.local/share/uv/tools/pynvim/Scripts/python.exe")
+          end
+          for _, p in ipairs(candidates) do
+            if vim.fn.executable(p) == 1 then return p end
+          end
+          return vim.fn.exepath(vim.fn.has "win32" == 1 and "python" or "python3")
         end)(),
       },
     },
