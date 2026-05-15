@@ -89,13 +89,10 @@ return {
         -- ("open"). Visual mode passes the selection's line range.
         ["<Leader>gO"] = { function() require("snacks").gitbrowse() end, desc = "Open on remote" },
         -- Snacks rename.rename_file — like a regular file rename, but
-        -- propagates the change through any LSP that's attached. <Leader>fR
-        -- is the AstroNvim-native slot ("Find" prefix for file ops, distinct
-        -- from <Leader>lr LSP symbol rename); <Leader>cR is the LazyVim
-        -- convention (Code → Rename), aliased here so muscle memory carries
-        -- between configs.
+        -- propagates the change through any LSP that's attached. Sits in
+        -- the "Find" namespace for file ops, distinct from <Leader>lr
+        -- (LSP symbol rename).
         ["<Leader>fR"] = { function() require("snacks").rename.rename_file() end, desc = "Rename file (LSP-aware)" },
-        ["<Leader>cR"] = { function() require("snacks").rename.rename_file() end, desc = "Rename file (LSP-aware)" },
         -- Zen mode toggle (zen-mode-nvim community pack only registers :ZenMode)
         ["<Leader>uz"] = { "<Cmd>ZenMode<CR>", desc = "Toggle Zen Mode" },
         -- Diffview — full 4-pane git diff (file diff + base + ours + theirs).

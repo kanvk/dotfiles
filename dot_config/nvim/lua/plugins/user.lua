@@ -117,10 +117,10 @@ return {
       }
 
       -- <Leader>c/<Leader>C (Close / Force close buffer) move to
-      -- <Leader>bd/<Leader>bD (LazyVim style). The <Leader>c namespace is
-      -- now fully empty — code/LSP actions live under <Leader>l* (where
+      -- <Leader>bd/<Leader>bD (buffer namespace). The <Leader>c namespace
+      -- is now fully empty — code/LSP actions live under <Leader>l* (where
       -- AstroNvim already has la/lA/lr/lR/lh/lf/ll/lL/lG/ls/lS/ld/lD/lw),
-      -- and file-rename moved to <Leader>fR.
+      -- and file-rename lives at <Leader>fR.
       opts.mappings.n["<Leader>c"] = false
       opts.mappings.n["<Leader>C"] = false
       opts.mappings.n["<Leader>bd"] = {
@@ -363,13 +363,13 @@ return {
       opts.scroll = { enabled = true }
 
       -- Indent column at every level (`indent`) + animated highlight of the
-      -- current indent scope (`scope`). Same combo LazyVim enables by default.
+      -- current indent scope (`scope`).
       opts.indent = { enabled = true }
       opts.scope = { enabled = true }
 
       -- gitbrowse + rename are function-call modules (`Snacks.gitbrowse()`,
       -- `Snacks.rename.rename_file()`); they lazy-load on first invoke and
-      -- don't need an opts entry — see the <Leader>gO and <Leader>cR maps
+      -- don't need an opts entry — see the <Leader>gO and <Leader>fR maps
       -- in astrocore.lua.
 
       -- Projects picker (<Leader>fp, dashboard `p`): point at ~/p as the
