@@ -59,19 +59,25 @@ return {
         -- NOTE: `mapleader` and `maplocalleader` must be set in the AstroNvim opts or before `lazy.setup`
         -- This can be found in the `lua/lazy_setup.lua` file
         -- Prefer the uv-tool-managed pynvim venv (per `uv tool install pynvim`
-        -- in .chezmoidata.yaml). Fallback to the system python3 if absent.
-        -- On Windows uv stores tool venvs under %APPDATA%\uv\tools and the
-        -- venv layout is `Scripts\python.exe`, not `bin/python`.
+        -- in .chezmoidata.yaml). Tool-dir precedence matches `uv tool dir`:
+        -- $UV_TOOL_DIR > $XDG_DATA_HOME/uv/tools > OS default. Falls back to
+        -- the system python if nothing resolves.
         python3_host_prog = (function()
-          local candidates = { vim.fn.expand "~/.local/share/uv/tools/pynvim/bin/python" }
-          if vim.fn.has "win32" == 1 then
-            table.insert(candidates, vim.fn.expand "$APPDATA/uv/tools/pynvim/Scripts/python.exe")
-            table.insert(candidates, vim.fn.expand "~/.local/share/uv/tools/pynvim/Scripts/python.exe")
+          local is_win = vim.fn.has "win32" == 1
+          local tool_dir = vim.env.UV_TOOL_DIR
+          if not tool_dir or tool_dir == "" then
+            local xdg = vim.env.XDG_DATA_HOME
+            if xdg and xdg ~= "" then
+              tool_dir = xdg .. "/uv/tools"
+            elseif is_win and vim.env.APPDATA then
+              tool_dir = vim.env.APPDATA .. "/uv/tools"
+            else
+              tool_dir = vim.fn.expand "~/.local/share/uv/tools"
+            end
           end
-          for _, p in ipairs(candidates) do
-            if vim.fn.executable(p) == 1 then return p end
-          end
-          return vim.fn.exepath(vim.fn.has "win32" == 1 and "python" or "python3")
+          local exe = tool_dir .. (is_win and "/pynvim/Scripts/python.exe" or "/pynvim/bin/python")
+          if vim.fn.executable(exe) == 1 then return exe end
+          return vim.fn.exepath(is_win and "python" or "python3")
         end)(),
       },
     },

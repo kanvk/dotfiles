@@ -5,23 +5,23 @@ vim.g.lazyvim_python_lsp = "basedpyright"
 vim.g.lazyvim_python_ruff = "ruff"
 vim.g.autoformat = false
 
--- Prefer the uv-tool-managed pynvim venv; on Windows uv keeps tool venvs
--- under %APPDATA%\uv\tools with a `Scripts\python.exe` layout.
+-- Tool-dir precedence matches `uv tool dir`:
+-- $UV_TOOL_DIR > $XDG_DATA_HOME/uv/tools > OS default.
 do
-  local candidates = { vim.fn.expand "~/.local/share/uv/tools/pynvim/bin/python" }
-  if vim.fn.has "win32" == 1 then
-    table.insert(candidates, vim.fn.expand "$APPDATA/uv/tools/pynvim/Scripts/python.exe")
-    table.insert(candidates, vim.fn.expand "~/.local/share/uv/tools/pynvim/Scripts/python.exe")
-  end
-  for _, p in ipairs(candidates) do
-    if vim.fn.executable(p) == 1 then
-      vim.g.python3_host_prog = p
-      break
+  local is_win = vim.fn.has "win32" == 1
+  local tool_dir = vim.env.UV_TOOL_DIR
+  if not tool_dir or tool_dir == "" then
+    local xdg = vim.env.XDG_DATA_HOME
+    if xdg and xdg ~= "" then
+      tool_dir = xdg .. "/uv/tools"
+    elseif is_win and vim.env.APPDATA then
+      tool_dir = vim.env.APPDATA .. "/uv/tools"
+    else
+      tool_dir = vim.fn.expand "~/.local/share/uv/tools"
     end
   end
-  if not vim.g.python3_host_prog then
-    vim.g.python3_host_prog = vim.fn.exepath(vim.fn.has "win32" == 1 and "python" or "python3")
-  end
+  local exe = tool_dir .. (is_win and "/pynvim/Scripts/python.exe" or "/pynvim/bin/python")
+  vim.g.python3_host_prog = vim.fn.executable(exe) == 1 and exe or vim.fn.exepath(is_win and "python" or "python3")
 end
 
 -- Wire pwsh as the shell on native Windows so `:!`, toggleterm, lazygit,
