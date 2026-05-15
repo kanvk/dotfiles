@@ -16,6 +16,7 @@ set smartindent
 set hidden
 set nospell
 set nowrap
+set clipboard=unnamedplus
 
 set signcolumn=yes
 set colorcolumn=120
