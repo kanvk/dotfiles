@@ -18,6 +18,7 @@
     windows/executable_komorebi.json     -> $KomorebiHome\komorebi.json
     windows/executable_komorebi.bar.json -> $KomorebiHome\komorebi.bar.json
     windows/powershell/profile.ps1       -> $PROFILE.CurrentUserAllHosts
+    windows/dot_vimrc                    -> $env:USERPROFILE\.vimrc
     windows/config/<rest>                -> $env:USERPROFILE\.config\<rest>  (chezmoi prefixes stripped)
     windows/terminal/**                  -> ignored (see terminal\README.md)
     nvim/<rest>                          -> $NvimConfig\<rest>  (chezmoi prefixes stripped)
@@ -190,6 +191,7 @@ function Resolve-WindowsDest {
         'executable_komorebi.json'     { return (Join-Path $KomorebiHome 'komorebi.json') }
         'executable_komorebi.bar.json' { return (Join-Path $KomorebiHome 'komorebi.bar.json') }
         'powershell/profile.ps1'       { return $PwshProfile }
+        'dot_vimrc'                    { return (Join-Path $WinUserHome '.vimrc') }
     }
     if ($RelForward.StartsWith('config/')) {
         $rest = $RelForward.Substring('config/'.Length)

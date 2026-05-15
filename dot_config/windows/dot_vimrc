@@ -1,0 +1,24 @@
+" Basic .vimrc for vim emulators (VSCode-Vim, IdeaVim, etc.).
+" Options here mirror the editor-agnostic subset of my nvim setup.
+
+let mapleader = " "
+let maplocalleader = ","
+
+set number
+set relativenumber
+
+set expandtab
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set smartindent
+
+set hidden
+set nospell
+set nowrap
+
+set signcolumn=yes
+set colorcolumn=120
+
+set listchars=tab:→\ ,eol:¶,space:·,trail:▒,nbsp:␣,extends:»,precedes:«
+set nolist
