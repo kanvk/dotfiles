@@ -78,8 +78,8 @@ cd:
 # === Windows ===
 
 # Pass-through args: `-DryRun`, `-Yes`, `-User <name>`. Run from WSL or Windows.
-# Example: just install-windows -DryRun ; just install-windows -User alice -Yes
-# Mirror dot_config/windows/** to C:\Users\<user>\.config\windows\ via pwsh.
+# Example: just install-windows -DryRun ; just install-windows -Yes
+# Install dot_config/windows/** to each tool's actual Windows location via pwsh.
 install-windows *args:
     pwsh ./dot_config/windows/install.ps1 {{args}}
 
