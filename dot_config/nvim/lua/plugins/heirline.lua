@@ -112,9 +112,16 @@ return {
       return truncate(host, 10)
     end
 
+    local function is_ssh_session()
+      return vim.env.SSH_TTY ~= nil or vim.env.SSH_CONNECTION ~= nil or vim.env.SSH_CLIENT ~= nil
+    end
+
     local function user_host_hl()
+      local fg = is_ssh_session() and hl_color("DiagnosticWarn", "fg", loaded_color "yellow")
+        or hl_color("Directory", "fg", loaded_color "blue")
+
       return {
-        fg = hl_color("Directory", "fg", loaded_color "blue"),
+        fg = fg,
         bg = "bg",
         bold = true,
       }
