@@ -8,7 +8,6 @@ return {
       position = 45,
       virtual_env = 65,
       time = 80,
-      user_host = 100,
     }
 
     local function normalize_color(color)
@@ -55,8 +54,19 @@ return {
       return status.utils.width() >= width[name]
     end
 
-    local function truncate(text, max)
-      return #text > max and text:sub(1, max - 1) .. "~" or text
+    local function truncate(text, max_width)
+      if not max_width or vim.fn.strdisplaywidth(text) <= max_width then return text end
+      if max_width <= 1 then return "~" end
+
+      local truncated = ""
+      local target_width = max_width - 1
+      for char = 1, vim.fn.strchars(text) do
+        local next_text = vim.fn.strcharpart(text, 0, char)
+        if vim.fn.strdisplaywidth(next_text) > target_width then break end
+        truncated = next_text
+      end
+
+      return truncated .. "~"
     end
 
     local function branch_provider(max)
@@ -68,21 +78,58 @@ return {
       end
     end
 
-    local function option_flags()
+    local function option_flags(self)
+      local bufnr = self and self.bufnr or 0
       local flags = {}
       if vim.opt.paste:get() then table.insert(flags, "paste") end
       if vim.wo.spell then table.insert(flags, "spell") end
       if vim.wo.wrap then table.insert(flags, "wrap") end
+      if vim.bo[bufnr].binary then table.insert(flags, "bin") end
+
+      local fileformat = vim.bo[bufnr].fileformat
+      if fileformat == "dos" then
+        table.insert(flags, "crlf")
+      elseif fileformat == "mac" then
+        table.insert(flags, "cr")
+      end
+
+      local fileencoding = vim.bo[bufnr].fileencoding
+      if fileencoding ~= "" and fileencoding:lower() ~= "utf-8" then
+        table.insert(flags, "enc:" .. fileencoding)
+      end
+      if vim.bo[bufnr].bomb then table.insert(flags, "bom") end
+      if not vim.bo[bufnr].endofline then table.insert(flags, "noeol") end
+      if not vim.bo[bufnr].fixendofline then table.insert(flags, "nofixeol") end
       return flags
     end
 
-    local function has_option_flags()
-      return #option_flags() > 0
+    local function has_option_flags(self)
+      return #option_flags(self) > 0
+    end
+
+    local function is_recording()
+      return vim.fn.reg_recording() ~= ""
     end
 
     local function short_host(host)
       host = host:gsub("%..*$", "")
-      return #host > 10 and host:sub(1, 9) .. "~" or host
+      return truncate(host, 10)
+    end
+
+    local function user_host_hl()
+      return {
+        fg = hl_color("Directory", "fg", loaded_color "blue"),
+        bg = "bg",
+        bold = true,
+      }
+    end
+
+    local function macro_rec_hl()
+      return {
+        fg = hl_color("WarningMsg", "fg", loaded_color "yellow"),
+        bg = "bg",
+        bold = true,
+      }
     end
 
     local function right_block(main, left, condition)
@@ -135,18 +182,40 @@ return {
       status.component.diagnostics(),
       status.component.fill(),
       status.component.cmd_info(),
-      status.component.fill(),
       status.component.builder {
         {
           provider = function()
-            return status.utils.stylize(table.concat(option_flags(), " "), {
+            return status.utils.stylize("rec @" .. vim.fn.reg_recording(), {
+              padding = { left = 1, right = 1 },
+            })
+          end,
+        },
+        condition = is_recording,
+        hl = macro_rec_hl,
+        update = {
+          "RecordingEnter",
+          "RecordingLeave",
+          callback = vim.schedule_wrap(function() vim.cmd.redrawstatus() end),
+        },
+      },
+      status.component.fill(),
+      status.component.builder {
+        {
+          provider = function(self)
+            return status.utils.stylize(table.concat(option_flags(self), " "), {
               padding = { left = 1, right = 1 },
             })
           end,
         },
         condition = has_option_flags,
         hl = function() return status.hl.get_attributes "cmd_info" end,
-        update = { "OptionSet", "BufEnter", "WinEnter" },
+        update = {
+          "OptionSet",
+          "BufEnter",
+          "BufReadPost",
+          "BufWritePost",
+          "WinEnter",
+        },
       },
       status.component.virtual_env {
         surround = {
@@ -159,7 +228,6 @@ return {
       },
       -- Right-side order: user@host, percentage + row:col, clock.
       status.component.builder {
-        condition = function() return min_width "user_host" end,
         init = function(self)
           self.user = os.getenv "USER" or "user"
           self.host = vim.uv.os_gethostname() or "host"
@@ -175,7 +243,7 @@ return {
           },
           { provider = "" },
         },
-        hl = { fg = "fg", bg = "bg" },
+        hl = user_host_hl,
         update = { "VimResized", "WinResized" },
       },
       status.component.builder {
