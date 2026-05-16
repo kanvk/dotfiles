@@ -2,7 +2,7 @@
 
 Kanv's dotfiles, managed with [chezmoi](https://www.chezmoi.io/).
 
-Officially supports **Kali on WSL2** and **Ubuntu** (native or WSL2). macOS is not targeted. Windows-native configs (komorebi, yasb, whkd, Windows Terminal) live in `dot_config/windows/` and apply to `~/.config/windows/` on every host — inert off Windows; on a Windows box the user copies them into their canonical locations manually.
+Officially supports **Kali** and **Ubuntu** (native or WSL2). macOS is not targeted. Windows-native configs (komorebi, yasb, whkd, Windows Terminal) live in `dot_config/windows/` and apply to `~/.config/windows/` on every host — inert off Windows; on a Windows box the user copies them into their canonical locations manually.
 
 ## Bootstrap a new machine
 
