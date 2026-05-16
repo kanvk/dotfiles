@@ -107,10 +107,6 @@ return {
       return #option_flags(self) > 0
     end
 
-    local function is_recording()
-      return vim.fn.reg_recording() ~= ""
-    end
-
     local function short_host(host)
       host = host:gsub("%..*$", "")
       return truncate(host, 10)
@@ -181,21 +177,10 @@ return {
       status.component.git_diff(),
       status.component.diagnostics(),
       status.component.fill(),
-      status.component.cmd_info(),
-      status.component.builder {
-        {
-          provider = function()
-            return status.utils.stylize("rec @" .. vim.fn.reg_recording(), {
-              padding = { left = 1, right = 1 },
-            })
-          end,
-        },
-        condition = is_recording,
-        hl = macro_rec_hl,
-        update = {
-          "RecordingEnter",
-          "RecordingLeave",
-          callback = vim.schedule_wrap(function() vim.cmd.redrawstatus() end),
+      status.component.cmd_info {
+        macro_recording = {
+          padding = { left = 1, right = 1 },
+          hl = macro_rec_hl,
         },
       },
       status.component.fill(),
