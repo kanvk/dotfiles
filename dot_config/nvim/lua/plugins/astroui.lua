@@ -1,6 +1,8 @@
 -- AstroUI provides the basis for configuring the AstroNvim User Interface
 -- Configuration documentation can be found with `:h astroui`
 
+local palette = require "statusline_palette"
+
 ---@type LazySpec
 return {
   "AstroNvim/astroui",
@@ -16,6 +18,14 @@ return {
       astrodark = { -- a table of overrides/changes when applying the astrotheme theme
         -- Normal = { bg = "#000000" },
       },
+    },
+    -- `colors` callback seeds only the mode pill (per-mode backgrounds + mode_fg)
+    -- from the active colorscheme's lualine theme; per-component foregrounds
+    -- (git_branch, virtual_env, etc.) are decided in heirline.lua via dynamic
+    -- highlight-group lookup.
+    status = {
+      colors = function(colors) return palette.apply_lualine_mode_colors(colors) end,
+      modes = palette.astro_mode_overrides(),
     },
     -- Icons can be configured throughout the interface
     icons = {

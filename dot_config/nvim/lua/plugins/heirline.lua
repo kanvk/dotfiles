@@ -2,6 +2,7 @@ return {
   "rebelot/heirline.nvim",
   opts = function(_, opts)
     local status = require "astroui.status"
+    local palette = require "statusline_palette"
     local right_sep = "\xee\x82\xb2" -- powerline left separator (U+E0B2)
     local right_update = { "ModeChanged", pattern = "*:*" }
     local width = {
@@ -10,32 +11,28 @@ return {
       time = 80,
     }
 
-    local function normalize_color(color)
-      if type(color) == "number" then return string.format("#%06x", color) end
-      return color
-    end
-
     local function loaded_color(name)
       local colors = require("heirline.highlights").get_loaded_colors()
-      return normalize_color(colors[name] or name)
+      return palette.normalize_color(colors[name] or name)
     end
 
-    local function hl_color(group, attr, fallback)
-      return normalize_color(require("astroui").get_hlgroup(group)[attr]) or fallback
+    local function pick_fg(group, fallback)
+      return palette.hl_color(group, "fg",
+        palette.lualine_attr(palette.lualine_theme(), "normal", "b", "fg", fallback))
     end
 
     local function lualine_section(section, attr, fallback)
-      local ok, theme = pcall(require, "lualine.themes." .. (vim.g.colors_name or ""))
-      local mode = status.hl.mode_bg()
-      local mode_section = ok and theme[mode] and theme[mode][section]
-      local normal_section = ok and theme.normal and theme.normal[section]
-      return normalize_color(
-        (mode_section and mode_section[attr]) or (normal_section and normal_section[attr]) or fallback
+      return palette.lualine_attr(
+        palette.lualine_theme(),
+        palette.current_lualine_mode(),
+        section,
+        attr,
+        fallback
       )
     end
 
     local function line_bg()
-      return lualine_section("b", "bg", hl_color("Normal", "bg", loaded_color "bg"))
+      return lualine_section("b", "bg", palette.hl_color("Normal", "bg", loaded_color "bg"))
     end
 
     local function mode_fg()
@@ -117,8 +114,8 @@ return {
     end
 
     local function user_host_hl()
-      local fg = is_ssh_session() and hl_color("DiagnosticWarn", "fg", loaded_color "yellow")
-        or hl_color("Directory", "fg", loaded_color "blue")
+      local fg = is_ssh_session() and palette.hl_color("DiagnosticWarn", "fg", loaded_color "yellow")
+        or palette.hl_color("Directory", "fg", loaded_color "blue")
 
       return {
         fg = fg,
@@ -129,10 +126,20 @@ return {
 
     local function macro_rec_hl()
       return {
-        fg = hl_color("WarningMsg", "fg", loaded_color "yellow"),
+        fg = palette.hl_color("WarningMsg", "fg", loaded_color "yellow"),
         bg = "bg",
         bold = true,
       }
+    end
+
+    local function git_branch_hl()
+      return { fg = pick_fg("Conditional", loaded_color "purple"), bold = true }
+    end
+
+    -- NvimEnvironmentName is rarely defined; the chain typically lands at the
+    -- lualine theme's normal.b.fg or the heirline "yellow" alias.
+    local function virtual_env_hl()
+      return { fg = pick_fg("NvimEnvironmentName", loaded_color "yellow"), bold = true }
     end
 
     local function right_block(main, left, condition)
@@ -174,11 +181,11 @@ return {
         },
         surround = {
           separator = "left",
-          color = "git_branch_bg",
+          color = "bg",
           condition = status.condition.is_git_repo,
         },
         on_click = vim.tbl_get(require("astroui").config.status.components, "git_branch", "on_click"),
-        hl = function() return status.hl.get_attributes "git_branch" end,
+        hl = git_branch_hl,
       },
       status.component.file_info(),
       status.component.git_diff(),
@@ -212,13 +219,13 @@ return {
       status.component.virtual_env {
         surround = {
           separator = "right",
-          color = "virtual_env_bg",
+          color = "bg",
           condition = function()
             return min_width "virtual_env" and status.condition.has_virtual_env()
           end,
         },
+        hl = virtual_env_hl,
       },
-      -- Right-side order: user@host, percentage + row:col, clock.
       status.component.builder {
         init = function(self)
           self.user = os.getenv "USER" or "user"
