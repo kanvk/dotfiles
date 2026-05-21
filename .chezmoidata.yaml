@@ -121,6 +121,7 @@ tiers:
         - poppler
         - resvg
         - sevenzip
+        - zoxide
         # rest of git / VCS
         - difftastic
         - git-absorb     # autofixup: build fixup! commits targeting whoever last touched each hunk
@@ -179,10 +180,12 @@ tiers:
         - ouch
         - pastel
         - sd
+        - shfmt
         - taplo
         - tlrc
         - tmuxinator
         - vivid
+        - yamlfmt
         - yq
       pipx:
         - apprise
@@ -193,6 +196,9 @@ tiers:
         - hatch
         - huggingface-hub
         - jupytext # .ipynb <-> .py(percent) for molten / jupytext.nvim
+        - mdformat
+        - mdformat-frontmatter
+        - mdformat-gfm
         - mkdocs
         - nbdime
         - nox
@@ -229,8 +235,6 @@ tiers:
   full:
     inherits: [base]
     include:
-      apt:
-        - trash-cli
       brew:
         # extra prompts / multiplexers
         - starship
@@ -272,6 +276,7 @@ tiers:
         # specialty / niche
         - pixi
         - pkl
+        - prettier
         - typst
         # taps (full path auto-taps on install)
         - anomalyco/tap/opencode
