@@ -1,0 +1,21 @@
+# Display: natural sort handles file2 vs file10 correctly; size linemode
+# shows file size next to each name; show_symlink reveals symlink targets
+# in the file list itself.
+[mgr]
+sort_by        = "natural"
+sort_dir_first = true
+linemode       = "size"
+show_symlink   = true
+scrolloff      = 5
+
+# Register the git plugin as a fetcher so the linemode shows git status
+# (modified/staged/untracked) next to each file in a git repo.
+[[plugin.prepend_fetchers]]
+url   = "*"
+run   = "git"
+group = "git"
+
+[[plugin.prepend_fetchers]]
+url   = "*/"
+run   = "git"
+group = "git"
