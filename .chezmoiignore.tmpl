@@ -36,6 +36,13 @@ docs/**
 # Defensive: never vendor sheldon's plugin cache, even if accidentally re-added.
 .local/share/sheldon/repos/**
 
+# Yazi plugins and flavors are managed by `ya pkg` per package.toml; chezmoi
+# stays out of the way so the two don't fight over the same directories.
+# The smart-tab / smart-switch micro-plugins are written by the
+# yazi-pkg-install run_onchange script, not vendored in source.
+.config/yazi/plugins/**
+.config/yazi/flavors/**
+
 # Runtime/ephemeral Claude Code state — managed at runtime, not tracked.
 .claude/.credentials.json
 .claude/history.jsonl

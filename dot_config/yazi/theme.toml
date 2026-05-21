@@ -1,4 +1,4 @@
-# Source: https://github.com/yazi-rs/flavors (catppuccin-macchiato.yazi)
-# The flavor itself is vendored under flavors/catppuccin-macchiato.yazi/.
+# Flavor itself is managed by `ya pkg` (see package.toml); the install
+# script materializes it under ~/.config/yazi/flavors/.
 [flavor]
 dark = "catppuccin-macchiato"

@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+#
+# Installs yazi plugins and flavors declared in dot_config/yazi/package.toml
+# via `ya pkg install` (uses the locked rev/hash entries in the manifest).
+# Also materializes the smart-tab and smart-switch micro-plugins inline (they
+# aren't in the yazi-rs/plugins monorepo and so can't go through ya pkg).
+# Re-fires whenever package.toml changes.
+#
+# package-toml-hash: {{ include "dot_config/yazi/package.toml" | sha256sum }}
+
+set -euo pipefail
+{{ template "brew-path-bootstrap" . }}
+
+if ! command -v ya >/dev/null 2>&1; then
+  echo "ya not installed yet (ships with yazi) — skipping yazi plugin install"
+  exit 0
+fi
+
+echo "==> Installing yazi plugins via ya pkg install"
+if ! ya pkg install 2>&1 | tail -20; then
+  echo "  (ya pkg install reported errors — re-run 'chezmoi apply --force'"
+  echo "   after the brew install of yazi completes, or run 'ya pkg install'"
+  echo "   directly to retry.)"
+fi
+
+echo "==> Writing smart-tab and smart-switch micro-plugins"
+PLUGIN_DIR="$HOME/.config/yazi/plugins"
+
+mkdir -p "$PLUGIN_DIR/smart-tab.yazi"
+cat > "$PLUGIN_DIR/smart-tab.yazi/main.lua" <<'LUA'
+--- @sync entry
+return {
+	entry = function()
+		local h = cx.active.current.hovered
+		ya.emit("tab_create", h and h.cha.is_dir and { h.url } or { current = true })
+	end,
+}
+LUA
+
+mkdir -p "$PLUGIN_DIR/smart-switch.yazi"
+cat > "$PLUGIN_DIR/smart-switch.yazi/main.lua" <<'LUA'
+--- @sync entry
+local function entry(_, job)
+	local cur = cx.active.current
+	for _ = #cx.tabs, job.args[1] do
+		ya.emit("tab_create", { cur.cwd })
+		if cur.hovered then
+			ya.emit("reveal", { cur.hovered.url })
+		end
+	end
+	ya.emit("tab_switch", { job.args[1] })
+end
+return { entry = entry }
+LUA
