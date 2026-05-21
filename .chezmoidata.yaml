@@ -116,6 +116,11 @@ tiers:
         - ripgrep-all
         - tree-sitter-cli
         - yazi
+        # yazi preview dependencies: pdf (poppler), svg (resvg), images (imagemagick), archives (sevenzip → 7zz)
+        - imagemagick
+        - poppler
+        - resvg
+        - sevenzip
         # rest of git / VCS
         - difftastic
         - git-absorb     # autofixup: build fixup! commits targeting whoever last touched each hunk
@@ -170,6 +175,7 @@ tiers:
         - xh
         # misc
         - f2
+        - jq
         - ouch
         - pastel
         - sd
