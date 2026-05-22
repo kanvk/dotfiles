@@ -102,6 +102,10 @@ fpath+=~/.zfunc
 if command -v brew >/dev/null 2>&1; then
   fpath=("$(brew --prefix)/share/zsh/site-functions" $fpath)
 fi
+# apt-shipped completions on Debian-based Linux. Vendor-completions holds the
+# per-package files; site-functions holds the system-wide ones from zsh-common.
+[ -d /usr/share/zsh/vendor-completions ] && fpath+=/usr/share/zsh/vendor-completions
+[ -d /usr/share/zsh/site-functions ]     && fpath+=/usr/share/zsh/site-functions
 [ -n "$ASDF_DIR" ] && fpath+="$ASDF_DIR/completions"
 
 zstyle :omz:plugins:ssh-agent lazy yes
