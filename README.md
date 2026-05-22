@@ -107,7 +107,7 @@ Things `chezmoi apply` cannot do automatically — do these once on a new machin
 
 ## Editing packages
 
-Edit `.chezmoidata.yaml`, keyed by manager (`apt`, `brew`, `pipx` [installed via `uv tool`], `npm`, `cargo`, `go`, `bun`). The next `chezmoi apply` detects the hash change and re-runs the install script.
+Edit `.chezmoidata.yaml`, keyed by manager (`apt`, `brew`, `uvx` [installed via `uv tool`], `npm`, `cargo`, `go`, `bun`). The next `chezmoi apply` detects the hash change and re-runs the install script.
 
 ```sh
 chezmoi edit .chezmoidata.yaml      # edits in the source

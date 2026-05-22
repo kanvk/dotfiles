@@ -306,7 +306,7 @@ return {
 
   -- Transparent .ipynb <-> .py(percent) conversion on read/write so molten
   -- can drive Jupyter notebooks via cell markers (`# %%`). Requires the
-  -- jupytext CLI (installed via pipx — see .chezmoidata.yaml).
+  -- jupytext CLI (installed via uv tool — see .chezmoidata.yaml).
   {
     "GCBallesteros/jupytext.nvim",
     lazy = false,

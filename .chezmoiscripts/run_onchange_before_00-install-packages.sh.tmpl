@@ -1,10 +1,9 @@
 {{- /*
   Resolve the chosen tier (default "base" if the cached chezmoi.toml predates
   the tier prompt) into a flat per-manager package set. After this block,
-  $resolved is a dict like {apt: [...], brew: [...], pipx: [...], ...} that
-  the rest of the script consumes via $resolved.<manager>. The `pipx` key
-  name is preserved for stability; the underlying installer is `uv tool`
-  (see the python-tools block below).
+  $resolved is a dict like {apt: [...], brew: [...], uvx: [...], ...} that
+  the rest of the script consumes via $resolved.<manager>. The `uvx` list
+  is installed via `uv tool` (see the python-tools block below).
 */ -}}
 {{- $tierName := "base" -}}
 {{- if hasKey . "tier" -}}{{- $tierName = .tier -}}{{- end -}}
@@ -166,11 +165,10 @@ rm -f "$_brewfile"
 unset _brewfile
 {{- end }}
 
-{{ if index $resolved "pipx" -}}
-# --- python tools (YAML key `pipx:`, installer is `uv tool`) ---
-# The `pipx` key in .chezmoidata.yaml is kept for stability; the underlying
-# installer is uv tool. uv autoselects (or auto-downloads) a managed Python
-# the first time a tool is installed — no UV_PYTHON pin and no pyenv coupling.
+{{ if index $resolved "uvx" -}}
+# --- python tools (YAML key `uvx:`, installer is `uv tool`) ---
+# uv autoselects (or auto-downloads) a managed Python the first time a tool
+# is installed — no UV_PYTHON pin and no pyenv coupling.
 if command -v uv >/dev/null 2>&1; then
   echo "==> Installing python tools via uv tool"
   # Entries can carry extra `uv tool install` args after the package name, e.g.
@@ -181,7 +179,7 @@ if command -v uv >/dev/null 2>&1; then
   # following `--with` gets its own `--with`). Other flags (e.g. `--python 3.11`)
   # pass through verbatim. Input comes from .chezmoidata.yaml (trusted), so the
   # unquoted word-split is intentional.
-  for _pkg in{{ range (index $resolved "pipx") }} {{ . | quote }}{{ end }}; do
+  for _pkg in{{ range (index $resolved "uvx") }} {{ . | quote }}{{ end }}; do
     # shellcheck disable=SC2086
     set -- $_pkg
     _name="$1"

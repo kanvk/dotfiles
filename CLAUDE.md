@@ -68,7 +68,7 @@ Both configs (`nvim` = AstroNvim at `dot_config/nvim/`, `lvim` = LazyVim at `dot
 
 ```
 .chezmoi.toml.tmpl         # init-time prompts + computed vars (.is_wsl, .is_debian_like, .tier)
-.chezmoidata.yaml          # tiered package lists (apt/brew/pipx [via uv tool]/npm/cargo/go/bun/gh-ext)
+.chezmoidata.yaml          # tiered package lists (apt/brew/uvx [via uv tool]/npm/cargo/go/bun/gh-ext)
 .chezmoiignore.tmpl        # repo-docs/test exclusions + encrypted-locals gate
 .chezmoiexternal.toml.tmpl # TPM + other externals
 .chezmoiscripts/           # run_once_* and run_onchange_* automation

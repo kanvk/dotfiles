@@ -17,8 +17,8 @@
 #   matters. Tap-prefixed entries (e.g. hashicorp/tap/vault) auto-tap on install.
 #   Cask entries are prefixed with `cask:` (e.g. `cask:copilot-cli`); the install
 #   script rewrites them to `cask "..."` Brewfile lines.
-# - pipx: isolated Python applications. The YAML key is kept for stability;
-#   the install loop uses `uv tool install` under the hood (see install-packages).
+# - uvx: isolated Python applications, installed via `uv tool install`
+#   (see install-packages).
 # - cargo: Rust-only tools not in apt or brew (or where the cargo build is
 #   preferred). Things available via apt/brew live there, not here.
 # - npm/go/bun: language-specific globals where there's no apt/brew equivalent.
@@ -109,7 +109,7 @@ tiers:
         - ffmpeg
         - ffmpegthumbnailer
         - ranger
-        # python provider for nvim (apt is the canonical install path; the pipx: list is for apps, installed via uv tool)
+        # python provider for nvim (apt is the canonical install path; the uvx: list is for apps, installed via uv tool)
         - python3-pynvim
         # GPG: TUI passphrase prompt (avoids "no pinentry" hangs on WSL / headless / SSH sessions)
         - pinentry-curses
@@ -189,7 +189,7 @@ tiers:
         - vivid
         - yamlfmt
         - yq
-      pipx:
+      uvx:
         - apprise
         - bandit
         - build
@@ -286,7 +286,7 @@ tiers:
         - hashicorp/tap/vault
         - localstack/tap/localstack-cli
         - mutagen-io/mutagen/mutagen
-      pipx:
+      uvx:
         - conda-lock
         - dvc
         - dynaconf
