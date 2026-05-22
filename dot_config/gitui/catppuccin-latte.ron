@@ -1,9 +1,8 @@
-// Theme: catppuccin-latte, blue accent. Light flavor.
-// Base: https://github.com/catppuccin/gitui/blob/main/themes/catppuccin-latte.ron.
-// Active tab renders blue; commit authors render lavender.
+// Theme: catppuccin-latte. Light flavor.
+// Source: https://github.com/catppuccin/gitui/blob/main/themes/catppuccin-latte.ron.
 // Apply at launch: `gitui -t catppuccin-latte.ron`.
 (
-    selected_tab: Some("#1e66f5"),
+    selected_tab: Some("Reset"),
     command_fg: Some("#4c4f69"),
     selection_bg: Some("#acb0be"),
     selection_fg: Some("#4c4f69"),
@@ -18,10 +17,10 @@
     diff_file_modified: Some("#fe640b"),
     commit_hash: Some("#7287fd"),
     commit_time: Some("#5c5f77"),
-    commit_author: Some("#7287fd"),
+    commit_author: Some("#209fb5"),
     danger_fg: Some("#d20f39"),
     push_gauge_bg: Some("#1e66f5"),
     push_gauge_fg: Some("#eff1f5"),
     tag_fg: Some("#dc8a78"),
-    branch_fg: Some("#179299"),
+    branch_fg: Some("#179299")
 )
