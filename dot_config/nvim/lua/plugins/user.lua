@@ -50,6 +50,22 @@ return {
       opts.mappings.x = opts.mappings.x or {}
       opts.mappings.v = opts.mappings.v or {}
 
+      -- Pane/split resize on <C-S-Arrow>; <C-Arrow> stays unbound at every
+      -- layer so zsh forward-word/backward-word survives in tmux shell
+      -- panes. Tmux's @pane-is-vim forwarding makes the same chord resize
+      -- panes outside nvim and splits inside it. The original <C-Arrow>
+      -- comes from AstroNvim core's smart-splits spec; opts.mappings = false
+      -- can race the merge order with function-form opts, so a VeryLazy
+      -- `vim.keymap.del` also runs below.
+      opts.mappings.n["<C-S-Up>"] = { function() require("smart-splits").resize_up() end, desc = "Resize split up" }
+      opts.mappings.n["<C-S-Down>"] = { function() require("smart-splits").resize_down() end, desc = "Resize split down" }
+      opts.mappings.n["<C-S-Left>"] = { function() require("smart-splits").resize_left() end, desc = "Resize split left" }
+      opts.mappings.n["<C-S-Right>"] = { function() require("smart-splits").resize_right() end, desc = "Resize split right" }
+      opts.mappings.n["<C-Up>"] = false
+      opts.mappings.n["<C-Down>"] = false
+      opts.mappings.n["<C-Left>"] = false
+      opts.mappings.n["<C-Right>"] = false
+
       -- Spectre relocates from <Leader>s* to <Leader>R* = "Replace" (group
       -- title in plugins/whichkey-groups.lua). The astrocommunity spectre
       -- pack still binds n.<Leader>ss/sR/sf; their disable via false isn't
@@ -173,8 +189,12 @@ return {
         {
           event = "User",
           pattern = "VeryLazy",
-          desc = "Drop pre-relocation <Leader>M*, <Leader>s*, <Leader>f* keymaps",
+          desc = "Drop pre-relocation <Leader>M*, <Leader>s*, <Leader>f*, <C-Arrow> keymaps",
           callback = function()
+            -- smart-splits resize <C-Arrow> → <C-S-Arrow>
+            for _, lhs in ipairs { "<C-Up>", "<C-Down>", "<C-Left>", "<C-Right>" } do
+              pcall(vim.keymap.del, "n", lhs)
+            end
             -- Overseer M* → O*
             for _, lhs in ipairs { "<Leader>Mt", "<Leader>Mc", "<Leader>Mr", "<Leader>Ma", "<Leader>Mi" } do
               pcall(vim.keymap.del, "n", lhs)
