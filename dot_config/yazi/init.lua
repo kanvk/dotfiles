@@ -94,14 +94,14 @@ Status:children_add(function()
 	}
 end, 500, Status.RIGHT)
 
--- Status bar (right): hidden-files marker. The 󰈉 glyph is a slashed eye —
--- it appears when hidden files are NOT visible (i.e. there may be stuff
--- you can't see). It disappears once you toggle hidden visibility on.
+-- Status bar (right): hidden-files marker. The 󰈈 glyph (open eye) appears
+-- when hidden files ARE visible, signaling "you're seeing everything".
+-- Empty when hidden files are filtered out (the default state).
 Status:children_add(function()
-	if not cx.active or not cx.active.pref or cx.active.pref.show_hidden then
+	if not cx.active or not cx.active.pref or not cx.active.pref.show_hidden then
 		return ""
 	end
-	return ui.Line { ui.Span(" 󰈉 "):fg("darkgray") }
+	return ui.Line { ui.Span(" 󰈈 "):fg("darkgray") }
 end, 350, Status.RIGHT)
 
 -- Header (left): user@host. Yellow when running over SSH, blue otherwise.
