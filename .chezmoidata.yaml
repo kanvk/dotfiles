@@ -85,9 +85,12 @@ tiers:
       apt:
         # build tooling
         - cmake
+        - cloc
+        - pastel
         - pkg-config
         - shellcheck
         - shfmt
+        - tmuxinator
         # python build deps (so `pyenv install <X>` works without errors)
         - libbz2-dev
         - libffi-dev
@@ -169,7 +172,6 @@ tiers:
         - fastfetch
         # build / quality
         - ast-grep
-        - cloc
         - scc
         # secrets / security
         - betterleaks
@@ -181,11 +183,9 @@ tiers:
         - f2
         - jq
         - ouch
-        - pastel
         - sd
         - taplo
         - tlrc
-        - tmuxinator
         - vivid
         - yamlfmt
         - yq

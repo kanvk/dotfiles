@@ -41,6 +41,15 @@ if command -v nala >/dev/null 2>&1 && command -v register-python-argcomplete >/d
   register-python-argcomplete nala > "$HOME/.zfunc/_nala" 2>/dev/null || true
 fi
 
+# --- apt-shipped completions placed outside this user's fpath ---
+# Some Debian/Ubuntu packages install their zsh completion into
+# /usr/share/zsh/vendor-completions/, which isn't on fpath here (zshrc keeps
+# the list explicit: ~/.zfunc, brew site-functions, asdf). Copy the ones we
+# actually want into ~/.zfunc so compinit picks them up.
+for src in /usr/share/zsh/vendor-completions/_tmuxinator; do
+  [ -r "$src" ] && cp "$src" "$HOME/.zfunc/$(basename "$src")"
+done
+
 # --- Click-based CLIs (uv-tool-installed; brew-installed Click tools like
 # ggshield are already covered by brew's site-functions and skipped here) ---
 # Click's standard "_<TOOL>_COMPLETE=zsh_source <tool>" dance produces a
