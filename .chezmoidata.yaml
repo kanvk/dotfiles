@@ -105,7 +105,7 @@ tiers:
         - ranger
         # python provider for nvim (apt is the canonical install path; the pipx: list is for apps, installed via uv tool)
         - python3-pynvim
-        # GPG: TUI passphrase prompt (avoids "no pinentry" hangs on WSL/headless)
+        # GPG: TUI passphrase prompt (avoids "no pinentry" hangs on WSL / headless / SSH sessions)
         - pinentry-curses
         # hex dump CLI; hex.nvim (binary view) shells out to it
         - xxd

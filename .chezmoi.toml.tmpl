@@ -74,9 +74,9 @@
     {{- $osIdLike = .chezmoi.osRelease.idLike -}}
   {{- end -}}
 {{- end -}}
-{{- /* Kali sets ID_LIKE=debian, so the contains check covers it without an
-       explicit eq. Debian itself sets ID=debian (no ID_LIKE), so it needs the
-       eq branch. Ubuntu has ID_LIKE=debian but the eq is kept for readability. */ -}}
+{{- /* Most Debian derivatives set ID_LIKE=debian, so the contains check covers
+       them. Debian itself sets ID=debian (no ID_LIKE), so it needs its own eq.
+       The eq on "ubuntu" stays for explicitness and as a quick first-check. */ -}}
 {{- $isDebianLike := or
     (eq $osId "debian")
     (eq $osId "ubuntu")

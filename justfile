@@ -16,13 +16,14 @@ default:
 # Smoke test (alias for `test-smoke`).
 test: test-smoke
 
-# Apply dotfiles in a fresh container; verify modes, gates, idempotence. Default: ubuntu.
+# Apply dotfiles in a fresh container; verify modes, gates, idempotence. Default: a Debian-based image.
 test-smoke distro="ubuntu":
     ./tests/run.sh {{distro}} smoke
 
 # Full bootstrap (apt + brew bundle + uv tool + cargo + ...). Strict superset of test-smoke. Slow.
-# Default: ubuntu, since CLAUDE.md's policy is that ubuntu-only is the routine green-light
-# bar (kali shares the same install pipeline). Pass `all` for both distros when distro-specific.
+# Default: a single Debian-based container, since CLAUDE.md's policy is that one
+# distro is the routine green-light bar (the other test images share the same
+# install pipeline). Pass `all` for every container when changes are distro-specific.
 test-full distro="ubuntu":
     ./tests/run.sh {{distro}} full
 

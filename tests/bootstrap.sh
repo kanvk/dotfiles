@@ -2,7 +2,7 @@
 #
 # Runs INSIDE a test container (tests/Dockerfile.{kali,ubuntu}) to bootstrap
 # this chezmoi config from a bind-mounted source dir. Validates that the
-# dotfiles apply cleanly on a stock Kali / Ubuntu image.
+# dotfiles apply cleanly on a stock Debian-based Linux image.
 #
 # Usage (run by tests/run.sh, not directly — or via the top-level justfile):
 #   bootstrap.sh <smoke|full> [source-dir]
@@ -152,8 +152,8 @@ absent "$HOME/.claude/statusline.sh"
 absent "$HOME/.codex/config.toml"
 absent "$HOME/.codex/AGENTS.md"
 
-# --- WSL helper + Windows configs apply on every host (OS gates dropped so
-# `chezmoi add` works from a WSL box; the files just sit unused on the wrong OS) ---
+# --- wsl.zsh + Windows configs apply on every host (OS gates dropped so
+# `chezmoi add` works from any source machine; the files just sit unused on the wrong OS) ---
 check -f "$HOME/.config/zsh/omz-custom/wsl.zsh"
 check -d "$HOME/.config/windows"
 

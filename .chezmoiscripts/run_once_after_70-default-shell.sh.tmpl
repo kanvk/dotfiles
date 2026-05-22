@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #
 # Set the user's login shell to zsh on first apply. Without this, a fresh
-# bootstrap on Ubuntu/Kali installs zsh + every shell config in this repo
-# but leaves the user on bash — they'd source `.profile`, not `.zshrc`, and
-# silently lose every dotfile in the repo until they ran `chsh` themselves.
+# bootstrap on Debian-based Linux installs zsh + every shell config in this
+# repo but leaves the user on bash — they'd source `.profile`, not `.zshrc`,
+# and silently lose every dotfile in the repo until they ran `chsh` themselves.
 #
 # Idempotent: skips if the user is already on a zsh entry from /etc/shells.
 # `run_once` semantics (vs onchange) so a later manual chsh away from zsh

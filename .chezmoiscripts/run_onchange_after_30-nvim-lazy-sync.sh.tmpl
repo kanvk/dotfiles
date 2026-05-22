@@ -7,7 +7,7 @@
 set -euo pipefail
 {{ template "brew-path-bootstrap" . }}
 # Brew's nvim is preferred over the apt `neovim` system package (a dep of
-# `python3-pynvim`, version-locked to whatever Ubuntu/Kali ships) — the
+# `python3-pynvim`, version-locked to whatever the distro ships) — the
 # bootstrap above puts brew first on PATH so `command -v nvim` resolves there.
 if ! command -v nvim >/dev/null 2>&1; then
   echo "nvim not installed yet — skipping Lazy sync"

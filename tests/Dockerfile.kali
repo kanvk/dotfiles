@@ -1,4 +1,4 @@
-# Test container — Kali rolling. Mirrors the user's primary dev box (WSL2 + Kali).
+# Test container — Kali rolling. A Debian-based Linux image for the bootstrap harness.
 FROM kalilinux/kali-rolling
 
 ENV DEBIAN_FRONTEND=noninteractive

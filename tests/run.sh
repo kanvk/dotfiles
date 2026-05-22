@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# Top-level Docker test runner. Builds + runs bootstrap.sh inside Kali / Ubuntu
-# containers against the local working tree (mounted read-only at /dotfiles).
+# Top-level Docker test runner. Builds + runs bootstrap.sh inside Debian-based
+# Linux containers against the local working tree (mounted read-only at /dotfiles).
 #
 # Usually invoked via the top-level `justfile` (just test, just test-full, etc.)
 # rather than directly. Direct usage:

@@ -88,7 +88,7 @@ if command -v chezmoi >/dev/null 2>&1; then
 fi
 
 {{ if and .is_debian_like (index $resolved "apt") -}}
-# --- apt / nala (Debian/Ubuntu/Kali) ---
+# --- apt / nala (Debian-based Linux) ---
 if command -v sudo >/dev/null 2>&1 && command -v apt-get >/dev/null 2>&1; then
   # Bootstrap nala first so the rest of this run benefits from its parallel
   # downloads + nicer progress UI. nala is itself in the apt list, so this is a

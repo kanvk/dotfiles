@@ -1,4 +1,4 @@
-# Test container — Ubuntu latest. The other officially-supported target.
+# Test container — Ubuntu latest. A Debian-based Linux image for the bootstrap harness.
 FROM ubuntu:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
