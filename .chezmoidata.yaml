@@ -108,7 +108,6 @@ tiers:
         - chafa
         - ffmpeg
         - ffmpegthumbnailer
-        - ranger
         # python provider for nvim (apt is the canonical install path; the uvx: list is for apps, installed via uv tool)
         - python3-pynvim
         # GPG: TUI passphrase prompt (avoids "no pinentry" hangs on WSL / headless / SSH sessions)
@@ -238,6 +237,8 @@ tiers:
   full:
     inherits: [base]
     include:
+      apt:
+        - ranger
       brew:
         # extra prompts / multiplexers
         - starship
