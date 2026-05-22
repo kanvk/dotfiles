@@ -14,11 +14,19 @@ return {
   {
     "mrjones2014/smart-splits.nvim",
     lazy = false,
+    -- Pane/split resize on <C-S-Arrow>; <C-Arrow> stays unbound so zsh
+    -- forward-word/backward-word survives in tmux shell panes. Tmux's
+    -- @pane-is-vim forwarding makes the same chord resize panes outside
+    -- nvim and splits inside it — Ctrl=cursor motion, Ctrl+Shift=structural.
     keys = {
       { "<C-h>", function() require("smart-splits").move_cursor_left() end, desc = "Window left" },
       { "<C-j>", function() require("smart-splits").move_cursor_down() end, desc = "Window down" },
       { "<C-k>", function() require("smart-splits").move_cursor_up() end, desc = "Window up" },
       { "<C-l>", function() require("smart-splits").move_cursor_right() end, desc = "Window right" },
+      { "<C-S-Up>",    function() require("smart-splits").resize_up() end,    desc = "Resize split up" },
+      { "<C-S-Down>",  function() require("smart-splits").resize_down() end,  desc = "Resize split down" },
+      { "<C-S-Left>",  function() require("smart-splits").resize_left() end,  desc = "Resize split left" },
+      { "<C-S-Right>", function() require("smart-splits").resize_right() end, desc = "Resize split right" },
     },
   },
   {
