@@ -87,6 +87,7 @@ tiers:
         - cmake
         - pkg-config
         - shellcheck
+        - shfmt
         # python build deps (so `pyenv install <X>` works without errors)
         - libbz2-dev
         - libffi-dev
@@ -182,7 +183,6 @@ tiers:
         - ouch
         - pastel
         - sd
-        - shfmt
         - taplo
         - tlrc
         - tmuxinator
