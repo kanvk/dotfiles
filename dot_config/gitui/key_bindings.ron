@@ -1,9 +1,0 @@
-// Vim-style hjkl navigation. Additive: gitui's default arrow keys still work,
-// and context-scoped letter bindings (e.g., `l` for stash_open in the stash
-// tab) keep working since gitui resolves bindings by context.
-(
-    move_left:  Some(( code: Char('h'), modifiers: "" )),
-    move_down:  Some(( code: Char('j'), modifiers: "" )),
-    move_up:    Some(( code: Char('k'), modifiers: "" )),
-    move_right: Some(( code: Char('l'), modifiers: "" )),
-)
