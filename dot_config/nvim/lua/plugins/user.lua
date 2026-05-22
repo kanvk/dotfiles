@@ -15,11 +15,10 @@ return {
   -- content-search namespace (LazyVim split parity). Group desc registered
   -- in plugins/whichkey-groups.lua.
   --
-  -- luarocks.nvim dep mirrors what AstroCommunity's pack does: installs
-  -- luautf8 (spider uses it via pcall(require, "lua-utf8") for UTF-8 word
-  -- boundaries) and dkjson (which luarocks.nvim's own loader requires on
-  -- cold start — see the notes there). luajit on PATH at apply-time satisfies
-  -- the bootstrap (.chezmoidata.yaml base tier).
+  -- luarocks.nvim installs luautf8 (spider uses it via pcall(require,
+  -- "lua-utf8") for UTF-8 word boundaries) and dkjson (luarocks.nvim's own
+  -- loader requires it on cold start). luajit on PATH at apply-time
+  -- satisfies the bootstrap (.chezmoidata.yaml base tier).
   {
     "chrisgrieser/nvim-spider",
     dependencies = {
@@ -42,7 +41,7 @@ return {
   -- community packs), reclaiming LHS that earlier function-form opts have
   -- set. Fixes <Leader>-prefix timeout collisions where a shorter LHS was a
   -- complete mapping AND a prefix of longer ones (timeoutlen=500ms felt on
-  -- every press of the short form). Where possible, mirrors lvim conventions.
+  -- every press of the short form).
   {
     "AstroNvim/astrocore",
     opts = function(_, opts)

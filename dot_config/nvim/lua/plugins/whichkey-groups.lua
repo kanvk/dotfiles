@@ -45,11 +45,10 @@ return {
     -- mirrors because their children are mapped in {n,x,o} (e.g., spider's
     -- motions) but the group desc was only registered in n-mode.
 
-    -- <Leader>s: content-search namespace (LazyVim split parity). Mirrors
-    -- lvim/LazyVim layout: grep, buffer lines, help, keymaps, diagnostics,
-    -- registers, marks, undo, etc. — letter-for-letter where possible so
-    -- muscle memory carries between nvim and lvim. The actual bindings live
-    -- in plugins/user.lua. Mode mirror in x (visual selection grep).
+    -- <Leader>s: content-search namespace — grep, buffer lines, help,
+    -- keymaps, diagnostics, registers, marks, undo, etc. The actual
+    -- bindings live in plugins/user.lua. Mode-mirror in x for visual
+    -- selection grep.
     opts.mappings.n["<Leader>s"] = { desc = "Search" }
     opts.mappings.x["<Leader>s"] = { desc = "Search" }
 

@@ -37,13 +37,12 @@ return {
   -- (iS/aS subword, iv/av value, ii/aI indentation, iU url, ...) on top of
   -- vim's built-ins.
   --
-  -- Same disabled set and rebinds as the nvim side so muscle memory carries
-  -- between distros. In lvim specifically:
+  -- Disabled keys reasoning:
   --   an/in is mini.ai's "around/inner NEXT <textobj-id>" prefix (e.g. `anq`
   --         = around-next-quote); keep it free of single-key takeover.
   --   r/R   are flash.nvim treesitter/remote motions in o/x mode.
-  --   ak/ik, ao/io don't collide with anything load-bearing in lvim, but stay
-  --         disabled here for parity with the nvim spec.
+  --   ak/ik, ao/io don't collide with anything load-bearing here but stay
+  --         disabled so the keymap stays predictable across configs.
   -- `number` left unbound — LazyVim's dial extra (loaded via extras.lua)
   --         covers the `<C-a>`/`<C-x>` increment use case.
   {
@@ -96,9 +95,9 @@ return {
     keys = { { "<Leader>uz", "<cmd>ZenMode<cr>", desc = "Toggle Zen Mode" } },
     opts = {},
   },
-  -- Spectre under <Leader>R* = "Replace" group (parity with nvim). Group
-  -- title is registered in plugins/keymaps.lua. Three children mirror the
-  -- nvim layout: project search-replace, current file, visual word.
+  -- Spectre under <Leader>R* = "Replace" group. Group title is registered
+  -- in plugins/keymaps.lua. Three actions: project search-replace, current
+  -- file, visual word.
   {
     "nvim-pack/nvim-spectre",
     cmd = "Spectre",

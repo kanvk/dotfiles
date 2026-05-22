@@ -1,5 +1,5 @@
 " Basic .vimrc for vim emulators (VSCode-Vim, IdeaVim, etc.).
-" Options here mirror the editor-agnostic subset of my nvim setup.
+" Editor-agnostic options only.
 
 let mapleader = " "
 let maplocalleader = ","

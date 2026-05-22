@@ -4,9 +4,10 @@ return {
     "folke/which-key.nvim",
     opts = {
       spec = {
-        -- Net-new groups (after the lvim reorg). LazyVim's default spec already
-        -- labels <leader>{c,d,f,g,gh,q,s,u,x,b,w,<tab>} and non-leader {[,],g,gs,z}
-        -- in n+x modes; the entries below are additions and o-mode mirrors.
+        -- Net-new whichkey groups. The defaults from the upstream packs
+        -- already label most leader and non-leader prefixes in n+x; the
+        -- entries below add the rest and supply o-mode entries so
+        -- operator-pending popups can name their sub-prefixes.
         { "<Leader>gH", group = "GitHub", mode = { "n", "x" } },
         { "<Leader>S",  group = "Subword", mode = { "n", "x", "o" } },
         { "<Leader>R",  group = "Replace", mode = { "n", "x" } },

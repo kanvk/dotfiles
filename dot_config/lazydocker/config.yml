@@ -1,6 +1,6 @@
-# Theme: catppuccin-macchiato (blue accent) — mirrors dot_config/lazygit/config.yml
-# so the two TUIs share a palette. Lazydocker exposes fewer themable keys than
-# lazygit (only the four below), so the rest falls back to lazydocker defaults.
+# Theme: catppuccin-macchiato (blue accent). Lazydocker exposes fewer
+# themable keys than most TUIs (only the four below); the rest falls back
+# to lazydocker defaults.
 gui:
   border: rounded
   theme:

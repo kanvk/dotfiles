@@ -4,7 +4,7 @@
 --
 -- Loads lazily on the keybinds and on :Oil. `default_file_explorer =
 -- false` keeps neo-tree the handler for `nvim <dir>` invocations;
--- oil is opt-in via the keys below. Mirrors the nvim oil spec.
+-- oil is opt-in via the keys below.
 
 ---@type LazySpec
 return {

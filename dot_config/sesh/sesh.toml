@@ -9,7 +9,7 @@
 strict_mode = true
 dir_length = 1
 
-# Two layers of out-of-band overrides, mirroring the gitconfig/ssh convention:
+# Two layers of out-of-band overrides:
 #   - sesh.local.toml   — personal-but-portable sessions (encrypted-tracked
 #                         under chezmoi when encrypt_locals=true; synced across
 #                         the user's own machines).

@@ -89,7 +89,7 @@ return {
         -- Snacks scratch — quick scratch buffer + picker over saved scratchpads
         ["<Leader>."] = { function() require("snacks").scratch() end, desc = "Open scratchpad" },
         ["<Leader>fS"] = { function() require("snacks").scratch.select() end, desc = "Find scratchpads" },
-        -- Snacks zoxide picker — jump to a frequent dir (mirrors dashboard `z`)
+        -- Snacks zoxide picker — jump to a frequent dir
         ["<Leader>fz"] = { function() require("snacks").picker.zoxide() end, desc = "Find via zoxide" },
         -- Snacks gh — GitHub issues/PRs via `gh` CLI. Nested under <Leader>gH*
         -- (group title registered in plugins/whichkey-groups.lua) because
@@ -129,8 +129,8 @@ return {
         ["[n"] = { function() require("neotest").jump.prev() end, desc = "Previous test" },
       },
       x = {
-        -- Visual-mode mirror of <Leader>gO: snacks.gitbrowse picks up the
-        -- selection's line range and includes it in the URL.
+        -- snacks.gitbrowse picks up the visual selection's line range and
+        -- includes it in the remote URL.
         ["<Leader>gO"] = { function() require("snacks").gitbrowse() end, desc = "Open selection on remote" },
         -- Spider <Leader>sw and Spectre visual <Leader>Rw live in plugins/user.lua.
       },

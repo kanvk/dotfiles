@@ -2,8 +2,7 @@
 -- read-only gh_issue/gh_pr pickers (already on <Leader>gHi/I/p/P in
 -- plugins/keymaps.lua) with the write actions (create, comment, review).
 --
--- Requires `gh auth login`. Uses snacks as the picker backend (LazyVim's
--- default picker on install_version >= 8). Mirrors the nvim octo spec.
+-- Requires `gh auth login`. Uses snacks as the picker backend.
 
 ---@type LazySpec
 return {
