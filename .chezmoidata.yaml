@@ -9,17 +9,19 @@
 # See .chezmoitemplates/resolve-tier for the resolver itself.
 #
 # Conventions:
-# - apt: minimal dev-essentials + system-level things brew can't / shouldn't own
-#   (shell, tmux, build deps for pyenv-built Python, media for nvim/yazi previews).
-# - brew: source of truth for version-current user tooling. Most things go here.
-#   Tap-prefixed entries (e.g. hashicorp/tap/vault) auto-tap on install.
-#   Cask entries are prefixed with `cask:` (e.g. `cask:copilot-cli`); the
-#   install script rewrites them to `cask "..."` Brewfile lines.
+# - apt: default for everything available there. Fast, integrated, no extra
+#   installer needed. Use unless apt's version is far behind upstream or being
+#   on the latest matters a lot (e.g. neovim, language toolchains, fast-moving
+#   CLI tools). Covers stable tooling (shell, build deps, formatters, libraries).
+# - brew: reserved for tools where apt is too out-of-date or being version-current
+#   matters. Tap-prefixed entries (e.g. hashicorp/tap/vault) auto-tap on install.
+#   Cask entries are prefixed with `cask:` (e.g. `cask:copilot-cli`); the install
+#   script rewrites them to `cask "..."` Brewfile lines.
 # - pipx: isolated Python applications. The YAML key is kept for stability;
 #   the install loop uses `uv tool install` under the hood (see install-packages).
-# - cargo: Rust-only tools that aren't in brew (or for which the cargo build
-#   is preferred). Things available via brew live in `brew`, not here.
-# - npm/go/bun: language-specific globals where there's no brew equivalent.
+# - cargo: Rust-only tools not in apt or brew (or where the cargo build is
+#   preferred). Things available via apt/brew live there, not here.
+# - npm/go/bun: language-specific globals where there's no apt/brew equivalent.
 #
 # Tier intent:
 # - minimal: shell + git + the few CLI niceties so a fresh box is usable. Picked
