@@ -87,12 +87,22 @@ Status:children_add(function()
 		return ""
 	end
 	return ui.Line {
-		ui.Span(ya.user_name(h.cha.uid) or tostring(h.cha.uid)):fg("magenta"),
+		ui.Span(ya.user_name(h.cha.uid) or tostring(h.cha.uid)):fg("cyan"),
 		":",
-		ui.Span(ya.group_name(h.cha.gid) or tostring(h.cha.gid)):fg("magenta"),
+		ui.Span(ya.group_name(h.cha.gid) or tostring(h.cha.gid)):fg("yellow"),
 		" ",
 	}
 end, 500, Status.RIGHT)
+
+-- Status bar (right): hidden-files marker. The 󰈉 glyph is a slashed eye —
+-- it appears when hidden files are NOT visible (i.e. there may be stuff
+-- you can't see). It disappears once you toggle hidden visibility on.
+Status:children_add(function()
+	if not cx.active or not cx.active.pref or cx.active.pref.show_hidden then
+		return ""
+	end
+	return ui.Line { ui.Span(" 󰈉 "):fg("darkgray") }
+end, 350, Status.RIGHT)
 
 -- Header (left): user@host. Yellow when running over SSH, blue otherwise.
 Header:children_add(function()
