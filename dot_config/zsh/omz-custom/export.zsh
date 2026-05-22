@@ -85,3 +85,7 @@ export PYENV_ROOT="$HOME/.pyenv"
 
 # broot launcher is created by `broot --install` — skip sourcing if absent.
 [ -f "$HOME/.config/broot/launcher/bash/br" ] && source "$HOME/.config/broot/launcher/bash/br"
+
+# luarocks: surface ~/.luarocks/{share,lib,bin} via LUA_PATH/LUA_CPATH/PATH so
+# rock-installed libs are `require`-able and CLIs (busted, luacheck, …) work.
+command -v luarocks >/dev/null && eval "$(luarocks path --bin)"

@@ -238,6 +238,10 @@ tiers:
     inherits: [base]
     include:
       apt:
+        # lua: package manager + dev headers (for building C-backed rocks like lpeg, lsqlite3).
+        # luarocks defaults to PUC Lua 5.4 here; LuaJIT (for nvim) is a separate brew install.
+        - liblua5.4-dev
+        - luarocks
         - ranger
       brew:
         # extra prompts / multiplexers
