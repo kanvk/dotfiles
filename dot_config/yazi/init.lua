@@ -12,24 +12,39 @@ Status:children_add(function(self)
 	end
 end, 3300, Status.LEFT)
 
--- Status bar (left): git branch of the current view's CWD.
--- Cached per-cwd: status callbacks fire on every redraw, so a fresh shell-out
--- to `git` here would freeze the UI. Refresh only when the cwd changes.
-local git_branch_cache = { cwd = nil, branch = "" }
-local function current_git_branch(cwd_str)
-	if cwd_str == git_branch_cache.cwd then
-		return git_branch_cache.branch
+-- Status bar (left): git branch of the current view's CWD, plus a worktree
+-- marker when the CWD lives in a non-main worktree. Cached per-cwd: status
+-- callbacks fire on every redraw, so a fresh shell-out to `git` here would
+-- freeze the UI. Refresh only when the cwd changes.
+local git_info_cache = { cwd = nil, branch = "", worktree = "" }
+local function current_git_info(cwd_str)
+	if cwd_str == git_info_cache.cwd then
+		return git_info_cache.branch, git_info_cache.worktree
 	end
-	git_branch_cache.cwd = cwd_str
-	local handle = io.popen("git -C " .. ("%q"):format(cwd_str) .. " branch --show-current 2>/dev/null")
+	git_info_cache.cwd = cwd_str
+	local cmd = "git -C " .. ("%q"):format(cwd_str)
+		.. " rev-parse --git-dir --git-common-dir --show-toplevel --abbrev-ref HEAD 2>/dev/null"
+	local handle = io.popen(cmd)
 	if not handle then
-		git_branch_cache.branch = ""
-		return ""
+		git_info_cache.branch, git_info_cache.worktree = "", ""
+		return "", ""
 	end
-	local out = handle:read("*l") or ""
+	local git_dir = handle:read("*l")
+	local git_common = handle:read("*l")
+	local toplevel = handle:read("*l")
+	local branch = handle:read("*l")
 	handle:close()
-	git_branch_cache.branch = out
-	return out
+	if not branch or branch == "" or branch == "HEAD" then
+		git_info_cache.branch, git_info_cache.worktree = "", ""
+		return "", ""
+	end
+	git_info_cache.branch = branch
+	if git_dir and git_common and git_dir ~= git_common and toplevel then
+		git_info_cache.worktree = toplevel:match("([^/]+)$") or ""
+	else
+		git_info_cache.worktree = ""
+	end
+	return git_info_cache.branch, git_info_cache.worktree
 end
 
 Status:children_add(function()
@@ -37,15 +52,16 @@ Status:children_add(function()
 	if not cwd then
 		return ""
 	end
-	local branch = current_git_branch(tostring(cwd))
+	local branch, worktree = current_git_info(tostring(cwd))
 	if branch == "" then
 		return ""
 	end
-	return ui.Line {
-		" ",
-		ui.Span(" " .. branch):fg("green"),
-		" ",
-	}
+	local parts = { " ", ui.Span(" " .. branch):fg("green") }
+	if worktree ~= "" then
+		table.insert(parts, ui.Span(" ⎇ " .. worktree):fg("yellow"))
+	end
+	table.insert(parts, " ")
+	return ui.Line(parts)
 end, 3000, Status.LEFT)
 
 -- Status bar (right): mtime of the hovered file, "YYYY-MM-DD HH:MM" (minute precision).
