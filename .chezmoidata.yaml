@@ -253,6 +253,7 @@ tiers:
         - act
         - ggshield
         - gitleaks
+        - gitui
         - jj
         - k9s
         - rustscan
