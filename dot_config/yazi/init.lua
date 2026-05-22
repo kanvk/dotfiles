@@ -12,6 +12,22 @@ Status:children_add(function(self)
 	end
 end, 3300, Status.LEFT)
 
+-- Status bar (right): mtime of the hovered file, "YYYY-MM-DD HH:MM" (minute precision).
+Status:children_add(function()
+	local h = cx.active.current.hovered
+	if not h or not h.cha or not h.cha.mtime then
+		return ""
+	end
+	local t = math.floor(h.cha.mtime)
+	if t <= 0 then
+		return ""
+	end
+	return ui.Line {
+		ui.Span(os.date("%Y-%m-%d %H:%M", t)):fg("darkgray"),
+		" ",
+	}
+end, 400, Status.RIGHT)
+
 -- Status bar (right): owner:group of the hovered file.
 Status:children_add(function()
 	local h = cx.active.current.hovered
