@@ -69,6 +69,7 @@ gui:
   filterMode: fuzzy
   statusPanelView: allBranchesLog
   showDivergenceFromBaseBranch: arrowAndNumber
+  showRandomTip: false
   expandFocusedSidePanel: true
   expandedSidePanelWeight: 2
   skipRewordInEditorWarning: true
