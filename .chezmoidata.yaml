@@ -198,9 +198,7 @@ tiers:
         - hatch
         - huggingface-hub
         - jupytext # .ipynb <-> .py(percent) for molten / jupytext.nvim
-        - mdformat
-        - mdformat-frontmatter
-        - mdformat-gfm
+        - mdformat --with mdformat-frontmatter --with mdformat-gfm
         - mkdocs
         - nbdime
         - nox

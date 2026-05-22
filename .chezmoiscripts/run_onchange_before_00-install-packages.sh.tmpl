@@ -173,10 +173,18 @@ unset _brewfile
 # the first time a tool is installed — no UV_PYTHON pin and no pyenv coupling.
 if command -v uv >/dev/null 2>&1; then
   echo "==> Installing python tools via uv tool"
+  # Entries can carry extra `uv tool install` args after the package name, e.g.
+  # `mdformat --with mdformat-frontmatter --with mdformat-gfm` — the plugin
+  # libraries need to live inside the tool's own venv (they're not standalone
+  # CLIs). Word-split each entry into positional params so those args reach uv
+  # intact; upgrade only needs the bare package name. Input comes from
+  # .chezmoidata.yaml (trusted), so the unquoted expansion is intentional.
   for _pkg in{{ range (index $resolved "pipx") }} {{ . | quote }}{{ end }}; do
-    uv tool install "$_pkg" 2>/dev/null \
-      || uv tool upgrade "$_pkg" \
-      || _record_install_failure "uv tool: $_pkg"
+    # shellcheck disable=SC2086
+    set -- $_pkg
+    uv tool install "$@" 2>/dev/null \
+      || uv tool upgrade "$1" \
+      || _record_install_failure "uv tool: $1"
   done
   unset _pkg
 fi
