@@ -133,7 +133,7 @@ return {
     end
 
     local function git_branch_hl()
-      return { fg = pick_fg("Conditional", loaded_color "purple"), bold = true }
+      return { fg = pick_fg("GitSignsAdd", loaded_color "green"), bold = true }
     end
 
     -- NvimEnvironmentName is rarely defined; the chain typically lands at the
