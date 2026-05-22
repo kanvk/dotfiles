@@ -47,10 +47,9 @@ if [ -n "$unexpected" ]; then
 fi
 
 # Find a python that has PyYAML. The chezmoi-managed pynvim uv-tool venv is
-# the canonical host — it's installed on every dev box and has pyyaml injected
-# by .chezmoiscripts/run_onchange_after_20-pynvim-extras.sh.tmpl. Fall back to
-# whatever `python3` resolves to if the venv isn't there yet (fresh clone
-# before first apply) or doesn't have yaml.
+# the canonical host — it's installed on every dev box with pyyaml among its
+# `--with` extras. Fall back to whatever `python3` resolves to if the venv
+# isn't there yet (fresh clone before first apply) or doesn't have yaml.
 py_yaml=""
 for cand in "$HOME/.local/share/uv/tools/pynvim/bin/python" python3; do
     if command -v "$cand" >/dev/null 2>&1 && "$cand" -c 'import yaml' 2>/dev/null; then

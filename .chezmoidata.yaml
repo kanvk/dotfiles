@@ -198,7 +198,7 @@ tiers:
         - hatch
         - huggingface-hub
         - jupytext # .ipynb <-> .py(percent) for molten / jupytext.nvim
-        - mdformat --with mdformat-frontmatter --with mdformat-gfm
+        - mdformat --with mdformat-frontmatter mdformat-gfm
         - mkdocs
         - nbdime
         - nox
@@ -208,7 +208,10 @@ tiers:
         - pip-tools
         - prek
         - py-spy
-        - pynvim # nvim python host; molten extras (jupyter_client, ipykernel, cairosvg, pnglatex, plotly, kaleido, pyperclip, nbformat, pillow) injected by run_onchange_after_20-pynvim-extras
+        # nvim python host; the molten extras are required for the
+        # :checkhealth molten plugin; pyyaml doubles as the canonical
+        # "python with yaml" used by `just lint`.
+        - pynvim --with jupyter_client ipykernel cairosvg pnglatex plotly kaleido pyperclip nbformat pillow pyyaml
         - shell-functools
         - tox
         - ydiff

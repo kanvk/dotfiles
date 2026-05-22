@@ -174,19 +174,35 @@ unset _brewfile
 if command -v uv >/dev/null 2>&1; then
   echo "==> Installing python tools via uv tool"
   # Entries can carry extra `uv tool install` args after the package name, e.g.
-  # `mdformat --with mdformat-frontmatter --with mdformat-gfm` — the plugin
-  # libraries need to live inside the tool's own venv (they're not standalone
-  # CLIs). Word-split each entry into positional params so those args reach uv
-  # intact; upgrade only needs the bare package name. Input comes from
-  # .chezmoidata.yaml (trusted), so the unquoted expansion is intentional.
+  # `mdformat --with mdformat-frontmatter mdformat-gfm` — plugin libraries with
+  # no executables that need to live inside the tool's own venv. `uv tool install`
+  # only accepts one package per `--with` flag, so the loop expands a single
+  # `--with X Y Z` group into `--with X --with Y --with Z` (each non-flag arg
+  # following `--with` gets its own `--with`). Other flags (e.g. `--python 3.11`)
+  # pass through verbatim. Input comes from .chezmoidata.yaml (trusted), so the
+  # unquoted word-split is intentional.
   for _pkg in{{ range (index $resolved "pipx") }} {{ . | quote }}{{ end }}; do
     # shellcheck disable=SC2086
     set -- $_pkg
-    uv tool install "$@" 2>/dev/null \
-      || uv tool upgrade "$1" \
-      || _record_install_failure "uv tool: $1"
+    _name="$1"
+    _args=()
+    _need_with=0
+    for _arg in "$@"; do
+      case "$_arg" in
+        --with) _need_with=1 ;;
+        --*)    _args+=("$_arg"); _need_with=0 ;;
+        *)
+          if [ "$_need_with" = "1" ]; then _args+=(--with "$_arg")
+          else                              _args+=("$_arg")
+          fi
+          ;;
+      esac
+    done
+    uv tool install "${_args[@]}" 2>/dev/null \
+      || uv tool upgrade "$_name" \
+      || _record_install_failure "uv tool: $_name"
   done
-  unset _pkg
+  unset _pkg _name _args _arg _need_with
 fi
 {{- end }}
 
