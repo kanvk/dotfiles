@@ -32,6 +32,18 @@ verbs: [
         execution: "$EDITOR {file}"
         leave_broot: false
     }
+    {
+        key: enter
+        apply_to: text_file
+        execution: "$EDITOR {file}"
+        leave_broot: false
+    }
+    {
+        key: ctrl-e
+        apply_to: directory
+        execution: "$EDITOR {file}"
+        leave_broot: false
+    }
 
     # Example 1: launching `tail -n` on the selected file (leaving broot)
     # {
@@ -143,7 +155,7 @@ verbs: [
     # alt-* bindings are unreachable. Provide ctrl-* equivalents.
     {
         key: ctrl-o
-        internal: ":open_leave"
+        internal: ":open_stay"
     }
     {
         key: ctrl-y
