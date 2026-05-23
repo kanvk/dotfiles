@@ -39,6 +39,10 @@ dim='\033[38;2;110;115;141m'     # Overlay0 — separators, @, parens, chrome
 rst='\033[0m'
 sep=" ${dim}|${rst} "
 
+# ── Tunables ────────────────────────────────────────────────────────────────
+cache_max_age=60      # seconds — refresh OAuth usage data this often
+stale_max_age=1800    # seconds — show stale cache up to 30min if API is down
+
 # ── Helper functions ─────────────────────────────────────────────────────────
 # Hot-path functions set REPLY instead of printing to stdout.
 # This avoids subshell forks: "func; x=$REPLY" vs "x=$(func)" (the latter forks).
@@ -239,17 +243,22 @@ get_oauth_token() {
 }
 
 # ── Fetch usage data (60s cache with atomic writes) ──────────────────────────
-cache_file="/tmp/claude/statusline-usage-cache.json"
-cache_max_age=60
+# Cache lives under $XDG_CACHE_HOME/claude (or ~/.cache/claude) — user-private,
+# not the shared /tmp tree (which is exposed to other local users).
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/claude"
+cache_file="$cache_dir/statusline-usage.json"
 
 fetch_usage_data() {
     local usage_data="" has_data=false
-    mkdir -p /tmp/claude 2>/dev/null
-    # Read cache if fresh enough
+    mkdir -p "$cache_dir" 2>/dev/null
+    # Read cache if fresh enough. Guard against future mtimes (clock skew,
+    # NTP correction, hostile pre-populated file) — a negative age would
+    # otherwise pass the `< cache_max_age` check forever.
     if [ -f "$cache_file" ]; then
         local cache_mtime
         cache_mtime=$(stat -c %Y "$cache_file" 2>/dev/null || stat -f %m "$cache_file" 2>/dev/null)
-        if [ $(($(date +%s) - cache_mtime)) -lt "$cache_max_age" ]; then
+        local age=$(($(date +%s) - ${cache_mtime:-0}))
+        if [ "$age" -ge 0 ] && [ "$age" -lt "$cache_max_age" ]; then
             usage_data=$(<"$cache_file")
             has_data=true
         fi
@@ -264,22 +273,35 @@ fetch_usage_data() {
                 -H "Content-Type: application/json" \
                 -H "Authorization: Bearer $token" \
                 -H "anthropic-beta: oauth-2025-04-20" \
-                -H "User-Agent: claude-code/2.1.34" \
+                -H "User-Agent: claude-code/2.1.150" \
                 "https://api.anthropic.com/api/oauth/usage" 2>/dev/null)
             if [ -n "$response" ] && jq -e . <<<"$response" >/dev/null 2>&1; then
                 usage_data="$response"
                 has_data=true
-                # Atomic write: temp file + rename prevents concurrent partial reads
+                # Atomic write: temp file + rename prevents concurrent partial reads.
+                # Silence printf's redirect error if mktemp returned empty, and
+                # clean up the temp file if either write or rename fails.
                 local tmp_cache
-                tmp_cache=$(mktemp "${cache_file}.XXXXXX" 2>/dev/null) &&
-                    printf '%s' "$response" >"$tmp_cache" &&
-                    mv "$tmp_cache" "$cache_file"
+                if tmp_cache=$(mktemp "${cache_file}.XXXXXX" 2>/dev/null); then
+                    if printf '%s' "$response" >"$tmp_cache" 2>/dev/null &&
+                        mv "$tmp_cache" "$cache_file" 2>/dev/null; then
+                        : # success
+                    else
+                        rm -f "$tmp_cache"
+                    fi
+                fi
             fi
         fi
-        # Fall back to stale cache if API call failed
+        # Fall back to stale cache if API call failed — but cap at stale_max_age
+        # so a week-old cache doesn't silently mask a week-long API outage.
         if ! $has_data && [ -f "$cache_file" ]; then
-            usage_data=$(<"$cache_file")
-            has_data=true
+            local stale_mtime
+            stale_mtime=$(stat -c %Y "$cache_file" 2>/dev/null || stat -f %m "$cache_file" 2>/dev/null)
+            local stale_age=$(($(date +%s) - ${stale_mtime:-0}))
+            if [ "$stale_age" -ge 0 ] && [ "$stale_age" -lt "$stale_max_age" ]; then
+                usage_data=$(<"$cache_file")
+                has_data=true
+            fi
         fi
     fi
     $has_data && printf '%s' "$usage_data"
