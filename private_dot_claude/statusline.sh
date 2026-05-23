@@ -179,30 +179,25 @@ if [ -n "$total_dur_ms" ]; then
     total_dur_fmt=$REPLY
 else total_dur_fmt="NA"; fi
 
-# Format epoch seconds → compact local time string (native rate_limits.resets_at is already epoch)
-# Styles: "time"→"7:00pm", "datetime"→"Mar 6, 10:00am"
-format_reset_epoch() {
-    local epoch="$1" style="$2" result
+# Format epoch seconds → compact local time string. Native rate_limits.resets_at
+# is already epoch; ISO 8601 callers go through format_reset_time → iso_to_epoch.
+# Styles: "time"→"7:00pm", "datetime"→"Mar 6, 10:00am", default→"Mar 6"
+# BSD branch (date -j -r) covers macOS, GNU branch (date -d @epoch) covers Linux.
+# Lowercase only needed on the BSD branch — GNU's %P already emits "am/pm".
+format_epoch() {
+    local epoch="$1" style="$2" bsd_fmt gnu_fmt result
     { [ -z "$epoch" ] || [ "$epoch" = "null" ]; } && return
     case "$style" in
-    time)
-        # BSD date (macOS) then GNU date (Linux)
-        result=$(date -j -r "$epoch" +"%l:%M%p" 2>/dev/null)
-        if [ -n "$result" ]; then
-            echo "$result" | sed 's/^ //' | tr '[:upper:]' '[:lower:]'
-        else
-            date -d "@$epoch" +"%l:%M%P" 2>/dev/null | sed 's/^ //'
-        fi
-        ;;
-    datetime)
-        result=$(date -j -r "$epoch" +"%b %-d, %l:%M%p" 2>/dev/null)
-        if [ -n "$result" ]; then
-            echo "$result" | sed 's/  / /g; s/^ //' | tr '[:upper:]' '[:lower:]'
-        else
-            date -d "@$epoch" +"%b %-d, %l:%M%P" 2>/dev/null | sed 's/  / /g; s/^ //'
-        fi
-        ;;
+    time)     bsd_fmt='%l:%M%p'         gnu_fmt='%l:%M%P' ;;
+    datetime) bsd_fmt='%b %-d, %l:%M%p' gnu_fmt='%b %-d, %l:%M%P' ;;
+    *)        bsd_fmt='%b %-d'          gnu_fmt='%b %-d' ;;
     esac
+    result=$(date -j -r "$epoch" +"$bsd_fmt" 2>/dev/null)
+    if [ -n "$result" ]; then
+        echo "$result" | sed 's/  / /g; s/^ //' | tr '[:upper:]' '[:lower:]'
+    else
+        date -d "@$epoch" +"$gnu_fmt" 2>/dev/null | sed 's/  / /g; s/^ //'
+    fi
 }
 
 # ── OAuth token resolution ───────────────────────────────────────────────────
@@ -333,38 +328,13 @@ iso_to_epoch() {
     return 1
 }
 
-# Format ISO timestamp → compact local time string
-# Styles: "time"→"7:00pm", "datetime"→"Mar 6, 10:00am", default→"Mar 6"
+# Format ISO 8601 timestamp → compact local time string (thin wrapper around
+# format_epoch). Styles same as format_epoch.
 format_reset_time() {
-    local iso_str="$1" style="$2" epoch result
+    local iso_str="$1" style="$2" epoch
     { [ -z "$iso_str" ] || [ "$iso_str" = "null" ]; } && return
     epoch=$(iso_to_epoch "$iso_str") || return
-    case "$style" in
-    time)
-        result=$(date -j -r "$epoch" +"%l:%M%p" 2>/dev/null)
-        if [ -n "$result" ]; then
-            echo "$result" | sed 's/^ //' | tr '[:upper:]' '[:lower:]'
-        else
-            date -d "@$epoch" +"%l:%M%P" 2>/dev/null | sed 's/^ //'
-        fi
-        ;;
-    datetime)
-        result=$(date -j -r "$epoch" +"%b %-d, %l:%M%p" 2>/dev/null)
-        if [ -n "$result" ]; then
-            echo "$result" | sed 's/  / /g; s/^ //' | tr '[:upper:]' '[:lower:]'
-        else
-            date -d "@$epoch" +"%b %-d, %l:%M%P" 2>/dev/null | sed 's/  / /g; s/^ //'
-        fi
-        ;;
-    *)
-        result=$(date -j -r "$epoch" +"%b %-d" 2>/dev/null)
-        if [ -n "$result" ]; then
-            echo "$result" | tr '[:upper:]' '[:lower:]'
-        else
-            date -d "@$epoch" +"%b %-d" 2>/dev/null
-        fi
-        ;;
-    esac
+    format_epoch "$epoch" "$style"
 }
 
 # ── Build output string ─────────────────────────────────────────────────────
@@ -403,10 +373,8 @@ fi
 # Segment 4: API response time / total session wall-clock time
 out+="${sep}${path}${api_dur_fmt}${rst}${dim}/${rst}${path}${total_dur_fmt}${rst}"
 
-# Segment 5: Lines added/removed
-if [ -n "$lines_added" ]; then la_fmt="+${lines_added}"; else la_fmt="NA"; fi
-if [ -n "$lines_removed" ]; then lr_fmt="-${lines_removed}"; else lr_fmt="NA"; fi
-out+="${sep}${branch}${la_fmt}${rst}${dim}/${rst}${removed}${lr_fmt}${rst}"
+# Segment 5: Lines added/removed (jq's `// 0` guarantees both are non-empty)
+out+="${sep}${branch}+${lines_added}${rst}${dim}/${rst}${removed}-${lines_removed}${rst}"
 
 # ── Segment 6: Rate limits (3-tier fallback) ─────────────────────────────────
 # 1. Native rate_limits from input JSON (after first API response)
@@ -422,7 +390,7 @@ if [ -n "$rl_five_pct" ] || [ -n "$rl_seven_pct" ]; then
         five_color=$REPLY
         out+="${sep}${label}5h${rst} ${five_color}${five_pct_int}%${rst}"
         if [ -n "$rl_five_reset" ]; then
-            five_reset=$(format_reset_epoch "$rl_five_reset" "time")
+            five_reset=$(format_epoch "$rl_five_reset" "time")
             [ -n "$five_reset" ] && out+=" ${dim}@${five_reset}${rst}"
         fi
     fi
@@ -434,7 +402,7 @@ if [ -n "$rl_five_pct" ] || [ -n "$rl_seven_pct" ]; then
         seven_color=$REPLY
         out+="${sep}${label}7d${rst} ${seven_color}${seven_pct_int}%${rst}"
         if [ -n "$rl_seven_reset" ]; then
-            seven_reset=$(format_reset_epoch "$rl_seven_reset" "datetime")
+            seven_reset=$(format_epoch "$rl_seven_reset" "datetime")
             [ -n "$seven_reset" ] && out+=" ${dim}@${seven_reset}${rst}"
         fi
     fi
@@ -466,8 +434,8 @@ else
         : "${extra_used:=0}"
         : "${extra_limit:=0}"
 
-        LC_NUMERIC=C printf -v five_hour_pct '%.0f' "${five_hour_pct:-0}" 2>/dev/null
-        LC_NUMERIC=C printf -v seven_day_pct '%.0f' "${seven_day_pct:-0}" 2>/dev/null
+        LC_NUMERIC=C printf -v five_hour_pct '%.0f' "$five_hour_pct" 2>/dev/null
+        LC_NUMERIC=C printf -v seven_day_pct '%.0f' "$seven_day_pct" 2>/dev/null
 
         # 5-hour rate limit with reset time
         usage_color "$five_hour_pct"
@@ -486,11 +454,11 @@ else
         # Extra usage credits (only shown when enabled on the account)
         if [ "$extra_enabled" = "true" ]; then
             LC_NUMERIC=C printf -v extra_pct_int '%.0f' "${extra_pct:-0}" 2>/dev/null
-            # Credits are in cents — divide by 100 for dollars (needs awk for float division)
-            extra_used_fmt=$(LC_NUMERIC=C awk "BEGIN {printf \"%.2f\", ${extra_used:-0}/100}" 2>/dev/null)
-            extra_limit_fmt=$(LC_NUMERIC=C awk "BEGIN {printf \"%.2f\", ${extra_limit:-0}/100}" 2>/dev/null)
-            if [ -n "$extra_used_fmt" ] && [ -n "$extra_limit_fmt" ] &&
-                [[ "$extra_used_fmt" != *'$'* ]] && [[ "$extra_limit_fmt" != *'$'* ]]; then
+            # Credits are in cents — pure-bash int division for the dollars part,
+            # printf builtin for the zero-padded cents. No awk fork needed.
+            extra_used_fmt="$((extra_used / 100)).$(printf '%02d' "$((extra_used % 100))")"
+            extra_limit_fmt="$((extra_limit / 100)).$(printf '%02d' "$((extra_limit % 100))")"
+            if [ -n "$extra_used_fmt" ] && [ -n "$extra_limit_fmt" ]; then
                 usage_color "$extra_pct_int"
                 extra_color=$REPLY
                 out+="${sep}${label}extra${rst} ${extra_color}\$${extra_used_fmt}/\$${extra_limit_fmt}${rst}"
