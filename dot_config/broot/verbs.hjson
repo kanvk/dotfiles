@@ -162,11 +162,11 @@ verbs: [
         internal: ":toggle_hidden"
     }
     {
-        key: ctrl-l
+        key: ctrl-|
         internal: ":move_panel_divider 0 1"
     }
     {
-        key: ctrl-x
+        key: ctrl--
         internal: ":move_panel_divider 0 -1"
     }
 
