@@ -81,6 +81,11 @@ verbs: [
         execution: ":focus {git-root}"
         leave_broot: false
     }
+    {
+        invocation: tf
+        internal: ":toggle_files"
+        leave_broot: false
+    }
 
     # On ctrl-b, propose the creation of a copy of the selection.
     # While this might occasionally be useful, this verb is mostly here
