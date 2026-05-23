@@ -22,19 +22,22 @@
 # - Git commands use --no-optional-locks to prevent lock contention
 # - Here-strings (<<<) used instead of echo|pipe where possible
 
+# set -f only: tolerate partial/missing input fields and degrade gracefully;
+# -e/-u/pipefail would conflict with the script's defensive ${var:-default} idiom.
 set -f # disable globbing
 
 # ── ANSI colors (Catppuccin Macchiato, 24-bit truecolor) ────────────────────
-blue='\033[38;2;198;160;246m'    # Mauve  — primary accent (model name)
-orange='\033[38;2;245;169;127m'  # Peach  — context tokens / tier-3 counts
-green='\033[38;2;166;218;149m'   # Green  — git branch, +lines, git added
-cyan='\033[38;2;125;196;228m'    # Sapphire — dir/path, durations, worktree
-red='\033[38;2;237;135;150m'     # Red    — -lines, git removed
-yellow='\033[38;2;238;212;159m'  # Yellow — tier-3 cost
-white='\033[38;2;183;189;248m'   # Lavender — effort brackets/label
-gray='\033[38;2;110;115;141m'    # Overlay0 — separators, @, parens, chrome
+# Variables are named by semantic role; the comment notes the Catppuccin hue.
+accent='\033[38;2;198;160;246m'  # Mauve    — model name (primary accent)
+tokens='\033[38;2;245;169;127m'  # Peach    — context tokens / tier-3 counts
+branch='\033[38;2;166;218;149m'  # Green    — git branch, +lines, git added
+path='\033[38;2;125;196;228m'    # Sapphire — dir/path, durations, worktree
+removed='\033[38;2;237;135;150m' # Red      — -lines, git removed
+warn='\033[38;2;238;212;159m'    # Yellow   — tier-3 cost
+label='\033[38;2;183;189;248m'   # Lavender — effort brackets, rate-limit labels
+dim='\033[38;2;110;115;141m'     # Overlay0 — separators, @, parens, chrome
 rst='\033[0m'
-sep=" ${gray}|${rst} "
+sep=" ${dim}|${rst} "
 
 # ── Helper functions ─────────────────────────────────────────────────────────
 # Hot-path functions set REPLY instead of printing to stdout.
@@ -66,18 +69,20 @@ format_tokens_round() {
 
 # Color-code a percentage: Green <50% < Yellow <70% < Peach <90% < Red
 # Rounds the input defensively so floats (e.g. 95.4 from upstream) don't
-# trigger "integer expected" errors and fall through to green.
+# trigger "integer expected" errors and fall through to the safe (branch) tier.
+# The gradient reuses palette vars: $removed = danger red (same hex as -lines),
+# $tokens = peach, $warn = yellow, $branch = green. Cosmetic alias, same bytes.
 usage_color() {
     local n
     LC_NUMERIC=C printf -v n '%.0f' "$1" 2>/dev/null || n=0
     if [ "$n" -ge 90 ]; then
-        REPLY=$red      # Red    237,135,150
+        REPLY=$removed  # Red    237,135,150
     elif [ "$n" -ge 70 ]; then
-        REPLY=$orange   # Peach  245,169,127
+        REPLY=$tokens   # Peach  245,169,127
     elif [ "$n" -ge 50 ]; then
-        REPLY=$yellow   # Yellow 238,212,159
+        REPLY=$warn     # Yellow 238,212,159
     else
-        REPLY=$green    # Green  166,218,149
+        REPLY=$branch   # Green  166,218,149
     fi
 }
 
@@ -160,7 +165,7 @@ else ctx_total_fmt="NA"; fi
 if [ -n "$pct_used_int" ]; then
     usage_color "$pct_used_int"
     ctx_color=$REPLY
-else ctx_color=$gray; fi
+else ctx_color=$dim; fi
 if [ -n "$api_dur_ms" ]; then
     fmt_dur "$api_dur_ms"
     api_dur_fmt=$REPLY
@@ -345,41 +350,41 @@ out=""
 
 # Segment 1: Model [effort]
 if [ -n "$effort_level" ]; then
-    out+="${blue}${model_name}${rst} ${white}[${effort_level}]${rst}"
+    out+="${accent}${model_name}${rst} ${label}[${effort_level}]${rst}"
 else
-    out+="${blue}${model_name}${rst}"
+    out+="${accent}${model_name}${rst}"
 fi
 
 # Segment 2: workspace dir@branch (+added -removed)
 # --no-optional-locks prevents git from writing lock files that block other processes
 if [ -n "$cwd" ]; then
-    out+="${sep}${cyan}${cwd##*/}${rst}"
+    out+="${sep}${path}${cwd##*/}${rst}"
     git_branch=$(git -C "$cwd" --no-optional-locks rev-parse --abbrev-ref HEAD 2>/dev/null)
     if [ -n "$git_branch" ]; then
-        out+="${gray}@${rst}${green}${git_branch}${rst}"
+        out+="${dim}@${rst}${branch}${git_branch}${rst}"
         git_stat=$(git -C "$cwd" --no-optional-locks diff --numstat 2>/dev/null |
             awk '{a+=$1; d+=$2} END {if (a+d>0) printf "+%d -%d", a, d}')
         if [ -n "$git_stat" ]; then
-            out+=" ${gray}(${rst}${green}${git_stat%% *}${rst} ${red}${git_stat##* }${rst}${gray})${rst}"
+            out+=" ${dim}(${rst}${branch}${git_stat%% *}${rst} ${removed}${git_stat##* }${rst}${dim})${rst}"
         fi
     fi
 fi
 
 # Segment 3: Context window — tokens / max (color-coded %)
-out+="${sep}${orange}${ctx_used_fmt}${gray}/${rst}${orange}${ctx_total_fmt}${rst}"
+out+="${sep}${tokens}${ctx_used_fmt}${dim}/${rst}${tokens}${ctx_total_fmt}${rst}"
 if [ -n "$pct_used_int" ]; then
-    out+=" ${gray}(${rst}${ctx_color}${pct_used_int}%${rst}${gray})${rst}"
+    out+=" ${dim}(${rst}${ctx_color}${pct_used_int}%${rst}${dim})${rst}"
 else
-    out+=" ${gray}(${rst}${ctx_color}NA${rst}${gray})${rst}"
+    out+=" ${dim}(${rst}${ctx_color}NA${rst}${dim})${rst}"
 fi
 
 # Segment 4: API response time / total session wall-clock time
-out+="${sep}${cyan}${api_dur_fmt}${rst}${gray}/${rst}${cyan}${total_dur_fmt}${rst}"
+out+="${sep}${path}${api_dur_fmt}${rst}${dim}/${rst}${path}${total_dur_fmt}${rst}"
 
 # Segment 5: Lines added/removed
 if [ -n "$lines_added" ]; then la_fmt="+${lines_added}"; else la_fmt="NA"; fi
 if [ -n "$lines_removed" ]; then lr_fmt="-${lines_removed}"; else lr_fmt="NA"; fi
-out+="${sep}${green}${la_fmt}${rst}${gray}/${rst}${red}${lr_fmt}${rst}"
+out+="${sep}${branch}${la_fmt}${rst}${dim}/${rst}${removed}${lr_fmt}${rst}"
 
 # ── Segment 6: Rate limits (3-tier fallback) ─────────────────────────────────
 # 1. Native rate_limits from input JSON (after first API response)
@@ -393,10 +398,10 @@ if [ -n "$rl_five_pct" ] || [ -n "$rl_seven_pct" ]; then
         LC_NUMERIC=C printf -v five_pct_int '%.0f' "$rl_five_pct" 2>/dev/null
         usage_color "$five_pct_int"
         five_color=$REPLY
-        out+="${sep}${white}5h${rst} ${five_color}${five_pct_int}%${rst}"
+        out+="${sep}${label}5h${rst} ${five_color}${five_pct_int}%${rst}"
         if [ -n "$rl_five_reset" ]; then
             five_reset=$(format_reset_epoch "$rl_five_reset" "time")
-            [ -n "$five_reset" ] && out+=" ${gray}@${five_reset}${rst}"
+            [ -n "$five_reset" ] && out+=" ${dim}@${five_reset}${rst}"
         fi
     fi
 
@@ -405,10 +410,10 @@ if [ -n "$rl_five_pct" ] || [ -n "$rl_seven_pct" ]; then
         LC_NUMERIC=C printf -v seven_pct_int '%.0f' "$rl_seven_pct" 2>/dev/null
         usage_color "$seven_pct_int"
         seven_color=$REPLY
-        out+="${sep}${white}7d${rst} ${seven_color}${seven_pct_int}%${rst}"
+        out+="${sep}${label}7d${rst} ${seven_color}${seven_pct_int}%${rst}"
         if [ -n "$rl_seven_reset" ]; then
             seven_reset=$(format_reset_epoch "$rl_seven_reset" "datetime")
-            [ -n "$seven_reset" ] && out+=" ${gray}@${seven_reset}${rst}"
+            [ -n "$seven_reset" ] && out+=" ${dim}@${seven_reset}${rst}"
         fi
     fi
 
@@ -445,16 +450,16 @@ else
         # 5-hour rate limit with reset time
         usage_color "$five_hour_pct"
         five_hour_color=$REPLY
-        out+="${sep}${white}5h${rst} ${five_hour_color}${five_hour_pct}%${rst}"
+        out+="${sep}${label}5h${rst} ${five_hour_color}${five_hour_pct}%${rst}"
         five_hour_reset=$(format_reset_time "$five_hour_reset_iso" "time")
-        [ -n "$five_hour_reset" ] && out+=" ${gray}@${five_hour_reset}${rst}"
+        [ -n "$five_hour_reset" ] && out+=" ${dim}@${five_hour_reset}${rst}"
 
         # 7-day rate limit with reset datetime
         usage_color "$seven_day_pct"
         seven_day_color=$REPLY
-        out+="${sep}${white}7d${rst} ${seven_day_color}${seven_day_pct}%${rst}"
+        out+="${sep}${label}7d${rst} ${seven_day_color}${seven_day_pct}%${rst}"
         seven_day_reset=$(format_reset_time "$seven_day_reset_iso" "datetime")
-        [ -n "$seven_day_reset" ] && out+=" ${gray}@${seven_day_reset}${rst}"
+        [ -n "$seven_day_reset" ] && out+=" ${dim}@${seven_day_reset}${rst}"
 
         # Extra usage credits (only shown when enabled on the account)
         if [ "$extra_enabled" = "true" ]; then
@@ -466,9 +471,9 @@ else
                 [[ "$extra_used_fmt" != *'$'* ]] && [[ "$extra_limit_fmt" != *'$'* ]]; then
                 usage_color "$extra_pct_int"
                 extra_color=$REPLY
-                out+="${sep}${white}extra${rst} ${extra_color}\$${extra_used_fmt}/\$${extra_limit_fmt}${rst}"
+                out+="${sep}${label}extra${rst} ${extra_color}\$${extra_used_fmt}/\$${extra_limit_fmt}${rst}"
             else
-                out+="${sep}${white}extra${rst} ${green}enabled${rst}"
+                out+="${sep}${label}extra${rst} ${branch}enabled${rst}"
             fi
         fi
 
@@ -482,28 +487,28 @@ else
             format_tokens "$total_out"
             out_fmt=$REPLY
         else out_fmt="NA"; fi
-        out+="${sep}${gray}in: ${rst}${orange}${in_fmt}${rst}"
-        out+=" ${gray}out: ${rst}${orange}${out_fmt}${rst}"
+        out+="${sep}${dim}in: ${rst}${tokens}${in_fmt}${rst}"
+        out+=" ${dim}out: ${rst}${tokens}${out_fmt}${rst}"
         if [ -n "$total_cost" ]; then
             LC_NUMERIC=C printf -v cost_fmt '%.2f' "$total_cost" 2>/dev/null
-            out+="${sep}${yellow}\$${cost_fmt}${rst}"
+            out+="${sep}${warn}\$${cost_fmt}${rst}"
         else
-            out+="${sep}${gray}NA${rst}"
+            out+="${sep}${dim}NA${rst}"
         fi
     fi
 fi
 
 # ── Line 2 (worktree, conditional) ────────────────────────────────────────────
 if [ -n "$wt_name" ]; then
-    wt_line="${cyan}${wt_name}${rst}"
-    [ -n "$wt_branch" ] && wt_line+="${gray}@${rst}${green}${wt_branch}${rst}"
+    wt_line="${path}${wt_name}${rst}"
+    [ -n "$wt_branch" ] && wt_line+="${dim}@${rst}${branch}${wt_branch}${rst}"
     if [ -n "$wt_orig_cwd" ] || [ -n "$wt_orig_branch" ]; then
-        wt_line+="${sep}${cyan}${wt_orig_cwd##*/}${rst}"
-        [ -n "$wt_orig_branch" ] && wt_line+="${gray}@${rst}${green}${wt_orig_branch}${rst}"
+        wt_line+="${sep}${path}${wt_orig_cwd##*/}${rst}"
+        [ -n "$wt_orig_branch" ] && wt_line+="${dim}@${rst}${branch}${wt_orig_branch}${rst}"
     fi
     if [ -n "$wt_orig_cwd" ]; then
         orig_path="${wt_orig_cwd/#$HOME/\~}"
-        wt_line+="${sep}${gray}${orig_path}${rst}"
+        wt_line+="${sep}${dim}${orig_path}${rst}"
     fi
     out+="\n${wt_line}"
 fi
