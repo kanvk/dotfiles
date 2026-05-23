@@ -455,15 +455,26 @@ else
         seven_day_reset=$(format_reset_time "$seven_day_reset_iso" "datetime")
         [ -n "$seven_day_reset" ] && out+=" ${dim}@${seven_day_reset}${rst}"
 
-        # Extra usage credits (only shown when enabled on the account)
-        if [ "$extra_enabled" = "true" ] && [ "${extra_limit:-0}" -gt 0 ]; then
+        # Extra usage credits (only shown when enabled on the account).
+        # Render when there's a positive cap OR positive spend — suppress only
+        # the both-zero case (no allocation, no spend). A non-zero spend
+        # against a zero cap is a notable anomaly worth surfacing in red.
+        if [ "$extra_enabled" = "true" ] \
+            && ( [ "${extra_limit:-0}" -gt 0 ] || [ "${extra_used:-0}" -gt 0 ] ); then
             LC_NUMERIC=C printf -v extra_pct_int '%.0f' "${extra_pct:-0}" 2>/dev/null
             # Credits are in cents — pure-bash int division for the dollars part,
             # printf builtin for the zero-padded cents. No awk fork needed.
             extra_used_fmt="$((extra_used / 100)).$(printf '%02d' "$((extra_used % 100))")"
             extra_limit_fmt="$((extra_limit / 100)).$(printf '%02d' "$((extra_limit % 100))")"
-            usage_color "$extra_pct_int"
-            extra_color=$REPLY
+            if [ "${extra_limit:-0}" -eq 0 ]; then
+                # Spend on a zero cap — percentage is mathematically undefined
+                # and the API likely reports utilization=0 (would render green
+                # via usage_color, wrong signal). Force red.
+                extra_color=$removed
+            else
+                usage_color "$extra_pct_int"
+                extra_color=$REPLY
+            fi
             out+="${sep}${label}extra${rst} ${extra_color}\$${extra_used_fmt}/\$${extra_limit_fmt}${rst}"
         fi
 
