@@ -41,7 +41,7 @@ skin: {
 
   input: rgb(76, 79, 105) none / rgb(92, 95, 119) rgb(172, 176, 190)
 
-  status_error: rgb(76, 79, 105) rgb(210, 15, 57)
+  status_error: rgb(76, 79, 105) rgb(254, 100, 11)
   status_job: rgb(223, 142, 29) rgb(188, 192, 204)
   status_normal: rgb(76, 79, 105) rgb(172, 176, 190)
   status_italic: rgb(136, 57, 239) rgb(172, 176, 190) Italic
