@@ -83,10 +83,11 @@ show_selection_mark: true
 
 ###############################################################
 # Icons
-# Disabled. Enabling requires broot's own vscode.ttf font (NOT a
-# Nerd Font). See https://dystroy.org/broot/icons for details.
+# `nerdfont` uses any patched Nerd Font. `vscode` requires
+# broot's own vscode.ttf font (separate install). See
+# https://dystroy.org/broot/icons for details.
 #
-# icon_theme: vscode
+icon_theme: nerdfont
 
 ###############################################################
 # Special paths
