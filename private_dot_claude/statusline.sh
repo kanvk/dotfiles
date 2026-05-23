@@ -457,8 +457,9 @@ else
 
         # Extra usage credits (only shown when enabled on the account).
         # Render when there's a positive cap OR positive spend — suppress only
-        # the both-zero case (no allocation, no spend). A non-zero spend
-        # against a zero cap is a notable anomaly worth surfacing in red.
+        # the both-zero case (no allocation, no spend). A zero cap can
+        # legitimately mean "no monthly cap configured"; trust the
+        # API-reported utilization to drive color via usage_color.
         if [ "$extra_enabled" = "true" ] \
             && ( [ "${extra_limit:-0}" -gt 0 ] || [ "${extra_used:-0}" -gt 0 ] ); then
             LC_NUMERIC=C printf -v extra_pct_int '%.0f' "${extra_pct:-0}" 2>/dev/null
@@ -466,15 +467,8 @@ else
             # printf builtin for the zero-padded cents. No awk fork needed.
             extra_used_fmt="$((extra_used / 100)).$(printf '%02d' "$((extra_used % 100))")"
             extra_limit_fmt="$((extra_limit / 100)).$(printf '%02d' "$((extra_limit % 100))")"
-            if [ "${extra_limit:-0}" -eq 0 ]; then
-                # Spend on a zero cap — percentage is mathematically undefined
-                # and the API likely reports utilization=0 (would render green
-                # via usage_color, wrong signal). Force red.
-                extra_color=$removed
-            else
-                usage_color "$extra_pct_int"
-                extra_color=$REPLY
-            fi
+            usage_color "$extra_pct_int"
+            extra_color=$REPLY
             out+="${sep}${label}extra${rst} ${extra_color}\$${extra_used_fmt}/\$${extra_limit_fmt}${rst}"
         fi
 
