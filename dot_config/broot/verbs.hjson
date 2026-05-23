@@ -174,12 +174,12 @@ verbs: [
         internal: ":toggle_hidden"
     }
     {
-        key: ctrl-|
-        internal: ":move_panel_divider 0 1"
+        key: ctrl-{
+        internal: ":move_panel_divider 0 -1"
     }
     {
-        key: ctrl--
-        internal: ":move_panel_divider 0 -1"
+        key: ctrl-}
+        internal: ":move_panel_divider 0 1"
     }
 
     # If you develop using git, you might like to often switch
