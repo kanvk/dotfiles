@@ -63,6 +63,13 @@ verbs: [
         execution: "git difftool -y {file}"
     }
 
+    {
+        invocation: gtr
+        shortcut: gr
+        execution: ":focus {git-root}"
+        leave_broot: false
+    }
+
     # On ctrl-b, propose the creation of a copy of the selection.
     # While this might occasionally be useful, this verb is mostly here
     # as an example to demonstrate rare standard groups like {file-stem}
