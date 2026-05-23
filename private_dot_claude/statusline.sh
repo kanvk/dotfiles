@@ -419,8 +419,8 @@ else
             @sh "seven_day_reset_iso=\(.seven_day.resets_at // "")",
             @sh "extra_enabled=\(.extra_usage.is_enabled // false)",
             @sh "extra_pct=\(.extra_usage.utilization // 0)",
-            @sh "extra_used=\(.extra_usage.used_credits // 0)",
-            @sh "extra_limit=\(.extra_usage.monthly_limit // 0)"
+            @sh "extra_used=\(.extra_usage.used_credits // 0 | floor)",
+            @sh "extra_limit=\(.extra_usage.monthly_limit // 0 | floor)"
         ' <<<"$usage_data" 2>/dev/null)"
 
         # Defensive defaults — if the jq above failed (malformed JSON, jq missing,
