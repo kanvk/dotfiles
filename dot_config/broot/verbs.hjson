@@ -147,13 +147,34 @@ verbs: [
 
     # Komorebi on Windows claims Alt-* for window management, so broot's default
     # alt-* bindings are unreachable. Provide ctrl-* equivalents.
-    { key: ctrl-o, internal: ":open_leave" }
-    { key: ctrl-y, internal: ":copy_line" }
-    { key: ctrl-r, internal: ":toggle_watch" }
-    { key: ctrl-n, internal: ":toggle_ignore" }
-    { key: ctrl-., internal: ":toggle_hidden" }
-    { key: ctrl-l, internal: ":move_panel_divider 0 1" }
-    { key: ctrl-x, internal: ":move_panel_divider 0 -1" }
+    {
+        key: ctrl-o
+        internal: ":open_leave"
+    }
+    {
+        key: ctrl-y
+        internal: ":copy_line"
+    }
+    {
+        key: ctrl-r
+        internal: ":toggle_watch"
+    }
+    {
+        key: ctrl-n
+        internal: ":toggle_ignore"
+    }
+    {
+        key: ctrl-.
+        internal: ":toggle_hidden"
+    }
+    {
+        key: ctrl-l
+        internal: ":move_panel_divider 0 1"
+    }
+    {
+        key: ctrl-x
+        internal: ":move_panel_divider 0 -1"
+    }
 
     # If you develop using git, you might like to often switch
     # to the git status filter:
