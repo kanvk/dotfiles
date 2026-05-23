@@ -17,24 +17,17 @@
 
 ###############################################################
 # Default flags
-# You can set up flags you want broot to start with by
-# default, for example `default_flags="-ihp"` if you usually want
-# to see hidden and gitignored files and the permissions (then
-# if you don't want the hidden files at a specific launch,
-# you can launch broot with `br -H`).
-# A popular flag is the `g` one which displays git related info.
+# `-g` shows the git column on every launch. Override per launch
+# with the capital form (e.g. `br -G` to suppress).
 #
 default_flags: "-g"
 
 ###############################################################
 # Terminal's title
-# If you want the terminal's title to be updated when you change
-# directory, set a terminal_title pattern by uncommenting one of
-# the examples below and tuning it to your taste.
+# Updates the terminal title as you navigate. {git-name} resolves
+# to the repo name in git dirs, the directory basename elsewhere.
 #
 terminal_title: "[broot] {git-name}"
-# terminal_title: "{file} 🐄"
-# terminal_title: "-= {file-name} =-"
 # reset_terminal_title_on_exit: false
 
 ###############################################################
@@ -90,9 +83,8 @@ show_selection_mark: true
 
 ###############################################################
 # Icons
-# If you want to display icons in broot, uncomment this line
-# (see https://dystroy.org/broot/icons for installation and
-# troubleshooting)
+# Requires a Nerd Font. See https://dystroy.org/broot/icons for
+# installation and troubleshooting.
 #
 icon_theme: vscode
 
