@@ -181,6 +181,10 @@ verbs: [
         key: ctrl-}
         internal: ":move_panel_divider 0 1"
     }
+    {
+        key: ctrl-shift-q
+        internal: ":open_leave"
+    }
 
     # If you develop using git, you might like to often switch
     # to the git status filter:
