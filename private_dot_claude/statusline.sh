@@ -359,6 +359,10 @@ if [ -n "$cwd" ]; then
         if [ -n "$git_stat" ]; then
             out+=" ${dim}(${rst}${branch}${git_stat%% *}${rst} ${removed}${git_stat##* }${rst}${dim})${rst}"
         fi
+        wt_count=$(git -C "$cwd" --no-optional-locks worktree list --porcelain 2>/dev/null | grep -c '^worktree ')
+        if [ "${wt_count:-0}" -ge 2 ]; then
+            out+=" ${dim}(wt:${wt_count})${rst}"
+        fi
     fi
 fi
 
