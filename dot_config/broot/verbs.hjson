@@ -137,6 +137,19 @@ verbs: [
     #     execution: ":focus ~"
     # }
 
+    # File-manager idiom: left arrow goes to parent, right arrow descends
+    # into the selected entry. Broot's input layer only consumes left/right
+    # when the search cursor can actually move; at the edges these fall
+    # through to verb dispatch.
+    {
+        key: left
+        internal: ":up_tree"
+    }
+    {
+        key: right
+        internal: ":open_stay"
+    }
+
     # A popular set of shortcuts for going up and down:
     #
     {
