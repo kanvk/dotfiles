@@ -281,20 +281,12 @@ imports: [
             dark
             unknown
         ]
-        # (un)comment to choose your preferred skin
-        //file: skins/dark-blue.hjson
         file: skins/catppuccin-macchiato-mauve.hjson
-        //file: skins/catppuccin-mocha.hjson
-        //file: skins/dark-gruvbox.hjson
-        //file: skins/dark-orange.hjson
-        //file: skins/solarized-dark.hjson
     }
 
     # This skin is imported when your terminal is light
     {
         luma: light
-        # (un)comment to choose your preferred skin
-        //file: skins/solarized-light.hjson
         file: skins/catppuccin-latte-mauve.hjson
     }
 ]
