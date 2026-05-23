@@ -456,9 +456,7 @@ else
         [ -n "$seven_day_reset" ] && out+=" ${dim}@${seven_day_reset}${rst}"
 
         # Extra usage credits (only shown when enabled on the account)
-        if [ "$extra_enabled" = "true" ] \
-            && [ "${extra_limit:-0}" -gt 0 ] \
-            && [ "${extra_used:-0}" -le "${extra_limit:-0}" ]; then
+        if [ "$extra_enabled" = "true" ] && [ "${extra_limit:-0}" -gt 0 ]; then
             LC_NUMERIC=C printf -v extra_pct_int '%.0f' "${extra_pct:-0}" 2>/dev/null
             # Credits are in cents — pure-bash int division for the dollars part,
             # printf builtin for the zero-padded cents. No awk fork needed.
