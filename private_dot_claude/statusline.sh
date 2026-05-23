@@ -461,7 +461,7 @@ else
         # legitimately mean "no monthly cap configured"; trust the
         # API-reported utilization to drive color via usage_color.
         if [ "$extra_enabled" = "true" ] \
-            && ( [ "${extra_limit:-0}" -gt 0 ] || [ "${extra_used:-0}" -gt 0 ] ); then
+            && { [ "${extra_limit:-0}" -gt 0 ] || [ "${extra_used:-0}" -gt 0 ]; }; then
             LC_NUMERIC=C printf -v extra_pct_int '%.0f' "${extra_pct:-0}" 2>/dev/null
             # Credits are in cents — pure-bash int division for the dollars part,
             # printf builtin for the zero-padded cents. No awk fork needed.
