@@ -24,15 +24,15 @@
 
 set -f # disable globbing
 
-# ── ANSI colors (standard 16-color, terminal theme adaptive) ────────────────
-blue='\033[94m'
-orange='\033[33m'
-green='\033[32m'
-cyan='\033[36m'
-red='\033[91m'
-yellow='\033[93m'
-white='\033[97m'
-gray='\033[90m'
+# ── ANSI colors (Catppuccin Macchiato, 24-bit truecolor) ────────────────────
+blue='\033[38;2;198;160;246m'    # Mauve  — primary accent (model name)
+orange='\033[38;2;245;169;127m'  # Peach  — context tokens / tier-3 counts
+green='\033[38;2;166;218;149m'   # Green  — git branch, +lines, git added
+cyan='\033[38;2;125;196;228m'    # Sapphire — dir/path, durations, worktree
+red='\033[38;2;237;135;150m'     # Red    — -lines, git removed
+yellow='\033[38;2;238;212;159m'  # Yellow — tier-3 cost
+white='\033[38;2;183;189;248m'   # Lavender — effort brackets/label
+gray='\033[38;2;110;115;141m'    # Overlay0 — separators, @, parens, chrome
 rst='\033[0m'
 sep=" ${gray}|${rst} "
 
@@ -64,16 +64,16 @@ format_tokens_round() {
     fi
 }
 
-# Color-code a percentage: green <50% < yellow <70% < orange <90% < red
+# Color-code a percentage: Green <50% < Yellow <70% < Peach <90% < Red
 usage_color() {
     if [ "$1" -ge 90 ]; then
-        REPLY=$red
+        REPLY=$red      # Red    237,135,150
     elif [ "$1" -ge 70 ]; then
-        REPLY=$orange
+        REPLY=$orange   # Peach  245,169,127
     elif [ "$1" -ge 50 ]; then
-        REPLY=$yellow
+        REPLY=$yellow   # Yellow 238,212,159
     else
-        REPLY=$green
+        REPLY=$green    # Green  166,218,149
     fi
 }
 
@@ -121,7 +121,8 @@ eval "$(jq -r '
     @sh "rl_five_pct=\(.rate_limits.five_hour.used_percentage // "")",
     @sh "rl_five_reset=\(.rate_limits.five_hour.resets_at // "")",
     @sh "rl_seven_pct=\(.rate_limits.seven_day.used_percentage // "")",
-    @sh "rl_seven_reset=\(.rate_limits.seven_day.resets_at // "")"
+    @sh "rl_seven_reset=\(.rate_limits.seven_day.resets_at // "")",
+    @sh "effort_level=\(.effort.level // "")"
 ' <<<"$input" 2>/dev/null)"
 
 # Fallbacks if jq eval produced empty/missing values (e.g. malformed JSON)
@@ -131,6 +132,7 @@ eval "$(jq -r '
 : "${lines_added:=}" "${lines_removed:=}" "${total_cost:=}"
 : "${total_in:=}" "${total_out:=}"
 : "${rl_five_pct:=}" "${rl_five_reset:=}" "${rl_seven_pct:=}" "${rl_seven_reset:=}"
+: "${effort_level:=}"
 
 # Context window
 if [ -n "$ctx_size" ] && [ "$ctx_size" -gt 0 ] 2>/dev/null && [ -n "$pct_used" ]; then
@@ -334,8 +336,12 @@ format_reset_time() {
 # ── Build output string ─────────────────────────────────────────────────────
 out=""
 
-# Segment 1: Model
-out+="${blue}${model_name}${rst}"
+# Segment 1: Model [effort]
+if [ -n "$effort_level" ]; then
+    out+="${blue}${model_name}${rst} ${white}[${effort_level}]${rst}"
+else
+    out+="${blue}${model_name}${rst}"
+fi
 
 # Segment 2: workspace dir@branch (+added -removed)
 # --no-optional-locks prevents git from writing lock files that block other processes
