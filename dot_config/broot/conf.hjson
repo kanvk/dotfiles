@@ -176,9 +176,7 @@ content_search_max_file_size: 10MB
 ###############################################################
 # Max Panels Count
 #
-# Change this if you sometimes want to have more than 2 panels
-# open
-# max_panels_count: 2
+max_panels_count: 3
 
 ###############################################################
 # Update work dir
