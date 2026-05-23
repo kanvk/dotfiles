@@ -65,12 +65,16 @@ format_tokens_round() {
 }
 
 # Color-code a percentage: Green <50% < Yellow <70% < Peach <90% < Red
+# Rounds the input defensively so floats (e.g. 95.4 from upstream) don't
+# trigger "integer expected" errors and fall through to green.
 usage_color() {
-    if [ "$1" -ge 90 ]; then
+    local n
+    LC_NUMERIC=C printf -v n '%.0f' "$1" 2>/dev/null || n=0
+    if [ "$n" -ge 90 ]; then
         REPLY=$red      # Red    237,135,150
-    elif [ "$1" -ge 70 ]; then
+    elif [ "$n" -ge 70 ]; then
         REPLY=$orange   # Peach  245,169,127
-    elif [ "$1" -ge 50 ]; then
+    elif [ "$n" -ge 50 ]; then
         REPLY=$yellow   # Yellow 238,212,159
     else
         REPLY=$green    # Green  166,218,149
@@ -137,8 +141,11 @@ eval "$(jq -r '
 # Context window
 if [ -n "$ctx_size" ] && [ "$ctx_size" -gt 0 ] 2>/dev/null && [ -n "$pct_used" ]; then
     current=$((${input_tokens:-0} + ${cache_create:-0} + ${cache_read:-0}))
+    # Upstream sends used_percentage as a float (e.g. 50.7) — round to an int
+    # before passing to the integer-comparing usage_color, and display rounded.
+    LC_NUMERIC=C printf -v pct_used_int '%.0f' "$pct_used" 2>/dev/null || pct_used_int=0
 else
-    current="" ctx_size="" pct_used=""
+    current="" ctx_size="" pct_used="" pct_used_int=""
 fi
 
 # ── Pre-compute display values (zero subshells — all via REPLY) ──────────────
@@ -150,8 +157,8 @@ if [ -n "$ctx_size" ]; then
     format_tokens_round "$ctx_size"
     ctx_total_fmt=$REPLY
 else ctx_total_fmt="NA"; fi
-if [ -n "$pct_used" ]; then
-    usage_color "$pct_used"
+if [ -n "$pct_used_int" ]; then
+    usage_color "$pct_used_int"
     ctx_color=$REPLY
 else ctx_color=$gray; fi
 if [ -n "$api_dur_ms" ]; then
@@ -360,8 +367,8 @@ fi
 
 # Segment 3: Context window — tokens / max (color-coded %)
 out+="${sep}${orange}${ctx_used_fmt}${gray}/${rst}${orange}${ctx_total_fmt}${rst}"
-if [ -n "$pct_used" ]; then
-    out+=" ${gray}(${rst}${ctx_color}${pct_used}%${rst}${gray})${rst}"
+if [ -n "$pct_used_int" ]; then
+    out+=" ${gray}(${rst}${ctx_color}${pct_used_int}%${rst}${gray})${rst}"
 else
     out+=" ${gray}(${rst}${ctx_color}NA${rst}${gray})${rst}"
 fi
@@ -420,6 +427,17 @@ else
             @sh "extra_used=\(.extra_usage.used_credits // 0)",
             @sh "extra_limit=\(.extra_usage.monthly_limit // 0)"
         ' <<<"$usage_data" 2>/dev/null)"
+
+        # Defensive defaults — if the jq above failed (malformed JSON, jq missing,
+        # etc.) the eval is a no-op and none of these vars get set.
+        : "${five_hour_pct:=0}"
+        : "${five_hour_reset_iso:=}"
+        : "${seven_day_pct:=0}"
+        : "${seven_day_reset_iso:=}"
+        : "${extra_enabled:=false}"
+        : "${extra_pct:=0}"
+        : "${extra_used:=0}"
+        : "${extra_limit:=0}"
 
         LC_NUMERIC=C printf -v five_hour_pct '%.0f' "${five_hour_pct:-0}" 2>/dev/null
         LC_NUMERIC=C printf -v seven_day_pct '%.0f' "${seven_day_pct:-0}" 2>/dev/null
