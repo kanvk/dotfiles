@@ -9,6 +9,10 @@
 strict_mode = true
 dir_length = 1
 
+# Hide auto-generated tmux scratch pads (see ~/.tmux.conf) from `sesh list`.
+# Anchored regex; user-named scratch-* sessions stay visible.
+blacklist = ["^scratch-[0-9a-f]{16}-pad$"]
+
 # Two layers of out-of-band overrides:
 #   - sesh.local.toml   — personal-but-portable sessions (encrypted-tracked
 #                         under chezmoi when encrypt_locals=true; synced across
