@@ -133,6 +133,35 @@ elif [ -x /opt/homebrew/bin/brew ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
+{{- /* Collect tap-prefixed entries (owner/tap/name) for `brew trust` below.
+   Core formulae/casks never contain a slash, so a slash marks a tap entry. */}}
+{{- $tapFormulae := list }}
+{{- $tapCasks := list }}
+{{- range (index $resolved "brew") }}
+{{- if hasPrefix "cask:" . }}
+{{- $name := trimPrefix "cask:" . }}
+{{- if contains "/" $name }}{{ $tapCasks = append $tapCasks $name }}{{ end }}
+{{- else if contains "/" . }}
+{{- $tapFormulae = append $tapFormulae . }}
+{{- end }}
+{{- end }}
+{{- if or $tapFormulae $tapCasks }}
+# Trust third-party-tap entries before bundling. Homebrew 5.1+ warns about
+# untrusted taps, and once HOMEBREW_REQUIRE_TAP_TRUST becomes the default
+# (brew 5.2/6.0) untrusted entries are skipped outright. Per brew's own
+# advice, trust only the specific formulae/casks we install — never the
+# whole tap. `brew trust` works before the tap exists (it just records the
+# entry in trust.json), so this is safe on a fresh machine.
+{{- if $tapFormulae }}
+brew trust --formula{{ range $tapFormulae }} {{ . | quote }}{{ end }} \
+  || _record_install_failure "brew: trust tap formulae (see log above)"
+{{- end }}
+{{- if $tapCasks }}
+brew trust --cask{{ range $tapCasks }} {{ . | quote }}{{ end }} \
+  || _record_install_failure "brew: trust tap casks (see log above)"
+{{- end }}
+{{- end }}
+
 echo "==> Installing brew packages via brew bundle"
 # Generate Brewfile from the resolved tier set at apply time. Tap-prefixed
 # entries (foo/tap/bar) auto-tap. We deliberately don't pass `--cleanup` — it
