@@ -7,7 +7,6 @@ return {
     local right_update = { "ModeChanged", pattern = "*:*" }
     local width = {
       position = 45,
-      virtual_env = 65,
       time = 80,
     }
 
@@ -71,6 +70,33 @@ return {
         local branch = max and truncate(self.branch, max) or self.branch
         return status.utils.stylize(branch, {
           icon = { kind = "GitBranch", padding = { right = 1 } },
+        })
+      end
+    end
+
+    -- Raw env name mirroring astroui's virtual_env provider (whose stylized
+    -- output can't be truncated cleanly), honoring the same provider opts.
+    local function venv_name()
+      local venv_opts = vim.tbl_get(require("astroui").config, "status", "providers", "virtual_env") or {}
+      local venv = vim.env.VIRTUAL_ENV
+      if venv then
+        local path = vim.fn.split(venv, "/")
+        local name = path[#path]
+        if #path > 1 and vim.tbl_contains(venv_opts.env_names or {}, name) then name = path[#path - 1] end
+        return name
+      end
+      local conda = vim.env.CONDA_DEFAULT_ENV
+      if vim.tbl_get(venv_opts, "conda", "enabled") and conda then
+        if conda ~= "base" or not vim.tbl_get(venv_opts, "conda", "ignore_base") then return conda end
+      end
+      return ""
+    end
+
+    local function venv_provider(max)
+      return function(self)
+        local venv = max and truncate(self.venv, max) or self.venv
+        return status.utils.stylize(venv, {
+          icon = { kind = "Environment", padding = { right = 1 } },
         })
       end
     end
@@ -173,7 +199,10 @@ return {
           self.branch = vim.b[self.bufnr or 0].gitsigns_head or ""
         end,
         {
-          flexible = 1,
+          -- Highest contraction priority: heirline shrinks lower numbers
+          -- first, and the branch name is the most task-relevant of the
+          -- flexible components.
+          flexible = 3,
           { provider = branch_provider() },
           { provider = branch_provider(28) },
           { provider = branch_provider(16) },
@@ -216,14 +245,21 @@ return {
           "WinEnter",
         },
       },
-      status.component.virtual_env {
+      status.component.builder {
+        condition = status.condition.has_virtual_env,
+        init = function(self) self.venv = venv_name() end,
+        {
+          flexible = 2,
+          { provider = venv_provider() },
+          { provider = venv_provider(16) },
+          { provider = "" },
+        },
         surround = {
           separator = "right",
           color = "bg",
-          condition = function()
-            return min_width "virtual_env" and status.condition.has_virtual_env()
-          end,
+          condition = status.condition.has_virtual_env,
         },
+        on_click = vim.tbl_get(require("astroui").config.status.components, "virtual_env", "on_click"),
         hl = virtual_env_hl,
       },
       status.component.builder {
@@ -233,6 +269,8 @@ return {
           self.short_host = short_host(self.host)
         end,
         {
+          -- Lowest contraction priority: static identity info shrinks before
+          -- the venv and git branch components.
           flexible = 1,
           {
             provider = function(self) return string.format(" %s@%s ", self.user, self.host) end,
@@ -243,7 +281,10 @@ return {
           { provider = "" },
         },
         hl = user_host_hl,
-        update = { "VimResized", "WinResized" },
+        -- ColorScheme: user_host_hl returns raw hex, which heirline caches
+        -- with the evaluated string — without this, a colorscheme switch
+        -- leaves the old theme's colors in place until a resize.
+        update = { "VimResized", "WinResized", "ColorScheme" },
       },
       status.component.builder {
         {
