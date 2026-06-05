@@ -1,8 +1,13 @@
 # Managed by chezmoi (source: dot_config/mise/config.toml.tmpl).
-# Global mise tool versions. mise itself is brew-installed (base tier) and
-# activated in dot_zshrc; tools listed here are provisioned by
-# .chezmoiscripts/run_onchange_after_15-mise-tools.sh.tmpl on apply.
-{{ if eq .tier "full" -}}
+# Tools come from the resolved tier's `mise` list in .chezmoidata.yaml;
+# run_onchange_after_15-mise-tools.sh.tmpl provisions them on apply.
+{{- $resolved := includeTemplate "resolve-tier" (dict "tier" .tier "tiers" .tiers "acc" dict) | fromJson }}
+{{- $tools := index $resolved "mise" | default list }}
+{{- if $tools }}
 [tools]
-"aqua:quarto-dev/quarto-cli" = "latest"
+{{- range $tools }}
+{{- if not (contains "@" .) }}{{ fail (printf "mise entry %q must be tool@version" .) }}{{ end }}
+{{- $parts := splitList "@" . }}
+"{{ $parts | initial | join "@" }}" = "{{ $parts | last }}"
+{{- end }}
 {{- end }}

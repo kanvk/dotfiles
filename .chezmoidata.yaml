@@ -22,6 +22,8 @@
 # - cargo: Rust-only tools not in apt or brew (or where the cargo build is
 #   preferred). Things available via apt/brew live there, not here.
 # - npm/go/bun: language-specific globals where there's no apt/brew equivalent.
+# - mise: tools no other manager packages (registry/aqua backends), as
+#   tool@version entries rendered into ~/.config/mise/config.toml.
 #
 # Tier intent:
 # - minimal: shell + git + the few CLI niceties so a fresh box is usable. Picked
@@ -86,7 +88,6 @@ tiers:
         # build tooling
         - cmake
         - cloc
-        - pastel
         - pkg-config
         - shellcheck
         - shfmt
@@ -172,6 +173,7 @@ tiers:
         # build / quality
         - ast-grep
         - scc
+        - pastel
         # secrets / security
         - betterleaks
         # network / sharing
@@ -314,3 +316,5 @@ tiers:
       cargo:
         - numbat-cli
       bun: []
+      mise:
+        - aqua:quarto-dev/quarto-cli@latest

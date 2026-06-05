@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 #
-# Provisions mise-managed CLI tools (currently quarto, on the `full` tier) so
-# the user doesn't have to run `mise install` by hand. mise is brew-installed
-# (base tier) and activated in dot_zshrc; this just installs whatever the
-# rendered ~/.config/mise/config.toml declares. On tiers whose config has no
-# [tools] block, `mise install` is a harmless no-op. Re-fires whenever the
-# mise config changes.
+# Provisions mise-managed tools from the tier's `mise` list (.chezmoidata.yaml),
+# rendered into ~/.config/mise/config.toml. No-op when the list is empty.
+# Two hashes: `include` reads raw template text, so it alone misses data-only edits.
 #
 # mise-config-hash: {{ include "dot_config/mise/config.toml.tmpl" | sha256sum }}
+# mise-tools-hash: {{ includeTemplate "resolve-tier" (dict "tier" .tier "tiers" .tiers "acc" dict) | fromJson | dig "mise" (list) | toJson | sha256sum }}
+# mise-bin: {{ lookPath "mise" }} (re-fires the skip-recorded run once mise lands on PATH)
 
 set -euo pipefail
 {{ template "brew-path-bootstrap" . }}
