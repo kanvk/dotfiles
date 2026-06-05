@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+#
+# Provisions mise-managed CLI tools (currently quarto, on the `full` tier) so
+# the user doesn't have to run `mise install` by hand. mise is brew-installed
+# (base tier) and activated in dot_zshrc; this just installs whatever the
+# rendered ~/.config/mise/config.toml declares. On tiers whose config has no
+# [tools] block, `mise install` is a harmless no-op. Re-fires whenever the
+# mise config changes.
+#
+# mise-config-hash: {{ include "dot_config/mise/config.toml.tmpl" | sha256sum }}
+
+set -euo pipefail
+{{ template "brew-path-bootstrap" . }}
+
+if ! command -v mise >/dev/null 2>&1; then
+  echo "mise not installed yet — skipping mise tool install"
+  exit 0
+fi
+
+echo "==> Installing mise-managed tools (mise install)"
+# Tolerant: a transient download failure (e.g. quarto's GitHub release fetch)
+# shouldn't abort the whole apply — warn and let the user re-run by hand.
+if ! mise install 2>&1 | tail -20; then
+  echo "  (mise install did not complete cleanly — re-run 'mise install'"
+  echo "   once your network is in place.)"
+fi
