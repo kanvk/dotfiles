@@ -58,8 +58,14 @@
 	# Match bat's BAT_THEME in dot_config/zsh/omz-custom/export.zsh — delta links
 	# bat as a library, so the theme name string is identical between the two.
 	syntax-theme = Catppuccin Macchiato
+	hyperlinks = true
+	hunk-header-style = file line-number syntax
+	tabs = 4
 [diff]
 	tool = nvimdiff
+	algorithm = histogram
+	colorMoved = zebra
+	colorMovedWS = allow-indentation-change
 [merge]
 	tool = nvimdiff
 	conflictStyle = zdiff3
@@ -73,6 +79,7 @@
 	prompt = false
 [mergetool]
 	prompt = false
+	keepBackup = false
 [difftool "nbdime"]
 	cmd = git-nbdifftool diff \"$LOCAL\" \"$REMOTE\" \"$BASE\"
 [mergetool "nbdime"]
