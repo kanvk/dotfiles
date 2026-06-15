@@ -17,6 +17,8 @@ export COLORTERM=truecolor
 export TZ=America/New_York
 export HOMEBREW_NO_ENV_HINTS=1
 export HOMEBREW_NO_ANALYTICS=1
+# Skip brew 6.0's default "Proceed? [Y/n]" prompt on install/upgrade.
+export HOMEBREW_NO_ASK=1
 
 # --- analytics / telemetry opt-outs ---
 # DO_NOT_TRACK is a community-standard env (see consoledonottrack.com); honored
