@@ -42,6 +42,7 @@ tiers:
         # bootstrap (also satisfies Homebrew install prereqs)
         - age
         - build-essential
+        - bubblewrap
         - ca-certificates
         - curl
         - file
