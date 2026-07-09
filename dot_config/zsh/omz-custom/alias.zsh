@@ -219,6 +219,7 @@ alias awsl='aws --profile local'
 
 # tmux
 alias t='tmux'
+alias tm='tmux new-session -A -s main'
 alias tp='tmux new-session -A -s $(basename $PWD)'
 alias tsf='sesh connect "$(sesh list | fzf)"'
 # `tv sesh` (television's sesh action mode) can't hand the terminal off to
