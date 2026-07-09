@@ -1,3 +1,4 @@
+{{ if .is_wsl -}}
 # WSL aliases
 alias epl='pwshw explorer.exe'
 alias cscw='win32yank.exe -i --crlf'
@@ -25,3 +26,4 @@ alias bw='pwshw bw'
 
 # Lock the Windows host from WSL.
 alias lock='pwshw "rundll32 user32.dll,LockWorkStation"'
+{{ end -}}
