@@ -11,9 +11,9 @@ show_systray: false
 
 # --- Komorebi (Tiling Window Manager) ---
 komorebi:
-    start_command: "komorebic start --wkhd"
-    stop_command: "komorebic stop --wkhd"
-    reload_command: "komorebic stop --wkhd && komorebic start --wkhd"
+    start_command: "komorebic start --whkd"
+    stop_command: "komorebic stop --whkd"
+    reload_command: "komorebic stop --whkd && komorebic start --whkd"
 
 # =================================================================================================
 # Bar Layout
