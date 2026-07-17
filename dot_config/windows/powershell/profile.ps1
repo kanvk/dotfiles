@@ -1,3 +1,8 @@
+# Bail out when stdin is a pipe (e.g. whkd's persistent shell) rather than a real
+# console: loading starship/conda/mamba/fnm under redirected input hangs the shell
+# and silently breaks every hotkey command whkd sends through it.
+if ([Console]::IsInputRedirected) { return }
+
 Import-Module 'C:\Program Files\gsudo\Current\gsudoModule.psd1'
 
 Invoke-Expression (& { (zoxide init powershell | Out-String) })
