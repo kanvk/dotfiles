@@ -2463,9 +2463,11 @@ QSlider::handle {
     background-color: var(--mantle);
 }
 
+/* Flat on purpose. YASB pins the forecast toggle overlay to the card's
+   top-left corner, so any panel background here gets a stack of buttons
+   sitting on top of it. */
 .open-meteo-card-today {
-    border-radius: 8px;
-    background-color: var(--base);
+    background-color: transparent;
     color: var(--text);
 }
 
