@@ -535,12 +535,12 @@ widgets:
         options:
             label: "<span>{icon}</span> {level}"
             label_alt: "<span>{icon}</span> {level}"
-            volume_icons:
-                - "\ueee8"  #  Mute
-                - "\uf026"  #  0-10%
-                - "\uf027"  #  11-30%
-                - "\uf027"  #  31-60%
-                - "\uf028"  #  61-100%
+            icons:
+                muted: "\ueee8"  # mute
+                "10":  "\uf026"  # 0-10%
+                "30":  "\uf027"  # 11-30%
+                "60":  "\uf027"  # 31-60%
+                "100": "\uf028"  # 61-100%
             audio_menu:
                 blur: True
                 round_corners: True
