@@ -76,7 +76,9 @@ QSlider::handle {
    Original: color "black", radius 3, offset [1, 1]. */
 .whkd-widget .label,
 .komorebi-active-layout .label,
-.media-widget .label,
+.media-lite-widget .title,
+.media-lite-widget .artist,
+.media-lite-widget .label,
 .microphone-widget .label,
 .bluetooth-widget .label,
 .battery-widget .label,
@@ -1209,14 +1211,14 @@ QSlider::handle {
     font-size: 13px;
 }
 
-/***---------------------------------      • Media Widget •      ------------------------------------***/
+/***-------------------------------      • Media Lite Widget •      -------------------------------***/
 
 /* 1. Bar Widget */
-.media-widget {
+.media-lite-widget {
     padding: 0 4px;
 }
 
-.media-widget .widget-container {
+.media-lite-widget .widget-container {
     background-color: var(--crust);
     border-radius: 12px;
     margin: 4px 0;
@@ -1224,54 +1226,54 @@ QSlider::handle {
     min-height: 24px;
 }
 
-.media-widget .label {
+.media-lite-widget .thumbnail {
+    margin-right: 8px;
+}
+
+.media-lite-widget .text {
+    padding-right: 4px;
+}
+
+.media-lite-widget .label,
+.media-lite-widget .title {
     color: var(--text);
     padding: 0;
-    padding-right: 4px;
     font-size: 12px;
     font-family: "CaskaydiaCove Nerd Font Mono";
     font-weight: 500;
 }
 
-.media-widget .btn {
-    color: var(--overlay1);
-    padding: 0 4px;
-    margin: 0;
-    font-family: "JetBrainsMonoNL Nerd Font Mono";
-    font-size: 12px;
-}
-
-.media-widget .btn:hover {
-    color: var(--text);
-}
-
-.media-widget .btn.disabled {
-    color: var(--surface2);
-}
-
-.media-widget .progress-bar {
-    max-height: 2px;
-    background-color: transparent;
-    margin-left: 5px;
-}
-
-.media-widget .progress-bar::chunk {
-    background-color: var(--mauve);
-    border-radius: 2px;
+.media-lite-widget .artist {
+    color: var(--subtext0);
+    padding: 0;
+    font-size: 11px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-weight: 500;
 }
 
 /* 2. Media Menu Popup */
-.media-menu {
+.media-lite-menu {
     min-width: 440px;
     max-width: 440px;
     background-color: var(--mantle);
 }
 
-.media-menu .thumbnail {
-    border-radius: 8px;
+/* Blurred album art sits in the same grid cell beneath the content. The pixmap
+   carries its own dimming from artwork_dim, so the mantle shows through it. */
+.media-lite-menu .artwork-background {
+    background: transparent;
 }
 
-.media-menu .title {
+.media-lite-menu .header,
+.media-lite-menu .controls {
+    background: transparent;
+}
+
+.media-lite-menu .thumbnail {
+    border-radius: 12px;
+}
+
+.media-lite-menu .title {
     font-size: 14px;
     font-weight: 600;
     font-family: "CaskaydiaCove Nerd Font Mono";
@@ -1279,7 +1281,7 @@ QSlider::handle {
     margin-left: 10px;
 }
 
-.media-menu .artist {
+.media-lite-menu .artist {
     font-size: 13px;
     font-weight: 500;
     font-family: "CaskaydiaCove Nerd Font Mono";
@@ -1288,7 +1290,7 @@ QSlider::handle {
     margin-top: 0px;
 }
 
-.media-menu .source {
+.media-lite-menu .source {
     font-size: 11px;
     font-weight: 600;
     font-family: "CaskaydiaCove Nerd Font Mono";
@@ -1300,18 +1302,19 @@ QSlider::handle {
     background-color: var(--subtext0);
 }
 
-.media-menu .source.spotify {
-    background-color: #1db954;
-    color: #ffffff;
+.media-lite-menu .source.spotify {
+    background-color: var(--green);
+    color: var(--crust);
 }
 
-.media-menu .source.youtube,
-.media-menu .source.youtube-music {
-    background-color: #ff0000;
-    color: #ffffff;
+.media-lite-menu .source.youtube,
+.media-lite-menu .source.youtube-music {
+    background-color: var(--red);
+    color: var(--crust);
 }
 
-.media-menu .btn {
+/* 3. Transport Controls */
+.media-lite-menu .btn {
     font-family: "Segoe Fluent Icons";
     font-size: 14px;
     font-weight: 400;
@@ -1324,66 +1327,93 @@ QSlider::handle {
     border-radius: 20px;
 }
 
-.media-menu .btn.prev {
+.media-lite-menu .btn.prev {
     margin-left: 10px;
 }
 
-.media-menu .btn:hover {
+.media-lite-menu .btn:hover {
     color: var(--text);
-    background-color: rgba(205, 214, 244, 0.1);
+    background-color: rgba(205, 214, 244, 0.1); /* --text @ 10% */
 }
 
-.media-menu .btn.play,
-.media-menu .btn.pause {
-    background-color: rgba(205, 214, 244, 0.1);
+.media-lite-menu .btn.play {
+    background-color: rgba(205, 214, 244, 0.1); /* --text @ 10% */
     font-size: 20px;
 }
 
-.media-menu .btn.play:hover,
-.media-menu .btn.pause:hover {
-    background-color: rgba(205, 214, 244, 0.15);
+.media-lite-menu .btn.play:hover {
+    background-color: rgba(205, 214, 244, 0.15); /* --text @ 15% */
 }
 
-.media-menu .btn.disabled,
-.media-menu .btn.disabled:hover {
+/* Shuffle and repeat are secondary toggles, sized down from the transport row */
+.media-lite-menu .btn.shuffle,
+.media-lite-menu .btn.repeat {
+    font-size: 13px;
+    min-width: 32px;
+    max-width: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    border-radius: 16px;
+    color: var(--overlay1);
+}
+
+.media-lite-menu .btn.active {
+    color: var(--mauve);
+    background-color: rgba(203, 166, 247, 0.15); /* --mauve @ 15% */
+}
+
+.media-lite-menu .btn.disabled,
+.media-lite-menu .btn.disabled:hover {
     color: var(--overlay0);
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0); /* transparent */
 }
 
-.media-menu .playback-time {
+/* 4. Timeline */
+.media-lite-menu .media-timeline-container {
+    background: transparent;
+    margin: 0 10px;
+}
+
+.media-lite-menu .playback-time {
     font-size: 13px;
     font-family: "CaskaydiaCove Nerd Font Mono";
     color: var(--overlay1);
-    margin-top: 20px;
-    min-width: 100px;
+    min-width: 48px;
 }
 
-/* 3. Media Menu Progress Slider */
-.media-menu .progress-slider {
+.media-lite-menu .playback-time.current {
+    color: var(--subtext0);
+}
+
+.media-lite-menu .playback-time.total {
+    color: var(--overlay1);
+}
+
+.media-lite-menu .progress-slider {
     height: 10px;
     margin: 5px 4px;
     border-radius: 3px;
 }
 
-.media-menu .progress-slider::groove {
-    background: rgba(205, 214, 244, 0.1);
+.media-lite-menu .progress-slider::groove {
+    background: rgba(205, 214, 244, 0.1); /* --text @ 10% */
     height: 2px;
     border-radius: 3px;
 }
 
-.media-menu .progress-slider::groove:hover {
-    background: rgba(205, 214, 244, 0.2);
+.media-lite-menu .progress-slider::groove:hover {
+    background: rgba(205, 214, 244, 0.2); /* --text @ 20% */
     height: 6px;
     border-radius: 3px;
 }
 
-.media-menu .progress-slider::sub-page {
+.media-lite-menu .progress-slider::sub-page {
     background: var(--mauve);
     border-radius: 3px;
     height: 4px;
 }
 
-.media-menu .progress-slider::handle {
+.media-lite-menu .progress-slider::handle {
     background: var(--text);
     border: 2px solid var(--base);
     width: 14px;
@@ -1393,51 +1423,68 @@ QSlider::handle {
     border-radius: 9px;
 }
 
-.media-menu .progress-slider::handle:hover {
+.media-lite-menu .progress-slider::handle:hover {
     background: var(--lavender);
     border-color: var(--surface0);
 }
 
-/* 4. Media Menu Volume Slider */
-.media-menu .app-volume-container {
-    background-color: rgba(205, 214, 244, 0.05);
-    padding: 8px 6px;
-    border-radius: 16px;
-    margin-left: 10px;
+/* 5. Volume */
+.media-lite-menu .volume-hover {
+    background: transparent;
 }
 
-.media-menu .app-volume-container .volume-slider::groove {
-    background: rgba(205, 214, 244, 0.1);
+.media-lite-menu .volume-button {
+    font-family: "Segoe Fluent Icons";
+    font-size: 16px;
+    color: var(--text);
+    min-width: 32px;
+    max-width: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    border-radius: 16px;
+}
+
+.media-lite-menu .volume-button:hover {
+    background-color: rgba(205, 214, 244, 0.1); /* --text @ 10% */
+}
+
+.media-lite-menu .volume-button.muted {
+    color: var(--red);
+}
+
+.media-lite-menu .volume-button.unavailable {
+    color: var(--overlay0);
+}
+
+.media-lite-menu .volume-slider-popup {
+    background-color: var(--surface0);
+    border: 1px solid var(--surface1);
+    border-radius: 8px;
+    padding: 6px;
+}
+
+.media-lite-menu .volume-slider::groove {
+    background: rgba(205, 214, 244, 0.1); /* --text @ 10% */
     width: 2px;
     border-radius: 3px;
 }
 
-.media-menu .app-volume-container .volume-slider::groove:hover {
-    background: rgba(205, 214, 244, 0.1);
-    width: 6px;
+.media-lite-menu .volume-slider::sub-page {
+    background: rgba(205, 214, 244, 0.1); /* --text @ 10% */
     border-radius: 3px;
 }
 
-.media-menu .app-volume-container .volume-slider::add-page {
+.media-lite-menu .volume-slider::add-page {
     background: var(--mauve);
     border-radius: 3px;
 }
 
-.media-menu .app-volume-container .volume-slider::sub-page {
-    background: rgba(205, 214, 244, 0.1);
-    border-radius: 3px;
-}
-
-.media-menu .app-volume-container .mute-button,
-.media-menu .app-volume-container .unmute-button {
-    font-family: "Segoe Fluent Icons";
-    font-size: 16px;
-    color: var(--text);
-    margin-top: 4px;
-}
-
-.media-menu .app-volume-container .unmute-button {
-    color: var(--overlay0);
+.media-lite-menu .volume-slider::handle {
+    background: var(--text);
+    border: 2px solid var(--base);
+    width: 12px;
+    height: 12px;
+    border-radius: 8px;
 }
 
 /***-------------------------------      • Open-Meteo Widget •      --------------------------------***/

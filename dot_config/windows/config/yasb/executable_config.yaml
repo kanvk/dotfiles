@@ -53,7 +53,7 @@ bars:
                     "windows_workspaces",
                     "komorebi_active_layout",
                     "komorebi_workspaces",
-                    "media",
+                    "media_lite",
                     "taskbar",
                 ]
             center: ["active_window"]
@@ -318,39 +318,28 @@ widgets:
                 hide_label: false
                 hide_duplicates: false
                 hide_floating: false
-    # --- Media Player ---
-    # Left click: media menu | Middle click: toggle label | Right click: play/pause
-    media:
-        type: "yasb.media.MediaWidget"
+    # --- Media Player (Lite) ---
+    # Left click: media menu | Middle click: play/pause | Right click: jump to source app
+    media_lite:
+        type: "yasb.media_lite.MediaWidget"
         options:
-            label: "{title}{s}{artist}"
-            label_alt: "{title}"
-            separator: " - "
-            hide_empty: true
             show_thumbnail: true
-            controls_only: false
-            controls_left: true
-            controls_hide: false
-            thumbnail_alpha: 80
-            thumbnail_padding: 8
-            thumbnail_corner_radius: 16
-            symmetric_corner_radius: false
-            thumbnail_edge_fade: true
-            max_field_size:
-                label: 20
-                label_alt: 30
-                truncate_whole_label: false
-            icons:
-                prev_track: "\uf048"  #  (nf-fa-step_backward)
-                next_track: "\uf051"  #  (nf-fa-step_forward)
-                play: "\uf04b"        #  (nf-fa-play)
-                pause: "\uf04c"       #  (nf-fa-pause)
+            show_title: true
+            show_artist: true
+            scrolling_label: false
+            image_size: 28
+            thumbnail_corner_radius: 6
+            max_label_size: 20
+            tooltip: true
             callbacks:
                 on_left: "toggle_media_menu"
-                on_middle: "toggle_label"
-                on_right: "toggle_play_pause"
+                on_middle: "toggle_play_pause"
+                on_right: "open_media_source"
             media_menu:
                 blur: true
+                artwork_background: true
+                artwork_blur_radius: 24
+                artwork_dim: 0.85
                 round_corners: true
                 round_corners_type: "normal"
                 border_color: "#45475a"
@@ -358,22 +347,18 @@ widgets:
                 direction: "down"
                 offset_top: 6
                 offset_left: 0
-                thumbnail_corner_radius: 8
-                thumbnail_size: 120
-                max_title_size: 60
-                max_artist_size: 20
-                show_source: true
-                show_volume_slider: true
-            media_menu_icons:
-                play: "\ue768"
-                pause: "\ue769"
-                prev_track: "\ue892"
-                next_track: "\ue893"
-                mute: "\ue994"
-                unmute: "\ue74f"
-            progress_bar:
-                enabled: true
-                alignment: "bottom"
+                image_size: 160
+                thumbnail_corner_radius: 12
+                icons:
+                    play:       "\ue768"
+                    pause:      "\ue769"
+                    prev_track: "\ue892"
+                    next_track: "\ue893"
+                    shuffle:    "\ue8b1"
+                    repeat:     "\ue8ee"
+                    repeat_one: "\ue8ed"
+                    volume:     "\ue767"
+                    mute:       "\ue994"
 
     # --- Taskbar ---
     taskbar:
