@@ -1,0 +1,19 @@
+# Line-ending policy.
+#
+# Without this file, the working-tree form of every file is whatever each
+# clone's core.autocrlf happens to be. Git for Windows defaults that to true,
+# so a Windows clone of this public repo would rewrite the Windows configs and
+# produce phantom diffs. Declaring the intent here makes it deterministic.
+#
+# Git stores every text file as LF; the working-tree form is decided below.
+
+* text=auto
+
+# Windows-native configs. chezmoi copies these byte-for-byte (none of them are
+# templates), and the tools that consume them — komorebi, yasb, whkd, Windows
+# Terminal, PowerShell — are CRLF-native.
+dot_config/windows/** text eol=crlf
+
+# Encrypted payloads are opaque even though age armor is ASCII: the armor is
+# line-oriented and must never be rewritten.
+*.age -text
