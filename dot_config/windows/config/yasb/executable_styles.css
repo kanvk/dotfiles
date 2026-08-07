@@ -2455,9 +2455,14 @@ QSlider::handle {
     font-family: "CaskaydiaCove NFM";
 }
 
+/* The chart is a custom-painted widget inside a resizable QScrollArea, so it
+   takes its height from this container. Without a min-height the paint code
+   computes a near-zero graph area and the temperature labels, icons, wind and
+   time rows all collapse on top of each other. */
 .open-meteo-card .hourly-container {
     background-color: var(--base);
     border-radius: 8px;
+    min-height: 170px;
 }
 
 .open-meteo-card .search-input {
@@ -2514,6 +2519,9 @@ QSlider::handle {
 
 /* Temperature / rain / snow toggles above the hourly chart. These are
    QPushButtons, so the border has to be cleared explicitly. */
+/* Overlay pinned to the card's top-left by buttons_container.move(0, 0). It
+   floats over the header, so keep the stack short enough to clear the
+   conditions line rather than padding it further down into the text. */
 .open-meteo-card .hourly-data-buttons {
     background-color: transparent;
 }
@@ -2523,9 +2531,9 @@ QSlider::handle {
     color: var(--subtext0);
     border: none;
     border-radius: 6px;
-    padding: 4px 10px;
-    margin: 0 2px;
-    font-size: 13px;
+    padding: 3px 7px;
+    margin: 1px 2px;
+    font-size: 12px;
 }
 
 .open-meteo-card .hourly-data-button:hover {
