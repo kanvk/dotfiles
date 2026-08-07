@@ -571,8 +571,8 @@ widgets:
                     enabled: true
                     snow_overrides_rain: true
                     temp_line_animation_style: "both"
-                    rain_effect_intensity: 1.0
-                    snow_effect_intensity: 1.0
+                    rain_effect_intensity: 0.3
+                    snow_effect_intensity: 0.3
                     scale_with_chance: true
 
     # --- Volume ---
@@ -1174,6 +1174,6 @@ widgets:
                     enabled: true
                     snow_overrides_rain: true
                     temp_line_animation_style: "both"
-                    rain_effect_intensity: 1.0
-                    snow_effect_intensity: 1.0
+                    rain_effect_intensity: 0.3
+                    snow_effect_intensity: 0.3
                     scale_with_chance: true
