@@ -568,7 +568,7 @@ widgets:
                     rain_icon: "\U000F0596"         # nf-md-weather_pouring
                     snow_icon: "\U000F0598"         # nf-md-weather_snowy
                 weather_animation:
-                    enabled: true
+                    enabled: false  # too busy over the temperature curve
                     snow_overrides_rain: true
                     temp_line_animation_style: "both"
                     rain_effect_intensity: 0.3
