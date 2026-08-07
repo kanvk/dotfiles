@@ -478,16 +478,20 @@ widgets:
             label: "<span>\ue70c</span>"
             label_alt: "<span>\ue70c</span> recents"
             menu_title: "VS Code Recents"
-            max_field_size: 50
-            folder_icon: "\uf07c"  #  (nf-fa-folder)
-            file_icon: "\uf15b"    #  (nf-fa-file)
             truncate_to_root_dir: false
-            hide_folder_icon: false
-            hide_file_icon: false
+            icons:
+                folder: "\uf07c"  # nf-fa-folder
+                file:   "\uf15b"  # nf-fa-file
+                remote: "\uf233"  # nf-fa-server (ssh / wsl workspaces)
             max_number_of_folders: 5
             max_number_of_files: 10
             modified_date_format: "Date modified: %Y-%m-%d %H:%M"
             cli_command: "code"
+            # VS Code is installed system-wide, but the widget only probes
+            # %LOCALAPPDATA%\Programs\Microsoft VS Code for product.json, so its
+            # shared-storage detection never fires and it falls back to a
+            # globalStorage db that no longer carries the recents list.
+            state_storage_path: "C:\\Users\\kanvk\\.vscode-shared\\sharedStorage\\state.vscdb"
             menu:
                 blur: true
                 round_corners: true
