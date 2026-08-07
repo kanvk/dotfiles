@@ -509,8 +509,8 @@ widgets:
     weather:
         type: "yasb.weather.WeatherWidget"
         options:
-            label: "<span>{icon}</span> {temp}"
-            label_alt: "{location}: {conditions}, Min {min_temp}, Max {max_temp}, Humidity {humidity}"
+            label: "<span>{icon}</span> {temp}  \uf043{daily_chance_of_rain}"
+            label_alt: "{location}: {conditions}  \u2022  Feels {feelslike}  \u2022  Min {min_temp} / Max {max_temp}  \u2022  Humidity {humidity}  \u2022  Wind {wind} {wind_dir}  \u2022  UV {uv}  \u2022  Rain {daily_chance_of_rain}"
             api_key: env
             location: env
             update_interval: 600
@@ -1114,8 +1114,8 @@ widgets:
     open_meteo:
         type: "yasb.open_meteo.OpenMeteoWidget"
         options:
-            label: "<span>{icon}</span> {temp}"
-            label_alt: "{location}: Min {min_temp}, Max {max_temp}, Humidity {humidity}"
+            label: "<span>{icon}</span> {temp}  \uf043{precipitation_probability}"
+            label_alt: "{location}: {condition_text}  \u2022  Feels {feelslike}  \u2022  Min {min_temp} / Max {max_temp}  \u2022  Humidity {humidity}  \u2022  Wind {wind} {wind_dir}  \u2022  UV {uv}  \u2022  Rain {precipitation_probability}"
             tooltip: true
             update_interval: 600
             hide_decimal: true
