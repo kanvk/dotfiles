@@ -516,22 +516,70 @@ widgets:
                 on_right: "toggle_mute"
                 on_middle: "do_nothing"
     # --- Bluetooth ---
+    # Left click: device menu | Middle click: Windows settings | Right click: toggle label
     bluetooth:
         type: "yasb.bluetooth.BluetoothWidget"
         options:
             label: "<span>{icon}</span> {device_count}"
-            label_alt: "{device_name}"
+            label_alt: "<span>{icon}</span> {device_name}"
             label_no_device: "No devices connected"
             label_device_separator: ", "
             max_length: 50
             max_length_ellipsis: "..."
+            tooltip: true
             icons:
-                bluetooth_on:        "\uf294"  #  (nf-fa-bluetooth_b)
-                bluetooth_connected: "\uf293"  #  (nf-fa-bluetooth)
-                bluetooth_off:       "\ue920"  #  (nf-feather-bluetooth_off)
+                bluetooth_on:        "\uf294"  # nf-fa-bluetooth_b
+                bluetooth_connected: "\uf293"  # nf-fa-bluetooth
+                bluetooth_off:       "\ue920"  # nf-feather-bluetooth_off
             callbacks:
-                on_left: "toggle_label"
-                on_right: "exec cmd.exe /c start ms-settings:bluetooth"
+                on_left: "toggle_menu"
+                on_middle: "exec cmd.exe /c start ms-settings:bluetooth"
+                on_right: "toggle_label"
+            menu_config:
+                blur: true
+                round_corners: true
+                round_corners_type: "normal"
+                border_color: "#45475a"
+                alignment: "right"
+                direction: "down"
+                offset_top: 6
+                offset_left: 0
+                labels:
+                    title: "Bluetooth"
+                    your_devices: "Your devices"
+                    new_devices: "New devices"
+                    not_connected: "Not connected"
+                    connected: "Connected"
+                    more_settings: "More Bluetooth settings"
+                    connect: "Connect"
+                    disconnect: "Disconnect"
+                    connecting: "Connecting"
+                    disconnecting: "Disconnecting"
+                    pair: "Pair"
+                    manage: "Manage"
+                    power_on: "On"
+                    power_off: "Off"
+                device_icons:
+                    headphones: "\ue7f6"
+                    headset:    "\ue95b"
+                    speaker:    "\ue7f5"
+                    phone:      "\ue8ea"
+                    tablet:     "\ue70a"
+                    laptop:     "\ue7f8"
+                    computer:   "\ue950"
+                    keyboard:   "\ue765"
+                    mouse:      "\ue962"
+                    controller: "\ue7fc"
+                    watch:      "\ue918"
+                    camera:     "\ue722"
+                    generic:    "\ue702"
+                    scan:       "\ue72c"
+                    battery:
+                        empty:  "\ueba0"
+                        low:    "\ueba2"
+                        medium: "\ueba5"
+                        high:   "\ueba8"
+                        full:   "\uebaa"
     # --- Battery ---
     battery:
         type: "yasb.battery.BatteryWidget"

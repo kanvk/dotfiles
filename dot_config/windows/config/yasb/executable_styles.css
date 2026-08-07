@@ -686,6 +686,7 @@ QSlider::handle {
 
 /***--------------------------------      • Bluetooth Widget •      --------------------------------***/
 
+/* 1. Bar Widget */
 .bluetooth-widget {
     padding: 0 8px;
 }
@@ -697,7 +698,17 @@ QSlider::handle {
     padding-bottom: 2px;
 }
 
-.bluetooth-widget .icon.off {
+/* The widget emits bt-off / bt-on / bt-connected on both icon and label. */
+.bluetooth-widget .icon.bt-connected {
+    color: var(--blue);
+}
+
+.bluetooth-widget .icon.bt-on {
+    color: var(--overlay2);
+}
+
+.bluetooth-widget .icon.bt-off,
+.bluetooth-widget .label.bt-off {
     color: var(--overlay0);
 }
 
@@ -706,6 +717,167 @@ QSlider::handle {
     color: var(--text);
     font-size: 12px;
     font-weight: 500;
+}
+
+/* 2. Device Menu Popup */
+.bluetooth-menu {
+    min-width: 320px;
+    max-width: 320px;
+    background-color: var(--mantle);
+}
+
+.bluetooth-menu .header {
+    padding: 12px 14px 8px 14px;
+}
+
+.bluetooth-menu .header .title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.bluetooth-menu .header .power-button {
+    background-color: var(--surface0);
+    color: var(--subtext0);
+    border-radius: 10px;
+    padding: 2px 10px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.bluetooth-menu .header .power-button:checked {
+    background-color: var(--blue);
+    color: var(--crust);
+}
+
+.bluetooth-menu .header .progress-bar {
+    max-height: 2px;
+    background-color: transparent;
+}
+
+.bluetooth-menu .header .progress-bar::chunk {
+    background-color: var(--blue);
+    border-radius: 2px;
+}
+
+.bluetooth-menu .error-message {
+    color: var(--red);
+    font-size: 12px;
+    padding: 8px 14px;
+}
+
+.bluetooth-menu .bluetooth-list {
+    background: transparent;
+    padding: 0 8px 8px 8px;
+}
+
+.bluetooth-menu .section {
+    background: transparent;
+    margin-top: 6px;
+}
+
+.bluetooth-menu .section-title {
+    color: var(--subtext0);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 6px;
+}
+
+.bluetooth-menu .bluetooth-item {
+    background-color: transparent;
+    border-radius: 8px;
+    padding: 6px 8px;
+}
+
+.bluetooth-menu .bluetooth-item:hover {
+    background-color: var(--surface0);
+}
+
+.bluetooth-menu .bluetooth-item.active {
+    background-color: var(--surface1);
+}
+
+.bluetooth-menu .bluetooth-item .icon {
+    font-family: "Segoe Fluent Icons";
+    font-size: 16px;
+    color: var(--blue);
+    margin-right: 8px;
+}
+
+.bluetooth-menu .bluetooth-item .name {
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.bluetooth-menu .bluetooth-item .status {
+    color: var(--overlay1);
+    font-size: 11px;
+}
+
+.bluetooth-menu .bluetooth-item .battery {
+    color: var(--subtext0);
+    font-size: 11px;
+    margin-left: 4px;
+}
+
+.bluetooth-menu .bluetooth-item .battery-icon {
+    font-family: "Segoe Fluent Icons";
+    font-size: 14px;
+    margin-left: 4px;
+}
+
+.bluetooth-menu .bluetooth-item .battery-icon.empty,
+.bluetooth-menu .bluetooth-item .battery-icon.low {
+    color: var(--red);
+}
+
+.bluetooth-menu .bluetooth-item .battery-icon.medium {
+    color: var(--yellow);
+}
+
+.bluetooth-menu .bluetooth-item .battery-icon.high,
+.bluetooth-menu .bluetooth-item .battery-icon.full {
+    color: var(--green);
+}
+
+.bluetooth-menu .bluetooth-item .controls-container {
+    background: transparent;
+}
+
+.bluetooth-menu .bluetooth-item .connect {
+    background-color: var(--surface1);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.bluetooth-menu .bluetooth-item .connect:hover {
+    background-color: var(--blue);
+    color: var(--crust);
+}
+
+.bluetooth-menu .footer {
+    border-top: 1px solid var(--surface0);
+    padding: 8px 14px;
+}
+
+.bluetooth-menu .footer .settings-button {
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.bluetooth-menu .footer .settings-button:hover {
+    color: var(--lavender);
+}
+
+.bluetooth-menu .footer .scan-icon {
+    font-family: "Segoe Fluent Icons";
+    font-size: 14px;
+    color: var(--subtext0);
 }
 
 /***--------------------------------      • Battery Widget •      --------------------------------***/
