@@ -59,7 +59,6 @@ bars:
             center: ["active_window"]
             right:
                 [
-                    "ai_chat",
                     "vscode",
                     "weather",
                     "volume",
@@ -424,42 +423,6 @@ widgets:
     # =============================================================================================
     # Right Bar Widgets
     # =============================================================================================
-
-    # --- AI Chat (Ollama) ---
-    ai_chat:
-        type: "yasb.ai_chat.AiChatWidget"
-        options:
-            label: "<span>\uf086</span>"
-            chat:
-                blur: true
-                round_corners: true
-                round_corners_type: "normal"
-                border_color: "system"
-                alignment: "center"
-                direction: "down"
-                offset_left: 0
-                offset_top: 6
-            icons:
-                send: "\uf1d9"     #  (nf-fa-paper_plane)
-                stop: "\uf04d"     #  (nf-fa-stop)
-                clear: "\uf1f8"    #  (nf-fa-trash)
-                assistant: "\uebca" #  (nf-cod-hubot)
-            notification_dot:
-                enabled: false
-                corner: "top_right"
-                color: "red"
-                margin: [0, 2]
-            callbacks:
-                on_left: "toggle_chat"
-            providers:
-                - provider: "Ollama"
-                  api_endpoint: "http://localhost:11434/v1"
-                  credential: "ollama"
-                  models:
-                      - name: "gemma3:27b-it-qat"
-                        label: "Gemma3 27b"
-                      - name: "gemma3:12b-it-qat"
-                        label: "Gemma3 12b"
 
     # --- VS Code Recents ---
     vscode:
