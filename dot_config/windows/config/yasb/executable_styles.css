@@ -1451,9 +1451,11 @@ QSlider::handle {
     color: var(--blue);
 }
 
+/* Titles are ElidedLabels, so the popup width decides how much path survives.
+   320px cut most remote workspaces mid-name. */
 .vscode-menu {
     max-height: 500px;
-    min-width: 320px;
+    min-width: 460px;
     background-color: var(--mantle);
 }
 
@@ -1464,6 +1466,29 @@ QSlider::handle {
     padding: 8px;
     color: var(--text);
     background-color: var(--mantle);
+}
+
+/* All / Folders / Files / Remotes pills. QPushButtons, so the native border and
+   background have to be cleared or they render as system buttons. */
+.vscode-menu .filter-button {
+    background: transparent;
+    border: none;
+    color: var(--overlay1);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    margin-left: 4px;
+    border-radius: 10px;
+}
+
+.vscode-menu .filter-button:hover {
+    background-color: var(--surface0);
+    color: var(--text);
+}
+
+.vscode-menu .filter-button.active {
+    background-color: var(--mauve);
+    color: var(--crust);
 }
 
 /* Search field added in 2.0. Without these the QLineEdit falls back to Qt's
@@ -1504,12 +1529,32 @@ QSlider::handle {
     border-bottom: 1px solid var(--surface0);
 }
 
-/* Folder and file glyphs are rendered inline in the title now, so the old
-   .folder-icon / .file-icon rules no longer match anything. */
+/* Icons need an explicit box for the same reason the bar icons do: Qt sizes the
+   text rect from font metrics and clips anything wider. */
+.vscode-menu .contents .item .folder-icon,
+.vscode-menu .contents .item .file-icon,
+.vscode-menu .contents .item .remote-icon {
+    font-size: 14px;
+    min-width: 28px;
+    padding-left: 8px;
+    border: none;
+}
+
+.vscode-menu .contents .item .folder-icon {
+    color: var(--flamingo);
+}
+
+.vscode-menu .contents .item .file-icon {
+    color: var(--mauve);
+}
+
+.vscode-menu .contents .item .remote-icon {
+    color: var(--teal);
+}
+
 .vscode-menu .contents .item .title {
     font-size: 12px;
     color: var(--text);
-    margin-left: 8px;
     margin-right: 5px;
 }
 
