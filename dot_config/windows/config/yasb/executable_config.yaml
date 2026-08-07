@@ -61,7 +61,6 @@ bars:
                 [
                     "vscode",
                     "open_meteo",
-                    "weather",
                     "volume",
                     "microphone",
                     "bluetooth",
@@ -502,9 +501,9 @@ widgets:
                 offset_top: 0
 
     # --- Weather (WeatherAPI, key required) ---
-    # Temporarily in the bar alongside open_meteo for comparison. Needs
-    # YASB_WEATHER_API_KEY and YASB_WEATHER_LOCATION in the Windows
-    # environment; without them the widget renders its placeholder state.
+    # Defined but not in the bar. Swap it in above to switch back; it needs
+    # YASB_WEATHER_API_KEY and YASB_WEATHER_LOCATION, which live in
+    # ~/.config/yasb/.env on the Windows side, not in this repo.
     # Left click: forecast card | Right click: toggle label
     weather:
         type: "yasb.weather.WeatherWidget"
