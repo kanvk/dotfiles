@@ -298,9 +298,10 @@ QSlider::handle {
     background-color: var(--mantle);
 }
 
+/* Flat on purpose: the forecast toggle overlay is pinned to the card corner
+   and would otherwise sit on top of this panel's background. */
 .weather-card-today {
-    border-radius: 8px;
-    background-color: var(--base);
+    background-color: transparent;
     color: var(--text);
 }
 
@@ -333,6 +334,49 @@ QSlider::handle {
 .weather-card-day .label {
     font-size: 12px;
     font-family: "LiterationSans Nerd Font";
+}
+
+.weather-card-day.active {
+    background-color: var(--surface0);
+    border: 1px solid var(--surface1);
+}
+
+/* Same custom-painted chart as the open-meteo card: it takes its height from
+   this container, and collapses onto itself without one. */
+.weather-card .hourly-container {
+    background-color: var(--base);
+    border-radius: 8px;
+    min-height: 170px;
+}
+
+.weather-card .hourly-data-buttons {
+    background-color: transparent;
+}
+
+.weather-card .hourly-data-button {
+    background-color: var(--surface0);
+    color: var(--subtext0);
+    border: none;
+    border-radius: 6px;
+    padding: 3px 7px;
+    margin: 1px 2px;
+    font-size: 12px;
+}
+
+.weather-card .hourly-data-button:hover {
+    background-color: var(--surface1);
+    color: var(--text);
+}
+
+.weather-card .hourly-data-button.active {
+    background-color: var(--mauve);
+    color: var(--crust);
+}
+
+/* Shown when the API key or location is missing, or a fetch fails. */
+.weather-card .placeholder-icon {
+    font-size: 32px;
+    color: var(--overlay0);
 }
 
 .calendar {

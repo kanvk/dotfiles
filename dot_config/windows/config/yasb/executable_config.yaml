@@ -61,6 +61,7 @@ bars:
                 [
                     "vscode",
                     "open_meteo",
+                    "weather",
                     "volume",
                     "microphone",
                     "bluetooth",
@@ -500,38 +501,79 @@ widgets:
                 alignment: "center"
                 offset_top: 0
 
-    # --- Weather (API key required) ---
+    # --- Weather (WeatherAPI, key required) ---
+    # Temporarily in the bar alongside open_meteo for comparison. Needs
+    # YASB_WEATHER_API_KEY and YASB_WEATHER_LOCATION in the Windows
+    # environment; without them the widget renders its placeholder state.
+    # Left click: forecast card | Right click: toggle label
     weather:
         type: "yasb.weather.WeatherWidget"
         options:
             label: "<span>{icon}</span> {temp}"
             label_alt: "{location}: {conditions}, Min {min_temp}, Max {max_temp}, Humidity {humidity}"
             api_key: env
+            location: env
             update_interval: 600
             hide_decimal: true
-            location: env
             units: "imperial"
+            tooltip: true
+            show_alerts: true
             callbacks:
                 on_left: "toggle_card"
+                on_middle: "do_nothing"
+                on_right: "toggle_label"
             icons:
-                sunnyDay:      "\ue30d"  #  (nf-weather-day_sunny)
-                clearNight:    "\ue32b"  #  (nf-weather-night_clear)
-                cloudyDay:     "\ue302"  #  (nf-weather-day_cloudy)
-                cloudyNight:   "\ue32e"  #  (nf-weather-night_cloudy)
-                rainyDay:      "\ue308"  #  (nf-weather-day_rain)
-                rainyNight:    "\ue333"  #  (nf-weather-night_rain)
-                snowyDay:   "\ue30a"  #  (nf-weather-day_snow)
-                snowyNight: "\ue335"  #  (nf-weather-night_snow)
-                blizzardDay:   "\ue31a"  #  (nf-weather-snow)
-                default:       "\ue30d"  #  (nf-weather-day_sunny)
+                sunnyDay:          "\ue30d"  # nf-weather-day_sunny
+                clearNight:        "\ue32b"  # nf-weather-night_clear
+                cloudyDay:         "\ue302"  # nf-weather-day_cloudy
+                cloudyNight:       "\ue32e"  # nf-weather-night_cloudy
+                rainyDay:          "\ue308"  # nf-weather-day_rain
+                rainyNight:        "\ue333"  # nf-weather-night_rain
+                snowyDay:          "\ue30a"  # nf-weather-day_snow
+                snowyNight:        "\ue335"  # nf-weather-night_snow
+                blizzardDay:       "\ue31a"  # nf-weather-snow
+                blizzardNight:     "\ue31a"  # nf-weather-snow
+                foggyDay:          "\ue303"  # nf-weather-day_fog
+                foggyNight:        "\ue346"  # nf-weather-night_fog
+                thunderstormDay:   "\ue30e"  # nf-weather-day_lightning
+                thunderstormNight: "\ue332"  # nf-weather-night_lightning
+                default:           "\ue30d"  # nf-weather-day_sunny
             weather_card:
-                blur: True
-                round_corners: True
+                blur: true
+                round_corners: true
                 round_corners_type: "normal"
                 border_color: "#45475a"
                 alignment: "right"
                 direction: "down"
+                offset_top: 6
+                offset_left: 0
                 icon_size: 48
+                show_hourly_forecast: true
+                time_format: "12h"
+                hourly_point_spacing: 76
+                hourly_icon_size: 24
+                icon_smoothing: true
+                temp_line_width: 2
+                current_line_color: "#CBA6F7"    # mauve
+                current_line_width: 1
+                current_line_style: "dot"
+                hourly_gradient:
+                    enabled: true
+                    top_color: "#89B4FA"         # blue
+                    bottom_color: "#1E1E2E"      # base
+                hourly_forecast_buttons:
+                    enabled: true
+                    default_view: "temperature"
+                    temperature_icon: "\U000F0599"  # nf-md-thermometer
+                    rain_icon: "\U000F0596"         # nf-md-weather_pouring
+                    snow_icon: "\U000F0598"         # nf-md-weather_snowy
+                weather_animation:
+                    enabled: true
+                    snow_overrides_rain: true
+                    temp_line_animation_style: "both"
+                    rain_effect_intensity: 1.0
+                    snow_effect_intensity: 1.0
+                    scale_with_chance: true
 
     # --- Volume ---
     volume:
