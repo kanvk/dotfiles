@@ -741,6 +741,7 @@ QSlider::handle {
 }
 
 .bluetooth-menu .header .power-button {
+    border: none;
     background-color: var(--surface0);
     color: var(--subtext0);
     border-radius: 10px;
@@ -754,14 +755,8 @@ QSlider::handle {
     color: var(--crust);
 }
 
-.bluetooth-menu .header .progress-bar {
-    max-height: 2px;
-    background-color: transparent;
-}
-
-.bluetooth-menu .header .progress-bar::chunk {
-    background-color: var(--blue);
-    border-radius: 2px;
+.bluetooth-menu .bluetooth-item .details-container {
+    background: transparent;
 }
 
 .bluetooth-menu .error-message {
@@ -850,6 +845,7 @@ QSlider::handle {
 }
 
 .bluetooth-menu .bluetooth-item .connect {
+    border: none;
     background-color: var(--surface1);
     color: var(--text);
     border-radius: 6px;
@@ -868,10 +864,16 @@ QSlider::handle {
     padding: 8px 14px;
 }
 
+/* Footer children are QPushButtons. Without clearing background and border
+   they render with Qt's native button chrome instead of as flat links. */
 .bluetooth-menu .footer .settings-button {
+    background: transparent;
+    border: none;
     color: var(--blue);
     font-size: 12px;
     font-weight: 500;
+    padding: 4px 2px;
+    text-align: left;
 }
 
 .bluetooth-menu .footer .settings-button:hover {
@@ -879,9 +881,18 @@ QSlider::handle {
 }
 
 .bluetooth-menu .footer .scan-icon {
+    background: transparent;
+    border: none;
     font-family: "Segoe Fluent Icons";
     font-size: 14px;
     color: var(--subtext0);
+    padding: 4px 6px;
+    border-radius: 6px;
+}
+
+.bluetooth-menu .footer .scan-icon:hover {
+    background-color: var(--surface0);
+    color: var(--text);
 }
 
 /***-------------------------------      • Brightness Widget •      -------------------------------***/
