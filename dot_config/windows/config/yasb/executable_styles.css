@@ -82,6 +82,7 @@ QSlider::handle {
 .microphone-widget .label,
 .bluetooth-widget .label,
 .brightness-widget .label,
+.dnd-widget .label,
 .battery-widget .label,
 .cpu-widget .label,
 .gpu-widget .label,
@@ -1060,6 +1061,46 @@ QSlider::handle {
 .battery-widget .icon.status-charging {
     color: var(--green);
 }
+
+/***-----------------------------------      • DND Widget •      ----------------------------------***/
+
+.dnd-widget {
+    padding: 0 8px;
+}
+
+.dnd-widget .widget-container .icon {
+    font-size: 16px;
+    margin: 0 2px 0 0;
+    padding-bottom: 2px;
+}
+
+.dnd-widget .widget-container .label {
+    margin-right: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.dnd-widget .widget-container .label.alt {
+    padding: 1px 8px;
+}
+
+/* Status colours follow the battery widget's convention: muted when off,
+   accented while a restricted mode is active. */
+.dnd-widget .widget-container .icon.status-disabled,
+.dnd-widget .widget-container .label.status-disabled {
+    color: var(--overlay0);
+}
+
+.dnd-widget .widget-container .icon.status-priority,
+.dnd-widget .widget-container .label.status-priority {
+    color: var(--mauve);
+}
+
+.dnd-widget .widget-container .icon.status-alarms,
+.dnd-widget .widget-container .label.status-alarms {
+    color: var(--peach);
+}
+
 
 /***--------------------------------      • Active Window •      ---------------------------------***/
 

@@ -68,6 +68,7 @@ bars:
                     "battery",
                     # "system_grouper",  # Contains: cpu, gpu, memory, disk, traffic
                     "clock",
+                    "dnd",
                     "power_menu",
                     "komorebi_ctl",
                 ]
@@ -845,6 +846,25 @@ widgets:
                 country_code: "US"
                 holiday_color: "#FF6464"
                 extended: false
+
+    # --- Do Not Disturb (Windows Focus Assist) ---
+    # Left click: toggle | Middle click: toggle label | Right click: cycle modes
+    dnd:
+        type: "yasb.dnd.DndWidget"
+        options:
+            label: "<span>{icon}</span>"
+            label_alt: "<span>{icon}</span> {status}"
+            tooltip: true
+            default_active_mode: "priority"
+            callbacks:
+                on_left: "toggle_status"
+                on_middle: "toggle_label"
+                on_right: "cycle_status"
+            icons:
+                disabled: "\uf0f3"  # nf-fa-bell
+                priority: "\uf186"  # nf-fa-moon_o
+                alarms:   "\uf1f6"  # nf-fa-bell_slash
+
 
     # --- Power Menu (Fullscreen) ---
     # Blur background, colorful per-button icons
