@@ -91,12 +91,12 @@ QSlider::handle {
 .disk-widget .label,
 .traffic-widget .label,
 .komorebi-control-widget .label {
-    text-shadow: 1px 1px 3px black;
+    text-shadow: 1px 1px 3px #11111B; /* --crust */
 }
 
 .windows-workspaces .ws-btn,
 .komorebi-workspaces .ws-btn {
-    box-shadow: 1px 1px 3px black;
+    box-shadow: 1px 1px 3px #11111B; /* --crust */
 }
 
 .tooltip {
@@ -114,7 +114,7 @@ QSlider::handle {
 /***-------------------------------      • Power Menu Widget •      --------------------------------***/
 
 .power-menu-overlay {
-    background-color: rgba(17, 17, 27, 0.5);
+    background-color: rgba(17, 17, 27, 0.5);  /* --crust @ 50% */
 }
 
 .power-menu-overlay .uptime {
@@ -126,7 +126,7 @@ QSlider::handle {
 }
 
 .power-menu-popup {
-    background-color: rgba(30, 30, 46, 0.6);
+    background-color: rgba(30, 30, 46, 0.6);  /* --base @ 60% */
     padding: 32px;
     border-radius: 16px;
 }
@@ -166,7 +166,7 @@ QSlider::handle {
     min-height: 80px;
     border-radius: 12px;
     background-color: var(--surface0);
-    border: 8px solid rgba(0, 0, 0, 0);
+    border: 8px solid rgba(0, 0, 0, 0);  /* transparent */
 }
 
 .power-menu-popup .button.hover {
@@ -317,9 +317,9 @@ QSlider::handle {
 .weather-card-today .label.alert {
     font-size: 12px;
     font-weight: 700;
-    background-color: rgba(249, 226, 175, 0.05);
-    border: 1px solid rgba(249, 226, 175, 0.1);
-    color: rgba(205, 214, 244, 0.85);
+    background-color: rgba(249, 226, 175, 0.05);  /* --yellow @ 5% */
+    border: 1px solid rgba(249, 226, 175, 0.1);  /* --yellow @ 10% */
+    color: rgba(205, 214, 244, 0.85);  /* --text @ 85% */
     border-radius: 6px;
     padding: 5px 0;
 }
@@ -340,7 +340,7 @@ QSlider::handle {
 
 .calendar .calendar-table,
 .calendar .calendar-table::item {
-    background-color: rgba(17, 17, 27, 0);
+    background-color: rgba(17, 17, 27, 0);  /* --crust @ 0% (transparent) */
     color: var(--overlay1);
     font-family: "CaskaydiaCove Nerd Font Mono";
     margin: 0;
@@ -2173,9 +2173,9 @@ QSlider::handle {
 .open-meteo-card-today .label.alert {
     font-size: 12px;
     font-weight: 700;
-    background-color: rgba(249, 226, 175, 0.05);
-    border: 1px solid rgba(249, 226, 175, 0.1);
-    color: rgba(205, 214, 244, 0.85);
+    background-color: rgba(249, 226, 175, 0.05);  /* --yellow @ 5% */
+    border: 1px solid rgba(249, 226, 175, 0.1);  /* --yellow @ 10% */
+    color: rgba(205, 214, 244, 0.85);  /* --text @ 85% */
     border-radius: 6px;
     padding: 5px 0;
 }
@@ -2582,7 +2582,7 @@ QSlider::handle {
     margin: 0;
     padding: 0;
     border-radius: 6px;
-    border: 1px solid rgba(0, 0, 0, 0);
+    border: 1px solid rgba(0, 0, 0, 0);  /* transparent */
 }
 
 .disk-group-row:hover {
@@ -2604,7 +2604,7 @@ QSlider::handle {
 
 .disk-group-label-bar {
     max-height: 8px;
-    border: 0px solid rgba(0, 0, 0, 0);
+    border: 0px solid rgba(0, 0, 0, 0);  /* transparent */
     background-color: var(--surface1);
     border-radius: 4px;
 }
