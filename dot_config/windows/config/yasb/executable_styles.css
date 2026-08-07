@@ -76,6 +76,7 @@ QSlider::handle {
    Original: color "black", radius 3, offset [1, 1]. */
 .whkd-widget .label,
 .komorebi-active-layout .label,
+.media-widget .label,
 .media-lite-widget .title,
 .media-lite-widget .artist,
 .media-lite-widget .label,
@@ -1834,6 +1835,237 @@ QSlider::handle {
     font-family: "CaskaydiaCove Nerd Font Mono";
     font-weight: 600;
     font-size: 13px;
+}
+
+/***---------------------------------      • Media Widget •      ------------------------------------***/
+
+/* 1. Bar Widget */
+.media-widget {
+    padding: 0 4px;
+}
+
+.media-widget .widget-container {
+    background-color: var(--crust);
+    border-radius: 12px;
+    margin: 4px 0;
+    padding: 0 8px;
+    min-height: 24px;
+}
+
+.media-widget .label {
+    color: var(--text);
+    padding: 0;
+    padding-right: 4px;
+    font-size: 12px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-weight: 500;
+}
+
+.media-widget .btn {
+    color: var(--overlay1);
+    padding: 0 4px;
+    margin: 0;
+    font-family: "JetBrainsMonoNL Nerd Font Mono";
+    font-size: 12px;
+}
+
+.media-widget .btn:hover {
+    color: var(--text);
+}
+
+.media-widget .btn.disabled {
+    color: var(--surface2);
+}
+
+.media-widget .progress-bar {
+    max-height: 2px;
+    background-color: transparent;
+    margin-left: 5px;
+}
+
+.media-widget .progress-bar::chunk {
+    background-color: var(--mauve);
+    border-radius: 2px;
+}
+
+/* 2. Media Menu Popup */
+.media-menu {
+    min-width: 440px;
+    max-width: 440px;
+    background-color: var(--mantle);
+}
+
+.media-menu .thumbnail {
+    border-radius: 8px;
+}
+
+.media-menu .title {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--text);
+    margin-left: 10px;
+}
+
+.media-menu .artist {
+    font-size: 13px;
+    font-weight: 500;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--subtext1);
+    margin-left: 10px;
+    margin-top: 0px;
+}
+
+.media-menu .source {
+    font-size: 11px;
+    font-weight: 600;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--crust);
+    margin-left: 10px;
+    margin-top: 10px;
+    border-radius: 3px;
+    padding: 2px 4px;
+    background-color: var(--subtext0);
+}
+
+.media-menu .source.spotify {
+    background-color: var(--green);
+    color: var(--crust);
+}
+
+.media-menu .source.youtube,
+.media-menu .source.youtube-music {
+    background-color: var(--red);
+    color: var(--crust);
+}
+
+.media-menu .btn {
+    font-family: "Segoe Fluent Icons";
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text);
+    margin: 10px 2px 0px 2px;
+    min-width: 40px;
+    max-width: 40px;
+    min-height: 40px;
+    max-height: 40px;
+    border-radius: 20px;
+}
+
+.media-menu .btn.prev {
+    margin-left: 10px;
+}
+
+.media-menu .btn:hover {
+    color: var(--text);
+    background-color: rgba(205, 214, 244, 0.1);  /* --text @ 10% */
+}
+
+.media-menu .btn.play,
+.media-menu .btn.pause {
+    background-color: rgba(205, 214, 244, 0.1);  /* --text @ 10% */
+    font-size: 20px;
+}
+
+.media-menu .btn.play:hover,
+.media-menu .btn.pause:hover {
+    background-color: rgba(205, 214, 244, 0.15);  /* --text @ 15% */
+}
+
+.media-menu .btn.disabled,
+.media-menu .btn.disabled:hover {
+    color: var(--overlay0);
+    background-color: rgba(0, 0, 0, 0);  /* transparent */
+}
+
+.media-menu .playback-time {
+    font-size: 13px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--overlay1);
+    margin-top: 20px;
+    min-width: 100px;
+}
+
+/* 3. Media Menu Progress Slider */
+.media-menu .progress-slider {
+    height: 10px;
+    margin: 5px 4px;
+    border-radius: 3px;
+}
+
+.media-menu .progress-slider::groove {
+    background: rgba(205, 214, 244, 0.1);  /* --text @ 10% */
+    height: 2px;
+    border-radius: 3px;
+}
+
+.media-menu .progress-slider::groove:hover {
+    background: rgba(205, 214, 244, 0.2);  /* --text @ 20% */
+    height: 6px;
+    border-radius: 3px;
+}
+
+.media-menu .progress-slider::sub-page {
+    background: var(--mauve);
+    border-radius: 3px;
+    height: 4px;
+}
+
+.media-menu .progress-slider::handle {
+    background: var(--text);
+    border: 2px solid var(--base);
+    width: 14px;
+    height: 14px;
+    margin-top: -5px;
+    margin-bottom: -5px;
+    border-radius: 9px;
+}
+
+.media-menu .progress-slider::handle:hover {
+    background: var(--lavender);
+    border-color: var(--surface0);
+}
+
+/* 4. Media Menu Volume Slider */
+.media-menu .app-volume-container {
+    background-color: rgba(205, 214, 244, 0.05);  /* --text @ 5% */
+    padding: 8px 6px;
+    border-radius: 16px;
+    margin-left: 10px;
+}
+
+.media-menu .app-volume-container .volume-slider::groove {
+    background: rgba(205, 214, 244, 0.1);  /* --text @ 10% */
+    width: 2px;
+    border-radius: 3px;
+}
+
+.media-menu .app-volume-container .volume-slider::groove:hover {
+    background: rgba(205, 214, 244, 0.1);  /* --text @ 10% */
+    width: 6px;
+    border-radius: 3px;
+}
+
+.media-menu .app-volume-container .volume-slider::add-page {
+    background: var(--mauve);
+    border-radius: 3px;
+}
+
+.media-menu .app-volume-container .volume-slider::sub-page {
+    background: rgba(205, 214, 244, 0.1);  /* --text @ 10% */
+    border-radius: 3px;
+}
+
+.media-menu .app-volume-container .mute-button,
+.media-menu .app-volume-container .unmute-button {
+    font-family: "Segoe Fluent Icons";
+    font-size: 16px;
+    color: var(--text);
+    margin-top: 4px;
+}
+
+.media-menu .app-volume-container .unmute-button {
+    color: var(--overlay0);
 }
 
 /***-------------------------------      • Media Lite Widget •      -------------------------------***/
