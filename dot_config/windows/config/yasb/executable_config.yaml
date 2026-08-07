@@ -64,6 +64,7 @@ bars:
                     "volume",
                     "microphone",
                     "bluetooth",
+                    "brightness",
                     "battery",
                     # "system_grouper",  # Contains: cpu, gpu, memory, disk, traffic
                     "clock",
@@ -580,6 +581,50 @@ widgets:
                         medium: "\ueba5"
                         high:   "\ueba8"
                         full:   "\uebaa"
+    # --- Brightness (DDC/CI over the monitor cable) ---
+    # Left click: brightness menu | Middle click: cycle level | Right click: toggle label
+    # Scroll over the widget to adjust. No auto-light: it would override manual
+    # changes on a schedule, and DDC writes are slow enough to be noticeable.
+    brightness:
+        type: "yasb.brightness.BrightnessWidget"
+        options:
+            label: "<span>{icon}</span>"
+            label_alt: "<span>{icon}</span> {percent}%"
+            tooltip: true
+            scroll_step: 5
+            invert_wheel: false
+            ddc_poll_interval: 60
+            auto_light: false
+            brightness_toggle_level: [25, 50, 75, 100]
+            brightness_icons:
+                - "\U000F00DE"  # nf-md-brightness_4   0-25%
+                - "\U000F00DD"  # nf-md-brightness_3   26-50%
+                - "\U000F00DF"  # nf-md-brightness_5   51-75%
+                - "\U000F00E0"  # nf-md-brightness_6   76-100%
+            brightness_menu:
+                blur: true
+                round_corners: true
+                round_corners_type: "normal"
+                border_color: "#45475a"
+                alignment: "right"
+                direction: "down"
+                offset_top: 6
+                offset_left: 0
+                brightness_icon: "\ue706"
+                contrast_icon: "\ue7a1"
+            progress_bar:
+                enabled: true
+                progress_type: "circular"
+                position: "left"
+                size: 18
+                thickness: 3
+                color: "#F9E2AF"            # yellow
+                background_color: "#45475a" # surface1
+                animation: true
+            callbacks:
+                on_left: "toggle_brightness_menu"
+                on_middle: "toggle_level_next"
+                on_right: "toggle_label"
     # --- Battery ---
     battery:
         type: "yasb.battery.BatteryWidget"

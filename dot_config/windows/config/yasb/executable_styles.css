@@ -81,6 +81,7 @@ QSlider::handle {
 .media-lite-widget .label,
 .microphone-widget .label,
 .bluetooth-widget .label,
+.brightness-widget .label,
 .battery-widget .label,
 .cpu-widget .label,
 .gpu-widget .label,
@@ -879,6 +880,122 @@ QSlider::handle {
     font-size: 14px;
     color: var(--subtext0);
 }
+
+/***-------------------------------      • Brightness Widget •      -------------------------------***/
+
+/* 1. Bar Widget */
+.brightness-widget {
+    padding: 0 8px;
+}
+
+.brightness-widget .widget-container .icon {
+    color: var(--yellow);
+    font-size: 16px;
+    margin: 0 2px 0 0;
+    padding-bottom: 2px;
+}
+
+.brightness-widget .widget-container .label {
+    margin-right: 4px;
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Circular ring drawn behind the icon */
+.brightness-widget .progress-container {
+    margin: 0 2px 0 0;
+}
+
+/* 2. Brightness Menu Popup */
+.brightness-menu {
+    min-width: 300px;
+    max-width: 300px;
+    background-color: var(--mantle);
+}
+
+/* One row per detected monitor */
+.brightness-menu .monitor-row {
+    background-color: transparent;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin: 4px 8px;
+}
+
+.brightness-menu .monitor-row:hover {
+    background-color: var(--surface0);
+}
+
+.brightness-menu .monitor-row.monitor-0 {
+    margin-top: 8px;
+}
+
+.brightness-menu .monitor-title {
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.brightness-menu .monitor-subtitle {
+    color: var(--overlay1);
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.brightness-menu .slider-rows {
+    background: transparent;
+    margin-top: 6px;
+}
+
+.brightness-menu .slider-row {
+    background: transparent;
+    margin-top: 4px;
+}
+
+.brightness-menu .slider-icon {
+    font-family: "Segoe Fluent Icons";
+    font-size: 15px;
+    color: var(--subtext0);
+    margin-right: 8px;
+}
+
+/* Slider geometry mirrors the audio menu so both popups feel identical */
+.brightness-slider::groove,
+.contrast-slider::groove {
+    background: rgba(205, 214, 244, 0.1); /* --text @ 10% */
+    height: 4px;
+    border-radius: 2px;
+}
+
+.brightness-slider::sub-page {
+    background: var(--yellow);
+    border-radius: 2px;
+    height: 4px;
+}
+
+.contrast-slider::sub-page {
+    background: var(--sapphire);
+    border-radius: 2px;
+    height: 4px;
+}
+
+.brightness-slider::handle,
+.contrast-slider::handle {
+    background: var(--text);
+    border: 2px solid var(--base);
+    width: 14px;
+    height: 14px;
+    margin-top: -5px;
+    margin-bottom: -5px;
+    border-radius: 9px;
+}
+
+.brightness-slider::handle:hover,
+.contrast-slider::handle:hover {
+    background: var(--lavender);
+    border-color: var(--surface0);
+}
+
 
 /***--------------------------------      • Battery Widget •      --------------------------------***/
 
