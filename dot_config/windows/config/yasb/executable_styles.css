@@ -39,7 +39,7 @@
     font-size: 12px;
     color: var(--text);
     font-weight: 500;
-    font-family: "CaskaydiaCove Nerd Font Mono", "JetBrainsMonoNL Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM", "JetBrainsMonoNL NFM";
     margin: 0;
     padding: 0;
 }
@@ -123,7 +123,7 @@ QSlider::handle {
     margin-bottom: 20px;
     color: var(--subtext0);
     font-weight: 600;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .power-menu-popup {
@@ -144,20 +144,20 @@ QSlider::handle {
     font-weight: 600;
     color: var(--text);
     margin-top: 0;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .power-menu-popup .profile-info .profile-account-type {
     font-size: 13px;
     color: var(--subtext0);
     margin-top: 4px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .power-menu-widget .label {
     color: var(--maroon);
     font-size: 16px;
-    font-family: "JetBrainsMonoNL Nerd Font Mono";
+    font-family: "JetBrainsMonoNL NFM";
 }
 
 .power-menu-popup .button {
@@ -179,7 +179,7 @@ QSlider::handle {
     font-size: 13px;
     font-weight: 600;
     color: var(--text);
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .power-menu-popup .button .icon {
@@ -306,13 +306,13 @@ QSlider::handle {
 
 .weather-card-today .label {
     font-size: 12px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .weather-card-today .label.location {
     font-size: 24px;
     font-weight: 800;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .weather-card-today .label.alert {
@@ -332,7 +332,7 @@ QSlider::handle {
 
 .weather-card-day .label {
     font-size: 12px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .calendar {
@@ -343,7 +343,7 @@ QSlider::handle {
 .calendar .calendar-table::item {
     background-color: rgba(17, 17, 27, 0);  /* --crust @ 0% (transparent) */
     color: var(--overlay1);
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     margin: 0;
     padding: 0;
     border: none;
@@ -363,7 +363,7 @@ QSlider::handle {
 .calendar .day-label,
 .calendar .month-label,
 .calendar .date-label {
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     font-size: 16px;
     color: var(--text);
     font-weight: 700;
@@ -393,7 +393,7 @@ QSlider::handle {
 .home-menu .menu-item {
     padding: 8px 48px 8px 12px;
     font-size: 13px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     font-weight: 600;
 }
 
@@ -1425,7 +1425,7 @@ QSlider::handle {
 
 .active-window-widget .widget-container .label {
     color: var(--text);
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     font-weight: 600;
     font-size: 14px;
 }
@@ -1541,7 +1541,7 @@ QSlider::handle {
     font-size: 14px;
     font-weight: 600;
     border-radius: 4px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .whkd-popup .keybind-buttons-container {
@@ -1557,7 +1557,7 @@ QSlider::handle {
     border: 1px inset var(--surface1);
     border-bottom: 2px inset var(--surface1);
     border-radius: 4px;
-    font-family: "JetBrainsMonoNL Nerd Font Mono";
+    font-family: "JetBrainsMonoNL NFM";
 }
 
 .whkd-popup .keybind-button.special {
@@ -1580,7 +1580,7 @@ QSlider::handle {
 .whkd-popup .filter-input {
     padding: 0 8px 2px 8px;
     font-size: 14px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     border: 1px solid var(--surface0);
     border-radius: 4px;
     outline: none;
@@ -1741,7 +1741,7 @@ QSlider::handle {
 }
 
 .komorebi-layout-menu .menu-item-text {
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     padding-left: 4px;
     font-size: 12px;
 }
@@ -1776,7 +1776,7 @@ QSlider::handle {
     font-size: 14px;
     margin: 0 2px;
     padding: 2px 0;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .komorebi-workspaces .ws-btn.populated {
@@ -1839,7 +1839,7 @@ QSlider::handle {
 
 .taskbar-widget .app-container .app-title {
     padding-left: 6px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     font-weight: 500;
     color: var(--text);
 }
@@ -1865,7 +1865,7 @@ QSlider::handle {
 
 .taskbar-preview .header .title {
     color: var(--text);
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     font-weight: 600;
     font-size: 13px;
 }
@@ -1890,7 +1890,7 @@ QSlider::handle {
     padding: 0;
     padding-right: 4px;
     font-size: 12px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     font-weight: 500;
 }
 
@@ -1898,7 +1898,7 @@ QSlider::handle {
     color: var(--overlay1);
     padding: 0 4px;
     margin: 0;
-    font-family: "JetBrainsMonoNL Nerd Font Mono";
+    font-family: "JetBrainsMonoNL NFM";
     font-size: 12px;
 }
 
@@ -1935,7 +1935,7 @@ QSlider::handle {
 .media-menu .title {
     font-size: 14px;
     font-weight: 600;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--text);
     margin-left: 10px;
 }
@@ -1943,7 +1943,7 @@ QSlider::handle {
 .media-menu .artist {
     font-size: 13px;
     font-weight: 500;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--subtext1);
     margin-left: 10px;
     margin-top: 0px;
@@ -1952,7 +1952,7 @@ QSlider::handle {
 .media-menu .source {
     font-size: 11px;
     font-weight: 600;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--crust);
     margin-left: 10px;
     margin-top: 10px;
@@ -2013,7 +2013,7 @@ QSlider::handle {
 
 .media-menu .playback-time {
     font-size: 13px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--overlay1);
     margin-top: 20px;
     min-width: 100px;
@@ -2129,7 +2129,7 @@ QSlider::handle {
     color: var(--text);
     padding: 0;
     font-size: 12px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     font-weight: 500;
 }
 
@@ -2137,7 +2137,7 @@ QSlider::handle {
     color: var(--subtext0);
     padding: 0;
     font-size: 11px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     font-weight: 500;
 }
 
@@ -2166,7 +2166,7 @@ QSlider::handle {
 .media-lite-menu .title {
     font-size: 14px;
     font-weight: 600;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--text);
     margin-left: 10px;
 }
@@ -2174,7 +2174,7 @@ QSlider::handle {
 .media-lite-menu .artist {
     font-size: 13px;
     font-weight: 500;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--subtext1);
     margin-left: 10px;
     margin-top: 0px;
@@ -2183,7 +2183,7 @@ QSlider::handle {
 .media-lite-menu .source {
     font-size: 11px;
     font-weight: 600;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--crust);
     margin-left: 10px;
     margin-top: 10px;
@@ -2266,7 +2266,7 @@ QSlider::handle {
 
 .media-lite-menu .playback-time {
     font-size: 13px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--overlay1);
     min-width: 48px;
 }
@@ -2426,13 +2426,13 @@ QSlider::handle {
 
 .open-meteo-card-today .label {
     font-size: 12px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .open-meteo-card-today .label.location {
     font-size: 24px;
     font-weight: 800;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .open-meteo-card-today .label.alert {
@@ -2452,7 +2452,7 @@ QSlider::handle {
 
 .open-meteo-card-day .label {
     font-size: 12px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .open-meteo-card .hourly-container {
@@ -2465,7 +2465,7 @@ QSlider::handle {
     border: 1px solid var(--surface1);
     border-radius: 4px;
     color: var(--text);
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     font-size: 14px;
     padding: 4px 8px;
 }
@@ -2479,20 +2479,20 @@ QSlider::handle {
 .open-meteo-card-day .day-name {
     font-size: 12px;
     font-weight: 600;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--subtext0);
 }
 
 .open-meteo-card-day .day-temp-max {
     font-size: 13px;
     font-weight: 600;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--text);
 }
 
 .open-meteo-card-day .day-temp-min {
     font-size: 12px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--overlay1);
 }
 
@@ -2611,7 +2611,7 @@ QSlider::handle {
 }
 
 .quick-launch-popup .search .search-icon {
-    font-family: "JetBrainsMonoNL Nerd Font Mono";
+    font-family: "JetBrainsMonoNL NFM";
     font-size: 18px;
     color: var(--overlay1);
     padding-right: 8px;
@@ -2623,7 +2623,7 @@ QSlider::handle {
     border: none;
     color: var(--text);
     font-size: 16px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     font-weight: 400;
     padding: 4px 0;
 }
@@ -2637,7 +2637,7 @@ QSlider::handle {
     margin-right: 4px;
     font-size: 13px;
     font-weight: 600;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     max-height: 28px;
 }
 
@@ -2648,7 +2648,7 @@ QSlider::handle {
 
 .quick-launch-popup .results-list-view {
     font-size: 14px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     font-weight: 600;
     color: var(--text);
 }
@@ -2656,7 +2656,7 @@ QSlider::handle {
 .quick-launch-popup .results-list-view .description {
     color: var(--overlay1);
     font-size: 11px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     font-weight: 500;
 }
 
@@ -2672,7 +2672,7 @@ QSlider::handle {
 
 .quick-launch-popup .results-empty-text {
     font-size: 24px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--subtext0);
     padding-top: 8px;
 }
@@ -2686,7 +2686,7 @@ QSlider::handle {
     font-size: 13px;
     color: var(--subtext1);
     padding: 8px 12px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     background-color: var(--surface0);
     border: none;
 }
@@ -2699,14 +2699,14 @@ QSlider::handle {
 .quick-launch-popup .preview .preview-meta {
     padding: 6px 12px;
     border-top: 1px solid var(--surface1);
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .quick-launch-popup .preview .preview-meta .preview-title {
     font-size: 14px;
     font-weight: 600;
     color: var(--text);
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     margin-bottom: 10px;
     margin-left: -2px;
 }
@@ -2714,13 +2714,13 @@ QSlider::handle {
 .quick-launch-popup .preview .preview-meta .preview-subtitle {
     font-size: 12px;
     color: var(--subtext1);
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     padding-bottom: 1px;
 }
 
 .quick-launch-popup .preview.edit .preview-title {
     font-size: 13px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     font-weight: 600;
     color: var(--text);
     padding: 8px 12px 4px 12px;
@@ -2732,7 +2732,7 @@ QSlider::handle {
     border-radius: 4px;
     color: var(--text);
     font-size: 13px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     padding: 6px 8px;
     margin: 0 12px;
 }
@@ -2747,7 +2747,7 @@ QSlider::handle {
     border-radius: 4px;
     color: var(--text);
     font-size: 13px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     padding: 6px 8px;
     margin: 0 12px;
 }
@@ -2766,7 +2766,7 @@ QSlider::handle {
     border-radius: 4px;
     color: var(--text);
     font-size: 12px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     font-weight: 600;
     padding: 4px 16px;
 }
@@ -2798,7 +2798,7 @@ QSlider::handle {
     padding: 0 6px;
     background-color: transparent;
     border: none;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .system-grouper .grouper-button:hover {
@@ -2814,7 +2814,7 @@ QSlider::handle {
 .cpu-widget .widget-container .label {
     font-size: 12px;
     font-weight: 500;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .cpu-widget .widget-container .icon {
@@ -2848,7 +2848,7 @@ QSlider::handle {
 .gpu-widget .widget-container .label {
     font-size: 12px;
     font-weight: 500;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .gpu-widget .widget-container .icon {
@@ -2882,7 +2882,7 @@ QSlider::handle {
 .memory-widget .widget-container .label {
     font-size: 12px;
     font-weight: 500;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .memory-widget .widget-container .icon {
@@ -2916,7 +2916,7 @@ QSlider::handle {
 .disk-widget .widget-container .label {
     font-size: 12px;
     font-weight: 500;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .disk-widget .widget-container .icon {
@@ -2962,13 +2962,13 @@ QSlider::handle {
 
 .disk-group-label {
     font-size: 10px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--text);
 }
 
 .disk-group-label-size {
     font-size: 10px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--overlay0);
 }
 
@@ -2993,7 +2993,7 @@ QSlider::handle {
 .traffic-widget .label {
     font-size: 12px;
     font-weight: 500;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--green);
 }
 
@@ -3023,13 +3023,13 @@ QSlider::handle {
 .traffic-menu .header .title {
     font-size: 14px;
     font-weight: 600;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--text);
 }
 
 .traffic-menu .header .reset-button {
     font-size: 11px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     font-weight: 600;
     color: var(--subtext0);
     background-color: var(--surface0);
@@ -3057,7 +3057,7 @@ QSlider::handle {
 .traffic-menu .section-title {
     font-size: 11px;
     font-weight: 600;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--overlay1);
     margin-bottom: 4px;
 }
@@ -3072,21 +3072,21 @@ QSlider::handle {
 .traffic-menu .download-speed-value {
     font-size: 16px;
     font-weight: 600;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--green);
 }
 
 .traffic-menu .upload-speed-value {
     font-size: 16px;
     font-weight: 600;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--blue);
 }
 
 .traffic-menu .download-speed-unit,
 .traffic-menu .upload-speed-unit {
     font-size: 11px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--overlay1);
 }
 
@@ -3113,27 +3113,27 @@ QSlider::handle {
 
 .traffic-menu .data-text {
     font-size: 12px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--subtext0);
 }
 
 .traffic-menu .data-value {
     font-size: 12px;
     font-weight: 500;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--text);
 }
 
 .traffic-menu .interface-info {
     font-size: 11px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
     color: var(--overlay1);
     padding-top: 6px;
 }
 
 .traffic-menu .internet-info {
     font-size: 11px;
-    font-family: "CaskaydiaCove Nerd Font Mono";
+    font-family: "CaskaydiaCove NFM";
 }
 
 .traffic-menu .internet-info.connected {
@@ -3153,6 +3153,11 @@ QSlider::handle {
 /* -------------------------------------------------------------------------------------------------- */
 
 .icon {
+    /* 0. Icons use the non-Mono Nerd Font build. The Mono build forces every
+       glyph into one cell, which squeezes and clips the double-width nf-md
+       icons (brightness, weather) that the nf-fa icons elsewhere avoid. */
+    font-family: "CaskaydiaCove NF", "Symbols Nerd Font";
+
     /* 1. Force a transparent border to reserve physical pixels for the glyph */
     border-right: 4px solid transparent;
     border-bottom: 2px solid transparent;
