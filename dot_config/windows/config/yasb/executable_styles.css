@@ -2441,6 +2441,111 @@ QSlider::handle {
     border-color: var(--blue);
 }
 
+/* Day columns emit day-name / day-temp-max / day-temp-min; the generic .label
+   rule above no longer matches them. */
+.open-meteo-card-day .day-name {
+    font-size: 12px;
+    font-weight: 600;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--subtext0);
+}
+
+.open-meteo-card-day .day-temp-max {
+    font-size: 13px;
+    font-weight: 600;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--text);
+}
+
+.open-meteo-card-day .day-temp-min {
+    font-size: 12px;
+    font-family: "CaskaydiaCove Nerd Font Mono";
+    color: var(--overlay1);
+}
+
+.open-meteo-card-day.active {
+    background-color: var(--surface0);
+    border: 1px solid var(--surface1);
+}
+
+/* Sunrise / sunset row on the today panel */
+.open-meteo-card-today .label.sunrisesunset {
+    font-size: 12px;
+    color: var(--subtext0);
+}
+
+.open-meteo-card-today .label.sunrisesunset-icon {
+    font-size: 14px;
+    color: var(--yellow);
+}
+
+/* Temperature / rain / snow toggles above the hourly chart. These are
+   QPushButtons, so the border has to be cleared explicitly. */
+.open-meteo-card .hourly-data-buttons {
+    background-color: transparent;
+}
+
+.open-meteo-card .hourly-data-button {
+    background-color: var(--surface0);
+    color: var(--subtext0);
+    border: none;
+    border-radius: 6px;
+    padding: 4px 10px;
+    margin: 0 2px;
+    font-size: 13px;
+}
+
+.open-meteo-card .hourly-data-button:hover {
+    background-color: var(--surface1);
+    color: var(--text);
+}
+
+.open-meteo-card .hourly-data-button.active {
+    background-color: var(--mauve);
+    color: var(--crust);
+}
+
+/* Empty state, shown before a location is picked or after a failed fetch */
+.open-meteo-card .no-data-icon {
+    font-size: 32px;
+    color: var(--overlay0);
+}
+
+.open-meteo-card .no-data-text {
+    font-size: 13px;
+    color: var(--overlay1);
+}
+
+/* Location search */
+.open-meteo-card .search-head {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.open-meteo-card .search-description {
+    font-size: 12px;
+    color: var(--subtext0);
+}
+
+.open-meteo-card .search-results {
+    background-color: var(--base);
+    border: 1px solid var(--surface1);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 12px;
+}
+
+.open-meteo-card .search-results::item {
+    padding: 6px 8px;
+    border-radius: 4px;
+}
+
+.open-meteo-card .search-results::item:hover,
+.open-meteo-card .search-results::item:selected {
+    background-color: var(--surface1);
+}
+
 /***-------------------------------      • Quick Launch Widget •      --------------------------------***/
 
 .quick-launch-widget {
