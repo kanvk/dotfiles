@@ -846,7 +846,7 @@ widgets:
                 show_week_numbers: true
                 show_years: true
                 country_code: "US"
-                holiday_color: "#FF6464"
+                holiday_color: "#F38BA8"  # red
                 extended: false
 
     # --- Do Not Disturb (Windows Focus Assist) ---
