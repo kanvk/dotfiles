@@ -83,6 +83,7 @@ QSlider::handle {
 .bluetooth-widget .label,
 .brightness-widget .label,
 .dnd-widget .label,
+.control-center-widget .label,
 .battery-widget .label,
 .cpu-widget .label,
 .gpu-widget .label,
@@ -1061,6 +1062,300 @@ QSlider::handle {
 .battery-widget .icon.status-charging {
     color: var(--green);
 }
+
+/***-------------------------------      • Control Center •      ---------------------------------***/
+
+/* 1. Bar Widget */
+.control-center-widget {
+    padding: 0 8px;
+}
+
+.control-center-widget .widget-container .icon {
+    color: var(--lavender);
+    font-size: 16px;
+    padding-bottom: 2px;
+}
+
+.control-center-widget .widget-container .label {
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* 2. Popup Shell */
+.control-center-menu {
+    min-width: 360px;
+    max-width: 360px;
+    background-color: var(--mantle);
+}
+
+.control-center-menu .section {
+    background: transparent;
+    padding: 10px 14px;
+}
+
+/* 3. System Controls */
+.control-center-menu .section.system-controls .button {
+    background-color: var(--surface0);
+    color: var(--text);
+    border-radius: 8px;
+    min-width: 36px;
+    min-height: 36px;
+    font-family: "Segoe Fluent Icons";
+    font-size: 15px;
+}
+
+.control-center-menu .section.system-controls .button:hover {
+    background-color: var(--surface1);
+}
+
+.control-center-menu .section.system-controls .button.profile-image {
+    background: transparent;
+    border-radius: 14px;
+}
+
+.control-center-menu .section.system-controls .button.settings:hover {
+    color: var(--blue);
+}
+
+.control-center-menu .section.system-controls .button.power:hover {
+    background-color: var(--red);
+    color: var(--crust);
+}
+
+/* 4. Quick Actions Grid */
+.control-center-menu .section.quick-actions .button {
+    background-color: var(--surface0);
+    border-radius: 10px;
+    padding: 10px 6px;
+    margin: 3px;
+    min-height: 62px;
+}
+
+.control-center-menu .section.quick-actions .button:hover {
+    background-color: var(--surface1);
+}
+
+.control-center-menu .section.quick-actions .button.active {
+    background-color: var(--mauve);
+}
+
+.control-center-menu .section.quick-actions .button .icon {
+    font-family: "Segoe Fluent Icons";
+    font-size: 17px;
+    color: var(--text);
+}
+
+.control-center-menu .section.quick-actions .button .title {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--subtext0);
+    margin-top: 4px;
+}
+
+.control-center-menu .section.quick-actions .button.active .icon,
+.control-center-menu .section.quick-actions .button.active .title {
+    color: var(--crust);
+}
+
+/* 5. Sliders */
+.control-center-menu .section.sliders .slider {
+    background: transparent;
+    margin: 4px 0;
+}
+
+.control-center-menu .section.sliders .slider .icon {
+    font-family: "Segoe Fluent Icons";
+    font-size: 15px;
+    color: var(--subtext0);
+    margin-right: 8px;
+    min-width: 20px;
+}
+
+.control-center-menu .section.sliders .slider.brightness .icon {
+    color: var(--yellow);
+}
+
+.control-center-menu .section.sliders .slider.volume .icon {
+    color: var(--mauve);
+}
+
+.control-center-menu .section.sliders .slider.microphone .icon {
+    color: var(--peach);
+}
+
+.control-center-menu .section.sliders .slider .value {
+    color: var(--overlay1);
+    font-size: 11px;
+    min-width: 32px;
+}
+
+.control-center-menu .section.sliders .slider .source-selector {
+    font-family: "Segoe Fluent Icons";
+    font-size: 12px;
+    color: var(--overlay1);
+    background: transparent;
+    min-width: 20px;
+}
+
+.control-center-menu .section.sliders .slider .source-selector:hover {
+    color: var(--text);
+}
+
+.control-center-menu .section.sliders .slider .slider-control::groove {
+    background: rgba(205, 214, 244, 0.1); /* --text @ 10% */
+    height: 4px;
+    border-radius: 2px;
+}
+
+.control-center-menu .section.sliders .slider.brightness .slider-control::sub-page {
+    background: var(--yellow);
+    border-radius: 2px;
+}
+
+.control-center-menu .section.sliders .slider.volume .slider-control::sub-page {
+    background: var(--mauve);
+    border-radius: 2px;
+}
+
+.control-center-menu .section.sliders .slider.microphone .slider-control::sub-page {
+    background: var(--peach);
+    border-radius: 2px;
+}
+
+.control-center-menu .section.sliders .slider .slider-control::handle {
+    background: var(--text);
+    border: 2px solid var(--base);
+    width: 14px;
+    height: 14px;
+    margin-top: -5px;
+    margin-bottom: -5px;
+    border-radius: 9px;
+}
+
+.control-center-menu .section.sliders .slider .slider-control::handle:hover {
+    background: var(--lavender);
+    border-color: var(--surface0);
+}
+
+/* 6. Power Plan / Mode */
+.control-center-menu .section.power .button.plan-name,
+.control-center-menu .section.power .button.mode-name {
+    background-color: var(--surface0);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin: 3px;
+}
+
+.control-center-menu .section.power .button.plan-name:hover,
+.control-center-menu .section.power .button.mode-name:hover {
+    background-color: var(--surface1);
+}
+
+.control-center-menu .section.power .button .title {
+    color: var(--subtext0);
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.control-center-menu .section.power .button .subtext {
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.control-center-menu .section.power .button .icon {
+    font-family: "Segoe Fluent Icons";
+    font-size: 12px;
+    color: var(--overlay1);
+}
+
+/* 7. Media Strip */
+.control-center-menu .section.media .thumbnail {
+    border-radius: 8px;
+    margin-right: 10px;
+}
+
+.control-center-menu .section.media .track-info {
+    background: transparent;
+}
+
+.control-center-menu .section.media .title {
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.control-center-menu .section.media .subtext {
+    color: var(--subtext0);
+    font-size: 11px;
+}
+
+.control-center-menu .section.media .controls {
+    background: transparent;
+}
+
+.control-center-menu .section.media .button {
+    font-family: "Segoe Fluent Icons";
+    font-size: 13px;
+    color: var(--text);
+    background: transparent;
+    min-width: 30px;
+    max-width: 30px;
+    min-height: 30px;
+    max-height: 30px;
+    border-radius: 15px;
+}
+
+.control-center-menu .section.media .button:hover {
+    background-color: rgba(205, 214, 244, 0.1); /* --text @ 10% */
+}
+
+.control-center-menu .section.media .button.play {
+    background-color: rgba(205, 214, 244, 0.1); /* --text @ 10% */
+    font-size: 15px;
+}
+
+.control-center-menu .section.media .button.disabled,
+.control-center-menu .section.media .button.disabled:hover {
+    color: var(--overlay0);
+    background-color: rgba(0, 0, 0, 0); /* transparent */
+}
+
+/* 8. Source-selector Dropdowns */
+.control-center-menu .context-menu {
+    background-color: var(--surface0);
+    border: 1px solid var(--surface1);
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.control-center-menu .context-menu::item {
+    color: var(--text);
+    font-size: 12px;
+    padding: 6px 24px 6px 10px;
+    border-radius: 6px;
+}
+
+.control-center-menu .context-menu::item:selected {
+    background-color: var(--surface1);
+}
+
+.control-center-menu .context-menu::separator {
+    height: 1px;
+    background-color: var(--surface1);
+    margin: 4px 6px;
+}
+
+.control-center-menu .context-menu::indicator:unchecked {
+    width: 0;
+}
+
+.control-center-menu .context-menu::indicator:checked {
+    width: 12px;
+    color: var(--mauve);
+}
+
 
 /***-----------------------------------      • DND Widget •      ----------------------------------***/
 

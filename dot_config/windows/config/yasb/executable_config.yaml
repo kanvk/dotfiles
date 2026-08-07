@@ -69,6 +69,7 @@ bars:
                     # "system_grouper",  # Contains: cpu, gpu, memory, disk, traffic
                     "clock",
                     "dnd",
+                    "control_center",
                     "power_menu",
                     "komorebi_ctl",
                 ]
@@ -864,6 +865,99 @@ widgets:
                 disabled: "\uf0f3"  # nf-fa-bell
                 priority: "\uf186"  # nf-fa-moon_o
                 alarms:   "\uf1f6"  # nf-fa-bell_slash
+
+
+    # --- Control Center ---
+    # One panel for the things otherwise scattered across the bar. The overlap
+    # with the standalone widgets is deliberate: this is the "I do not want to
+    # aim at a 16px icon" path.
+    control_center:
+        type: "yasb.control_center.ControlCenterWidget"
+        options:
+            label: "<span>\ue713</span>"
+            tooltip: true
+            sections_order:
+                - "system_controls"
+                - "quick_actions"
+                - "sliders"
+                - "power"
+                - "media"
+            popup:
+                blur: true
+                round_corners: true
+                round_corners_type: "normal"
+                border_color: "#45475a"
+                alignment: "right"
+                direction: "down"
+                offset_top: 6
+                offset_left: 0
+            sections:
+                system_controls:
+                    show: true
+                    profile_image_size: 28
+                    power_icon:    "\ue7e8"
+                    lock_icon:     "\ue72e"
+                    settings_icon: "\ue713"
+                quick_actions:
+                    show: true
+                    columns: 3
+                    label_position: "default"
+                    # Six actions fill a 3x2 grid exactly. touch_keyboard is
+                    # omitted: no touchscreen on this machine.
+                    actions:
+                        - id: "toggle_dnd"
+                          label: "Do Not Disturb"
+                          icon: "\uf285"
+                        - id: "cycle_dnd"
+                          label: "Cycle DND"
+                          icon: "\uf186"
+                        - id: "toggle_theme"
+                          label: "Dark Mode"
+                          icon: "\ue708"
+                        - id: "toggle_mute"
+                          label: "Mute"
+                          icon: "\ue74f"
+                        - id: "toggle_mic_mute"
+                          label: "Mic Mute"
+                          icon: "\uf12e"
+                        - id: "screenshot"
+                          label: "Screenshot"
+                          icon: "\ue91b"
+                sliders:
+                    show: true
+                    # Source selectors default to off; with three monitors and
+                    # several audio devices the pickers earn their space.
+                    brightness:
+                        show_slider: true
+                        icon: "\ue706"
+                        show_source_selector: true
+                        source_selector_icon: "\ue972"
+                    volume:
+                        show_slider: true
+                        icon: "\ue767"
+                        show_source_selector: true
+                        source_selector_icon: "\ue972"
+                    microphone:
+                        show_slider: true
+                        icon: "\ue720"
+                        show_source_selector: true
+                        source_selector_icon: "\ue972"
+                power:
+                    show: true
+                    power_plan_title: "Power Plan"
+                    power_mode_title: "Power Mode"
+                    button_menu_icon: "\ue76c"
+                media:
+                    show: true
+                    thumbnail_size: 64
+                    thumbnail_radius: 8
+                    icons:
+                        prev_track: "\ue892"
+                        next_track: "\ue893"
+                        play:       "\ue768"
+                        pause:      "\ue769"
+            callbacks:
+                on_left: "toggle_menu"
 
 
     # --- Power Menu (Fullscreen) ---
