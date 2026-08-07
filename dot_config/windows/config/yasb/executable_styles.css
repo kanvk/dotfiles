@@ -3033,6 +3033,13 @@ QSlider::handle {
     border-right: 6px solid transparent;
 }
 
+/* nf-md glyphs are drawn wider than the nf-fa icons used elsewhere on the bar,
+   so 16px brightness icons clip on both edges without extra reserve. */
+.brightness-widget .icon {
+    border-left: 2px solid transparent;
+    border-right: 8px solid transparent;
+}
+
 /* Adjust the container to handle the invisible borders */
 .widget .label {
     /* Remove padding here so we don't double-up with the icon borders */
