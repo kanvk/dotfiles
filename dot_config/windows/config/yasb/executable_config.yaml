@@ -269,20 +269,20 @@ widgets:
                     "right_main_vertical_stack",
                 ]
             layout_icons:
-                bsp:                       "\uebeb"  #  (nf-cod-layout)
-                columns:                   "\uebf7"  #  (nf-cod-layout_centered)
-                rows:                      "\uec01"  #  (nf-cod-layout_panel_off)
-                grid:                      "\uf00a"  #  (nf-fa-th)
-                scrolling:                 "\uebf7"  #  (nf-cod-layout_centered)
-                vertical_stack:            "\uebee"  #  (nf-cod-layout_panel_left)
-                horizontal_stack:          "\uebf0"  #  (nf-cod-layout_panel_justify)
-                ultrawide_vertical_stack:  "\uebee"  #  (nf-cod-layout_panel_left)
-                right_main_vertical_stack: "\uebf1"  #  (nf-cod-layout_panel_right)
-                monocle:                   "\uf2d0"  #  (nf-fa-window_maximize)
-                maximized:                 "\uf2d0"  #  (nf-fa-window_maximize)
-                floating:                  "\uf2d2"  #  (nf-fa-window_restore)
-                paused:                    "\uf04c"  #  (nf-fa-pause)
-                tiling:                    "\ue62a"  #  (nf-custom-windows)
+                bsp:                       "\uebeb"      #  (nf-cod-layout)
+                columns:                   "\ueb56"      #  (nf-cod-split_horizontal)
+                rows:                      "\ueb57"      #  (nf-cod-split_vertical)
+                grid:                      "\uf00a"      #  (nf-fa-th)
+                scrolling:                 "\U000F056C"  #  (nf-md-view_carousel)
+                vertical_stack:            "\uebf4"      #  (nf-cod-layout_sidebar_right)
+                horizontal_stack:          "\uebf2"      #  (nf-cod-layout_panel)
+                ultrawide_vertical_stack:  "\uebf7"      #  (nf-cod-layout_centered)
+                right_main_vertical_stack: "\uebf3"      #  (nf-cod-layout_sidebar_left)
+                monocle:                   "\ueb4c"      #  (nf-cod-screen_full)
+                maximized:                 "\uf2d0"      #  (nf-fa-window_maximize)
+                floating:                  "\uf2d2"      #  (nf-fa-window_restore)
+                paused:                    "\uf04c"      #  (nf-fa-pause)
+                tiling:                    "\ue62a"      #  (nf-custom-windows)
             callbacks:
                 on_left: "toggle_layout_menu"
                 on_middle: "prev_layout"
@@ -979,7 +979,7 @@ widgets:
     control_center:
         type: "yasb.control_center.ControlCenterWidget"
         options:
-            label: "<span>\ue713</span>"
+            label: "<span>\ueaf8</span>"  #  (nf-cod-gear)
             tooltip: true
             sections_order:
                 - "system_controls"

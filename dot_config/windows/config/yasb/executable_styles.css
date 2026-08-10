@@ -32,7 +32,12 @@
 
     /* Typography. Body text inherits from the `*` rule below, so most widgets
        carry no font declaration at all -- change --font-md to rescale the UI. */
-    --font-ui: "LiterationSans Nerd Font", "Symbols Nerd Font", "Segoe UI";
+    /* Nerd Font patching only adds the PUA icon ranges -- block elements and
+       the mac modifier keys come from the base typeface, and proportional
+       bases like Liberation Sans omit them. JetBrainsMono is the monospace
+       fallback that carries both: U+2581-2587 for the sparklines and
+       U+2303/2325/21E7 for the whkd key labels. */
+    --font-ui: "LiterationSans Nerd Font", "Symbols Nerd Font", "JetBrainsMono Nerd Font", "Segoe UI";
     --font-icon: "Segoe Fluent Icons";
     --font-xs: 11px;
     --font-md: 13px;
