@@ -244,12 +244,13 @@ QSlider::handle {
 }
 
 /* Reserve the clock's full width so a long window title squeezes the centre
-   widget instead of clipping the date. Expressed in em so it tracks --font-md
-   rather than needing a new pixel count every time the base size changes;
-   15em covers "<icon> hh:mm:ss AM |  Www dd Mmm". */
+   widget instead of clipping the date. 190px is measured from the rendered
+   width of the label at --font-md, with a couple of px of slack. Kept in px
+   rather than em so the reserved width is predictable; revisit if the clock
+   format or --font-md changes materially. */
 .clock-widget {
     padding: 0 4px;
-    min-width: 15em;
+    min-width: 190px;
 }
 
 /* --------------------------------------------------------------------------------------------------- */

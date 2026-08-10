@@ -934,7 +934,7 @@ widgets:
     clock:
         type: "yasb.clock.ClockWidget"
         options:
-            label: "<span>\uf017</span>{%I:%M:%S %p |  %a %d %b}"
+            label: "<span>\uf017</span>{%I:%M:%S %p | %a %d %b}"
             label_alt: "{%a, %d %b %H:%M:%S}"
             timezones: []
             calendar:
