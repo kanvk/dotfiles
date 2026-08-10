@@ -1285,6 +1285,16 @@ QSlider::handle {
     background-color: var(--surface1);
 }
 
+/* An unsupported power mode is re-classed `mode-name disabled`, dropping the
+   `button` class, so the rule above stops matching and it loses its pill. */
+.control-center-menu .section.power .mode-name.disabled {
+    background-color: var(--surface0);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin: 3px;
+    color: var(--overlay1);
+}
+
 .control-center-menu .section.power .button .title {
     color: var(--subtext0);
     font-size: var(--font-xs);

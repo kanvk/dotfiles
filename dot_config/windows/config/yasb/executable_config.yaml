@@ -722,7 +722,7 @@ widgets:
             progress_bar:
                 enabled: true
                 progress_type: "circular"
-                position: "left"
+                position: "right"
                 size: 18
                 thickness: 3
                 color: "#F9E2AF"            # yellow
