@@ -243,8 +243,13 @@ QSlider::handle {
     color: var(--crust);
 }
 
+/* Reserve the clock's full width so a long window title squeezes the centre
+   widget instead of clipping the date. Expressed in em so it tracks --font-md
+   rather than needing a new pixel count every time the base size changes;
+   15em covers "<icon> hh:mm:ss AM |  Www dd Mmm". */
 .clock-widget {
     padding: 0 4px;
+    min-width: 15em;
 }
 
 /* --------------------------------------------------------------------------------------------------- */
@@ -1272,8 +1277,10 @@ QSlider::handle {
 }
 
 /* 6. Power Plan / Mode */
+/* The mode button is re-classed `mode-name disabled` when the power mode is
+   unsupported, dropping its `button` class -- so match on `mode-name` alone. */
 .control-center-menu .section.power .button.plan-name,
-.control-center-menu .section.power .button.mode-name {
+.control-center-menu .section.power .mode-name {
     background-color: var(--surface0);
     border-radius: 8px;
     padding: 8px 10px;
@@ -1306,7 +1313,8 @@ QSlider::handle {
     font-weight: 500;
 }
 
-.control-center-menu .section.power .button .icon {
+.control-center-menu .section.power .button .icon,
+.control-center-menu .section.power .mode-name .icon {
     font-family: var(--font-icon);
     color: var(--overlay1);
 }
