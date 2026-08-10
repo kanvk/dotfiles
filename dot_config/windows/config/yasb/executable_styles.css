@@ -243,14 +243,8 @@ QSlider::handle {
     color: var(--crust);
 }
 
-/* Reserve the clock's full width so a long window title squeezes the centre
-   widget instead of clipping the date. 190px is measured from the rendered
-   width of the label at --font-md, with a couple of px of slack. Kept in px
-   rather than em so the reserved width is predictable; revisit if the clock
-   format or --font-md changes materially. */
 .clock-widget {
     padding: 0 4px;
-    min-width: 190px;
 }
 
 /* --------------------------------------------------------------------------------------------------- */
@@ -284,7 +278,9 @@ QSlider::handle {
 
 .clock-widget .icon {
     color: var(--mauve);
-    margin-right: 7px;
+    /* 3px, not 7: U+F017 carries a wide right side bearing of its own, so the
+       measured gap to the time was 16px. */
+    margin-right: 3px;
 }
 
 /***---------------------------------      • Weather Icons •      ----------------------------------***/
