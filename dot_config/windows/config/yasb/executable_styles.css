@@ -276,6 +276,12 @@ QSlider::handle {
     color: var(--blue);
 }
 
+/* The label is centre-aligned by default, so a too-narrow container eats the
+   hours AND the year. Pin it left: if it must crop, it crops the tail. */
+.clock-widget .label {
+    qproperty-alignment: 'AlignLeft | AlignVCenter';
+}
+
 .clock-widget .icon {
     color: var(--mauve);
     /* 3px, not 7: U+F017 carries a wide right side bearing of its own, so the
@@ -453,7 +459,7 @@ QSlider::handle {
 
 /* 1. Bar Widget Style */
 .volume-widget {
-    padding: 0 8px;
+    padding: 0 5px;
 }
 
 .volume-widget .icon {
@@ -617,7 +623,7 @@ QSlider::handle {
 
 /* 1. Bar Widget Style */
 .microphone-widget {
-    padding: 0 8px;
+    padding: 0 5px;
 }
 
 /* Active State (Peach color for Input) */
@@ -727,7 +733,7 @@ QSlider::handle {
 
 /* 1. Bar Widget */
 .bluetooth-widget {
-    padding: 0 8px;
+    padding: 0 5px;
 }
 
 .bluetooth-widget .icon {
@@ -927,7 +933,7 @@ QSlider::handle {
 
 /* 1. Bar Widget */
 .brightness-widget {
-    padding: 0 8px;
+    padding: 0 5px;
 }
 
 .brightness-widget .widget-container .icon {
@@ -1041,7 +1047,7 @@ QSlider::handle {
 
 /* 1. Bar Widget Style */
 .battery-widget {
-    padding: 0 8px;
+    padding: 0 5px;
 }
 
 .battery-widget .icon {
@@ -1104,7 +1110,7 @@ QSlider::handle {
 
 /* 1. Bar Widget */
 .control-center-widget {
-    padding: 0 8px;
+    padding: 0 5px;
 }
 
 .control-center-widget .widget-container .icon {
@@ -1403,7 +1409,7 @@ QSlider::handle {
 /***-----------------------------------      • DND Widget •      ----------------------------------***/
 
 .dnd-widget {
-    padding: 0 8px;
+    padding: 0 5px;
 }
 
 .dnd-widget .widget-container .icon {
@@ -2405,7 +2411,7 @@ QSlider::handle {
 /***-------------------------------      • Open-Meteo Widget •      --------------------------------***/
 
 .open-meteo-widget {
-    padding: 0 8px;
+    padding: 0 5px;
 }
 
 .open-meteo-widget .icon {
