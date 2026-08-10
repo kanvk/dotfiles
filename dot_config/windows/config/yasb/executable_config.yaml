@@ -636,9 +636,9 @@ widgets:
             max_length_ellipsis: "..."
             tooltip: true
             icons:
-                bluetooth_on:        "\uf294"  # nf-fa-bluetooth_b
-                bluetooth_connected: "\uf293"  # nf-fa-bluetooth
-                bluetooth_off:       "\ue920"  # nf-feather-bluetooth_off
+                bluetooth_on:        "\uf294"      # nf-fa-bluetooth_b
+                bluetooth_connected: "\uf293"      # nf-fa-bluetooth
+                bluetooth_off:       "\U000F00B2"  # nf-md-bluetooth_off
             callbacks:
                 on_left: "toggle_menu"
                 on_middle: "exec cmd.exe /c start ms-settings:bluetooth"
