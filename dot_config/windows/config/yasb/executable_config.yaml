@@ -269,20 +269,20 @@ widgets:
                     "right_main_vertical_stack",
                 ]
             layout_icons:
-                bsp:                       "\uebeb"  #  (nf-cod-split_horizontal)
-                columns:                   "\uebf7"  #  (nf-cod-split_vertical)
-                rows:                      "\uec01"  #  (nf-cod-three_bars)
+                bsp:                       "\uebeb"  #  (nf-cod-layout)
+                columns:                   "\uebf7"  #  (nf-cod-layout_centered)
+                rows:                      "\uec01"  #  (nf-cod-layout_panel_off)
                 grid:                      "\uf00a"  #  (nf-fa-th)
-                scrolling:                 "\uebf7"  #  (nf-cod-split_vertical)
-                vertical_stack:            "\uebee"  #  (nf-cod-split_vertical)
-                horizontal_stack:          "\uebf0"  #  (nf-cod-split_horizontal)
-                ultrawide_vertical_stack:  "\uebee"  #  (nf-cod-split_vertical)
-                right_main_vertical_stack: "\uebf1"  #  (nf-cod-split_horizontal)
+                scrolling:                 "\uebf7"  #  (nf-cod-layout_centered)
+                vertical_stack:            "\uebee"  #  (nf-cod-layout_panel_left)
+                horizontal_stack:          "\uebf0"  #  (nf-cod-layout_panel_justify)
+                ultrawide_vertical_stack:  "\uebee"  #  (nf-cod-layout_panel_left)
+                right_main_vertical_stack: "\uebf1"  #  (nf-cod-layout_panel_right)
                 monocle:                   "\uf2d0"  #  (nf-fa-window_maximize)
                 maximized:                 "\uf2d0"  #  (nf-fa-window_maximize)
                 floating:                  "\uf2d2"  #  (nf-fa-window_restore)
                 paused:                    "\uf04c"  #  (nf-fa-pause)
-                tiling:                    "\ue62a"  #  (nf-cod-layout)
+                tiling:                    "\ue62a"  #  (nf-custom-windows)
             callbacks:
                 on_left: "toggle_layout_menu"
                 on_middle: "prev_layout"

@@ -29,6 +29,19 @@
     --base: rgb(30, 30, 46);
     --mantle: rgb(24, 24, 37);
     --crust: rgb(17, 17, 27);
+
+    /* Typography. Body text inherits from the `*` rule below, so most widgets
+       carry no font declaration at all -- change --font-md to rescale the UI. */
+    --font-ui: "LiterationSans Nerd Font", "Symbols Nerd Font", "Segoe UI";
+    --font-icon: "Segoe Fluent Icons";
+    --font-xs: 11px;
+    --font-md: 13px;
+    --font-lg: 16px;
+    --font-xl: 18px;
+    --font-2xl: 20px;
+    --font-3xl: 24px;
+    --font-4xl: 32px;
+    --font-5xl: 88px;
 }
 
 /* -------------------------------------------------------------------------------------------------- */
@@ -36,10 +49,10 @@
 /* -------------------------------------------------------------------------------------------------- */
 
 * {
-    font-size: 12px;
+    font-size: var(--font-md);
     color: var(--text);
     font-weight: 500;
-    font-family: "LiterationSans Nerd Font", "Symbols Nerd Font";
+    font-family: var(--font-ui);
     margin: 0;
     padding: 0;
 }
@@ -119,11 +132,10 @@ QSlider::handle {
 }
 
 .power-menu-overlay .uptime {
-    font-size: 16px;
+    font-size: var(--font-lg);
     margin-bottom: 20px;
     color: var(--subtext0);
     font-weight: 600;
-    font-family: "LiterationSans Nerd Font";
 }
 
 .power-menu-popup {
@@ -140,24 +152,20 @@ QSlider::handle {
 }
 
 .power-menu-popup .profile-info .profile-username {
-    font-size: 24px;
+    font-size: var(--font-3xl);
     font-weight: 600;
     color: var(--text);
     margin-top: 0;
-    font-family: "LiterationSans Nerd Font";
 }
 
 .power-menu-popup .profile-info .profile-account-type {
-    font-size: 13px;
     color: var(--subtext0);
     margin-top: 4px;
-    font-family: "LiterationSans Nerd Font";
 }
 
 .power-menu-widget .label {
     color: var(--maroon);
-    font-size: 16px;
-    font-family: "LiterationSans Nerd Font";
+    font-size: var(--font-lg);
 }
 
 .power-menu-popup .button {
@@ -176,14 +184,12 @@ QSlider::handle {
 }
 
 .power-menu-popup .button .label {
-    font-size: 13px;
     font-weight: 600;
     color: var(--text);
-    font-family: "LiterationSans Nerd Font";
 }
 
 .power-menu-popup .button .icon {
-    font-size: 32px;
+    font-size: var(--font-4xl);
     color: var(--lavender);
     min-width: 48px;
     min-height: 48px;
@@ -241,7 +247,7 @@ QSlider::handle {
 /* --------------------------------------------------------------------------------------------------- */
 
 .icon {
-    font-size: 16px;
+    font-size: var(--font-lg);
 }
 
 .volume-widget .icon {
@@ -261,13 +267,12 @@ QSlider::handle {
 }
 
 .start-menu .icon {
-    font-size: 18px;
+    font-size: var(--font-xl);
     color: var(--blue);
 }
 
 .clock-widget .icon {
     color: var(--mauve);
-    font-size: 14px;
     margin-right: 7px;
 }
 
@@ -305,19 +310,12 @@ QSlider::handle {
     color: var(--text);
 }
 
-.weather-card-today .label {
-    font-size: 12px;
-    font-family: "LiterationSans Nerd Font";
-}
-
 .weather-card-today .label.location {
-    font-size: 24px;
+    font-size: var(--font-3xl);
     font-weight: 800;
-    font-family: "LiterationSans Nerd Font";
 }
 
 .weather-card-today .label.alert {
-    font-size: 12px;
     font-weight: 700;
     background-color: rgba(249, 226, 175, 0.05);  /* --yellow @ 5% */
     border: 1px solid rgba(249, 226, 175, 0.1);  /* --yellow @ 10% */
@@ -329,11 +327,6 @@ QSlider::handle {
 .weather-card-day {
     border-radius: 8px;
     background-color: var(--base);
-}
-
-.weather-card-day .label {
-    font-size: 12px;
-    font-family: "LiterationSans Nerd Font";
 }
 
 .weather-card-day.active {
@@ -360,7 +353,6 @@ QSlider::handle {
     border-radius: 6px;
     padding: 3px 7px;
     margin: 1px 2px;
-    font-size: 12px;
 }
 
 .weather-card .hourly-data-button:hover {
@@ -375,7 +367,7 @@ QSlider::handle {
 
 /* Shown when the API key or location is missing, or a fetch fails. */
 .weather-card .placeholder-icon {
-    font-size: 32px;
+    font-size: var(--font-4xl);
     color: var(--overlay0);
 }
 
@@ -387,7 +379,6 @@ QSlider::handle {
 .calendar .calendar-table::item {
     background-color: rgba(17, 17, 27, 0);  /* --crust @ 0% (transparent) */
     color: var(--overlay1);
-    font-family: "LiterationSans Nerd Font";
     margin: 0;
     padding: 0;
     border: none;
@@ -407,8 +398,7 @@ QSlider::handle {
 .calendar .day-label,
 .calendar .month-label,
 .calendar .date-label {
-    font-family: "LiterationSans Nerd Font";
-    font-size: 16px;
+    font-size: var(--font-lg);
     color: var(--text);
     font-weight: 700;
     min-width: 180px;
@@ -421,7 +411,7 @@ QSlider::handle {
 }
 
 .calendar .date-label {
-    font-size: 88px;
+    font-size: var(--font-5xl);
     font-weight: 900;
     color: var(--text);
     margin-top: -20px;
@@ -436,8 +426,6 @@ QSlider::handle {
 
 .home-menu .menu-item {
     padding: 8px 48px 8px 12px;
-    font-size: 13px;
-    font-family: "LiterationSans Nerd Font";
     font-weight: 600;
 }
 
@@ -462,7 +450,7 @@ QSlider::handle {
 }
 
 .volume-widget .icon {
-    font-size: 16px;
+    font-size: var(--font-lg);
     margin: 0 2px 0 0;
     padding-bottom: 2px;
 }
@@ -475,7 +463,6 @@ QSlider::handle {
 .volume-widget .label {
     margin-right: 4px;
     color: var(--text);
-    font-size: 12px;
     font-weight: 500;
 }
 
@@ -505,7 +492,6 @@ QSlider::handle {
     border: none;
     padding: 6px 8px 6px 4px;
     margin: 2px 0;
-    font-size: 12px;
     border-radius: 4px;
     color: var(--overlay1);
 }
@@ -630,7 +616,7 @@ QSlider::handle {
 /* Active State (Peach color for Input) */
 .microphone-widget .icon {
     color: var(--peach);
-    font-size: 16px;
+    font-size: var(--font-lg);
     margin: 0 2px 0 0;
     padding-bottom: 2px;
 }
@@ -643,7 +629,6 @@ QSlider::handle {
 .microphone-widget .label {
     margin-right: 4px;
     color: var(--text);
-    font-size: 12px;
     font-weight: 500;
 }
 
@@ -667,7 +652,6 @@ QSlider::handle {
     border: none;
     padding: 6px 8px 6px 4px;
     margin: 2px 0;
-    font-size: 12px;
     border-radius: 4px;
     color: var(--overlay1);
 }
@@ -741,7 +725,7 @@ QSlider::handle {
 
 .bluetooth-widget .icon {
     color: var(--blue);
-    font-size: 16px;
+    font-size: var(--font-lg);
     margin: 0 2px 0 0;
     padding-bottom: 2px;
 }
@@ -763,7 +747,6 @@ QSlider::handle {
 .bluetooth-widget .label {
     margin-right: 4px;
     color: var(--text);
-    font-size: 12px;
     font-weight: 500;
 }
 
@@ -779,7 +762,6 @@ QSlider::handle {
 }
 
 .bluetooth-menu .header .title {
-    font-size: 14px;
     font-weight: 600;
     color: var(--text);
 }
@@ -790,7 +772,7 @@ QSlider::handle {
     color: var(--subtext0);
     border-radius: 10px;
     padding: 2px 10px;
-    font-size: 11px;
+    font-size: var(--font-xs);
     font-weight: 600;
 }
 
@@ -805,7 +787,6 @@ QSlider::handle {
 
 .bluetooth-menu .error-message {
     color: var(--red);
-    font-size: 12px;
     padding: 8px 14px;
 }
 
@@ -821,7 +802,7 @@ QSlider::handle {
 
 .bluetooth-menu .section-title {
     color: var(--subtext0);
-    font-size: 11px;
+    font-size: var(--font-xs);
     font-weight: 600;
     padding: 4px 6px;
 }
@@ -841,32 +822,30 @@ QSlider::handle {
 }
 
 .bluetooth-menu .bluetooth-item .icon {
-    font-family: "Segoe Fluent Icons";
-    font-size: 16px;
+    font-family: var(--font-icon);
+    font-size: var(--font-lg);
     color: var(--blue);
     margin-right: 8px;
 }
 
 .bluetooth-menu .bluetooth-item .name {
     color: var(--text);
-    font-size: 12px;
     font-weight: 500;
 }
 
 .bluetooth-menu .bluetooth-item .status {
     color: var(--overlay1);
-    font-size: 11px;
+    font-size: var(--font-xs);
 }
 
 .bluetooth-menu .bluetooth-item .battery {
     color: var(--subtext0);
-    font-size: 11px;
+    font-size: var(--font-xs);
     margin-left: 4px;
 }
 
 .bluetooth-menu .bluetooth-item .battery-icon {
-    font-family: "Segoe Fluent Icons";
-    font-size: 14px;
+    font-family: var(--font-icon);
     margin-left: 4px;
 }
 
@@ -894,7 +873,7 @@ QSlider::handle {
     color: var(--text);
     border-radius: 6px;
     padding: 3px 10px;
-    font-size: 11px;
+    font-size: var(--font-xs);
     font-weight: 500;
 }
 
@@ -914,7 +893,6 @@ QSlider::handle {
     background: transparent;
     border: none;
     color: var(--blue);
-    font-size: 12px;
     font-weight: 500;
     padding: 4px 2px;
     text-align: left;
@@ -927,8 +905,7 @@ QSlider::handle {
 .bluetooth-menu .footer .scan-icon {
     background: transparent;
     border: none;
-    font-family: "Segoe Fluent Icons";
-    font-size: 14px;
+    font-family: var(--font-icon);
     color: var(--subtext0);
     padding: 4px 6px;
     border-radius: 6px;
@@ -948,7 +925,7 @@ QSlider::handle {
 
 .brightness-widget .widget-container .icon {
     color: var(--yellow);
-    font-size: 16px;
+    font-size: var(--font-lg);
     margin: 0 2px 0 0;
     padding-bottom: 2px;
 }
@@ -956,7 +933,6 @@ QSlider::handle {
 .brightness-widget .widget-container .label {
     margin-right: 4px;
     color: var(--text);
-    font-size: 12px;
     font-weight: 500;
 }
 
@@ -990,13 +966,12 @@ QSlider::handle {
 
 .brightness-menu .monitor-title {
     color: var(--text);
-    font-size: 12px;
     font-weight: 600;
 }
 
 .brightness-menu .monitor-subtitle {
     color: var(--overlay1);
-    font-size: 11px;
+    font-size: var(--font-xs);
     font-weight: 500;
 }
 
@@ -1011,8 +986,8 @@ QSlider::handle {
 }
 
 .brightness-menu .slider-icon {
-    font-family: "Segoe Fluent Icons";
-    font-size: 15px;
+    font-family: var(--font-icon);
+    font-size: var(--font-lg);
     color: var(--subtext0);
     margin-right: 8px;
 }
@@ -1064,7 +1039,7 @@ QSlider::handle {
 
 .battery-widget .icon {
     color: var(--green);
-    font-size: 16px;
+    font-size: var(--font-lg);
     margin: 0 2px 0 0;
     padding-bottom: 2px;
 }
@@ -1072,7 +1047,6 @@ QSlider::handle {
 .battery-widget .label {
     margin-right: 4px;
     color: var(--text);
-    font-size: 12px;
     font-weight: 500;
 }
 
@@ -1128,13 +1102,12 @@ QSlider::handle {
 
 .control-center-widget .widget-container .icon {
     color: var(--lavender);
-    font-size: 16px;
+    font-size: var(--font-lg);
     padding-bottom: 2px;
 }
 
 .control-center-widget .widget-container .label {
     color: var(--text);
-    font-size: 12px;
     font-weight: 500;
 }
 
@@ -1157,8 +1130,8 @@ QSlider::handle {
     border-radius: 8px;
     min-width: 36px;
     min-height: 36px;
-    font-family: "Segoe Fluent Icons";
-    font-size: 15px;
+    font-family: var(--font-icon);
+    font-size: var(--font-lg);
 }
 
 .control-center-menu .section.system-controls .button:hover {
@@ -1197,13 +1170,13 @@ QSlider::handle {
 }
 
 .control-center-menu .section.quick-actions .button .icon {
-    font-family: "Segoe Fluent Icons";
-    font-size: 17px;
+    font-family: var(--font-icon);
+    font-size: var(--font-xl);
     color: var(--text);
 }
 
 .control-center-menu .section.quick-actions .button .title {
-    font-size: 11px;
+    font-size: var(--font-xs);
     font-weight: 500;
     color: var(--subtext0);
     margin-top: 4px;
@@ -1221,8 +1194,8 @@ QSlider::handle {
 }
 
 .control-center-menu .section.sliders .slider .icon {
-    font-family: "Segoe Fluent Icons";
-    font-size: 15px;
+    font-family: var(--font-icon);
+    font-size: var(--font-lg);
     color: var(--subtext0);
     margin-right: 8px;
     min-width: 20px;
@@ -1242,13 +1215,12 @@ QSlider::handle {
 
 .control-center-menu .section.sliders .slider .value {
     color: var(--overlay1);
-    font-size: 11px;
+    font-size: var(--font-xs);
     min-width: 32px;
 }
 
 .control-center-menu .section.sliders .slider .source-selector {
-    font-family: "Segoe Fluent Icons";
-    font-size: 12px;
+    font-family: var(--font-icon);
     color: var(--overlay1);
     background: transparent;
     min-width: 20px;
@@ -1310,19 +1282,17 @@ QSlider::handle {
 
 .control-center-menu .section.power .button .title {
     color: var(--subtext0);
-    font-size: 10px;
+    font-size: var(--font-xs);
     font-weight: 600;
 }
 
 .control-center-menu .section.power .button .subtext {
     color: var(--text);
-    font-size: 12px;
     font-weight: 500;
 }
 
 .control-center-menu .section.power .button .icon {
-    font-family: "Segoe Fluent Icons";
-    font-size: 12px;
+    font-family: var(--font-icon);
     color: var(--overlay1);
 }
 
@@ -1338,13 +1308,12 @@ QSlider::handle {
 
 .control-center-menu .section.media .title {
     color: var(--text);
-    font-size: 12px;
     font-weight: 600;
 }
 
 .control-center-menu .section.media .subtext {
     color: var(--subtext0);
-    font-size: 11px;
+    font-size: var(--font-xs);
 }
 
 .control-center-menu .section.media .controls {
@@ -1352,8 +1321,7 @@ QSlider::handle {
 }
 
 .control-center-menu .section.media .button {
-    font-family: "Segoe Fluent Icons";
-    font-size: 13px;
+    font-family: var(--font-icon);
     color: var(--text);
     background: transparent;
     min-width: 30px;
@@ -1369,7 +1337,7 @@ QSlider::handle {
 
 .control-center-menu .section.media .button.play {
     background-color: rgba(205, 214, 244, 0.1); /* --text @ 10% */
-    font-size: 15px;
+    font-size: var(--font-lg);
 }
 
 .control-center-menu .section.media .button.disabled,
@@ -1388,7 +1356,6 @@ QSlider::handle {
 
 .control-center-menu .context-menu::item {
     color: var(--text);
-    font-size: 12px;
     padding: 6px 24px 6px 10px;
     border-radius: 6px;
 }
@@ -1420,14 +1387,13 @@ QSlider::handle {
 }
 
 .dnd-widget .widget-container .icon {
-    font-size: 16px;
+    font-size: var(--font-lg);
     margin: 0 2px 0 0;
     padding-bottom: 2px;
 }
 
 .dnd-widget .widget-container .label {
     margin-right: 4px;
-    font-size: 12px;
     font-weight: 500;
 }
 
@@ -1469,21 +1435,19 @@ QSlider::handle {
 
 .active-window-widget .widget-container .label {
     color: var(--text);
-    font-family: "LiterationSans Nerd Font";
+    font-size: var(--font-md);
     font-weight: 600;
-    font-size: 14px;
 }
 
 .active-window-widget .widget-container .label.alt {
     color: var(--overlay1);
     font-style: italic;
     font-weight: 400;
-    font-size: 12px;
 }
 
 .active-window-widget .widget-container .icon {
     color: var(--blue);
-    font-size: 16px;
+    font-size: var(--font-lg);
     margin-right: 8px;
     padding-bottom: 2px;
     vertical-align: middle;
@@ -1505,7 +1469,7 @@ QSlider::handle {
 
 .vscode-menu .header {
     border-bottom: 1px solid var(--surface1);
-    font-size: 15px;
+    font-size: var(--font-lg);
     font-weight: 400;
     padding: 8px;
     color: var(--text);
@@ -1518,7 +1482,7 @@ QSlider::handle {
     background: transparent;
     border: none;
     color: var(--overlay1);
-    font-size: 11px;
+    font-size: var(--font-xs);
     font-weight: 600;
     padding: 3px 10px;
     margin-left: 4px;
@@ -1549,7 +1513,6 @@ QSlider::handle {
     border: 1px solid var(--surface1);
     border-radius: 6px;
     padding: 5px 8px;
-    font-size: 12px;
     selection-background-color: var(--surface2);
     selection-color: var(--text);
 }
@@ -1565,7 +1528,6 @@ QSlider::handle {
 .vscode-menu .no-recent {
     background-color: var(--mantle);
     color: var(--overlay1);
-    font-size: 12px;
 }
 
 .vscode-menu .contents .item {
@@ -1578,7 +1540,6 @@ QSlider::handle {
 .vscode-menu .contents .item .folder-icon,
 .vscode-menu .contents .item .file-icon,
 .vscode-menu .contents .item .remote-icon {
-    font-size: 14px;
     min-width: 28px;
     padding-left: 8px;
     border: none;
@@ -1597,13 +1558,12 @@ QSlider::handle {
 }
 
 .vscode-menu .contents .item .title {
-    font-size: 12px;
     color: var(--text);
     margin-right: 5px;
 }
 
 .vscode-menu .contents .item .modified-date {
-    font-size: 11px;
+    font-size: var(--font-xs);
     margin-right: 5px;
     color: var(--overlay0);
 }
@@ -1620,17 +1580,15 @@ QSlider::handle {
 }
 
 .whkd-widget .icon {
-    font-size: 18px;
+    font-size: var(--font-xl);
 }
 
 .whkd-popup .edit-config-button {
     background-color: var(--blue);
     color: var(--base);
     padding: 4px 8px 6px;
-    font-size: 14px;
     font-weight: 600;
     border-radius: 4px;
-    font-family: "LiterationSans Nerd Font";
 }
 
 .whkd-popup .keybind-buttons-container {
@@ -1641,12 +1599,10 @@ QSlider::handle {
     background-color: var(--surface0);
     color: var(--text);
     padding: 4px 8px 6px;
-    font-size: 14px;
     font-weight: 600;
     border: 1px inset var(--surface1);
     border-bottom: 2px inset var(--surface1);
     border-radius: 4px;
-    font-family: "LiterationSans Nerd Font";
 }
 
 .whkd-popup .keybind-button.special {
@@ -1661,15 +1617,13 @@ QSlider::handle {
 .whkd-popup .plus-separator {
     padding: 0;
     border: none;
-    font-size: 16px;
+    font-size: var(--font-lg);
     font-weight: bold;
     background-color: transparent;
 }
 
 .whkd-popup .filter-input {
     padding: 0 8px 2px 8px;
-    font-size: 14px;
-    font-family: "LiterationSans Nerd Font";
     border: 1px solid var(--surface0);
     border-radius: 4px;
     outline: none;
@@ -1682,12 +1636,8 @@ QSlider::handle {
     border: 1px solid var(--blue);
 }
 
-.whkd-popup .keybind-command {
-    font-size: 14px;
-}
-
 .whkd-popup .keybind-header {
-    font-size: 16px;
+    font-size: var(--font-lg);
     font-weight: 600;
     color: var(--text);
     padding: 8px 0;
@@ -1713,7 +1663,7 @@ QSlider::handle {
 .windows-desktops .ws-btn {
     color: var(--overlay1);
     border: none;
-    font-size: 14px;
+    font-size: var(--font-lg);
     margin: 0 4px;
     padding: 0;
 }
@@ -1774,7 +1724,6 @@ QSlider::handle {
 /***----------------------------      • Komorebi Control •      -----------------------------***/
 
 .komorebi-control-widget .label {
-    font-size: 14px;
     color: var(--text);
     font-weight: 600;
 }
@@ -1786,7 +1735,7 @@ QSlider::handle {
 .komorebi-control-menu .button {
     color: var(--overlay1);
     padding: 8px 16px;
-    font-size: 32px;
+    font-size: var(--font-4xl);
     border-radius: 8px;
     background-color: var(--surface0);
 }
@@ -1807,7 +1756,6 @@ QSlider::handle {
 }
 
 .komorebi-control-menu .footer .text {
-    font-size: 12px;
     color: var(--overlay0);
 }
 
@@ -1819,20 +1767,17 @@ QSlider::handle {
 
 .komorebi-layout-menu .menu-item {
     padding: 8px 16px;
-    font-size: 12px;
     color: var(--text);
     font-weight: 600;
 }
 
 .komorebi-layout-menu .menu-item-icon {
     color: var(--text);
-    font-size: 16px;
+    font-size: var(--font-lg);
 }
 
 .komorebi-layout-menu .menu-item-text {
-    font-family: "LiterationSans Nerd Font";
     padding-left: 4px;
-    font-size: 12px;
 }
 
 .komorebi-layout-menu .menu-item:hover {
@@ -1862,10 +1807,9 @@ QSlider::handle {
     background-color: transparent;
     color: var(--overlay1);
     border: none;
-    font-size: 14px;
+    font-size: var(--font-lg);
     margin: 0 2px;
     padding: 2px 0;
-    font-family: "LiterationSans Nerd Font";
 }
 
 .komorebi-workspaces .ws-btn.populated {
@@ -1879,7 +1823,6 @@ QSlider::handle {
 
 .komorebi-workspaces .workspace-layer {
     margin-left: 8px;
-    font-size: 14px;
     color: var(--text);
 }
 
@@ -1928,7 +1871,6 @@ QSlider::handle {
 
 .taskbar-widget .app-container .app-title {
     padding-left: 6px;
-    font-family: "LiterationSans Nerd Font";
     font-weight: 500;
     color: var(--text);
 }
@@ -1954,9 +1896,7 @@ QSlider::handle {
 
 .taskbar-preview .header .title {
     color: var(--text);
-    font-family: "LiterationSans Nerd Font";
     font-weight: 600;
-    font-size: 13px;
 }
 
 /***---------------------------------      • Media Widget •      ------------------------------------***/
@@ -1978,8 +1918,6 @@ QSlider::handle {
     color: var(--text);
     padding: 0;
     padding-right: 4px;
-    font-size: 12px;
-    font-family: "LiterationSans Nerd Font";
     font-weight: 500;
 }
 
@@ -1987,8 +1925,6 @@ QSlider::handle {
     color: var(--overlay1);
     padding: 0 4px;
     margin: 0;
-    font-family: "LiterationSans Nerd Font";
-    font-size: 12px;
 }
 
 .media-widget .btn:hover {
@@ -2022,26 +1958,21 @@ QSlider::handle {
 }
 
 .media-menu .title {
-    font-size: 14px;
     font-weight: 600;
-    font-family: "LiterationSans Nerd Font";
     color: var(--text);
     margin-left: 10px;
 }
 
 .media-menu .artist {
-    font-size: 13px;
     font-weight: 500;
-    font-family: "LiterationSans Nerd Font";
     color: var(--subtext1);
     margin-left: 10px;
     margin-top: 0px;
 }
 
 .media-menu .source {
-    font-size: 11px;
+    font-size: var(--font-xs);
     font-weight: 600;
-    font-family: "LiterationSans Nerd Font";
     color: var(--crust);
     margin-left: 10px;
     margin-top: 10px;
@@ -2062,8 +1993,7 @@ QSlider::handle {
 }
 
 .media-menu .btn {
-    font-family: "Segoe Fluent Icons";
-    font-size: 14px;
+    font-family: var(--font-icon);
     font-weight: 400;
     color: var(--text);
     margin: 10px 2px 0px 2px;
@@ -2086,7 +2016,7 @@ QSlider::handle {
 .media-menu .btn.play,
 .media-menu .btn.pause {
     background-color: rgba(205, 214, 244, 0.1);  /* --text @ 10% */
-    font-size: 20px;
+    font-size: var(--font-2xl);
 }
 
 .media-menu .btn.play:hover,
@@ -2101,8 +2031,6 @@ QSlider::handle {
 }
 
 .media-menu .playback-time {
-    font-size: 13px;
-    font-family: "LiterationSans Nerd Font";
     color: var(--overlay1);
     margin-top: 20px;
     min-width: 100px;
@@ -2180,8 +2108,8 @@ QSlider::handle {
 
 .media-menu .app-volume-container .mute-button,
 .media-menu .app-volume-container .unmute-button {
-    font-family: "Segoe Fluent Icons";
-    font-size: 16px;
+    font-family: var(--font-icon);
+    font-size: var(--font-lg);
     color: var(--text);
     margin-top: 4px;
 }
@@ -2217,16 +2145,13 @@ QSlider::handle {
 .media-lite-widget .title {
     color: var(--text);
     padding: 0;
-    font-size: 12px;
-    font-family: "LiterationSans Nerd Font";
     font-weight: 500;
 }
 
 .media-lite-widget .artist {
     color: var(--subtext0);
     padding: 0;
-    font-size: 11px;
-    font-family: "LiterationSans Nerd Font";
+    font-size: var(--font-xs);
     font-weight: 500;
 }
 
@@ -2253,26 +2178,21 @@ QSlider::handle {
 }
 
 .media-lite-menu .title {
-    font-size: 14px;
     font-weight: 600;
-    font-family: "LiterationSans Nerd Font";
     color: var(--text);
     margin-left: 10px;
 }
 
 .media-lite-menu .artist {
-    font-size: 13px;
     font-weight: 500;
-    font-family: "LiterationSans Nerd Font";
     color: var(--subtext1);
     margin-left: 10px;
     margin-top: 0px;
 }
 
 .media-lite-menu .source {
-    font-size: 11px;
+    font-size: var(--font-xs);
     font-weight: 600;
-    font-family: "LiterationSans Nerd Font";
     color: var(--crust);
     margin-left: 10px;
     margin-top: 10px;
@@ -2294,8 +2214,7 @@ QSlider::handle {
 
 /* 3. Transport Controls */
 .media-lite-menu .btn {
-    font-family: "Segoe Fluent Icons";
-    font-size: 14px;
+    font-family: var(--font-icon);
     font-weight: 400;
     color: var(--text);
     margin: 10px 2px 0px 2px;
@@ -2317,7 +2236,7 @@ QSlider::handle {
 
 .media-lite-menu .btn.play {
     background-color: rgba(205, 214, 244, 0.1); /* --text @ 10% */
-    font-size: 20px;
+    font-size: var(--font-2xl);
 }
 
 .media-lite-menu .btn.play:hover {
@@ -2327,7 +2246,6 @@ QSlider::handle {
 /* Shuffle and repeat are secondary toggles, sized down from the transport row */
 .media-lite-menu .btn.shuffle,
 .media-lite-menu .btn.repeat {
-    font-size: 13px;
     min-width: 32px;
     max-width: 32px;
     min-height: 32px;
@@ -2354,8 +2272,6 @@ QSlider::handle {
 }
 
 .media-lite-menu .playback-time {
-    font-size: 13px;
-    font-family: "LiterationSans Nerd Font";
     color: var(--overlay1);
     min-width: 48px;
 }
@@ -2413,8 +2329,8 @@ QSlider::handle {
 }
 
 .media-lite-menu .volume-button {
-    font-family: "Segoe Fluent Icons";
-    font-size: 16px;
+    font-family: var(--font-icon);
+    font-size: var(--font-lg);
     color: var(--text);
     min-width: 32px;
     max-width: 32px;
@@ -2473,7 +2389,7 @@ QSlider::handle {
 }
 
 .open-meteo-widget .icon {
-    font-size: 16px;
+    font-size: var(--font-lg);
 }
 
 .open-meteo-widget .icon.sunnyDay {
@@ -2515,19 +2431,12 @@ QSlider::handle {
     color: var(--text);
 }
 
-.open-meteo-card-today .label {
-    font-size: 12px;
-    font-family: "LiterationSans Nerd Font";
-}
-
 .open-meteo-card-today .label.location {
-    font-size: 24px;
+    font-size: var(--font-3xl);
     font-weight: 800;
-    font-family: "LiterationSans Nerd Font";
 }
 
 .open-meteo-card-today .label.alert {
-    font-size: 12px;
     font-weight: 700;
     background-color: rgba(249, 226, 175, 0.05);  /* --yellow @ 5% */
     border: 1px solid rgba(249, 226, 175, 0.1);  /* --yellow @ 10% */
@@ -2539,11 +2448,6 @@ QSlider::handle {
 .open-meteo-card-day {
     border-radius: 8px;
     background-color: var(--base);
-}
-
-.open-meteo-card-day .label {
-    font-size: 12px;
-    font-family: "LiterationSans Nerd Font";
 }
 
 /* The chart is a custom-painted widget inside a resizable QScrollArea, so it
@@ -2561,8 +2465,6 @@ QSlider::handle {
     border: 1px solid var(--surface1);
     border-radius: 4px;
     color: var(--text);
-    font-family: "LiterationSans Nerd Font";
-    font-size: 14px;
     padding: 4px 8px;
 }
 
@@ -2573,22 +2475,16 @@ QSlider::handle {
 /* Day columns emit day-name / day-temp-max / day-temp-min; the generic .label
    rule above no longer matches them. */
 .open-meteo-card-day .day-name {
-    font-size: 12px;
     font-weight: 600;
-    font-family: "LiterationSans Nerd Font";
     color: var(--subtext0);
 }
 
 .open-meteo-card-day .day-temp-max {
-    font-size: 13px;
     font-weight: 600;
-    font-family: "LiterationSans Nerd Font";
     color: var(--text);
 }
 
 .open-meteo-card-day .day-temp-min {
-    font-size: 12px;
-    font-family: "LiterationSans Nerd Font";
     color: var(--overlay1);
 }
 
@@ -2599,12 +2495,10 @@ QSlider::handle {
 
 /* Sunrise / sunset row on the today panel */
 .open-meteo-card-today .label.sunrisesunset {
-    font-size: 12px;
     color: var(--subtext0);
 }
 
 .open-meteo-card-today .label.sunrisesunset-icon {
-    font-size: 14px;
     color: var(--yellow);
 }
 
@@ -2624,7 +2518,6 @@ QSlider::handle {
     border-radius: 6px;
     padding: 3px 7px;
     margin: 1px 2px;
-    font-size: 12px;
 }
 
 .open-meteo-card .hourly-data-button:hover {
@@ -2639,24 +2532,22 @@ QSlider::handle {
 
 /* Empty state, shown before a location is picked or after a failed fetch */
 .open-meteo-card .no-data-icon {
-    font-size: 32px;
+    font-size: var(--font-4xl);
     color: var(--overlay0);
 }
 
 .open-meteo-card .no-data-text {
-    font-size: 13px;
     color: var(--overlay1);
 }
 
 /* Location search */
 .open-meteo-card .search-head {
-    font-size: 15px;
+    font-size: var(--font-lg);
     font-weight: 600;
     color: var(--text);
 }
 
 .open-meteo-card .search-description {
-    font-size: 12px;
     color: var(--subtext0);
 }
 
@@ -2665,7 +2556,6 @@ QSlider::handle {
     border: 1px solid var(--surface1);
     border-radius: 6px;
     color: var(--text);
-    font-size: 12px;
 }
 
 .open-meteo-card .search-results::item {
@@ -2685,7 +2575,7 @@ QSlider::handle {
 }
 
 .quick-launch-widget .icon {
-    font-size: 16px;
+    font-size: var(--font-lg);
     color: var(--sapphire);
     min-width: 20px;
     qproperty-alignment: "AlignCenter | AlignVCenter";
@@ -2710,8 +2600,7 @@ QSlider::handle {
 }
 
 .quick-launch-popup .search .search-icon {
-    font-family: "LiterationSans Nerd Font";
-    font-size: 18px;
+    font-size: var(--font-xl);
     color: var(--overlay1);
     padding-right: 8px;
     min-width: 18px;
@@ -2721,8 +2610,7 @@ QSlider::handle {
     background: transparent;
     border: none;
     color: var(--text);
-    font-size: 16px;
-    font-family: "LiterationSans Nerd Font";
+    font-size: var(--font-lg);
     font-weight: 400;
     padding: 4px 0;
 }
@@ -2734,9 +2622,7 @@ QSlider::handle {
     padding: -2px 8px 0px 8px;
     margin-top: 2px;
     margin-right: 4px;
-    font-size: 13px;
     font-weight: 600;
-    font-family: "LiterationSans Nerd Font";
     max-height: 28px;
 }
 
@@ -2746,16 +2632,13 @@ QSlider::handle {
 }
 
 .quick-launch-popup .results-list-view {
-    font-size: 14px;
-    font-family: "LiterationSans Nerd Font";
     font-weight: 600;
     color: var(--text);
 }
 
 .quick-launch-popup .results-list-view .description {
     color: var(--overlay1);
-    font-size: 11px;
-    font-family: "LiterationSans Nerd Font";
+    font-size: var(--font-xs);
     font-weight: 500;
 }
 
@@ -2770,8 +2653,7 @@ QSlider::handle {
 }
 
 .quick-launch-popup .results-empty-text {
-    font-size: 24px;
-    font-family: "LiterationSans Nerd Font";
+    font-size: var(--font-3xl);
     color: var(--subtext0);
     padding-top: 8px;
 }
@@ -2782,10 +2664,8 @@ QSlider::handle {
 }
 
 .quick-launch-popup .preview .preview-text {
-    font-size: 13px;
     color: var(--subtext1);
     padding: 8px 12px;
-    font-family: "LiterationSans Nerd Font";
     background-color: var(--surface0);
     border: none;
 }
@@ -2798,28 +2678,21 @@ QSlider::handle {
 .quick-launch-popup .preview .preview-meta {
     padding: 6px 12px;
     border-top: 1px solid var(--surface1);
-    font-family: "LiterationSans Nerd Font";
 }
 
 .quick-launch-popup .preview .preview-meta .preview-title {
-    font-size: 14px;
     font-weight: 600;
     color: var(--text);
-    font-family: "LiterationSans Nerd Font";
     margin-bottom: 10px;
     margin-left: -2px;
 }
 
 .quick-launch-popup .preview .preview-meta .preview-subtitle {
-    font-size: 12px;
     color: var(--subtext1);
-    font-family: "LiterationSans Nerd Font";
     padding-bottom: 1px;
 }
 
 .quick-launch-popup .preview.edit .preview-title {
-    font-size: 13px;
-    font-family: "LiterationSans Nerd Font";
     font-weight: 600;
     color: var(--text);
     padding: 8px 12px 4px 12px;
@@ -2830,8 +2703,6 @@ QSlider::handle {
     border: 1px solid var(--surface1);
     border-radius: 4px;
     color: var(--text);
-    font-size: 13px;
-    font-family: "LiterationSans Nerd Font";
     padding: 6px 8px;
     margin: 0 12px;
 }
@@ -2845,8 +2716,6 @@ QSlider::handle {
     border: 1px solid var(--surface1);
     border-radius: 4px;
     color: var(--text);
-    font-size: 13px;
-    font-family: "LiterationSans Nerd Font";
     padding: 6px 8px;
     margin: 0 12px;
 }
@@ -2864,8 +2733,6 @@ QSlider::handle {
     border: none;
     border-radius: 4px;
     color: var(--text);
-    font-size: 12px;
-    font-family: "LiterationSans Nerd Font";
     font-weight: 600;
     padding: 4px 16px;
 }
@@ -2892,12 +2759,11 @@ QSlider::handle {
 }
 
 .system-grouper .grouper-button {
-    font-size: 10px;
+    font-size: var(--font-xs);
     color: var(--overlay1);
     padding: 0 6px;
     background-color: transparent;
     border: none;
-    font-family: "LiterationSans Nerd Font";
 }
 
 .system-grouper .grouper-button:hover {
@@ -2911,13 +2777,10 @@ QSlider::handle {
 }
 
 .cpu-widget .widget-container .label {
-    font-size: 12px;
     font-weight: 500;
-    font-family: "LiterationSans Nerd Font";
 }
 
 .cpu-widget .widget-container .icon {
-    font-size: 14px;
     color: var(--sapphire);
     margin-right: 2px;
 }
@@ -2945,13 +2808,10 @@ QSlider::handle {
 }
 
 .gpu-widget .widget-container .label {
-    font-size: 12px;
     font-weight: 500;
-    font-family: "LiterationSans Nerd Font";
 }
 
 .gpu-widget .widget-container .icon {
-    font-size: 14px;
     color: var(--green);
     margin-right: 2px;
 }
@@ -2979,13 +2839,10 @@ QSlider::handle {
 }
 
 .memory-widget .widget-container .label {
-    font-size: 12px;
     font-weight: 500;
-    font-family: "LiterationSans Nerd Font";
 }
 
 .memory-widget .widget-container .icon {
-    font-size: 14px;
     color: var(--mauve);
     margin-right: 2px;
 }
@@ -3013,13 +2870,10 @@ QSlider::handle {
 }
 
 .disk-widget .widget-container .label {
-    font-size: 12px;
     font-weight: 500;
-    font-family: "LiterationSans Nerd Font";
 }
 
 .disk-widget .widget-container .icon {
-    font-size: 14px;
     color: var(--peach);
     margin-right: 2px;
 }
@@ -3060,14 +2914,12 @@ QSlider::handle {
 }
 
 .disk-group-label {
-    font-size: 10px;
-    font-family: "LiterationSans Nerd Font";
+    font-size: var(--font-xs);
     color: var(--text);
 }
 
 .disk-group-label-size {
-    font-size: 10px;
-    font-family: "LiterationSans Nerd Font";
+    font-size: var(--font-xs);
     color: var(--overlay0);
 }
 
@@ -3090,14 +2942,11 @@ QSlider::handle {
 }
 
 .traffic-widget .label {
-    font-size: 12px;
     font-weight: 500;
-    font-family: "LiterationSans Nerd Font";
     color: var(--green);
 }
 
 .traffic-widget .icon {
-    font-size: 14px;
     color: var(--teal);
     margin-right: 2px;
 }
@@ -3120,15 +2969,12 @@ QSlider::handle {
 }
 
 .traffic-menu .header .title {
-    font-size: 14px;
     font-weight: 600;
-    font-family: "LiterationSans Nerd Font";
     color: var(--text);
 }
 
 .traffic-menu .header .reset-button {
-    font-size: 11px;
-    font-family: "LiterationSans Nerd Font";
+    font-size: var(--font-xs);
     font-weight: 600;
     color: var(--subtext0);
     background-color: var(--surface0);
@@ -3154,9 +3000,8 @@ QSlider::handle {
 }
 
 .traffic-menu .section-title {
-    font-size: 11px;
+    font-size: var(--font-xs);
     font-weight: 600;
-    font-family: "LiterationSans Nerd Font";
     color: var(--overlay1);
     margin-bottom: 4px;
 }
@@ -3169,23 +3014,20 @@ QSlider::handle {
 }
 
 .traffic-menu .download-speed-value {
-    font-size: 16px;
+    font-size: var(--font-lg);
     font-weight: 600;
-    font-family: "LiterationSans Nerd Font";
     color: var(--green);
 }
 
 .traffic-menu .upload-speed-value {
-    font-size: 16px;
+    font-size: var(--font-lg);
     font-weight: 600;
-    font-family: "LiterationSans Nerd Font";
     color: var(--blue);
 }
 
 .traffic-menu .download-speed-unit,
 .traffic-menu .upload-speed-unit {
-    font-size: 11px;
-    font-family: "LiterationSans Nerd Font";
+    font-size: var(--font-xs);
     color: var(--overlay1);
 }
 
@@ -3211,28 +3053,22 @@ QSlider::handle {
 }
 
 .traffic-menu .data-text {
-    font-size: 12px;
-    font-family: "LiterationSans Nerd Font";
     color: var(--subtext0);
 }
 
 .traffic-menu .data-value {
-    font-size: 12px;
     font-weight: 500;
-    font-family: "LiterationSans Nerd Font";
     color: var(--text);
 }
 
 .traffic-menu .interface-info {
-    font-size: 11px;
-    font-family: "LiterationSans Nerd Font";
+    font-size: var(--font-xs);
     color: var(--overlay1);
     padding-top: 6px;
 }
 
 .traffic-menu .internet-info {
-    font-size: 11px;
-    font-family: "LiterationSans Nerd Font";
+    font-size: var(--font-xs);
 }
 
 .traffic-menu .internet-info.connected {
@@ -3254,7 +3090,6 @@ QSlider::handle {
 .icon {
     /* 0. Keep icons on a non-Mono Nerd Font. A Mono build forces every glyph
        into one cell, which squeezes and clips double-width nf-md icons. */
-    font-family: "LiterationSans Nerd Font", "Symbols Nerd Font";
 
     /* 1. Force a transparent border to reserve physical pixels for the glyph */
     border-right: 4px solid transparent;
