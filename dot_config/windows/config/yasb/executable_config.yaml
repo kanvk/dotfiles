@@ -967,9 +967,9 @@ widgets:
                 on_middle: "toggle_label"
                 on_right: "cycle_status"
             icons:
-                disabled: "\uf0f3"  # nf-fa-bell
-                priority: "\uf186"  # nf-fa-moon_o
-                alarms:   "\uf1f6"  # nf-fa-bell_slash
+                disabled: "\ueaa2"  # nf-cod-bell             all notifications
+                priority: "\uec09"  # nf-cod-bell_slash_dot   muted, priority still through
+                alarms:   "\uec08"  # nf-cod-bell_slash       alarms only
 
 
     # --- Control Center ---
@@ -1015,10 +1015,10 @@ widgets:
                           icon: "\uf285"
                         - id: "cycle_dnd"
                           label: "Cycle DND"
-                          icon: "\uf186"
+                          icon: "\U000F1A29"  #  (nf-md-bell_cog)
                         - id: "toggle_theme"
                           label: "Dark Mode"
-                          icon: "\ue708"
+                          icon: "\U000F050E"  #  (nf-md-theme_light_dark)
                         - id: "toggle_mute"
                           label: "Mute"
                           icon: "\ue74f"
