@@ -1012,13 +1012,13 @@ widgets:
                     actions:
                         - id: "toggle_dnd"
                           label: "Do Not Disturb"
-                          icon: "\uf285"
+                          icon: "\ue7ed"  #  Segoe: crossed-out bell
                         - id: "cycle_dnd"
                           label: "Cycle DND"
-                          icon: "\U000F1A29"  #  (nf-md-bell_cog)
+                          icon: "\ue895"  #  Segoe: sync / cycle
                         - id: "toggle_theme"
                           label: "Dark Mode"
-                          icon: "\U000F050E"  #  (nf-md-theme_light_dark)
+                          icon: "\ue7a1"  #  Segoe: light/dark contrast
                         - id: "toggle_mute"
                           label: "Mute"
                           icon: "\ue74f"
