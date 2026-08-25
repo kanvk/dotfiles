@@ -1,10 +1,10 @@
 git:
-  pagers:
-    - pager: delta --dark --paging=never
-    - pager: ydiff -p cat -s --wrap --width={{columnWidth}}
+  diffRenderers:
+    - command: delta --dark --paging=never
+    - command: ydiff -p cat -s --wrap --width={{columnWidth}}
       colorArg: never
-    - externalDiffCommand: difft --color=always
-
+    - command: difft --color=always
+      type: extDiff
 os:
   editPreset: nvim
 # Diff workflow. Key choice constraints: Windows Terminal eats <c-t>, <c-v>,
@@ -58,7 +58,6 @@ customCommands:
     description: 'absorb: autofixup staged hunks into earlier commits'
     command: 'git absorb --and-rebase'
     output: terminal
-
 # Theme: catppuccin-macchiato (blue accent)
 # Source: https://github.com/catppuccin/lazygit/blob/main/themes-mergable/macchiato/blue.yml
 # Note: AstroNvim's lazygit integration overrides this when launched from inside
