@@ -215,6 +215,10 @@ bindkey '\t' menu-select "$terminfo[kcbt]" menu-select                          
 bindkey -M menuselect '\t' menu-complete "$terminfo[kcbt]" reverse-menu-complete # tab/shift-tab cycle in menu
 bindkey -v                                        # Vi key bindings
 
+# buffer-in-$EDITOR widget for the ^X^E binding below
+autoload -Uz edit-command-line
+zle -N edit-command-line
+
 # zsh-vi-mode (deferred plugin) rebuilds the viins keymap on init, wiping any
 # binding we make to the current keymap after `bindkey -v`. Wrap the affected
 # bindings in a function, run it now, and register it with zvm_after_init_commands
@@ -230,6 +234,8 @@ _user_keybindings() {
     bindkey '^[[H' beginning-of-line                  # home
     bindkey '^[[F' end-of-line                        # end
     bindkey '^[[Z' undo                               # shift + tab undo last action
+    bindkey -M viins '^X^E' edit-command-line         # ctrl-x ctrl-e edit buffer in $EDITOR
+    bindkey -M vicmd '^X^E' edit-command-line
 }
 _user_keybindings
 zvm_after_init_commands+=(_user_keybindings)
