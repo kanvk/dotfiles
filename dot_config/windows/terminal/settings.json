@@ -44,11 +44,16 @@
         }
     ],
     "alwaysShowNotificationIcon": true,
+    "alwaysShowTabs": true,
     "autoHideWindow": false,
     "compatibility.enableUnfocusedAcrylic": true,
     "copyFormatting": "none",
     "copyOnSelect": false,
     "defaultProfile": "{46ca431a-3a87-5fb3-83cd-11ececc031d2}",
+    "disabledProfileSources":
+    [
+        "Windows.Terminal.Azure"
+    ],
     "firstWindowPreference": "defaultProfile",
     "initialCols": 120,
     "keybindings":
@@ -93,7 +98,7 @@
     {
         "defaults":
         {
-            "adjustIndistinguishableColors": "never",
+            "adjustIndistinguishableColors": "automatic",
             "altGrAliasing": false,
             "antialiasingMode": "grayscale",
             "bellStyle": "taskbar",
@@ -108,7 +113,8 @@
             "opacity": 80,
             "pathTranslationStyle": "none",
             "rightClickContextMenu": false,
-            "showMarksOnScrollbar": true
+            "showMarksOnScrollbar": true,
+            "useAcrylic": false
         },
         "list":
         [
@@ -319,6 +325,8 @@
             "yellow": "#E5C07B"
         }
     ],
+    "searchWebDefaultQueryUrl": "https://www.google.com/search?q=%s",
+    "showTabsInTitlebar": true,
     "tabSwitcherMode": "inOrder",
     "theme": "Catppuccin Macchiato",
     "themes":
@@ -418,7 +426,6 @@
     ],
     "useAcrylicInTabRow": false,
     "warning.confirmCloseAllTabs": false,
-    "warning.inputService": false,
     "warning.largePaste": false,
-    "warning.multiLinePaste": false
+    "warning.multiLinePaste": "automatic"
 }
