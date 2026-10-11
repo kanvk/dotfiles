@@ -14,8 +14,8 @@ On first run, chezmoi prompts for:
 
 | Prompt | Used in |
 | --- | --- |
-| Name | `~/.gitconfig` user.name |
-| Email | `~/.gitconfig` user.email |
+| Name | `~/.gitconfig` user.name; default `Kanv Khare` |
+| Email | `~/.gitconfig` user.email; default `kanv@kanvk.com` |
 | Package tier (minimal \| base \| full) | which package set to install (see [Package tiers](#package-tiers) below); default `base` |
 | Sign git commits with GPG? | yes/no gate; only prompts for the fingerprint below if yes |
 | GPG signing key fingerprint | `~/.gitconfig` user.signingKey; only prompted when GPG signing is enabled |
