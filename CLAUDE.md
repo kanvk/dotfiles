@@ -34,6 +34,7 @@ The `justfile` is the canonical entry point — `just -l` for the menu.
 
 ## Conventions
 
+- **Commit messages:** Keep descriptions brief. Describe encrypted-file updates generically; never include decrypted contents or configuration values. Disable GPG signing with `git -c commit.gpgsign=false commit ...`.
 - **Path templating:** prefer `$HOME` in shell contexts (the shell expands at runtime, template stays portable), use `{{ .chezmoi.homeDir }}` in non-shell contexts (Nix, JSON, Lua, symlink targets).
 - **Identity templating:** `{{ .name }}`, `{{ .email }}` — seeded by `promptStringOnce` in `.chezmoi.toml.tmpl`.
 - **OS gates:**

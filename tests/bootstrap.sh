@@ -46,6 +46,7 @@ cat > "$HOME/.config/chezmoi/chezmoi.toml" <<'EOF'
 encryption = "age"
 
 [data]
+    tier              = "base"
     name              = "Test User"
     email             = "test@example.com"
     use_gpg_signing   = false
@@ -111,6 +112,8 @@ check -f "$HOME/.config/broot/conf.hjson"
 
 # --- private/secure files ---
 check -f "$HOME/.ssh/config"
+check -f "$HOME/.claude/settings.json"
+check -f "$HOME/.claude/statusline.sh"
 check -d "$HOME/.gnupg"
 check -f "$HOME/.gnupg/gpg-agent.conf"
 
@@ -147,14 +150,11 @@ contains "$HOME/.ssh/config" '^Include ~/.ssh/config\.machine'
 # encrypt_locals gate in .chezmoiignore.tmpl should NOT exist.
 absent "$HOME/.ssh/config.local"
 absent "$HOME/.gitconfig.local"
-absent "$HOME/.claude/settings.json"
-absent "$HOME/.claude/statusline.sh"
 absent "$HOME/.codex/config.toml"
 absent "$HOME/.codex/AGENTS.md"
 
-# --- wsl.zsh + Windows configs apply on every host (OS gates dropped so
-# `chezmoi add` works from any source machine; the files just sit unused on the wrong OS) ---
-check -f "$HOME/.config/zsh/omz-custom/wsl.zsh"
+# --- wsl.zsh renders empty outside WSL; Windows configs apply on every host ---
+absent "$HOME/.config/zsh/omz-custom/wsl.zsh"
 check -d "$HOME/.config/windows"
 
 # --- chezmoi-source-only files should NOT have been applied ---
