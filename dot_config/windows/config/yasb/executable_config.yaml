@@ -21,7 +21,7 @@ komorebi:
 bars:
     status-bar:
         enabled: true
-        screens: ["DELL AW2723DF (1)", "DELL AW2723DF (2)", "DELL AW2723DF (3)", "DENON-AVR"]
+        screens: ["DELL AW2723DF", "DELL AW2723DF (1)", "DELL AW2723DF (2)", "DELL AW2723DF (3)", "DENON-AVR"]
         class_name: "yasb-bar"
         alignment:
             position: "top"
