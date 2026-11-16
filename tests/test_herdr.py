@@ -14,8 +14,6 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 CHEZMOI = shutil.which("chezmoi")
-HELPER = Path("dot_local/bin/executable_herdr-config.tmpl")
-HOOK = Path(".chezmoiscripts/run_onchange_after_80-herdr.sh.tmpl")
 
 
 class HerdrTests(unittest.TestCase):
@@ -29,7 +27,7 @@ class HerdrTests(unittest.TestCase):
         runtime.mkdir(mode=0o700)
         self.config = self.base / "chezmoi.json"
         self.calls = self.base / "calls.json"
-        self.checkout = self.home / "p" / "personal config's checkout"
+        self.checkout = self.home / "p/herdr-config"
         (self.checkout / "scripts").mkdir(parents=True)
         (self.checkout / "scripts/deploy.py").write_text(
             "import json, os, sys\nfrom pathlib import Path\n"
@@ -41,13 +39,18 @@ class HerdrTests(unittest.TestCase):
             "use_gpg_signing": False, "gpg_signing_key": "", "ssh_age_identity": "",
             "ssh_age_recipient": "", "encrypt_locals": False,
             "is_wsl": True, "is_debian_like": True,
-            "herdr_enabled": True, "herdr_checkout": str(self.checkout),
-            "herdr_repo_url": "", "herdr_wsl_core": False,
         }
         self.environment = {
             **os.environ, "HOME": str(self.home), "HERDR_TEST_CALLS": str(self.calls),
             "XDG_RUNTIME_DIR": str(runtime),
         }
+        self.environment.pop("HERDR_CONFIG_DIR", None)
+        tools = self.base / "tools"
+        tools.mkdir()
+        wrapper = tools / "chezmoi"
+        wrapper.write_text("#!/usr/bin/env bash\nexec " + shlex.join(self.command()) + ' "$@"\n')
+        wrapper.chmod(0o755)
+        self.environment["PATH"] = str(tools) + os.pathsep + os.environ["PATH"]
 
     def command(self):
         self.config.write_text(json.dumps({"encryption": "age", "data": self.data}))
@@ -63,117 +66,91 @@ class HerdrTests(unittest.TestCase):
         return result.stdout
 
     def run_helper(self, action="bootstrap", *arguments):
-        result = subprocess.run(["bash", "-s", "--", action, *arguments],
-                                input=self.render(HELPER), text=True, capture_output=True,
-                                env=self.environment)
-        return result
+        self.command()
+        return subprocess.run(["just", "--justfile", str(ROOT / "justfile"),
+                               "herdr-" + action, *arguments], text=True,
+                              capture_output=True, env=self.environment)
 
-    def test_missing_opt_in_keys_remain_disabled(self):
-        self.data = {key: value for key, value in self.data.items() if not key.startswith("herdr_")}
+    def cli_arguments(self):
+        self.assertTrue(self.calls.is_file(), "Explicit just command did not invoke the config CLI")
+        return json.loads(self.calls.read_text())
+
+    def test_just_commands_work_without_herdr_specific_answers(self):
         for action in ["bootstrap", "deploy", "doctor"]:
-            result = self.run_helper(action)
-            self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertIn("disabled", result.stdout.lower())
-        self.assertFalse(self.calls.exists())
+            with self.subTest(action=action):
+                result = self.run_helper(action)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                expected = [action]
+                if action == "bootstrap":
+                    expected += ["--settings-dir", str(ROOT / "dot_config/windows")]
+                self.assertEqual(self.cli_arguments(), expected)
 
-    def test_explicitly_disabled_desktop_never_invokes_cli(self):
-        self.data["herdr_enabled"] = False
-        result = self.run_helper()
+    def test_legacy_disabled_answer_does_not_block_an_explicit_command(self):
+        self.data.update(herdr_enabled=False, herdr_checkout="/obsolete/path", herdr_repo_url="")
+        result = self.run_helper("doctor")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertFalse(self.calls.exists())
+        self.assertEqual(self.cli_arguments(), ["doctor"])
 
-    def test_non_wsl_is_harmless_even_when_enabled(self):
+    def test_non_wsl_reports_an_error_instead_of_silent_success(self):
         self.data["is_wsl"] = False
         result = self.run_helper()
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("WSL", result.stdout)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("WSL", result.stderr)
         self.assertFalse(self.calls.exists())
 
-    def test_bootstrap_alone_selects_staged_personal_files_and_preserves_arguments(self):
+    def test_bootstrap_reads_source_preferences_without_applying_dotfiles_first(self):
         result = self.run_helper("bootstrap", "--dry-run", "--no-activate")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(json.loads(self.calls.read_text()), [
-            "bootstrap", "--settings-dir", str(self.home / ".config/windows"),
+        self.assertEqual(self.cli_arguments(), [
+            "bootstrap", "--settings-dir", str(ROOT / "dot_config/windows"),
             "--dry-run", "--no-activate",
         ])
+        self.assertFalse((self.home / ".config/windows").exists())
 
-    def test_deploy_and_doctor_never_select_personal_settings(self):
+    def test_deploy_and_doctor_do_not_select_personal_settings(self):
         for action in ["deploy", "doctor"]:
             result = self.run_helper(action, "--dry-run")
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertEqual(json.loads(self.calls.read_text()), [action, "--dry-run"])
+            self.assertEqual(self.cli_arguments(), [action, "--dry-run"])
 
-    def test_default_checkout_expands_relative_to_the_current_home(self):
-        expected = self.home / "p/herdr-config"
-        self.checkout.rename(expected)
-        self.data.pop("herdr_checkout")
+    def test_checkout_override_handles_spaces_apostrophes_and_literal_shell_syntax(self):
+        checkout = self.home / "custom config's $(do-not-execute)"
+        self.checkout.rename(checkout)
+        self.environment["HERDR_CONFIG_DIR"] = str(checkout)
         result = self.run_helper("doctor")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(json.loads(self.calls.read_text()), ["doctor"])
+        self.assertEqual(self.cli_arguments(), ["doctor"])
 
-    def test_missing_checkout_and_unset_url_do_not_clone_or_deploy(self):
-        self.data["herdr_checkout"] = str(self.home / "missing checkout")
+    def test_tilde_checkout_override_expands_under_current_home(self):
+        self.environment["HERDR_CONFIG_DIR"] = "~/p/herdr-config"
+        result = self.run_helper("doctor")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.cli_arguments(), ["doctor"])
+
+    def test_missing_checkout_reports_failure_without_creating_or_cloning_it(self):
+        missing = self.home / "missing checkout"
+        self.environment["HERDR_CONFIG_DIR"] = str(missing)
         for action in ["bootstrap", "deploy", "doctor"]:
             result = self.run_helper(action)
-            self.assertEqual(result.returncode, 1, result.stderr)
-            self.assertIn("URL", result.stdout)
-        ready = self.run_helper("ready")
-        self.assertEqual(ready.returncode, 0, ready.stderr)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("checkout", result.stderr.lower())
         self.assertFalse(self.calls.exists())
-        self.assertFalse((self.home / "missing checkout").exists())
-
-    def test_configured_url_still_requires_manual_clone(self):
-        self.data["herdr_checkout"] = str(self.home / "missing")
-        self.data["herdr_repo_url"] = "git@example.invalid:private/config.git"
-        result = self.run_helper()
-        self.assertEqual(result.returncode, 1, result.stderr)
-        self.assertIn("manual", result.stdout.lower())
-        self.assertFalse(self.calls.exists())
-        self.assertFalse((self.home / "missing").exists())
-
-    def test_missing_python_fails_manual_actions_but_not_readiness(self):
-        empty_path = self.base / "empty-path"
-        empty_path.mkdir()
-        script = self.render(Path(".chezmoitemplates/herdr-command")) + '\nherdr_command "$@"\n'
-        for action in ["bootstrap", "deploy", "doctor", "ready"]:
-            result = subprocess.run([shutil.which("bash"), "-s", "--", action],
-                                    input=script, text=True, capture_output=True,
-                                    env={**self.environment, "PATH": str(empty_path)})
-            self.assertEqual(result.returncode, 0 if action == "ready" else 1, result.stderr)
-            if action != "ready":
-                self.assertIn("python3", result.stdout)
-        self.assertFalse(self.calls.exists())
-
-    def test_optional_after_hook_only_announces_readiness(self):
-        for updates in [{}, {"herdr_enabled": False}, {"is_wsl": False},
-                        {"herdr_checkout": str(self.home / "missing")}]:
-            with self.subTest(updates=updates):
-                original = self.data.copy()
-                self.data.update(updates)
-                result = subprocess.run(["bash", "-s"], input=self.render(HOOK), text=True,
-                                        capture_output=True, env=self.environment)
-                self.assertEqual(result.returncode, 0, result.stderr)
-                self.assertFalse(self.calls.exists())
-                self.data = original
+        self.assertFalse(missing.exists())
 
     def test_cli_failures_are_not_reported_as_success(self):
         result = self.run_helper("deploy", "--fail")
         self.assertEqual(result.returncode, 7, result.stderr)
 
-    def test_wsl_core_is_managed_only_when_explicitly_enabled_on_wsl(self):
-        for wsl, enabled, desktop, expected in [
-            (True, False, True, False), (False, True, True, False),
-            (True, True, True, True), (True, True, False, True),
-        ]:
-            with self.subTest(wsl=wsl, core=enabled, desktop=desktop):
-                self.data.update(is_wsl=wsl, herdr_wsl_core=enabled, herdr_enabled=desktop)
-                result = subprocess.run(self.command() + ["managed", "--include=files"],
-                                        text=True, capture_output=True, env=self.environment)
-                self.assertEqual(result.returncode, 0, result.stderr)
-                target = ".config/herdr-core/config.toml"
-                self.assertEqual(target in result.stdout.splitlines(), expected)
-        core = tomllib.loads(self.render(Path("dot_config/herdr-core/config.toml.tmpl")))
-        self.assertEqual(core["shell"], ["sh", "-c", 'exec "$SHELL" -l'])
+    def test_ordinary_apply_has_no_live_herdr_targets_or_hook_even_with_legacy_answers(self):
+        self.data.update(herdr_enabled=True, herdr_wsl_core=True)
+        result = subprocess.run(self.command() + ["managed", "--include=files,scripts"],
+                                text=True, capture_output=True, env=self.environment)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        targets = {path for path in result.stdout.splitlines() if "herdr" in path.lower()}
+        self.assertEqual(targets, {
+            ".config/windows/herdr-app/settings.json", ".config/windows/herdr-core/config.toml",
+        })
+        self.assertFalse(self.calls.exists())
 
     def test_windows_preferences_contain_exactly_the_eight_safe_live_fields(self):
         settings = json.loads((ROOT / "dot_config/windows/herdr-app/settings.json").read_text())
@@ -185,35 +162,11 @@ class HerdrTests(unittest.TestCase):
         core = tomllib.loads((ROOT / "dot_config/windows/herdr-core/config.toml").read_text())
         self.assertEqual(core, {"shell": ["wsl.exe"]})
 
-    def test_init_preserves_explicit_feature_data_and_defaults_missing_keys_off(self):
+    def test_init_does_not_emit_herdr_answers_even_if_legacy_values_exist(self):
+        self.data.update(herdr_enabled=True, herdr_checkout="~/old-checkout",
+                         herdr_repo_url="", herdr_wsl_core=True)
         configured = tomllib.loads(self.render(Path(".chezmoi.toml.tmpl"), init=True))["data"]
-        self.assertTrue(configured["herdr_enabled"])
-        self.assertFalse(configured["herdr_wsl_core"])
-        self.assertEqual(configured["herdr_checkout"], str(self.checkout))
-        self.assertEqual(configured["herdr_repo_url"], "")
-        self.data = {key: value for key, value in self.data.items() if not key.startswith("herdr_")}
-        defaults = tomllib.loads(self.render(Path(".chezmoi.toml.tmpl"), init=True))["data"]
-        self.assertFalse(defaults["herdr_enabled"])
-        self.assertFalse(defaults["herdr_wsl_core"])
-        self.assertEqual(defaults["herdr_checkout"], "~/p/herdr-config")
-        self.assertEqual(defaults["herdr_repo_url"], "")
-
-    def test_just_entrypoints_delegate_without_losing_arguments(self):
-        tools = self.base / "tools"
-        tools.mkdir()
-        wrapper = tools / "chezmoi"
-        wrapper.write_text("#!/usr/bin/env bash\nexec " + shlex.join(self.command()) + ' "$@"\n')
-        wrapper.chmod(0o755)
-        for action in ["bootstrap", "deploy", "doctor"]:
-            result = subprocess.run(["just", "--justfile", str(ROOT / "justfile"),
-                                     "herdr-" + action, "--dry-run", "--no-activate"],
-                                    text=True, capture_output=True,
-                                    env={**self.environment, "PATH": str(tools) + os.pathsep + os.environ["PATH"]})
-            self.assertEqual(result.returncode, 0, result.stderr)
-            expected = [action]
-            if action == "bootstrap":
-                expected += ["--settings-dir", str(self.home / ".config/windows")]
-            self.assertEqual(json.loads(self.calls.read_text()), expected + ["--dry-run", "--no-activate"])
+        self.assertFalse(any(key.startswith("herdr_") for key in configured))
 
 
 if __name__ == "__main__":

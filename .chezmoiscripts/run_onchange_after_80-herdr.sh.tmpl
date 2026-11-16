@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-# Readiness notice only. Deployment remains an explicit manual action.
-set -euo pipefail
-{{ template "brew-path-bootstrap" . }}
-{{ template "herdr-command" . }}
-herdr_command ready

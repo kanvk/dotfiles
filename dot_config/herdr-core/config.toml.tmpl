@@ -1,4 +1,0 @@
-{{- if and (get . "is_wsl") (get . "herdr_wsl_core") -}}
-# Local WSL core only; use the user's login shell without naming a distribution.
-shell = ["sh", "-c", "exec \"$SHELL\" -l"]
-{{ end -}}

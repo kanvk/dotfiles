@@ -26,7 +26,7 @@ just test-full all       # every test image (only when distro-specific changes w
 
 ```sh
 ./tests/lint.sh                 # static, no Docker
-python3 -B tests/test_herdr.py   # isolated Herdr templates and manual entrypoints
+python3 -B tests/test_herdr.py   # isolated Herdr just commands and preferences
 ./tests/run.sh ubuntu smoke
 ./tests/run.sh kali smoke
 ./tests/run.sh all smoke
@@ -40,7 +40,7 @@ python3 -B tests/test_herdr.py   # isolated Herdr templates and manual entrypoin
 - Sweeps for hardcoded `/home/kanvk`, `kanvk`, `kkhare`, `linuxbrew`, `pyenv/shims` outside the known-intentional set.
 - Validates `.chezmoidata.yaml` parses as YAML.
 - Runs shellcheck on every script under `.chezmoiscripts/` (if shellcheck is installed).
-- Runs the Herdr render/dispatch suite with temporary chezmoi configs and homes,
+- Runs the Herdr just-command suite with temporary chezmoi configs and homes,
   a fake local config CLI, and no real Windows deployment or repository cloning.
 
 **`smoke`**

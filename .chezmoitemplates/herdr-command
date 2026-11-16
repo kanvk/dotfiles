@@ -1,44 +1,32 @@
-# Shared by the installed helper and the readiness-only after hook.
-herdr_command() {
-    local action="${1:-doctor}"
-    if (( $# )); then shift; fi
-    if [[ {{ get . "herdr_enabled" | default false | toString | shellQuote }} != true ]]; then
-        printf '%s\n' 'Herdr desktop integration is disabled; set data.herdr_enabled = true to opt in.'
-        return 0
-    fi
-    if [[ {{ get . "is_wsl" | default false | toString | shellQuote }} != true ]]; then
-        printf '%s\n' 'Herdr desktop integration requires WSL; skipping.'
-        return 0
-    fi
-    local checkout={{ get . "herdr_checkout" | default "~/p/herdr-config" | shellQuote }}
-    case "$checkout" in
-        '~/'*) checkout="$HOME/${checkout#\~/}" ;;
-    esac
-    if [[ ! -f "$checkout/scripts/deploy.py" ]]; then
-        printf 'Herdr checkout missing at %s.\n' "$checkout"
-        if [[ -z {{ get . "herdr_repo_url" | default "" | shellQuote }} ]]; then
-            printf '%s\n' 'No private repo URL is configured; create the checkout locally or configure data.herdr_repo_url and clone manually.'
-        else
-            printf '%s\n' 'Clone the configured private repository manually, then retry; ordinary apply never clones or fetches.'
-        fi
-        if [[ "$action" == ready ]]; then return 0; fi
-        return 1
-    fi
-    if [[ "$action" == ready ]]; then
-        printf '%s\n' 'Herdr checkout ready. Run just herdr-bootstrap --dry-run, then just herdr-bootstrap when ready.'
-        return 0
-    fi
-    case "$action" in
-        bootstrap|deploy|doctor) ;;
-        *) printf 'Unknown Herdr action: %s\n' "$action" >&2; return 2 ;;
-    esac
-    if ! command -v python3 >/dev/null 2>&1; then
-        printf '%s\n' 'Herdr requires python3; install it before retrying.'
-        return 1
-    fi
-    local -a arguments=("$action")
-    if [[ "$action" == bootstrap ]]; then
-        arguments+=(--settings-dir "$HOME/.config/windows")
-    fi
-    exec python3 "$checkout/scripts/deploy.py" "${arguments[@]}" "$@"
-}
+#!/usr/bin/env bash
+set -euo pipefail
+{{ template "brew-path-bootstrap" . }}
+
+action="${1:-doctor}"
+if (( $# )); then shift; fi
+case "$action" in
+    bootstrap|deploy|doctor) ;;
+    *) printf 'Unknown Herdr action: %s\n' "$action" >&2; exit 2 ;;
+esac
+if [[ {{ get . "is_wsl" | default false | toString | shellQuote }} != true ]]; then
+    printf '%s\n' 'Herdr configuration commands require WSL.' >&2
+    exit 1
+fi
+checkout="${HERDR_CONFIG_DIR:-$HOME/p/herdr-config}"
+case "$checkout" in
+    '~/'*) checkout="$HOME/${checkout#\~/}" ;;
+esac
+if [[ ! -f "$checkout/scripts/deploy.py" ]]; then
+    printf 'Herdr config checkout missing at %s. Clone it there or set HERDR_CONFIG_DIR.\n' "$checkout" >&2
+    exit 1
+fi
+if ! command -v python3 >/dev/null 2>&1; then
+    printf '%s\n' 'Herdr configuration requires Python 3.11 or newer.' >&2
+    exit 1
+fi
+arguments=("$action")
+if [[ "$action" == bootstrap ]]; then
+    source_dir={{ .chezmoi.sourceDir | shellQuote }}
+    arguments+=(--settings-dir "$source_dir/dot_config/windows")
+fi
+exec python3 "$checkout/scripts/deploy.py" "${arguments[@]}" "$@"
