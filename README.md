@@ -1,6 +1,6 @@
 # dotfiles
 
-Kanv's dotfiles, managed with [chezmoi](https://www.chezmoi.io/).
+Personal dotfiles, managed with [chezmoi](https://www.chezmoi.io/).
 
 Officially supports **Debian-based Linux**. macOS is not targeted. Windows-native configs (komorebi, yasb, whkd, Windows Terminal) live in `dot_config/windows/` and apply to `~/.config/windows/` on every host — inert off Windows; on a Windows box the user copies them into their canonical locations manually.
 
@@ -14,8 +14,8 @@ On first run, chezmoi prompts for:
 
 | Prompt | Used in |
 | --- | --- |
-| Name | `~/.gitconfig` user.name; default `Kanv Khare` |
-| Email | `~/.gitconfig` user.email; default `kanv@kanvk.com` |
+| Name | `~/.gitconfig` user.name |
+| Email | `~/.gitconfig` user.email |
 | Package tier (minimal \| base \| full) | which package set to install (see [Package tiers](#package-tiers) below); default `base` |
 | Sign git commits with GPG? | yes/no gate; only prompts for the fingerprint below if yes |
 | GPG signing key fingerprint | `~/.gitconfig` user.signingKey; only prompted when GPG signing is enabled |
