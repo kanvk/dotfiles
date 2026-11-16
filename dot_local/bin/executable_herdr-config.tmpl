@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Manual configuration deployment only; never fetches, installs binaries or restarts programs.
+set -euo pipefail
+{{ template "brew-path-bootstrap" . }}
+{{ template "herdr-command" . }}
+herdr_command "$@"

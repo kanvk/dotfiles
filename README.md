@@ -105,6 +105,61 @@ Things `chezmoi apply` cannot do automatically — do these once on a new machin
    ```
    Note: if your SSH key is passphrase-protected, every apply that touches an `.age` file prompts for it (age reads the key directly, bypassing ssh-agent). Either drop the passphrase on the chezmoi-only key or switch to a native age identity (`age-keygen`).
 
+## Herdr desktop on WSL (opt-in)
+
+Herdr UI source belongs in a separate local checkout, normally `~/p/herdr-config`.
+This public repo contains only personal preferences and entrypoints; private repo
+URLs, credentials, connections and session state do not belong here.
+
+Add these fields under `[data]` in `~/.config/chezmoi/chezmoi.toml`:
+
+```toml
+herdr_enabled = true
+herdr_checkout = "~/p/herdr-config"
+herdr_repo_url = ""  # Leave unset until you create the private repository.
+herdr_wsl_core = false
+```
+
+Old configs that omit these fields default to disabled. `chezmoi init` preserves
+explicit values. The desktop helper requires both `herdr_enabled` and WSL;
+disabled and non-WSL hosts skip harmlessly with guidance. A missing checkout
+does not fail ordinary apply; explicit setup commands report it as an error.
+Create the checkout yourself. Even with a URL configured, ordinary apply never
+clones, fetches, installs Herdr binaries, or restarts programs. The after-Brew
+script prints readiness guidance only.
+
+Apply the staged files with `just apply-dotfiles`, then run manually:
+
+```sh
+just herdr-doctor
+just herdr-bootstrap --dry-run
+just herdr-bootstrap                  # Fresh setup, including staged personal files.
+just herdr-deploy --dry-run
+just herdr-deploy                     # Repo-owned layouts, keys, mods and themes only.
+```
+
+The recipes are available from this chezmoi checkout. After applying dotfiles,
+`herdr-config bootstrap|deploy|doctor` is also available in `~/.local/bin`.
+Arguments such as `--dry-run` and `--no-activate` pass through unchanged.
+Install the official Windows app/core and WSL prerequisites separately; the
+configuration CLI reports missing prerequisites without downloading binaries.
+
+Chezmoi stages eight safe personal preferences, including `telemetry: false`, at
+`~/.config/windows/herdr-app/settings.json` and Windows core defaults at
+`~/.config/windows/herdr-core/config.toml`. Windows terminals use `["wsl.exe"]`,
+so the system's default distribution decides where they start. Only
+`herdr-bootstrap` passes `--settings-dir ~/.config/windows`: the repo CLI backs
+up and copies those complete files. Deploy and doctor do not select or change
+personal preferences. Edit these chezmoi source files to change portable defaults.
+
+Separately setting `herdr_wsl_core = true` manages the actual local WSL
+`~/.config/herdr-core/config.toml` through chezmoi. Its shell dispatcher is
+`["sh", "-c", "exec \"$SHELL\" -l"]`. This independent opt-in applies only on
+WSL, including when desktop integration is disabled, and never edits remote
+machine defaults. Leave it false on hosts where the core file is managed elsewhere.
+
+Run `just test-herdr` for isolated render/dispatch tests; `just lint` includes them.
+
 ## Editing packages
 
 Edit `.chezmoidata.yaml`, keyed by manager (`apt`, `brew`, `uvx` [installed via `uv tool`], `npm`, `cargo`, `go`, `bun`). The next `chezmoi apply` detects the hash change and re-runs the install script.

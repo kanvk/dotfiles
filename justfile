@@ -31,6 +31,10 @@ test-full distro="ubuntu":
 lint:
     ./tests/lint.sh
 
+# Isolated Herdr template, gate, command forwarding and settings ownership tests.
+test-herdr:
+    python3 -B tests/test_herdr.py
+
 # === chezmoi day-to-day ===
 
 # Preview what `chezmoi apply` would change.
@@ -77,6 +81,27 @@ cd:
     chezmoi cd
 
 # === Windows ===
+
+# Explicit WSL desktop bootstrap; includes chezmoi's staged personal preferences.
+[positional-arguments]
+herdr-bootstrap *args:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    chezmoi execute-template < dot_local/bin/executable_herdr-config.tmpl | bash -s -- bootstrap "$@"
+
+# Update repo-owned Herdr UI only; personal preferences stay untouched.
+[positional-arguments]
+herdr-deploy *args:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    chezmoi execute-template < dot_local/bin/executable_herdr-config.tmpl | bash -s -- deploy "$@"
+
+# Diagnose prerequisites and configuration without installing binaries or restarting programs.
+[positional-arguments]
+herdr-doctor *args:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    chezmoi execute-template < dot_local/bin/executable_herdr-config.tmpl | bash -s -- doctor "$@"
 
 # Pass-through args: `-DryRun`, `-Yes`, `-User <name>`. Run from WSL or Windows.
 # Example: just install-windows -DryRun ; just install-windows -Yes

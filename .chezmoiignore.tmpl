@@ -15,6 +15,11 @@ justfile
 docs/**
 .pre-commit-config.yaml
 
+{{- if not (and (get . "is_wsl") (get . "herdr_wsl_core")) }}
+# Local WSL core only. Windows preferences are staged separately, never applied here.
+.config/herdr-core/config.toml
+{{- end }}
+
 # Example file shown in docs as a starter for the user-created config.machine;
 # we don't want it landing as the actual ~/.ssh/config.machine.example file.
 .ssh/config.machine.example

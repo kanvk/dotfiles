@@ -1,0 +1,2 @@
+# Windows-local terminals start the system-default WSL distribution.
+shell = ["wsl.exe"]

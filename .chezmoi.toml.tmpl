@@ -120,3 +120,8 @@ pager = ""
     encrypt_locals = {{ $encryptLocals }}
     is_wsl = {{ $isWsl }}
     is_debian_like = {{ $isDebianLike }}
+    # Herdr desktop is opt-in; routine apply never clones or deploys its repo.
+    herdr_enabled = {{ get . "herdr_enabled" | default false }}
+    herdr_checkout = {{ get . "herdr_checkout" | default "~/p/herdr-config" | quote }}
+    herdr_repo_url = {{ get . "herdr_repo_url" | default "" | quote }}
+    herdr_wsl_core = {{ get . "herdr_wsl_core" | default false }}

@@ -1,0 +1,12 @@
+{
+  "zoom": 1.0,
+  "sounds": {
+    "enabled": false
+  },
+  "font": "JetBrains Mono",
+  "font_size": 15.0,
+  "font_ligatures": false,
+  "ui_font": "Segoe UI",
+  "minimum_contrast": 1.0,
+  "telemetry": false
+}

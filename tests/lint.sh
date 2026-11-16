@@ -110,6 +110,11 @@ else
     echo "  (shellcheck not installed — skipping)"
 fi
 
+echo "==> 6. Isolated Herdr integration tests"
+if ! python3 -B tests/test_herdr.py; then
+    fail=1
+fi
+
 if [ "$fail" -eq 0 ]; then
     echo
     echo "✓ Lint PASSED"
